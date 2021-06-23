@@ -11,6 +11,9 @@
   },
   "phet": {
     "requirejsNamespace": "BUILD_A_NUCLEUS",
+    "phetLibs": [
+      "build-an-atom"
+    ],
     "simulation": true,
     "runnable": true,
     "colorProfile": true,

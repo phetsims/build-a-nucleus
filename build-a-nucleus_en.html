@@ -33,10 +33,12 @@
       },
       "phet": {
         "requirejsNamespace": "BUILD_A_NUCLEUS",
+        "phetLibs": [
+          "build-an-atom"
+        ],
         "simulation": true,
         "runnable": true,
         "colorProfile": true,
-        "readmeCreatedManually": true,
         "supportedBrands": [
           "phet",
           "adapted-from-phet"
@@ -49,16 +51,20 @@
   window.phet.chipper.stringRepos =
     [
       {
+        "repo": "build-a-nucleus",
+        "requirejsNamespace": "BUILD_A_NUCLEUS"
+      },
+      {
+        "repo": "build-an-atom",
+        "requirejsNamespace": "BUILD_AN_ATOM"
+      },
+      {
         "repo": "joist",
         "requirejsNamespace": "JOIST"
       },
       {
         "repo": "scenery-phet",
         "requirejsNamespace": "SCENERY_PHET"
-      },
-      {
-        "repo": "build-a-nucleus",
-        "requirejsNamespace": "BUILD_A_NUCLEUS"
       },
       {
         "repo": "sun",
