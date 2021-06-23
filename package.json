@@ -1,0 +1,25 @@
+{
+  "name": "build-a-nucleus",
+  "version": "1.0.0-dev.0",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phetsims/build-a-nucleus.git"
+  },
+  "devDependencies": {
+    "grunt": "~1.4.0"
+  },
+  "phet": {
+    "requirejsNamespace": "BUILD_A_NUCLEUS",
+    "simulation": true,
+    "runnable": true,
+    "colorProfile": true,
+    "supportedBrands": [
+      "phet",
+      "adapted-from-phet"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "../chipper/eslint/sim_eslintrc.js"
+  }
+}
