@@ -1,3 +1,18 @@
 {
-
+  "nucleus_icon.png": {
+    "text": [
+      "Copyright 2021 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Sharon Siman-Tov and Luisa Vargas"
+  },
+  "nucleus_icon_small.png": {
+    "text": [
+      "Copyright 2021 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco and Luisa Vargas"
+  }
 }
