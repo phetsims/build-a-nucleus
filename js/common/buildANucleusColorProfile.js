@@ -9,16 +9,13 @@
 import ProfileColorProperty from '../../../scenery/js/util/ProfileColorProperty.js';
 import buildANucleus from '../buildANucleus.js';
 
-class BuildANucleusColorProfile {
-  constructor() {
-    // Background color that for screens in this sim
-    this.screenBackgroundColorProperty = new ProfileColorProperty( 'screenBackground', {
-      default: 'white'
-    } );
-  }
-}
+const buildANucleusColorProfile = {
 
-const buildANucleusColorProfile = new BuildANucleusColorProfile();
+  // Background color that for screens in this sim
+  screenBackgroundColorProperty: new ProfileColorProperty( 'screenBackground', {
+    default: 'white'
+  } )
+};
 
 buildANucleus.register( 'buildANucleusColorProfile', buildANucleusColorProfile );
 
