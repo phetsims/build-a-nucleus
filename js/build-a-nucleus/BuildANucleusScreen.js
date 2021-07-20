@@ -4,8 +4,8 @@
  * @author Luisa Vargas
  */
 
+import NucleusScreenView from '../../../build-an-atom/js/atom/view/NucleusScreenView.js';
 import BuildAnAtomModel from '../../../build-an-atom/js/common/model/BuildAnAtomModel.js';
-import BAAScreenView from '../../../build-an-atom/js/common/view/BAAScreenView.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import Image from '../../../scenery/js/nodes/Image.js';
@@ -25,7 +25,8 @@ class BuildANucleusScreen extends Screen {
       () => new BuildAnAtomModel( tandem.createTandem( 'model' ), {
         includeChargeAndElectrons: false
       } ),
-      model => new BAAScreenView( model, tandem.createTandem( 'view' ), {
+
+      model => new NucleusScreenView( model, tandem.createTandem( 'view' ), {
         buildANucleusSim: true
       } ), {
         name: buildANucleusStrings[ 'build-a-nucleus' ].title,
