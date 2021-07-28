@@ -1,7 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * buildANucleusColorProfile defines the color profile for this sim.
+ * BuildANucleusColors defines the color profile for this sim.
  *
  * @author Chris Malley (PixelZoom, Inc.)
  */
@@ -9,7 +9,7 @@
 import ProfileColorProperty from '../../../scenery/js/util/ProfileColorProperty.js';
 import buildANucleus from '../buildANucleus.js';
 
-const buildANucleusColorProfile = {
+const BuildANucleusColors = {
 
   // Background color that for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( 'screenBackground', {
@@ -17,6 +17,6 @@ const buildANucleusColorProfile = {
   } )
 };
 
-buildANucleus.register( 'buildANucleusColorProfile', buildANucleusColorProfile );
+buildANucleus.register( 'BuildANucleusColors', BuildANucleusColors );
 
-export default buildANucleusColorProfile;
+export default BuildANucleusColors;
