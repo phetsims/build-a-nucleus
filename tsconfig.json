@@ -2,6 +2,9 @@
   "extends": "../chipper/tsconfig-core.json",
   "references": [
     {
+      "path": "../build-an-atom"
+    },
+    {
       "path": "../shred"
     },
     {
