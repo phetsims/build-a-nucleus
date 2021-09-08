@@ -12,7 +12,7 @@ import buildANucleus from '../buildANucleus.js';
 const BuildANucleusColors = {
 
   // Background color that for screens in this sim
-  screenBackgroundColorProperty: new ProfileColorProperty( 'screenBackground', {
+  screenBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'screenBackground', {
     default: 'white'
   } )
 };
