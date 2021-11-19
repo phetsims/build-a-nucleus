@@ -3,11 +3,17 @@
 /**
  * Auto-generated from modulify, DO NOT manually modify.
  */
-
+/* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
 import buildANucleus from './buildANucleus.js';
 
-const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' );
+type StringsType = {
+  'build-a-nucleus': {
+    'title': string
+  }
+};
+
+const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
 
 buildANucleus.register( 'buildANucleusStrings', buildANucleusStrings );
 
