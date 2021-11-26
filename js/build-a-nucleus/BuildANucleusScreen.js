@@ -8,7 +8,7 @@ import BuildAnAtomModel from '../../../build-an-atom/js/common/model/BuildAnAtom
 import BAAScreenView from '../../../build-an-atom/js/common/view/BAAScreenView.js';
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import Image from '../../../scenery/js/nodes/Image.js';
+import { Image } from '../../../scenery/js/imports.js';
 import nucleusIcon from '../../images/nucleus_icon_png.js';
 import nucleusIconSmall from '../../images/nucleus_icon_small_png.js';
 import buildANucleus from '../buildANucleus.js';
