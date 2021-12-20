@@ -9,8 +9,8 @@ import BAAScreenView from '../../../build-an-atom/js/common/view/BAAScreenView.j
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import { Image } from '../../../scenery/js/imports.js';
-import nucleusIcon from '../../images/nucleus_icon_png.js';
-import nucleusIconSmall from '../../images/nucleus_icon_small_png.js';
+import nucleusIcon_png from '../../images/nucleusIcon_png.js';
+import nucleusIconSmall_png from '../../images/nucleusIconSmall_png.js';
 import buildANucleus from '../buildANucleus.js';
 import buildANucleusStrings from '../buildANucleusStrings.js';
 
@@ -29,11 +29,11 @@ class BuildANucleusScreen extends Screen {
         buildANucleusSim: true
       } ), {
         name: buildANucleusStrings[ 'build-a-nucleus' ].title,
-        homeScreenIcon: new ScreenIcon( new Image( nucleusIcon ), {
+        homeScreenIcon: new ScreenIcon( new Image( nucleusIcon_png ), {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        navigationBarIcon: new ScreenIcon( new Image( nucleusIconSmall ), {
+        navigationBarIcon: new ScreenIcon( new Image( nucleusIconSmall_png ), {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
