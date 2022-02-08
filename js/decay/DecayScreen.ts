@@ -13,25 +13,29 @@ import buildANucleus from '../buildANucleus.js';
 import BuildANucleusColors from '../common/BuildANucleusColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
+import { ProfileColorProperty } from '../../../scenery/js/imports.js';
+
+// types
+type DecayScreenOptions = {
+  backgroundColorProperty: ProfileColorProperty,
+  tandem: Tandem
+};
 
 class DecayScreen extends Screen {
 
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  constructor( providedOptions?: Partial<DecayScreenOptions> ) {
 
-    options = merge( {
+    const options = merge( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       backgroundColorProperty: BuildANucleusColors.screenBackgroundColorProperty,
 
       // phet-io options
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions ) as DecayScreenOptions;
 
     super(
       () => new DecayModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+        ( model: DecayModel ) => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
       options
     );
   }
