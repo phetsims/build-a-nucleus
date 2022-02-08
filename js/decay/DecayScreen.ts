@@ -7,31 +7,31 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
-import merge from '../../../phet-core/js/merge.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
 import BuildANucleusColors from '../common/BuildANucleusColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
-import { ProfileColorProperty } from '../../../scenery/js/imports.js';
+import optionize from '../../../phet-core/js/optionize.js';
+import { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
 
 // types
-type DecayScreenOptions = {
-  backgroundColorProperty: ProfileColorProperty,
-  tandem: Tandem
-};
+type DecayScreenSelfOptions = {};
+export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class DecayScreen extends Screen {
 
-  constructor( providedOptions?: Partial<DecayScreenOptions> ) {
+  constructor( providedOptions?: DecayScreenOptions ) {
 
-    const options = merge( {
+    const options = optionize<DecayScreenOptions, DecayScreenSelfOptions, PhetioObjectOptions>( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
+
+      // @ts-ignore TODO: get screenBackgroundColorProperty from screen options when that exists
       backgroundColorProperty: BuildANucleusColors.screenBackgroundColorProperty,
 
       // phet-io options
       tandem: Tandem.REQUIRED
-    }, providedOptions ) as DecayScreenOptions;
+    }, providedOptions );
 
     super(
       () => new DecayModel( { tandem: options.tandem.createTandem( 'model' ) } ),

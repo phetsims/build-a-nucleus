@@ -6,40 +6,41 @@
  * @author Luisa Vargas
  */
 
-import merge from '../../../../phet-core/js/merge.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+// types
+type DecayModelSelfOptions = {};
+export type DecayModelOptions = DecayModelSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class DecayModel {
 
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  constructor( providedOptions?: DecayModelOptions ) {
 
-    options = merge( {
+    const options = optionize<DecayModelOptions, DecayModelSelfOptions, PhetioObjectOptions>( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
+    console.log( options.tandem );
     //TODO
   }
 
   /**
    * Resets the model.
-   * @public
    */
-  reset() {
+  public reset(): void {
     //TODO
   }
 
   /**
    * Steps the model.
    * @param {number} dt - time step, in seconds
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     //TODO
   }
 }

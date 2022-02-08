@@ -7,27 +7,27 @@
  */
 
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import merge from '../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusConstants from '../../common/BuildANucleusConstants.js';
 import DecayModel from '../model/DecayModel.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+// types
+type DecayScreenViewSelfOptions = {};
+export type DecayScreenViewOptions = DecayScreenViewSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class DecayScreenView extends ScreenView {
 
-  /**
-   * @param {SimulaRasaModel} model
-   * @param {Object} [options]
-   */
-  constructor( model, options ) {
-    assert && assert( model instanceof DecayModel, 'invalid model' );
+  constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
-    options = merge( {
+    const options = optionize<DecayScreenViewOptions, DecayScreenViewSelfOptions, PhetioObjectOptions>( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( options );
 
@@ -46,18 +46,16 @@ class DecayScreenView extends ScreenView {
 
   /**
    * Resets the view.
-   * @public
    */
-  reset() {
+  public reset(): void {
     //TODO
   }
 
   /**
    * Steps the view.
    * @param {number} dt - time step, in seconds
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     //TODO
   }
 }
