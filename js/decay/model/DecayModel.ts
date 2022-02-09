@@ -10,12 +10,13 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import BuildANucleusModel from '../../common/model/BuildANucleusModel.js';
 
 // types
 type DecayModelSelfOptions = {};
 export type DecayModelOptions = DecayModelSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
-class DecayModel {
+class DecayModel extends BuildANucleusModel {
 
   constructor( providedOptions?: DecayModelOptions ) {
 
@@ -25,19 +26,15 @@ class DecayModel {
       tandem: Tandem.REQUIRED
     }, providedOptions );
 
-    console.log( options.tandem );
-    //TODO
+    // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
+    super( 92, 146, options );
   }
 
-  /**
-   * Resets the model.
-   */
   public reset(): void {
     //TODO
   }
 
   /**
-   * Steps the model.
    * @param {number} dt - time step, in seconds
    */
   public step( dt: number ): void {
