@@ -15,12 +15,15 @@ import Range from '../../../../dot/js/Range.js';
 
 // types
 type BuildANucleusModelSelfOptions = {};
-export type BuildANucleusModelOptions = BuildANucleusModelSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+export type BuildANucleusModelOptions =
+  BuildANucleusModelSelfOptions
+  & PhetioObjectOptions
+  & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class BuildANucleusModel {
 
-  private readonly protonCountProperty: NumberProperty;
-  private readonly neutronCountProperty: NumberProperty;
+  public readonly protonCountProperty: NumberProperty;
+  public readonly neutronCountProperty: NumberProperty;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BuildANucleusModelOptions ) {
 
@@ -32,11 +35,13 @@ class BuildANucleusModel {
 
     console.log( options.tandem );
 
+    // the number of protons
     this.protonCountProperty = new NumberProperty( 0, {
       numberType: 'Integer',
       range: new Range( 0, maximumProtonNumber )
     } );
 
+    // the number of neutrons
     this.neutronCountProperty = new NumberProperty( 0, {
       numberType: 'Integer',
       range: new Range( 0, maximumNeutronNumber )
@@ -44,6 +49,7 @@ class BuildANucleusModel {
   }
 
   public reset(): void {
+    console.log( 'reset' );
     this.protonCountProperty.reset();
     this.neutronCountProperty.reset();
   }
