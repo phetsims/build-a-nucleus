@@ -1,5 +1,11 @@
 {
   "build-a-nucleus.title": {
     "value": "Build a Nucleus"
+  },
+  "protonsColon": {
+    "value": "Protons:"
+  },
+  "neutronsColon": {
+    "value": "Neutrons:"
   }
 }

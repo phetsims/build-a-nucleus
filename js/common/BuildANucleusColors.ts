@@ -12,9 +12,9 @@ import PhetColorScheme from '../../../scenery-phet/js/PhetColorScheme.js';
 
 const BuildANucleusColors = {
 
-  // Background color that for screens in this sim
+  // background color that for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'screenBackground', {
-    default: 'white'
+    default: Color.WHITE
   } ),
 
   // particle colors
@@ -23,6 +23,11 @@ const BuildANucleusColors = {
   } ),
   neutronColorProperty: new ProfileColorProperty( buildANucleus, 'neutronColor', {
     default: Color.GRAY
+  } ),
+
+  // background color for panels in this sim
+  panelBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'panelBackground', {
+    default: new Color( 241, 250, 254 )
   } )
 };
 

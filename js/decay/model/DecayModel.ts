@@ -14,7 +14,10 @@ import BuildANucleusModel from '../../common/model/BuildANucleusModel.js';
 
 // types
 type DecayModelSelfOptions = {};
-export type DecayModelOptions = DecayModelSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+export type DecayModelOptions =
+  DecayModelSelfOptions
+  & PhetioObjectOptions
+  & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class DecayModel extends BuildANucleusModel {
 
@@ -31,7 +34,7 @@ class DecayModel extends BuildANucleusModel {
   }
 
   public reset(): void {
-    //TODO
+    super.reset();
   }
 
   /**

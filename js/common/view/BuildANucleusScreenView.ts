@@ -15,8 +15,10 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BuildANucleusModel from '../model/BuildANucleusModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { ProfileColorProperty, VBox } from '../../../../scenery/js/imports.js';
+import { VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusColors from '../BuildANucleusColors.js';
+import NucleonCountPanel from './NucleonCountPanel.js';
+import merge from '../../../../phet-core/js/merge.js';
 
 // types
 type BuildANucleusScreenViewSelfOptions = {};
@@ -37,18 +39,20 @@ class BuildANucleusScreenView extends ScreenView {
 
     super( options );
 
-    // return arrow button options, setting the arrowFill color
-    const getArrowButtonConfig = ( arrowFillColor: ProfileColorProperty ) => {
-      return {
-        arrowWidth: 14,  // empirically determined
-        arrowHeight: 14, // empirically determined
-        spacing: 7,       // empirically determined
-        arrowFill: arrowFillColor
-      };
+    const nucleonCountPanel = new NucleonCountPanel( model.protonCountProperty, model.neutronCountProperty );
+    nucleonCountPanel.top = this.layoutBounds.minY + BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
+    nucleonCountPanel.left = this.layoutBounds.maxX - 200;
+    this.addChild( nucleonCountPanel );
+
+    // arrow button options
+    const arrowButtonConfig = {
+      arrowWidth: 14,  // empirically determined
+      arrowHeight: 14, // empirically determined
+      spacing: 7      // empirically determined
     };
 
     // create the arrow buttons, which change the value of protonCountProperty by -1 or +1
-    const protonArrowButtonConfig = getArrowButtonConfig( BuildANucleusColors.protonColorProperty );
+    const protonArrowButtonConfig = merge( arrowButtonConfig, { arrowFill: BuildANucleusColors.protonColorProperty } );
     const protonUpArrowButton = new ArrowButton( 'up', () => {
       model.protonCountProperty.value =
         Math.min( model.protonCountProperty.range!.max, model.protonCountProperty.value + 1 );
@@ -61,12 +65,12 @@ class BuildANucleusScreenView extends ScreenView {
       children: [ protonUpArrowButton, protonDownArrowButton ],
       spacing: protonArrowButtonConfig.spacing
     } );
-    protonArrowButtons.bottom = this.layoutBounds.maxY;
+    protonArrowButtons.bottom = this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
     protonArrowButtons.left = this.layoutBounds.minX + 50;
     this.addChild( protonArrowButtons );
 
     // create the arrow buttons, which change the value of neutronCountProperty by -1 or +1
-    const neutronArrowButtonConfig = getArrowButtonConfig( BuildANucleusColors.neutronColorProperty );
+    const neutronArrowButtonConfig = merge( arrowButtonConfig, { arrowFill: BuildANucleusColors.neutronColorProperty } );
     const neutronUpArrowButton = new ArrowButton( 'up', () => {
       model.neutronCountProperty.value =
         Math.min( model.neutronCountProperty.range!.max, model.neutronCountProperty.value + 1 );
@@ -79,7 +83,7 @@ class BuildANucleusScreenView extends ScreenView {
       children: [ neutronUpArrowButton, neutronDownArrowButton ],
       spacing: neutronArrowButtonConfig.spacing
     } );
-    neutronArrowButtons.bottom = this.layoutBounds.maxY;
+    neutronArrowButtons.bottom = this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
     neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 2;
     this.addChild( neutronArrowButtons );
 

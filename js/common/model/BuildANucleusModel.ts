@@ -49,7 +49,6 @@ class BuildANucleusModel {
   }
 
   public reset(): void {
-    console.log( 'reset' );
     this.protonCountProperty.reset();
     this.neutronCountProperty.reset();
   }

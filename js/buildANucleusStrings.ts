@@ -10,7 +10,9 @@ import buildANucleus from './buildANucleus.js';
 type StringsType = {
   'build-a-nucleus': {
     'title': string
-  }
+  },
+  'protonsColon': string,
+  'neutronsColon': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
