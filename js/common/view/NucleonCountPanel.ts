@@ -16,12 +16,11 @@ import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 
-//types
+// types
 type nucleonLabel = {
-  nucleonTitle: Text,
-  nucleonParticleNode: ParticleNode,
-  nucleonNumberDisplay: NumberDisplay,
-  nucleonContents: HBox
+  title: Text,
+  numberDisplay: NumberDisplay,
+  contents: HBox
 };
 
 // constants, empirically determined
@@ -38,8 +37,9 @@ class NucleonCountPanel extends Panel {
       fill: BuildANucleusColors.panelBackgroundColorProperty
     };
 
-    const panelContents = new Rectangle( 0, 0, 140, 40 );
+    const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
 
+    // function to create the nucleon labels and add them to panelContents
     const nucleonLabel = ( nucleonString: string, nucleonType: string, nucleonCountProperty: NumberProperty ): nucleonLabel => {
 
       const nucleonTitle = new Text( nucleonString, {
@@ -48,6 +48,9 @@ class NucleonCountPanel extends Panel {
       nucleonTitle.maxWidth = MAX_TITLE_WIDTH;
       const nucleonParticleNode = new ParticleNode( nucleonType, PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
+      nucleonTitle.left = nucleonParticleNode.right + nucleonParticleNode.width / 2;
+      nucleonTitle.top = nucleonContents.top;
+      nucleonParticleNode.centerY = nucleonTitle.centerY;
       panelContents.addChild( nucleonContents );
 
       const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountProperty.range, {
@@ -58,29 +61,25 @@ class NucleonCountPanel extends Panel {
         backgroundFill: null,
         backgroundStroke: null
       } );
+      nucleonNumberDisplay.right = panelContents.right;
       panelContents.addChild( nucleonNumberDisplay );
 
       return {
-        nucleonTitle: nucleonTitle,
-        nucleonParticleNode: nucleonParticleNode,
-        nucleonNumberDisplay: nucleonNumberDisplay,
-        nucleonContents: nucleonContents
+        title: nucleonTitle,
+        numberDisplay: nucleonNumberDisplay,
+        contents: nucleonContents
       };
     };
+
+    // create the nucleon labels
     const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, 'proton', protonCountProperty );
     const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, 'neutron', neutronCountProperty );
-    protonLabel.nucleonContents.top = 0;
-    protonLabel.nucleonTitle.left = protonLabel.nucleonParticleNode.right + protonLabel.nucleonParticleNode.width / 2;
-    protonLabel.nucleonTitle.top = protonLabel.nucleonContents.top;
-    protonLabel.nucleonParticleNode.centerY = protonLabel.nucleonTitle.centerY;
-    protonLabel.nucleonNumberDisplay.right = panelContents.right;
-    protonLabel.nucleonNumberDisplay.centerY = protonLabel.nucleonContents.centerY;
 
-    neutronLabel.nucleonContents.bottom = protonLabel.nucleonTitle.bottom + Math.max( neutronLabel.nucleonTitle.height, MIN_VERTICAL_SPACING );
-    neutronLabel.nucleonTitle.left = neutronLabel.nucleonParticleNode.right + neutronLabel.nucleonParticleNode.width / 2;
-    neutronLabel.nucleonParticleNode.centerY = neutronLabel.nucleonTitle.centerY;
-    neutronLabel.nucleonNumberDisplay.right = panelContents.right;
-    neutronLabel.nucleonNumberDisplay.centerY = neutronLabel.nucleonContents.centerY;
+    // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's
+    protonLabel.contents.top = 0;
+    protonLabel.numberDisplay.centerY = protonLabel.contents.centerY;
+    neutronLabel.contents.bottom = protonLabel.title.bottom + Math.max( neutronLabel.title.height, MIN_VERTICAL_SPACING );
+    neutronLabel.numberDisplay.centerY = neutronLabel.contents.centerY;
 
     super( panelContents, options );
   }
