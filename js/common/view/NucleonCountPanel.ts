@@ -1,6 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
+ * A node that presents a readout of the number of protons and neutrons.
+ *
  * @author Luisa Vargas
  */
 
@@ -12,10 +14,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
-
-// strings
-const protonsColonString = buildANucleusStrings.protonsColon;
-const neutronsColonString = buildANucleusStrings.neutronsColon;
 
 // constants, empirically determined
 const LABEL_FONT = new PhetFont( 12 );
@@ -34,7 +32,7 @@ class NucleonCountPanel extends Panel {
     const panelContents = new Node();
 
     const protonLabel = new Node();
-    const protonTitle = new Text( protonsColonString, {
+    const protonTitle = new Text( buildANucleusStrings.protonsColon, {
       font: LABEL_FONT
     } );
     protonTitle.maxWidth = MAX_TITLE_WIDTH;
@@ -48,7 +46,7 @@ class NucleonCountPanel extends Panel {
     panelContents.addChild( protonContents );
 
     const neutronLabel = new Node();
-    const neutronTitle = new Text( neutronsColonString, {
+    const neutronTitle = new Text( buildANucleusStrings.neutronsColon, {
       font: LABEL_FONT
     } );
     neutronTitle.maxWidth = MAX_TITLE_WIDTH;
