@@ -17,10 +17,10 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 
 // constants, empirically determined
-const LABEL_FONT = new PhetFont( 12 );
-const MAX_TITLE_WIDTH = 84;
+const LABEL_FONT = new PhetFont( 17 );
+const MAX_TITLE_WIDTH = 115;
 const MIN_VERTICAL_SPACING = 16;
-const PARTICLE_RADIUS = 4.5;
+const PARTICLE_RADIUS = 6;
 
 class NucleonCountPanel extends Panel {
 
@@ -30,7 +30,7 @@ class NucleonCountPanel extends Panel {
       fill: BuildANucleusColors.panelBackgroundColorProperty
     };
 
-    const panelContents = new Rectangle( 0, 0, 100, 20 );
+    const panelContents = new Rectangle( 0, 0, 140, 40 );
 
     const protonTitle = new Text( buildANucleusStrings.protonsColon, {
       font: LABEL_FONT
@@ -66,11 +66,7 @@ class NucleonCountPanel extends Panel {
     const neutronContents = new HBox( { spacing: 5, children: [ neutronParticleNode, neutronTitle ] } );
     panelContents.addChild( neutronContents );
 
-    const maxLabelWidth = Math.max( protonTitle.width + protonParticleNode.width * ( 3 / 2 ),
-      neutronTitle.width + neutronParticleNode.width * ( 3 / 2 ) );
-
     protonContents.top = 0;
-    protonParticleNode.left = maxLabelWidth;
     protonTitle.left = protonParticleNode.right + protonParticleNode.width / 2;
     protonTitle.top = protonContents.top;
     protonParticleNode.centerY = protonTitle.centerY;
@@ -78,7 +74,6 @@ class NucleonCountPanel extends Panel {
     protonNumberDisplay.centerY = protonContents.centerY;
 
     neutronContents.bottom = protonTitle.bottom + Math.max( neutronTitle.height, MIN_VERTICAL_SPACING );
-    neutronParticleNode.left = maxLabelWidth;
     neutronTitle.left = neutronParticleNode.right + neutronParticleNode.width / 2;
     neutronParticleNode.centerY = neutronTitle.centerY;
     neutronNumberDisplay.right = panelContents.right;
