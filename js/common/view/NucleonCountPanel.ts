@@ -16,6 +16,14 @@ import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 
+//types
+type nucleonLabel = {
+  nucleonTitle: Text,
+  nucleonParticleNode: ParticleNode,
+  nucleonNumberDisplay: NumberDisplay,
+  nucleonContents: HBox
+};
+
 // constants, empirically determined
 const LABEL_FONT = new PhetFont( 17 );
 const MAX_TITLE_WIDTH = 115;
@@ -32,52 +40,47 @@ class NucleonCountPanel extends Panel {
 
     const panelContents = new Rectangle( 0, 0, 140, 40 );
 
-    const protonTitle = new Text( buildANucleusStrings.protonsColon, {
-      font: LABEL_FONT
-    } );
-    protonTitle.maxWidth = MAX_TITLE_WIDTH;
-    const protonParticleNode = new ParticleNode( 'proton', PARTICLE_RADIUS );
-    const protonNumberDisplay = new NumberDisplay( protonCountProperty, protonCountProperty.range, {
-      align: 'right',
-      textOptions: {
+    const nucleonLabel = ( nucleonString: string, nucleonType: string, nucleonCountProperty: NumberProperty ): nucleonLabel => {
+
+      const nucleonTitle = new Text( nucleonString, {
         font: LABEL_FONT
-      },
-      backgroundFill: null,
-      backgroundStroke: null
-    } );
-    panelContents.addChild( protonNumberDisplay );
-    const protonContents = new HBox( { spacing: 5, children: [ protonParticleNode, protonTitle ] } );
-    panelContents.addChild( protonContents );
+      } );
+      nucleonTitle.maxWidth = MAX_TITLE_WIDTH;
+      const nucleonParticleNode = new ParticleNode( nucleonType, PARTICLE_RADIUS );
+      const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
+      panelContents.addChild( nucleonContents );
 
-    const neutronTitle = new Text( buildANucleusStrings.neutronsColon, {
-      font: LABEL_FONT
-    } );
-    neutronTitle.maxWidth = MAX_TITLE_WIDTH;
-    const neutronParticleNode = new ParticleNode( 'neutron', PARTICLE_RADIUS );
-    const neutronNumberDisplay = new NumberDisplay( neutronCountProperty, neutronCountProperty.range, {
-      align: 'right',
-      textOptions: {
-        font: LABEL_FONT
-      },
-      backgroundFill: null,
-      backgroundStroke: null
-    } );
-    panelContents.addChild( neutronNumberDisplay );
-    const neutronContents = new HBox( { spacing: 5, children: [ neutronParticleNode, neutronTitle ] } );
-    panelContents.addChild( neutronContents );
+      const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountProperty.range, {
+        align: 'right',
+        textOptions: {
+          font: LABEL_FONT
+        },
+        backgroundFill: null,
+        backgroundStroke: null
+      } );
+      panelContents.addChild( nucleonNumberDisplay );
 
-    protonContents.top = 0;
-    protonTitle.left = protonParticleNode.right + protonParticleNode.width / 2;
-    protonTitle.top = protonContents.top;
-    protonParticleNode.centerY = protonTitle.centerY;
-    protonNumberDisplay.right = panelContents.right;
-    protonNumberDisplay.centerY = protonContents.centerY;
+      return {
+        nucleonTitle: nucleonTitle,
+        nucleonParticleNode: nucleonParticleNode,
+        nucleonNumberDisplay: nucleonNumberDisplay,
+        nucleonContents: nucleonContents
+      };
+    };
+    const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, 'proton', protonCountProperty );
+    const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, 'neutron', neutronCountProperty );
+    protonLabel.nucleonContents.top = 0;
+    protonLabel.nucleonTitle.left = protonLabel.nucleonParticleNode.right + protonLabel.nucleonParticleNode.width / 2;
+    protonLabel.nucleonTitle.top = protonLabel.nucleonContents.top;
+    protonLabel.nucleonParticleNode.centerY = protonLabel.nucleonTitle.centerY;
+    protonLabel.nucleonNumberDisplay.right = panelContents.right;
+    protonLabel.nucleonNumberDisplay.centerY = protonLabel.nucleonContents.centerY;
 
-    neutronContents.bottom = protonTitle.bottom + Math.max( neutronTitle.height, MIN_VERTICAL_SPACING );
-    neutronTitle.left = neutronParticleNode.right + neutronParticleNode.width / 2;
-    neutronParticleNode.centerY = neutronTitle.centerY;
-    neutronNumberDisplay.right = panelContents.right;
-    neutronNumberDisplay.centerY = neutronContents.centerY;
+    neutronLabel.nucleonContents.bottom = protonLabel.nucleonTitle.bottom + Math.max( neutronLabel.nucleonTitle.height, MIN_VERTICAL_SPACING );
+    neutronLabel.nucleonTitle.left = neutronLabel.nucleonParticleNode.right + neutronLabel.nucleonParticleNode.width / 2;
+    neutronLabel.nucleonParticleNode.centerY = neutronLabel.nucleonTitle.centerY;
+    neutronLabel.nucleonNumberDisplay.right = panelContents.right;
+    neutronLabel.nucleonNumberDisplay.centerY = neutronLabel.nucleonContents.centerY;
 
     super( panelContents, options );
   }
