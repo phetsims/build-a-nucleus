@@ -15,10 +15,10 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BuildANucleusModel from '../model/BuildANucleusModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { VBox } from '../../../../scenery/js/imports.js';
+import { ProfileColorProperty, VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusColors from '../BuildANucleusColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
-import merge from '../../../../phet-core/js/merge.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // types
 type BuildANucleusScreenViewSelfOptions = {};
@@ -44,45 +44,34 @@ class BuildANucleusScreenView extends ScreenView {
     nucleonCountPanel.left = this.layoutBounds.maxX - 200;
     this.addChild( nucleonCountPanel );
 
-    // arrow button options
-    const arrowButtonConfig = {
-      arrowWidth: 14,  // empirically determined
-      arrowHeight: 14, // empirically determined
-      spacing: 7      // empirically determined
+    // function to create the arrow buttons, which change the value of the nucleonCountProperty by -1 or +1
+    const createArrowButtons = ( nucleonCountProperty: NumberProperty, nucleonColorProperty: ProfileColorProperty ): VBox => {
+      const arrowButtonConfig = {
+        arrowWidth: 14,  // empirically determined
+        arrowHeight: 14, // empirically determined
+        spacing: 7,      // empirically determined
+        arrowFill: nucleonColorProperty
+      };
+      const upArrowButton = new ArrowButton( 'up', () => {
+        nucleonCountProperty.value =
+          Math.min( nucleonCountProperty.range!.max, nucleonCountProperty.value + 1 );
+      }, arrowButtonConfig );
+      const downArrowButton = new ArrowButton( 'down', () => {
+        nucleonCountProperty.value =
+          Math.max( nucleonCountProperty.range!.min, nucleonCountProperty.value - 1 );
+      }, arrowButtonConfig );
+      return new VBox( {
+        children: [ upArrowButton, downArrowButton ],
+        spacing: arrowButtonConfig.spacing
+      } );
     };
 
-    // create the arrow buttons, which change the value of protonCountProperty by -1 or +1
-    const protonArrowButtonConfig = merge( arrowButtonConfig, { arrowFill: BuildANucleusColors.protonColorProperty } );
-    const protonUpArrowButton = new ArrowButton( 'up', () => {
-      model.protonCountProperty.value =
-        Math.min( model.protonCountProperty.range!.max, model.protonCountProperty.value + 1 );
-    }, protonArrowButtonConfig );
-    const protonDownArrowButton = new ArrowButton( 'down', () => {
-      model.protonCountProperty.value =
-        Math.max( model.protonCountProperty.range!.min, model.protonCountProperty.value - 1 );
-    }, protonArrowButtonConfig );
-    const protonArrowButtons = new VBox( {
-      children: [ protonUpArrowButton, protonDownArrowButton ],
-      spacing: protonArrowButtonConfig.spacing
-    } );
+    // create the arrow buttons
+    const protonArrowButtons = createArrowButtons( model.protonCountProperty, BuildANucleusColors.protonColorProperty );
     protonArrowButtons.bottom = this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
     protonArrowButtons.left = this.layoutBounds.minX + 50;
     this.addChild( protonArrowButtons );
-
-    // create the arrow buttons, which change the value of neutronCountProperty by -1 or +1
-    const neutronArrowButtonConfig = merge( arrowButtonConfig, { arrowFill: BuildANucleusColors.neutronColorProperty } );
-    const neutronUpArrowButton = new ArrowButton( 'up', () => {
-      model.neutronCountProperty.value =
-        Math.min( model.neutronCountProperty.range!.max, model.neutronCountProperty.value + 1 );
-    }, neutronArrowButtonConfig );
-    const neutronDownArrowButton = new ArrowButton( 'down', () => {
-      model.neutronCountProperty.value =
-        Math.max( model.neutronCountProperty.range!.min, model.neutronCountProperty.value - 1 );
-    }, neutronArrowButtonConfig );
-    const neutronArrowButtons = new VBox( {
-      children: [ neutronUpArrowButton, neutronDownArrowButton ],
-      spacing: neutronArrowButtonConfig.spacing
-    } );
+    const neutronArrowButtons = createArrowButtons( model.neutronCountProperty, BuildANucleusColors.neutronColorProperty );
     neutronArrowButtons.bottom = this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
     neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 2;
     this.addChild( neutronArrowButtons );
@@ -99,17 +88,21 @@ class BuildANucleusScreenView extends ScreenView {
     } );
     this.addChild( resetAllButton );
 
-    // disable the arrow buttons when the protonCountProperty or the neutronCountProperty values are at its min or max range
-    const protonCountPropertyObserver = ( protonCount: number ) => {
-      protonUpArrowButton.enabled = protonCount !== model.protonCountProperty.range!.max;
-      protonDownArrowButton.enabled = protonCount !== model.protonCountProperty.range!.min;
+    // function to create observers that disable the arrow buttons when the nucleonCountProperty values are at its min
+    // or max range
+    const nucleonCountPropertyObserver = ( nucleonCount: number, nucleonArrowButtons: VBox, nucleonCountProperty: NumberProperty ) => {
+      // up arrow button
+      nucleonArrowButtons.getChildAt( 0 ).enabled = nucleonCount !== nucleonCountProperty.range!.max;
+      // down arrow button
+      nucleonArrowButtons.getChildAt( 1 ).enabled = nucleonCount !== nucleonCountProperty.range!.min;
     };
-    model.protonCountProperty.link( protonCountPropertyObserver );
-    const neutronCountPropertyObserver = ( neutronCount: number ) => {
-      neutronUpArrowButton.enabled = neutronCount !== model.neutronCountProperty.range!.max;
-      neutronDownArrowButton.enabled = neutronCount !== model.neutronCountProperty.range!.min;
-    };
-    model.neutronCountProperty.link( neutronCountPropertyObserver );
+    // create the observers to disable the arrow buttons, see the comment on the observer above
+    model.protonCountProperty.link( protonCount => {
+      nucleonCountPropertyObserver( protonCount, protonArrowButtons, model.protonCountProperty );
+    } );
+    model.neutronCountProperty.link( neutronCount => {
+      nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
+    } );
   }
 
   public reset(): void {
