@@ -9,11 +9,12 @@
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusColors from '../BuildANucleusColors.js';
-import { Node, Text, HBox } from '../../../../scenery/js/imports.js';
+import { Text, HBox, Rectangle } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
+import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 
 // constants, empirically determined
 const LABEL_FONT = new PhetFont( 12 );
@@ -29,34 +30,40 @@ class NucleonCountPanel extends Panel {
       fill: BuildANucleusColors.panelBackgroundColorProperty
     };
 
-    const panelContents = new Node();
+    const panelContents = new Rectangle( 0, 0, 100, 20 );
 
-    const protonLabel = new Node();
     const protonTitle = new Text( buildANucleusStrings.protonsColon, {
       font: LABEL_FONT
     } );
     protonTitle.maxWidth = MAX_TITLE_WIDTH;
-    protonLabel.addChild( protonTitle );
     const protonParticleNode = new ParticleNode( 'proton', PARTICLE_RADIUS );
-    protonLabel.addChild( protonParticleNode );
-    const protonCountLabel = new Text( protonCountProperty.value, {
-      font: LABEL_FONT
+    const protonNumberDisplay = new NumberDisplay( protonCountProperty, protonCountProperty.range, {
+      align: 'right',
+      textOptions: {
+        font: LABEL_FONT
+      },
+      backgroundFill: null,
+      backgroundStroke: null
     } );
-    const protonContents = new HBox( { spacing: 15, children: [ protonLabel, protonCountLabel ] } );
+    panelContents.addChild( protonNumberDisplay );
+    const protonContents = new HBox( { spacing: 5, children: [ protonParticleNode, protonTitle ] } );
     panelContents.addChild( protonContents );
 
-    const neutronLabel = new Node();
     const neutronTitle = new Text( buildANucleusStrings.neutronsColon, {
       font: LABEL_FONT
     } );
     neutronTitle.maxWidth = MAX_TITLE_WIDTH;
-    neutronLabel.addChild( neutronTitle );
     const neutronParticleNode = new ParticleNode( 'neutron', PARTICLE_RADIUS );
-    neutronLabel.addChild( neutronParticleNode );
-    const neutronCountLabel = new Text( neutronCountProperty.value, {
-      font: LABEL_FONT
+    const neutronNumberDisplay = new NumberDisplay( neutronCountProperty, neutronCountProperty.range, {
+      align: 'right',
+      textOptions: {
+        font: LABEL_FONT
+      },
+      backgroundFill: null,
+      backgroundStroke: null
     } );
-    const neutronContents = new HBox( { spacing: 15, children: [ neutronLabel, neutronCountLabel ] } );
+    panelContents.addChild( neutronNumberDisplay );
+    const neutronContents = new HBox( { spacing: 5, children: [ neutronParticleNode, neutronTitle ] } );
     panelContents.addChild( neutronContents );
 
     const maxLabelWidth = Math.max( protonTitle.width + protonParticleNode.width * ( 3 / 2 ),
@@ -67,19 +74,15 @@ class NucleonCountPanel extends Panel {
     protonTitle.left = protonParticleNode.right + protonParticleNode.width / 2;
     protonTitle.top = protonContents.top;
     protonParticleNode.centerY = protonTitle.centerY;
+    protonNumberDisplay.right = panelContents.right;
+    protonNumberDisplay.centerY = protonContents.centerY;
 
     neutronContents.bottom = protonTitle.bottom + Math.max( neutronTitle.height, MIN_VERTICAL_SPACING );
     neutronParticleNode.left = maxLabelWidth;
     neutronTitle.left = neutronParticleNode.right + neutronParticleNode.width / 2;
     neutronParticleNode.centerY = neutronTitle.centerY;
-
-    // update the protonCount and neutronCount labels
-    protonCountProperty.link( ( protonCount: number ) => {
-      protonCountLabel.text = protonCount;
-    } );
-    neutronCountProperty.link( ( neutronCount: number ) => {
-      neutronCountLabel.text = neutronCount;
-    } );
+    neutronNumberDisplay.right = panelContents.right;
+    neutronNumberDisplay.centerY = neutronContents.centerY;
 
     super( panelContents, options );
   }
