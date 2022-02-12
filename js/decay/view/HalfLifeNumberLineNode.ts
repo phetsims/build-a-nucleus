@@ -24,6 +24,8 @@ import Easing from '../../../../twixt/js/Easing.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BuildANucleusColors from '../../common/BuildANucleusColors.js';
 import Utils from '../../../../dot/js/Utils.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import buildANucleusStrings from '../../buildANucleusStrings.js';
 
 // constants
 const TICK_MARK_EXTENT = 18;
@@ -34,8 +36,11 @@ class HalfLifeNumberLineNode extends Node {
   private readonly arrowXPositionProperty: NumberProperty;
   private readonly tickMarkSet: TickMarkSet;
   private modelViewTransform: ModelViewTransform2;
+  private arrowAnimation: null | Animation;
+  private readonly halfLifeTextXPosition: NumberProperty;
 
-  constructor( startX: number, endX: number, numberLineWidth: number, arrowLength: number ) {
+  constructor( halfLifeNumberProperty: NumberProperty, startX: number, endX: number, numberLineWidth: number,
+               arrowLength: number, halfLifeArrowLabel: boolean ) {
     super();
 
     const viewWidth = numberLineWidth;
@@ -98,20 +103,77 @@ class HalfLifeNumberLineNode extends Node {
     this.arrowXPositionProperty.link( xPosition => {
       halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY );
     } );
+    this.arrowAnimation = null;
+
+    // return the half-life label and number readout string
+    const halfLifeTextFillIn = ( halfLife: string ): string => {
+      const exponentSliceIndex = halfLife.indexOf( '+' ) === -1 ? halfLife.indexOf( 'e' ) : halfLife.indexOf( '+' );
+      return StringUtils.fillIn( buildANucleusStrings.halfLifePattern, {
+        decimal: halfLife.slice( 0, 3 ), // show only up to 1 decimal place
+        exponent: halfLife.slice( exponentSliceIndex + 1 )
+      } );
+    };
+
+    // create and add the half life label and number readout
+    const halfLifeString = halfLifeNumberProperty.value.toExponential();
+    const halfLifeText = new RichText( halfLifeTextFillIn( halfLifeString ), {
+      font: halfLifeArrowLabel ? LABEL_FONT : new PhetFont( 24 ),
+      supScale: 0.6,
+      supYOffset: -1
+    } );
+    halfLifeText.bottom = halfLifeArrowLabel ? halfLifeArrow.top : this.top;
+    halfLifeText.centerX = halfLifeArrowLabel ? halfLifeArrow.centerX : this.centerX;
+    this.addChild( halfLifeText );
+
+    // keep track of the x position of the halfLifeText in model coordinates
+    this.halfLifeTextXPosition = new NumberProperty( 0 );
+    this.halfLifeTextXPosition.link( xPosition => {
+      halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - 5 );
+    } );
+
+    // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
+    halfLifeNumberProperty.link( halfLifeNumber => {
+      halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential() ) );
+      this.moveHalfLifeArrow( halfLifeNumber, halfLifeArrowLabel );
+    } );
   }
 
   /**
-   * Animate the half-life arrow to the new half-life position along the number line.
+   * Animate the half-life arrow to the new half-life position along the number line. If the half-life text is added as
+   * a label to the half-life arrow, animate it to its new half-life position too.
    */
-  public moveHalfLifeArrow( halfLife: number ): void {
+  private moveHalfLifeArrow( halfLife: number, halfLifeArrowLabel: boolean ): void {
     const newXPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
-    const animation = new Animation( {
-      to: newXPosition,
-      property: this.arrowXPositionProperty,
-      duration: 0.5, // TODO: set duration based on the length it has to travel
-      easing: Easing.QUADRATIC_IN_OUT
-    } );
-    animation.start();
+
+    if ( this.arrowAnimation ) {
+      this.arrowAnimation.stop();
+      this.arrowAnimation = null;
+    }
+
+    if ( halfLifeArrowLabel ) {
+      this.arrowAnimation = new Animation( {
+        delay: 2,
+        targets: [ {
+          to: newXPosition,
+          property: this.arrowXPositionProperty
+        }, {
+          to: newXPosition,
+          property: this.halfLifeTextXPosition
+        } ],
+        duration: 0.5,
+        easing: Easing.QUADRATIC_IN_OUT
+      } );
+    }
+    else {
+      this.arrowAnimation = new Animation( {
+        delay: 2,
+        to: newXPosition,
+        property: this.arrowXPositionProperty,
+        duration: 0.5,
+        easing: Easing.QUADRATIC_IN_OUT
+      } );
+    }
+    this.arrowAnimation.start();
   }
 
   /**

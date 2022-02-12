@@ -11,7 +11,13 @@
   "seconds": {
     "value": "seconds"
   },
-  "halfLifeColon": {
-    "value": "Half-life:"
+  "halfLifePattern": {
+    "value": "Half-life: {{decimal}} x 10<sup>{{exponent}}</sup> s"
+  },
+  "lessStable": {
+    "value": "less stable"
+  },
+  "moreStable": {
+    "value": "more stable"
   }
 }

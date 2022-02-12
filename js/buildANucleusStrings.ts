@@ -14,7 +14,9 @@ type StringsType = {
   'protonsColon': string,
   'neutronsColon': string,
   'seconds': string,
-  'halfLifeColon': string
+  'halfLifePattern': string,
+  'lessStable': string,
+  'moreStable': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
