@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * Auto-generated from modulify, DO NOT manually modify.
@@ -12,7 +12,9 @@ type StringsType = {
     'title': string
   },
   'protonsColon': string,
-  'neutronsColon': string
+  'neutronsColon': string,
+  'seconds': string,
+  'halfLifeColon': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

@@ -17,7 +17,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 
 // types
-type nucleonLabel = {
+type NucleonLabel = {
   title: Text,
   numberDisplay: NumberDisplay,
   contents: HBox
@@ -40,7 +40,7 @@ class NucleonCountPanel extends Panel {
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
 
     // function to create the nucleon labels and add them to panelContents
-    const nucleonLabel = ( nucleonString: string, nucleonType: string, nucleonCountProperty: NumberProperty ): nucleonLabel => {
+    const nucleonLabel = ( nucleonString: string, nucleonType: string, nucleonCountProperty: NumberProperty ): NucleonLabel => {
 
       const nucleonTitle = new Text( nucleonString, {
         font: LABEL_FONT

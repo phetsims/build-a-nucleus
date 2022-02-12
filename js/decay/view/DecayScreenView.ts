@@ -12,6 +12,8 @@ import DecayModel from '../model/DecayModel.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BuildANucleusScreenView from '../../common/view/BuildANucleusScreenView.js';
+import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
+import BuildANucleusConstants from '../../common/BuildANucleusConstants.js';
 
 // types
 type DecayScreenViewSelfOptions = {};
@@ -27,6 +29,11 @@ class DecayScreenView extends BuildANucleusScreenView {
     }, providedOptions );
 
     super( model, options );
+
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( -18, 18, 450 );
+    halfLifeNumberLineNode.left = this.layoutBounds.minX + 60;
+    halfLifeNumberLineNode.y = this.layoutBounds.minY + BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN + 70;
+    this.addChild( halfLifeNumberLineNode );
   }
 
   public reset(): void {

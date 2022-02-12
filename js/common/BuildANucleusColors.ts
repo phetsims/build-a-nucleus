@@ -28,6 +28,11 @@ const BuildANucleusColors = {
   // background color for panels in this sim
   panelBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'panelBackground', {
     default: new Color( 241, 250, 254 )
+  } ),
+
+  // half-life color
+  halfLifeColorProperty: new ProfileColorProperty( buildANucleus, 'halfLifeColor', {
+    default: new Color( 255, 0, 255 )
   } )
 };
 

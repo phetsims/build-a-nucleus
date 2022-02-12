@@ -7,5 +7,11 @@
   },
   "neutronsColon": {
     "value": "Neutrons:"
+  },
+  "seconds": {
+    "value": "seconds"
+  },
+  "halfLifeColon": {
+    "value": "Half-life:"
   }
 }

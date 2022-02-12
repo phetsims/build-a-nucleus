@@ -12,6 +12,7 @@
   "phet": {
     "requirejsNamespace": "BUILD_A_NUCLEUS",
     "phetLibs": [
+      "bamboo",
       "build-an-atom",
       "shred"
     ],
