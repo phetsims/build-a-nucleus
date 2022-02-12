@@ -33,6 +33,11 @@ const BuildANucleusColors = {
   // half-life color
   halfLifeColorProperty: new ProfileColorProperty( buildANucleus, 'halfLifeColor', {
     default: new Color( 255, 0, 255 )
+  } ),
+
+  // color of the legend arrows in the Expanded Timescale
+  legendArrowColorProperty: new ProfileColorProperty( buildANucleus, 'legendArrowColor', {
+    default: new Color( 4, 4, 255 )
   } )
 };
 

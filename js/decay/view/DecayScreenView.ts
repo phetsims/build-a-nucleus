@@ -17,7 +17,10 @@ import BuildANucleusConstants from '../../common/BuildANucleusConstants.js';
 
 // types
 type DecayScreenViewSelfOptions = {};
-export type DecayScreenViewOptions = DecayScreenViewSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+export type DecayScreenViewOptions =
+  DecayScreenViewSelfOptions
+  & PhetioObjectOptions
+  & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class DecayScreenView extends BuildANucleusScreenView {
 
@@ -30,7 +33,7 @@ class DecayScreenView extends BuildANucleusScreenView {
 
     super( model, options );
 
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( -18, 18, 450 );
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( -18, 18, 450, 30 );
     halfLifeNumberLineNode.left = this.layoutBounds.minX + 60;
     halfLifeNumberLineNode.y = this.layoutBounds.minY + BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN + 70;
     this.addChild( halfLifeNumberLineNode );
