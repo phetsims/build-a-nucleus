@@ -19,7 +19,7 @@ import { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
 type DecayScreenSelfOptions = {};
 export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
-class DecayScreen extends Screen {
+class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
   constructor( providedOptions?: DecayScreenOptions ) {
 
@@ -35,7 +35,7 @@ class DecayScreen extends Screen {
 
     super(
       () => new DecayModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-        ( model: DecayModel ) => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      model => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
       options
     );
   }
