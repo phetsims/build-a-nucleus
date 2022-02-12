@@ -107,15 +107,19 @@ class HalfLifeNumberLineNode extends Node {
 
     // return the half-life label and number readout string
     const halfLifeTextFillIn = ( halfLife: string ): string => {
+      const decimal = halfLife.slice( 0, halfLife.indexOf( 'e' ) );
+      if ( decimal === '0' ) {
+        return buildANucleusStrings.halfLifeEmpty;
+      }
       const exponentSliceIndex = halfLife.indexOf( '+' ) === -1 ? halfLife.indexOf( 'e' ) : halfLife.indexOf( '+' );
       return StringUtils.fillIn( buildANucleusStrings.halfLifePattern, {
-        decimal: halfLife.slice( 0, 3 ), // show only up to 1 decimal place
+        decimal: decimal,
         exponent: halfLife.slice( exponentSliceIndex + 1 )
       } );
     };
 
     // create and add the half life label and number readout
-    const halfLifeString = halfLifeNumberProperty.value.toExponential();
+    const halfLifeString = halfLifeNumberProperty.value.toExponential( 1 );
     const halfLifeText = new RichText( halfLifeTextFillIn( halfLifeString ), {
       font: halfLifeArrowLabel ? LABEL_FONT : new PhetFont( 24 ),
       supScale: 0.6,
@@ -133,7 +137,7 @@ class HalfLifeNumberLineNode extends Node {
 
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {
-      halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential() ) );
+      halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
       this.moveHalfLifeArrow( halfLifeNumber, halfLifeArrowLabel );
     } );
   }
@@ -152,7 +156,6 @@ class HalfLifeNumberLineNode extends Node {
 
     if ( halfLifeArrowLabel ) {
       this.arrowAnimation = new Animation( {
-        delay: 2,
         targets: [ {
           to: newXPosition,
           property: this.arrowXPositionProperty
@@ -166,7 +169,6 @@ class HalfLifeNumberLineNode extends Node {
     }
     else {
       this.arrowAnimation = new Animation( {
-        delay: 2,
         to: newXPosition,
         property: this.arrowXPositionProperty,
         duration: 0.5,

@@ -35,9 +35,19 @@ const BuildANucleusColors = {
     default: new Color( 255, 0, 255 )
   } ),
 
+  // info button color on Decay screen
+  infoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'infoButtonColor', {
+    default: new Color( 255, 153, 255 )
+  } ),
+
   // color of the legend arrows in the Expanded Timescale
   legendArrowColorProperty: new ProfileColorProperty( buildANucleus, 'legendArrowColor', {
     default: new Color( 4, 4, 255 )
+  } ),
+
+  // half-life info dialog background
+  infoDialogBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'infoDialogBackground', {
+    default: new Color( 255, 254, 244 )
   } )
 };
 

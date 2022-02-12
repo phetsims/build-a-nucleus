@@ -14,10 +14,46 @@
   "halfLifePattern": {
     "value": "Half-life: {{decimal}} x 10<sup>{{exponent}}</sup> s"
   },
+  "halfLifeEmpty": {
+    "value": "Half-life: - s"
+  },
   "lessStable": {
     "value": "less stable"
   },
   "moreStable": {
     "value": "more stable"
+  },
+  "expandedTimescale": {
+    "value": "Expanded Timescale"
+  },
+  "timeForLightToCrossANucleus": {
+    "value": "1 - Time for light to cross a nucleus"
+  },
+  "timeForLightToCrossAnAtom": {
+    "value": "2 - Time for light to cross an atom"
+  },
+  "chemicalReactionDuration": {
+    "value": "3 - Chemical reaction duration"
+  },
+  "timeForSoundToTravel1mm": {
+    "value": "4 - Time for sound to travel 1mm"
+  },
+  "aBlinkOfAnEye": {
+    "value": "5 - A blink of an eye"
+  },
+  "oneMinute": {
+    "value": "6 - One minute"
+  },
+  "oneYear": {
+    "value": "7 - One year"
+  },
+  "averageHumanLifespan": {
+    "value": "8 - Average human lifespan"
+  },
+  "ageOfTheUniverse": {
+    "value": "9 - Age of the Universe"
+  },
+  "lifetimeOfLongestLivedStars": {
+    "value": "10 - Lifetime of longest lived stars"
   }
 }

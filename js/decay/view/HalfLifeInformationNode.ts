@@ -12,8 +12,11 @@ import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import { Text, Node } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import BuildANucleusColors from '../../common/BuildANucleusColors.js';
+import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
@@ -57,6 +60,21 @@ class HalfLifeInformationNode extends Node {
     moreStableText.right = rightArrow.left - 5;
     moreStableText.centerY = rightArrow.centerY;
     this.addChild( moreStableText );
+
+    // create and add the HalfLifeInfoDialog
+    const halfLifeInfoDialog = new HalfLifeInfoDialog();
+
+    // create and add the info button
+    const infoButton = new InfoButton( {
+      listener: () => halfLifeInfoDialog.show(),
+      baseColor: BuildANucleusColors.infoButtonColorProperty,
+      maxHeight: 45,
+      bottom: halfLifeNumberLineNode.centerY - 15,
+      right: halfLifeNumberLineNode.right
+    } );
+    this.addChild( infoButton );
+
+    halfLifeNumberProperty.value = 0.00993;
   }
 }
 
