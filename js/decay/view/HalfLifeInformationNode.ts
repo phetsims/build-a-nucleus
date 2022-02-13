@@ -37,29 +37,29 @@ class HalfLifeInformationNode extends Node {
     numberLineUnitsLabel.centerX = halfLifeNumberLineNode.centerX;
     this.addChild( numberLineUnitsLabel );
 
-    // create and add the 'less stable' arrow and text
-    const leftArrow = new ArrowNode( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.bottom + 10,
-      halfLifeNumberLineNode.left, halfLifeNumberLineNode.bottom + 10, {
-        headWidth: 6,
-        tailWidth: 1
-      } );
-    this.addChild( leftArrow );
-    const lessStableText = new Text( buildANucleusStrings.lessStable, { font: LABEL_FONT } );
-    lessStableText.left = leftArrow.right + 5;
-    lessStableText.centerY = leftArrow.centerY;
-    this.addChild( lessStableText );
+    // function to create and add the arrow and more/less stable label set
+    const arrowAndStableLabel = ( arrowNodeTailX: number, arrowNodeTipX: number, stabilityText: string ): void => {
+      const arrow = new ArrowNode( arrowNodeTailX, halfLifeNumberLineNode.bottom + 10, arrowNodeTipX,
+        halfLifeNumberLineNode.bottom + 10, {
+          headWidth: 6,
+          tailWidth: 1
+        } );
+      this.addChild( arrow );
 
-    // create and add the 'more stable' arrow and text
-    const rightArrow = new ArrowNode( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.bottom + 10,
-      halfLifeNumberLineNode.right, halfLifeNumberLineNode.bottom + 10, {
-        headWidth: 6,
-        tailWidth: 1
-      } );
-    this.addChild( rightArrow );
-    const moreStableText = new Text( buildANucleusStrings.moreStable, { font: LABEL_FONT } );
-    moreStableText.right = rightArrow.left - 5;
-    moreStableText.centerY = rightArrow.centerY;
-    this.addChild( moreStableText );
+      const arrowText = new Text( stabilityText, { font: LABEL_FONT } );
+      arrowText.centerY = arrow.centerY;
+      if ( stabilityText === buildANucleusStrings.lessStable ) {
+        arrowText.left = arrow.right + 5;
+      }
+      else {
+        arrowText.right = arrow.left - 5;
+      }
+      this.addChild( arrowText );
+    };
+
+    // create and add the 'less stable' and 'more  stable' arrow and text set
+    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, buildANucleusStrings.lessStable );
+    arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, buildANucleusStrings.moreStable );
 
     // create and add the HalfLifeInfoDialog
     const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty );
@@ -73,8 +73,6 @@ class HalfLifeInformationNode extends Node {
       right: halfLifeNumberLineNode.right
     } );
     this.addChild( infoButton );
-
-    halfLifeNumberProperty.value = 0.00993;
   }
 }
 

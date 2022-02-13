@@ -37,7 +37,7 @@ class HalfLifeNumberLineNode extends Node {
   private readonly tickMarkSet: TickMarkSet;
   private modelViewTransform: ModelViewTransform2;
   private arrowAnimation: null | Animation;
-  private readonly halfLifeTextXPosition: NumberProperty;
+  private readonly halfLifeTextXPosition: NumberProperty | undefined;
 
   constructor( halfLifeNumberProperty: NumberProperty, startX: number, endX: number, numberLineWidth: number,
                arrowLength: number, halfLifeArrowLabel: boolean ) {
@@ -101,6 +101,7 @@ class HalfLifeNumberLineNode extends Node {
     // keep track of the x position of the half-life arrow in model coordinates
     this.arrowXPositionProperty = new NumberProperty( 0 );
     this.arrowXPositionProperty.link( xPosition => {
+      console.log( `xPosition = ${xPosition}      modelCoordinates = ${this.modelViewTransform.modelToViewX( xPosition )}` );
       halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY );
     } );
     this.arrowAnimation = null;
@@ -129,24 +130,26 @@ class HalfLifeNumberLineNode extends Node {
     halfLifeText.centerX = halfLifeArrowLabel ? halfLifeArrow.centerX : this.centerX;
     this.addChild( halfLifeText );
 
-    // keep track of the x position of the halfLifeText in model coordinates
-    this.halfLifeTextXPosition = new NumberProperty( 0 );
-    this.halfLifeTextXPosition.link( xPosition => {
-      halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - 5 );
-    } );
+    // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
+    if ( halfLifeArrowLabel ) {
+      this.halfLifeTextXPosition = new NumberProperty( 0 );
+      this.halfLifeTextXPosition.link( xPosition => {
+        halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - 5 );
+      } );
+    }
 
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {
       halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
-      this.moveHalfLifeArrow( halfLifeNumber, halfLifeArrowLabel );
+      this.moveHalfLifePointerSet( halfLifeNumber, halfLifeArrowLabel );
     } );
   }
 
   /**
-   * Animate the half-life arrow to the new half-life position along the number line. If the half-life text is added as
-   * a label to the half-life arrow, animate it to its new half-life position too.
+   * Animate the half-life arrow to the new half-life position along the number line. If the half-life text is a label
+   * to the half-life arrow, animate it to its new half-life position too.
    */
-  private moveHalfLifeArrow( halfLife: number, halfLifeArrowLabel: boolean ): void {
+  private moveHalfLifePointerSet( halfLife: number, halfLifeArrowLabel: boolean ): void {
     const newXPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
 
     if ( this.arrowAnimation ) {
