@@ -62,7 +62,7 @@ class HalfLifeInformationNode extends Node {
     this.addChild( moreStableText );
 
     // create and add the HalfLifeInfoDialog
-    const halfLifeInfoDialog = new HalfLifeInfoDialog();
+    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty );
 
     // create and add the info button
     const infoButton = new InfoButton( {
