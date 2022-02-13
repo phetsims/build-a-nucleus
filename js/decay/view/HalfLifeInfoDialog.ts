@@ -12,7 +12,7 @@ import buildANucleus from '../../buildANucleus.js';
 import { RichText, Text, HBox, VBox } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
-import BuildANucleusColors from '../../common/BuildANucleusColors.js';
+import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
@@ -77,7 +77,7 @@ class HalfLifeInfoDialog extends Dialog {
       title: titleNode,
       ySpacing: 20,
       bottomMargin: 20,
-      fill: BuildANucleusColors.infoDialogBackgroundColorProperty
+      fill: BANColors.infoDialogBackgroundColorProperty
     } );
   }
 }

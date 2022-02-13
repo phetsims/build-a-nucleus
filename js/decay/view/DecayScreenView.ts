@@ -11,9 +11,9 @@ import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import BuildANucleusScreenView from '../../common/view/BuildANucleusScreenView.js';
+import BANScreenView from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
-import BuildANucleusConstants from '../../common/BuildANucleusConstants.js';
+import BANConstants from '../../common/BANConstants.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // types
@@ -23,7 +23,7 @@ export type DecayScreenViewOptions =
   & PhetioObjectOptions
   & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
-class DecayScreenView extends BuildANucleusScreenView {
+class DecayScreenView extends BANScreenView {
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -40,8 +40,10 @@ class DecayScreenView extends BuildANucleusScreenView {
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( halfLifeNumberProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + 60;
-    halfLifeInformationNode.y = this.layoutBounds.minY + BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN + 80;
+    halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
+
+    halfLifeNumberProperty.value = 7.6e-12;
   }
 
   public reset(): void {

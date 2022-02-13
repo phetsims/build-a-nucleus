@@ -8,7 +8,7 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
-import BuildANucleusColors from '../BuildANucleusColors.js';
+import BANColors from '../BANColors.js';
 import { Text, HBox, Rectangle } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -34,7 +34,7 @@ class NucleonCountPanel extends Panel {
   constructor( protonCountProperty: NumberProperty, neutronCountProperty: NumberProperty ) {
 
     const options = {
-      fill: BuildANucleusColors.panelBackgroundColorProperty
+      fill: BANColors.panelBackgroundColorProperty
     };
 
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined

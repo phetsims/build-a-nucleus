@@ -8,7 +8,7 @@
 
 import buildANucleus from '../buildANucleus.js';
 
-const BuildANucleusConstants = {
+const BANConstants = {
 
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15
@@ -16,5 +16,5 @@ const BuildANucleusConstants = {
   //TODO
 };
 
-buildANucleus.register( 'BuildANucleusConstants', BuildANucleusConstants );
-export default BuildANucleusConstants;
+buildANucleus.register( 'BANConstants', BANConstants );
+export default BANConstants;

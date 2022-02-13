@@ -10,7 +10,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import BuildANucleusModel from '../../common/model/BuildANucleusModel.js';
+import BANModel from '../../common/model/BANModel.js';
 
 // types
 type DecayModelSelfOptions = {};
@@ -19,7 +19,7 @@ export type DecayModelOptions =
   & PhetioObjectOptions
   & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
-class DecayModel extends BuildANucleusModel {
+class DecayModel extends BANModel {
 
   constructor( providedOptions?: DecayModelOptions ) {
 

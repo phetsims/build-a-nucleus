@@ -15,7 +15,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import BuildANucleusColors from '../../common/BuildANucleusColors.js';
+import BANColors from '../../common/BANColors.js';
 import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 
 // constants
@@ -67,7 +67,7 @@ class HalfLifeInformationNode extends Node {
     // create and add the info button
     const infoButton = new InfoButton( {
       listener: () => halfLifeInfoDialog.show(),
-      baseColor: BuildANucleusColors.infoButtonColorProperty,
+      baseColor: BANColors.infoButtonColorProperty,
       maxHeight: 45,
       bottom: halfLifeNumberLineNode.centerY - 15,
       right: halfLifeNumberLineNode.right

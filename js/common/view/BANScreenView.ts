@@ -10,13 +10,13 @@ import ScreenView from '../../../../joist/js/ScreenView.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import BuildANucleusConstants from '../../common/BuildANucleusConstants.js';
+import BANConstants from '../../common/BANConstants.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import BuildANucleusModel from '../model/BuildANucleusModel.js';
+import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import { ProfileColorProperty, VBox } from '../../../../scenery/js/imports.js';
-import BuildANucleusColors from '../BuildANucleusColors.js';
+import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
@@ -27,9 +27,9 @@ export type BuildANucleusScreenViewOptions =
   & PhetioObjectOptions
   & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
-class BuildANucleusScreenView extends ScreenView {
+class BANScreenView extends ScreenView {
 
-  constructor( model: BuildANucleusModel, providedOptions?: BuildANucleusScreenViewOptions ) {
+  constructor( model: BANModel, providedOptions?: BuildANucleusScreenViewOptions ) {
 
     const options = optionize<BuildANucleusScreenViewOptions, BuildANucleusScreenViewSelfOptions, PhetioObjectOptions>( {
 
@@ -40,7 +40,7 @@ class BuildANucleusScreenView extends ScreenView {
     super( options );
 
     const nucleonCountPanel = new NucleonCountPanel( model.protonCountProperty, model.neutronCountProperty );
-    nucleonCountPanel.top = this.layoutBounds.minY + BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
+    nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     nucleonCountPanel.left = this.layoutBounds.maxX - 200;
     this.addChild( nucleonCountPanel );
 
@@ -67,12 +67,12 @@ class BuildANucleusScreenView extends ScreenView {
     };
 
     // create the arrow buttons
-    const protonArrowButtons = createArrowButtons( model.protonCountProperty, BuildANucleusColors.protonColorProperty );
-    protonArrowButtons.bottom = this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
+    const protonArrowButtons = createArrowButtons( model.protonCountProperty, BANColors.protonColorProperty );
+    protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     protonArrowButtons.left = this.layoutBounds.minX + 50;
     this.addChild( protonArrowButtons );
-    const neutronArrowButtons = createArrowButtons( model.neutronCountProperty, BuildANucleusColors.neutronColorProperty );
-    neutronArrowButtons.bottom = this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN;
+    const neutronArrowButtons = createArrowButtons( model.neutronCountProperty, BANColors.neutronColorProperty );
+    neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 2;
     this.addChild( neutronArrowButtons );
 
@@ -82,8 +82,8 @@ class BuildANucleusScreenView extends ScreenView {
         model.reset();
         this.reset();
       },
-      right: this.layoutBounds.maxX - BuildANucleusConstants.SCREEN_VIEW_X_MARGIN,
-      bottom: this.layoutBounds.maxY - BuildANucleusConstants.SCREEN_VIEW_Y_MARGIN,
+      right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
+      bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: options.tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
@@ -117,5 +117,5 @@ class BuildANucleusScreenView extends ScreenView {
   }
 }
 
-buildANucleus.register( 'BuildANucleusScreenView', BuildANucleusScreenView );
-export default BuildANucleusScreenView;
+buildANucleus.register( 'BANScreenView', BANScreenView );
+export default BANScreenView;

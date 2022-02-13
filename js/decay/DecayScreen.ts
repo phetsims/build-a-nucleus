@@ -9,7 +9,7 @@
 import Screen from '../../../joist/js/Screen.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
-import BuildANucleusColors from '../common/BuildANucleusColors.js';
+import BANColors from '../common/BANColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
 import optionize from '../../../phet-core/js/optionize.js';
@@ -27,7 +27,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
 
       // @ts-ignore TODO: get screenBackgroundColorProperty from screen options when that exists
-      backgroundColorProperty: BuildANucleusColors.screenBackgroundColorProperty,
+      backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 
       // phet-io options
       tandem: Tandem.REQUIRED

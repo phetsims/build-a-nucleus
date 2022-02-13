@@ -20,7 +20,7 @@ export type BuildANucleusModelOptions =
   & PhetioObjectOptions
   & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
-class BuildANucleusModel {
+class BANModel {
 
   public readonly protonCountProperty: NumberProperty;
   public readonly neutronCountProperty: NumberProperty;
@@ -61,5 +61,5 @@ class BuildANucleusModel {
   }
 }
 
-buildANucleus.register( 'BuildANucleusModel', BuildANucleusModel );
-export default BuildANucleusModel;
+buildANucleus.register( 'BANModel', BANModel );
+export default BANModel;

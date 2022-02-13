@@ -22,7 +22,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import BuildANucleusColors from '../../common/BuildANucleusColors.js';
+import BANColors from '../../common/BANColors.js';
 import Utils from '../../../../dot/js/Utils.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
@@ -91,7 +91,7 @@ class HalfLifeNumberLineNode extends Node {
 
     // create and add the halfLifeArrow
     const halfLifeArrow = new ArrowNode( 0, -arrowLength, 0, this.tickMarkSet.centerY, {
-      fill: BuildANucleusColors.halfLifeColorProperty,
+      fill: BANColors.halfLifeColorProperty,
       stroke: null,
       tailWidth: 4,
       headWidth: 12
@@ -188,7 +188,7 @@ class HalfLifeNumberLineNode extends Node {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
     const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -40,
       this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
-        fill: BuildANucleusColors.legendArrowColorProperty,
+        fill: BANColors.legendArrowColorProperty,
         stroke: null,
         tailWidth: 1.5,
         headWidth: 5
