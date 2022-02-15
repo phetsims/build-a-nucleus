@@ -27,7 +27,7 @@ class HalfLifeInfoDialog extends Dialog {
       buildANucleusStrings.timeForLightToCrossANucleus,
       buildANucleusStrings.timeForLightToCrossAnAtom,
       buildANucleusStrings.chemicalReactionDuration,
-      buildANucleusStrings.timeForSoundToTravel1mm,
+      buildANucleusStrings.timeForSoundToTravelOneMillimeter,
       buildANucleusStrings.aBlinkOfAnEye
     ];
     const rightSideStrings = [

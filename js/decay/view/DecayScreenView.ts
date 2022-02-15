@@ -42,8 +42,6 @@ class DecayScreenView extends BANScreenView {
     halfLifeInformationNode.left = this.layoutBounds.minX + 60;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
-
-    halfLifeNumberProperty.value = 7.6e-12;
   }
 
   public reset(): void {

@@ -37,10 +37,10 @@ class HalfLifeNumberLineNode extends Node {
   private readonly tickMarkSet: TickMarkSet;
   private modelViewTransform: ModelViewTransform2;
   private arrowAnimation: null | Animation;
-  private readonly halfLifeTextXPosition: NumberProperty | undefined;
+  private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
 
   constructor( halfLifeNumberProperty: NumberProperty, startX: number, endX: number, numberLineWidth: number,
-               arrowLength: number, halfLifeArrowLabel: boolean ) {
+               arrowLength: number, isHalfLifeLabelFixed: boolean ) {
     super();
 
     const viewWidth = numberLineWidth;
@@ -101,7 +101,6 @@ class HalfLifeNumberLineNode extends Node {
     // keep track of the x position of the half-life arrow in model coordinates
     this.arrowXPositionProperty = new NumberProperty( 0 );
     this.arrowXPositionProperty.link( xPosition => {
-      console.log( `xPosition = ${xPosition}      modelCoordinates = ${this.modelViewTransform.modelToViewX( xPosition )}` );
       halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY );
     } );
     this.arrowAnimation = null;
@@ -109,7 +108,7 @@ class HalfLifeNumberLineNode extends Node {
     // return the half-life label and number readout string
     const halfLifeTextFillIn = ( halfLife: string ): string => {
       const decimal = halfLife.slice( 0, halfLife.indexOf( 'e' ) );
-      if ( decimal === '0' ) {
+      if ( decimal === '0.0' ) {
         return buildANucleusStrings.halfLifeEmpty;
       }
       const exponentSliceIndex = halfLife.indexOf( '+' ) === -1 ? halfLife.indexOf( 'e' ) : halfLife.indexOf( '+' );
@@ -122,18 +121,18 @@ class HalfLifeNumberLineNode extends Node {
     // create and add the half life label and number readout
     const halfLifeString = halfLifeNumberProperty.value.toExponential( 1 );
     const halfLifeText = new RichText( halfLifeTextFillIn( halfLifeString ), {
-      font: halfLifeArrowLabel ? LABEL_FONT : new PhetFont( 24 ),
+      font: isHalfLifeLabelFixed ? LABEL_FONT : new PhetFont( 24 ),
       supScale: 0.6,
       supYOffset: -1
     } );
-    halfLifeText.bottom = halfLifeArrowLabel ? halfLifeArrow.top : this.top;
-    halfLifeText.centerX = halfLifeArrowLabel ? halfLifeArrow.centerX : this.centerX;
+    halfLifeText.bottom = isHalfLifeLabelFixed ? halfLifeArrow.top : this.top;
+    halfLifeText.centerX = isHalfLifeLabelFixed ? halfLifeArrow.centerX : this.centerX;
     this.addChild( halfLifeText );
 
     // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
-    if ( halfLifeArrowLabel ) {
-      this.halfLifeTextXPosition = new NumberProperty( 0 );
-      this.halfLifeTextXPosition.link( xPosition => {
+    if ( isHalfLifeLabelFixed ) {
+      this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
+      this.halfLifeTextXPositionProperty.link( xPosition => {
         halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - 5 );
       } );
     }
@@ -141,7 +140,7 @@ class HalfLifeNumberLineNode extends Node {
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {
       halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
-      this.moveHalfLifePointerSet( halfLifeNumber, halfLifeArrowLabel );
+      this.moveHalfLifePointerSet( halfLifeNumber, isHalfLifeLabelFixed );
     } );
   }
 
@@ -149,7 +148,7 @@ class HalfLifeNumberLineNode extends Node {
    * Animate the half-life arrow to the new half-life position along the number line. If the half-life text is a label
    * to the half-life arrow, animate it to its new half-life position too.
    */
-  private moveHalfLifePointerSet( halfLife: number, halfLifeArrowLabel: boolean ): void {
+  private moveHalfLifePointerSet( halfLife: number, isHalfLifeLabelFixed: boolean ): void {
     const newXPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
 
     if ( this.arrowAnimation ) {
@@ -157,14 +156,14 @@ class HalfLifeNumberLineNode extends Node {
       this.arrowAnimation = null;
     }
 
-    if ( halfLifeArrowLabel ) {
+    if ( isHalfLifeLabelFixed ) {
       this.arrowAnimation = new Animation( {
         targets: [ {
           to: newXPosition,
           property: this.arrowXPositionProperty
         }, {
           to: newXPosition,
-          property: this.halfLifeTextXPosition
+          property: this.halfLifeTextXPositionProperty
         } ],
         duration: 0.5,
         easing: Easing.QUADRATIC_IN_OUT
@@ -179,6 +178,10 @@ class HalfLifeNumberLineNode extends Node {
       } );
     }
     this.arrowAnimation.start();
+
+    this.arrowAnimation.finishEmitter.addListener( () => {
+      this.arrowAnimation = null;
+    } );
   }
 
   /**
@@ -204,6 +207,9 @@ class HalfLifeNumberLineNode extends Node {
    * Convert the half-life number (in seconds) to a linear scale number to plot it on the number line.
    */
   private static logScaleNumberToLinearScaleNumber( halfLifeNumber: number ): number {
+    if ( halfLifeNumber === 0 ) {
+      return 0;
+    }
     return Utils.log10( halfLifeNumber );
   }
 }

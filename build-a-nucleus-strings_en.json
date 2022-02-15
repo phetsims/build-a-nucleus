@@ -35,8 +35,8 @@
   "chemicalReactionDuration": {
     "value": "3 - Chemical reaction duration"
   },
-  "timeForSoundToTravel1mm": {
-    "value": "4 - Time for sound to travel 1mm"
+  "timeForSoundToTravelOneMillimeter": {
+    "value": "4 - Time for sound to travel 1 mm"
   },
   "aBlinkOfAnEye": {
     "value": "5 - A blink of an eye"

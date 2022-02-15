@@ -22,7 +22,7 @@ type StringsType = {
   'timeForLightToCrossANucleus': string,
   'timeForLightToCrossAnAtom': string,
   'chemicalReactionDuration': string,
-  'timeForSoundToTravel1mm': string,
+  'timeForSoundToTravelOneMillimeter': string,
   'aBlinkOfAnEye': string,
   'oneMinute': string,
   'oneYear': string,
