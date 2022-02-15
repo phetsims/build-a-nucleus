@@ -15,6 +15,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import BANTimescalePoints from '../model/BANTimescalePoints.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
@@ -24,18 +25,18 @@ class HalfLifeInfoDialog extends Dialog {
   constructor( halfLifeNumberProperty: NumberProperty ) {
 
     const leftSideStrings = [
-      buildANucleusStrings.timeForLightToCrossANucleus,
-      buildANucleusStrings.timeForLightToCrossAnAtom,
-      buildANucleusStrings.chemicalReactionDuration,
-      buildANucleusStrings.timeForSoundToTravelOneMillimeter,
-      buildANucleusStrings.aBlinkOfAnEye
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.timescaleItem,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM.timescaleItem,
+      BANTimescalePoints.CHEMICAL_REACTION_DURATION.timescaleItem,
+      BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER.timescaleItem,
+      BANTimescalePoints.A_BLINK_OF_AN_EYE.timescaleItem
     ];
     const rightSideStrings = [
-      buildANucleusStrings.oneMinute,
-      buildANucleusStrings.oneYear,
-      buildANucleusStrings.averageHumanLifespan,
-      buildANucleusStrings.ageOfTheUniverse,
-      buildANucleusStrings.lifetimeOfLongestLivedStars
+      BANTimescalePoints.ONE_MINUTE.timescaleItem,
+      BANTimescalePoints.ONE_YEAR.timescaleItem,
+      BANTimescalePoints.AVERAGE_HUMAN_LIFESPAN.timescaleItem,
+      BANTimescalePoints.AGE_OF_THE_UNIVERSE.timescaleItem,
+      BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS.timescaleItem
     ];
 
     // join the strings in each array, placing one on each line
@@ -58,7 +59,18 @@ class HalfLifeInfoDialog extends Dialog {
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, -24, 24, MAX_CONTENT_WIDTH, 70, true );
 
     // the half-life's of the strings, in respective order
-    const halfLifeTime = [ Math.pow( 10, -23 ), Math.pow( 10, -19 ), 2.5e-15, 2e-6, 1 / 3, 60, 3.154e7, 2.2911e9, 4.3425072e17, 5e18 ];
+    const halfLifeTime = [
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.numberOfSeconds,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM.numberOfSeconds,
+      BANTimescalePoints.CHEMICAL_REACTION_DURATION.numberOfSeconds,
+      BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER.numberOfSeconds,
+      BANTimescalePoints.A_BLINK_OF_AN_EYE.numberOfSeconds,
+      BANTimescalePoints.ONE_MINUTE.numberOfSeconds,
+      BANTimescalePoints.ONE_YEAR.numberOfSeconds,
+      BANTimescalePoints.AVERAGE_HUMAN_LIFESPAN.numberOfSeconds,
+      BANTimescalePoints.AGE_OF_THE_UNIVERSE.numberOfSeconds,
+      BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS.numberOfSeconds
+    ];
     for ( let i = 0; i < halfLifeTime.length; i++ ) {
       halfLifeNumberLineNode.addArrowAndNumber( i + 1, halfLifeTime[ i ] );
     }
