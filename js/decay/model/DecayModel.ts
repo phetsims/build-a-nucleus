@@ -11,6 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../../common/model/BANModel.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // types
 type DecayModelSelfOptions = {};
@@ -20,6 +21,8 @@ export type DecayModelOptions =
   & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class DecayModel extends BANModel {
+
+  public halfLifeNumberProperty: NumberProperty;
 
   constructor( providedOptions?: DecayModelOptions ) {
 
@@ -31,6 +34,9 @@ class DecayModel extends BANModel {
 
     // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
     super( 92, 146, options );
+
+    // keep track of the half-life number
+    this.halfLifeNumberProperty = new NumberProperty( 0 );
   }
 
   public reset(): void {

@@ -14,7 +14,6 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import BANScreenView from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // types
 type DecayScreenViewSelfOptions = {};
@@ -34,11 +33,8 @@ class DecayScreenView extends BANScreenView {
 
     super( model, options );
 
-    // keep track of the half-life number
-    const halfLifeNumberProperty = new NumberProperty( 0 );
-
     // create and add the half-life information node at the top half of the decay screen
-    const halfLifeInformationNode = new HalfLifeInformationNode( halfLifeNumberProperty );
+    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + 60;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );

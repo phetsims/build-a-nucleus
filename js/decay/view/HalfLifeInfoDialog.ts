@@ -19,6 +19,8 @@ import BANTimescalePoints from '../model/BANTimescalePoints.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
+const TITLE_FONT = new PhetFont( 32 );
+const LEGEND_FONT = new PhetFont( 20 );
 
 class HalfLifeInfoDialog extends Dialog {
 
@@ -42,7 +44,7 @@ class HalfLifeInfoDialog extends Dialog {
     // join the strings in each array, placing one on each line
     const createTextFromStrings = ( strings: string[] ): RichText => {
       return new RichText( strings.join( '<br>' ), {
-        font: new PhetFont( 20 ),
+        font: LEGEND_FONT,
         leading: 6
       } );
     };
@@ -56,7 +58,10 @@ class HalfLifeInfoDialog extends Dialog {
     } );
 
     // create and add the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, -24, 24, MAX_CONTENT_WIDTH, 70, true );
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, -24, 24, 750, 80, true, {
+      tickMarkExtent: 24,
+      labelFont: LEGEND_FONT
+    } );
 
     // the half-life's of the strings, in respective order
     const halfLifeTime = [
@@ -81,7 +86,7 @@ class HalfLifeInfoDialog extends Dialog {
     } );
 
     const titleNode = new Text( buildANucleusStrings.expandedTimescale, {
-      font: new PhetFont( 32 ),
+      font: TITLE_FONT,
       maxWidth: 0.75 * MAX_CONTENT_WIDTH
     } );
 

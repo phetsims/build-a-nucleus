@@ -26,10 +26,17 @@ import BANColors from '../../common/BANColors.js';
 import Utils from '../../../../dot/js/Utils.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+// types
+type HalfLifeNumberLineNodeSelfOptions = {
+  tickMarkExtent?: number,
+  labelFont?: PhetFont
+};
+export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions;
 
 // constants
-const TICK_MARK_EXTENT = 18;
-const LABEL_FONT = new PhetFont( 15 );
+const TITLE_FONT = new PhetFont( 24 );
 
 class HalfLifeNumberLineNode extends Node {
 
@@ -38,10 +45,27 @@ class HalfLifeNumberLineNode extends Node {
   private modelViewTransform: ModelViewTransform2;
   private arrowAnimation: null | Animation;
   private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
+  private readonly labelFont: PhetFont | undefined;
 
+  /**
+   * @param halfLifeNumberProperty
+   * @param startX
+   * @param endX
+   * @param numberLineWidth
+   * @param arrowLength
+   * @param isHalfLifeLabelFixed - if the half-life label is fixed, place it centered above the number line, otherwise,
+   * animate its position with the half-life arrow
+   * @param providedOptions
+   */
   constructor( halfLifeNumberProperty: NumberProperty, startX: number, endX: number, numberLineWidth: number,
-               arrowLength: number, isHalfLifeLabelFixed: boolean ) {
+               arrowLength: number, isHalfLifeLabelFixed: boolean, providedOptions?: HalfLifeNumberLineNodeOptions ) {
     super();
+
+    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions>( {
+      tickMarkExtent: 18,
+      labelFont: new PhetFont( 15 )
+    }, providedOptions );
+    this.labelFont = options.labelFont;
 
     const viewWidth = numberLineWidth;
     const numberLineLength = new Range( startX, endX ).getLength();
@@ -56,7 +80,7 @@ class HalfLifeNumberLineNode extends Node {
     const createExponentialLabel = ( value: number ): RichText => {
       const numberValue = value === 0 ? 1 : `10<sup>${value}</sup>`;
       return new RichText( numberValue, {
-        font: LABEL_FONT,
+        font: options.labelFont,
         supScale: 0.6,
         supYOffset: -1
       } );
@@ -71,7 +95,7 @@ class HalfLifeNumberLineNode extends Node {
     const tickXSpacing = 3;
     this.tickMarkSet = new TickMarkSet( chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       stroke: Color.BLACK,
-      extent: TICK_MARK_EXTENT,
+      extent: options.tickMarkExtent,
       lineWidth: 2
     } );
     this.tickMarkSet.centerY = 0;
@@ -121,7 +145,7 @@ class HalfLifeNumberLineNode extends Node {
     // create and add the half life label and number readout
     const halfLifeString = halfLifeNumberProperty.value.toExponential( 1 );
     const halfLifeText = new RichText( halfLifeTextFillIn( halfLifeString ), {
-      font: isHalfLifeLabelFixed ? LABEL_FONT : new PhetFont( 24 ),
+      font: isHalfLifeLabelFixed ? options.labelFont : TITLE_FONT,
       supScale: 0.6,
       supYOffset: -1
     } );
@@ -197,7 +221,7 @@ class HalfLifeNumberLineNode extends Node {
         headWidth: 5
       } );
     this.addChild( arrow );
-    const numberText = new Text( number, { font: LABEL_FONT } );
+    const numberText = new Text( number, { font: this.labelFont } );
     numberText.bottom = arrow.top;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );
