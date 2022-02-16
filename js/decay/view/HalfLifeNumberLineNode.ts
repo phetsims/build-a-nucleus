@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Range from '../../../../dot/js/Range.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Line, Node, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, NodeOptions, RichText, Text } from '../../../../scenery/js/imports.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -30,10 +30,16 @@ import optionize from '../../../../phet-core/js/optionize.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
-  tickMarkExtent?: number,
-  labelFont?: PhetFont
+  numberLineStartExponent: number,
+  numberLineEndExponent: number,
+  tickMarkExtent: number,
+  numberLineLabelFont: PhetFont,
+  numberLineWidth: number,
+  halfLifeArrowLength: number,
+  isHalfLifeLabelFixed: boolean // if the half-life label is fixed, place it centered above the number line, otherwise,
+  // animate its position with the half-life arrow
 };
-export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions;
+export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & NodeOptions;
 
 // constants
 const TITLE_FONT = new PhetFont( 24 );
@@ -47,40 +53,26 @@ class HalfLifeNumberLineNode extends Node {
   private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
   private readonly labelFont: PhetFont | undefined;
 
-  /**
-   * @param halfLifeNumberProperty
-   * @param startX
-   * @param endX
-   * @param numberLineWidth
-   * @param arrowLength
-   * @param isHalfLifeLabelFixed - if the half-life label is fixed, place it centered above the number line, otherwise,
-   * animate its position with the half-life arrow
-   * @param providedOptions
-   */
-  constructor( halfLifeNumberProperty: NumberProperty, startX: number, endX: number, numberLineWidth: number,
-               arrowLength: number, isHalfLifeLabelFixed: boolean, providedOptions?: HalfLifeNumberLineNodeOptions ) {
+  constructor( halfLifeNumberProperty: NumberProperty, providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
-    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions>( {
-      tickMarkExtent: 18,
-      labelFont: new PhetFont( 15 )
-    }, providedOptions );
-    this.labelFont = options.labelFont;
+    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>( {}, providedOptions );
+    this.labelFont = options.numberLineLabelFont;
 
-    const viewWidth = numberLineWidth;
-    const numberLineLength = new Range( startX, endX ).getLength();
+    const viewWidth = options.numberLineWidth;
+    const numberLineLength = new Range( options.numberLineStartExponent, options.numberLineEndExponent ).getLength();
     const tickMarkLength = viewWidth / numberLineLength;
 
     // TODO: Fix the view Y's
     this.modelViewTransform = ModelViewTransform2.createRectangleMapping(
-      new Bounds2( startX, 0, endX, 1 ),
+      new Bounds2( options.numberLineStartExponent, 0, options.numberLineEndExponent, 1 ),
       new Bounds2( 0, 0, viewWidth, tickMarkLength )
     );
 
     const createExponentialLabel = ( value: number ): RichText => {
       const numberValue = value === 0 ? 1 : `10<sup>${value}</sup>`;
       return new RichText( numberValue, {
-        font: options.labelFont,
+        font: options.numberLineLabelFont,
         supScale: 0.6,
         supYOffset: -1
       } );
@@ -90,7 +82,7 @@ class HalfLifeNumberLineNode extends Node {
     const numberLineNode = new Node();
     const chartTransform = new ChartTransform( {
       viewWidth: viewWidth,
-      modelXRange: new Range( startX, endX )
+      modelXRange: new Range( options.numberLineStartExponent, options.numberLineEndExponent )
     } );
     const tickXSpacing = 3;
     this.tickMarkSet = new TickMarkSet( chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
@@ -107,14 +99,15 @@ class HalfLifeNumberLineNode extends Node {
     tickLabelSet.top = this.tickMarkSet.bottom;
     numberLineNode.addChild( tickLabelSet );
     const numberLine = new Line( {
-      x1: this.modelViewTransform.modelToViewX( startX ), y1: this.tickMarkSet.centerY,
-      x2: this.modelViewTransform.modelToViewX( endX ), y2: this.tickMarkSet.centerY, stroke: Color.BLACK
+      x1: this.modelViewTransform.modelToViewX( options.numberLineStartExponent ), y1: this.tickMarkSet.centerY,
+      x2: this.modelViewTransform.modelToViewX( options.numberLineEndExponent ), y2: this.tickMarkSet.centerY,
+      stroke: Color.BLACK
     } );
     numberLineNode.addChild( numberLine );
     this.addChild( numberLineNode );
 
     // create and add the halfLifeArrow
-    const halfLifeArrow = new ArrowNode( 0, -arrowLength, 0, this.tickMarkSet.centerY, {
+    const halfLifeArrow = new ArrowNode( 0, -options.halfLifeArrowLength, 0, this.tickMarkSet.centerY, {
       fill: BANColors.halfLifeColorProperty,
       stroke: null,
       tailWidth: 4,
@@ -145,16 +138,16 @@ class HalfLifeNumberLineNode extends Node {
     // create and add the half life label and number readout
     const halfLifeString = halfLifeNumberProperty.value.toExponential( 1 );
     const halfLifeText = new RichText( halfLifeTextFillIn( halfLifeString ), {
-      font: isHalfLifeLabelFixed ? options.labelFont : TITLE_FONT,
+      font: options.isHalfLifeLabelFixed ? options.numberLineLabelFont : TITLE_FONT,
       supScale: 0.6,
       supYOffset: -1
     } );
-    halfLifeText.bottom = isHalfLifeLabelFixed ? halfLifeArrow.top : this.top;
-    halfLifeText.centerX = isHalfLifeLabelFixed ? halfLifeArrow.centerX : this.centerX;
+    halfLifeText.bottom = options.isHalfLifeLabelFixed ? halfLifeArrow.top : this.top;
+    halfLifeText.centerX = options.isHalfLifeLabelFixed ? halfLifeArrow.centerX : this.centerX;
     this.addChild( halfLifeText );
 
     // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
-    if ( isHalfLifeLabelFixed ) {
+    if ( options.isHalfLifeLabelFixed ) {
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
         halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - 5 );
@@ -164,7 +157,7 @@ class HalfLifeNumberLineNode extends Node {
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {
       halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
-      this.moveHalfLifePointerSet( halfLifeNumber, isHalfLifeLabelFixed );
+      this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
     } );
   }
 

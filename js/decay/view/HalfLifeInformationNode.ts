@@ -28,7 +28,15 @@ class HalfLifeInformationNode extends Node {
     super();
 
     // create and add the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, -18, 18, 450, 30, false );
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, {
+      numberLineStartExponent: -18,
+      numberLineEndExponent: 18,
+      tickMarkExtent: 18,
+      numberLineLabelFont: new PhetFont( 15 ),
+      numberLineWidth: 450,
+      halfLifeArrowLength: 30,
+      isHalfLifeLabelFixed: false
+    } );
     this.addChild( halfLifeNumberLineNode );
 
     // create and add the units label on the number line

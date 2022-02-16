@@ -58,9 +58,14 @@ class HalfLifeInfoDialog extends Dialog {
     } );
 
     // create and add the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, -24, 24, 750, 80, true, {
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, {
+      numberLineStartExponent: -24,
+      numberLineEndExponent: 24,
       tickMarkExtent: 24,
-      labelFont: LEGEND_FONT
+      numberLineLabelFont: LEGEND_FONT,
+      numberLineWidth: 750,
+      halfLifeArrowLength: 80,
+      isHalfLifeLabelFixed: true
     } );
 
     // the half-life's of the strings, in respective order
