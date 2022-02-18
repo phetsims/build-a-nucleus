@@ -23,8 +23,8 @@
   "moreStable": {
     "value": "more stable"
   },
-  "expandedTimescale": {
-    "value": "Expanded Timescale"
+  "halfLifeTimescale": {
+    "value": "Half-life Timescale"
   },
   "timeForLightToCrossANucleus": {
     "value": " - Time for light to cross a nucleus"

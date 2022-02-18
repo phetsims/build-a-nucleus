@@ -18,7 +18,7 @@ type StringsType = {
   'halfLifeColon': string,
   'lessStable': string,
   'moreStable': string,
-  'expandedTimescale': string,
+  'halfLifeTimescale': string,
   'timeForLightToCrossANucleus': string,
   'timeForLightToCrossAnAtom': string,
   'chemicalReactionDuration': string,

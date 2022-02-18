@@ -107,7 +107,7 @@ class HalfLifeInfoDialog extends Dialog {
       halfLifeNumberLineNode.addArrowAndLabel( halfLifeLabels[ i ], halfLifeTime[ i ] );
     }
 
-    const titleNode = new Text( buildANucleusStrings.expandedTimescale, {
+    const titleNode = new Text( buildANucleusStrings.halfLifeTimescale, {
       font: TITLE_FONT,
       maxWidth: 0.75 * MAX_CONTENT_WIDTH
     } );
