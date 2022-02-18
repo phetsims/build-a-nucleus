@@ -505,8 +505,15 @@ const NuclideIdentifier = {
   },
 
   // Get the half-life of a nuclide with the specified number of protons and neutrons.
-  getNuclideHalfLife: ( numProtons: number, numNeutrons: number ): number | null => {
+  getNuclideHalfLife: ( numProtons: number, numNeutrons: number ): number | undefined => {
     return HalfLifeConstants[ numProtons ][ numNeutrons ];
+  },
+
+  // Identifies whether a given nuclide exists on Earth.
+  doesExist: ( numProtons: number, numNeutrons: number ): boolean => {
+    const isStable = NuclideIdentifier.isStable( numProtons, numNeutrons );
+    const halfLife = NuclideIdentifier.getNuclideHalfLife( numProtons, numNeutrons );
+    return !( !isStable && halfLife === undefined );
   }
 };
 
