@@ -16,6 +16,7 @@ import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import BANTimescalePoints from '../model/BANTimescalePoints.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
@@ -24,7 +25,7 @@ const LEGEND_FONT = new PhetFont( 20 );
 
 class HalfLifeInfoDialog extends Dialog {
 
-  constructor( halfLifeNumberProperty: NumberProperty ) {
+  constructor( halfLifeNumberProperty: NumberProperty, isStableBooleanProperty: BooleanProperty ) {
 
     const leftSideStrings = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.timescaleItem,
@@ -58,7 +59,7 @@ class HalfLifeInfoDialog extends Dialog {
     } );
 
     // create and add the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, {
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
       numberLineStartExponent: -24,
       numberLineEndExponent: 24,
       tickMarkExtent: 24,

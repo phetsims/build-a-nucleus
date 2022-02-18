@@ -17,18 +17,19 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
 
 class HalfLifeInformationNode extends Node {
 
-  constructor( halfLifeNumberProperty: NumberProperty ) {
+  constructor( halfLifeNumberProperty: NumberProperty, isStableBooleanProperty: BooleanProperty ) {
 
     super();
 
     // create and add the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, {
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
       numberLineStartExponent: -18,
       numberLineEndExponent: 18,
       tickMarkExtent: 18,
@@ -70,7 +71,7 @@ class HalfLifeInformationNode extends Node {
     arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, buildANucleusStrings.moreStable );
 
     // create and add the HalfLifeInfoDialog
-    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty );
+    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty );
 
     // create and add the info button
     const infoButton = new InfoButton( {

@@ -27,6 +27,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -53,7 +54,7 @@ class HalfLifeNumberLineNode extends Node {
   private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
   private readonly labelFont: PhetFont | undefined;
 
-  constructor( halfLifeNumberProperty: NumberProperty, providedOptions: HalfLifeNumberLineNodeOptions ) {
+  constructor( halfLifeNumberProperty: NumberProperty, isStableBooleanProperty: BooleanProperty, providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
     const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>( {}, providedOptions );
@@ -163,6 +164,16 @@ class HalfLifeNumberLineNode extends Node {
     halfLifeNumberProperty.link( halfLifeNumber => {
       halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
       this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+    } );
+
+    // Only show the half-life arrow if the nuclide is not stable
+    isStableBooleanProperty.link( isStable => {
+      if ( isStable ) {
+        this.removeChild( halfLifeArrow );
+      }
+      else {
+        this.addChild( halfLifeArrow );
+      }
     } );
   }
 
