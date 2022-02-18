@@ -65,7 +65,7 @@ class HalfLifeInfoDialog extends Dialog {
       numberLineLabelFont: LEGEND_FONT,
       numberLineWidth: 750,
       halfLifeArrowLength: 80,
-      isHalfLifeLabelFixed: true
+      isHalfLifeLabelFixed: false
     } );
 
     const contents = new VBox( {

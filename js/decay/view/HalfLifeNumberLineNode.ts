@@ -138,16 +138,21 @@ class HalfLifeNumberLineNode extends Node {
     // create and add the half life label and number readout
     const halfLifeString = halfLifeNumberProperty.value.toExponential( 1 );
     const halfLifeText = new RichText( halfLifeTextFillIn( halfLifeString ), {
-      font: options.isHalfLifeLabelFixed ? options.numberLineLabelFont : TITLE_FONT,
+      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont,
       supScale: 0.6,
       supYOffset: -1
     } );
-    halfLifeText.bottom = options.isHalfLifeLabelFixed ? halfLifeArrow.top : this.top;
-    halfLifeText.centerX = options.isHalfLifeLabelFixed ? halfLifeArrow.centerX : this.centerX;
+    halfLifeText.bottom = options.isHalfLifeLabelFixed ? this.top : halfLifeArrow.top;
+    if ( options.isHalfLifeLabelFixed ) {
+      halfLifeText.left = this.centerX - this.width / 4;
+    }
+    else {
+      halfLifeText.centerX = halfLifeArrow.centerX;
+    }
     this.addChild( halfLifeText );
 
     // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
-    if ( options.isHalfLifeLabelFixed ) {
+    if ( !options.isHalfLifeLabelFixed ) {
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
         halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - 5 );
@@ -175,6 +180,14 @@ class HalfLifeNumberLineNode extends Node {
 
     if ( isHalfLifeLabelFixed ) {
       this.arrowAnimation = new Animation( {
+        to: newXPosition,
+        property: this.arrowXPositionProperty,
+        duration: 0.5,
+        easing: Easing.QUADRATIC_IN_OUT
+      } );
+    }
+    else {
+      this.arrowAnimation = new Animation( {
         targets: [ {
           to: newXPosition,
           property: this.arrowXPositionProperty
@@ -182,14 +195,6 @@ class HalfLifeNumberLineNode extends Node {
           to: newXPosition,
           property: this.halfLifeTextXPositionProperty
         } ],
-        duration: 0.5,
-        easing: Easing.QUADRATIC_IN_OUT
-      } );
-    }
-    else {
-      this.arrowAnimation = new Animation( {
-        to: newXPosition,
-        property: this.arrowXPositionProperty,
         duration: 0.5,
         easing: Easing.QUADRATIC_IN_OUT
       } );

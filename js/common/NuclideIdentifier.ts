@@ -509,7 +509,7 @@ const NuclideIdentifier = {
     return HalfLifeConstants[ numProtons ][ numNeutrons ];
   },
 
-  // Identifies whether a given nuclide exists on Earth.
+  // Identifies whether a given nuclide exists
   doesExist: ( numProtons: number, numNeutrons: number ): boolean => {
     const isStable = NuclideIdentifier.isStable( numProtons, numNeutrons );
     const halfLife = NuclideIdentifier.getNuclideHalfLife( numProtons, numNeutrons );

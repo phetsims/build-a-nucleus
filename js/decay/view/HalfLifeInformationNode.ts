@@ -35,7 +35,7 @@ class HalfLifeInformationNode extends Node {
       numberLineLabelFont: new PhetFont( 15 ),
       numberLineWidth: 450,
       halfLifeArrowLength: 30,
-      isHalfLifeLabelFixed: false
+      isHalfLifeLabelFixed: true
     } );
     this.addChild( halfLifeNumberLineNode );
 
