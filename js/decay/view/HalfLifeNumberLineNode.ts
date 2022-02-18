@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Range from '../../../../dot/js/Range.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Line, Node, NodeOptions, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, NodeOptions, RichText } from '../../../../scenery/js/imports.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -126,7 +126,7 @@ class HalfLifeNumberLineNode extends Node {
     const halfLifeTextFillIn = ( halfLife: string ): string => {
       const decimal = halfLife.slice( 0, halfLife.indexOf( 'e' ) );
       if ( decimal === '0.0' ) {
-        return buildANucleusStrings.halfLifeEmpty;
+        return buildANucleusStrings.halfLifeColon;
       }
       const exponentSliceIndex = halfLife.indexOf( '+' ) === -1 ? halfLife.indexOf( 'e' ) : halfLife.indexOf( '+' );
       return StringUtils.fillIn( buildANucleusStrings.halfLifePattern, {
@@ -202,9 +202,9 @@ class HalfLifeNumberLineNode extends Node {
   }
 
   /**
-   * Add an arrow with a label number to the number line.
+   * Add an arrow with a label to the number line.
    */
-  public addArrowAndNumber( number: number, halfLife: number ): void {
+  public addArrowAndLabel( label: string, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
     const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -40,
       this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
@@ -214,7 +214,7 @@ class HalfLifeNumberLineNode extends Node {
         headWidth: 5
       } );
     this.addChild( arrow );
-    const numberText = new Text( number, { font: this.labelFont } );
+    const numberText = new RichText( label, { font: this.labelFont } );
     numberText.bottom = arrow.top;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );

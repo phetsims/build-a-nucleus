@@ -15,7 +15,7 @@ type StringsType = {
   'neutronsColon': string,
   'seconds': string,
   'halfLifePattern': string,
-  'halfLifeEmpty': string,
+  'halfLifeColon': string,
   'lessStable': string,
   'moreStable': string,
   'expandedTimescale': string,
@@ -28,7 +28,17 @@ type StringsType = {
   'oneYear': string,
   'averageHumanLifespan': string,
   'ageOfTheUniverse': string,
-  'lifetimeOfLongestLivedStars': string
+  'lifetimeOfLongestLivedStars': string,
+  'A': string,
+  'B': string,
+  'C': string,
+  'D': string,
+  'E': string,
+  'F': string,
+  'G': string,
+  'H': string,
+  'I': string,
+  'J': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

@@ -68,6 +68,12 @@ class HalfLifeInfoDialog extends Dialog {
       isHalfLifeLabelFixed: true
     } );
 
+    const contents = new VBox( {
+      children: [ legend, halfLifeNumberLineNode ],
+      spacing: 30,
+      align: 'center'
+    } );
+
     // the half-life's of the strings, in respective order
     const halfLifeTime = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.numberOfSeconds,
@@ -81,14 +87,25 @@ class HalfLifeInfoDialog extends Dialog {
       BANTimescalePoints.AGE_OF_THE_UNIVERSE.numberOfSeconds,
       BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS.numberOfSeconds
     ];
+
+    // the labels on the half-life's, in respective order
+    const halfLifeLabels = [
+      buildANucleusStrings.A,
+      buildANucleusStrings.B,
+      buildANucleusStrings.C,
+      buildANucleusStrings.D,
+      buildANucleusStrings.E,
+      buildANucleusStrings.F,
+      buildANucleusStrings.G,
+      buildANucleusStrings.H,
+      buildANucleusStrings.I,
+      buildANucleusStrings.J
+    ];
+
+    // create and add the half-life arrow and label
     for ( let i = 0; i < halfLifeTime.length; i++ ) {
-      halfLifeNumberLineNode.addArrowAndNumber( i + 1, halfLifeTime[ i ] );
+      halfLifeNumberLineNode.addArrowAndLabel( halfLifeLabels[ i ], halfLifeTime[ i ] );
     }
-    const contents = new VBox( {
-      children: [ legend, halfLifeNumberLineNode ],
-      spacing: 30,
-      align: 'center'
-    } );
 
     const titleNode = new Text( buildANucleusStrings.expandedTimescale, {
       font: TITLE_FONT,

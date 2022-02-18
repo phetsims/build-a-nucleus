@@ -14,8 +14,8 @@
   "halfLifePattern": {
     "value": "Half-life: {{decimal}} x 10<sup>{{exponent}}</sup> s"
   },
-  "halfLifeEmpty": {
-    "value": "Half-life: - s"
+  "halfLifeColon": {
+    "value": "Half-life:"
   },
   "lessStable": {
     "value": "less stable"
@@ -27,33 +27,63 @@
     "value": "Expanded Timescale"
   },
   "timeForLightToCrossANucleus": {
-    "value": "1 - Time for light to cross a nucleus"
+    "value": " - Time for light to cross a nucleus"
   },
   "timeForLightToCrossAnAtom": {
-    "value": "2 - Time for light to cross an atom"
+    "value": " - Time for light to cross an atom"
   },
   "chemicalReactionDuration": {
-    "value": "3 - Chemical reaction duration"
+    "value": " - Chemical reaction duration"
   },
   "timeForSoundToTravelOneMillimeter": {
-    "value": "4 - Time for sound to travel 1 mm"
+    "value": " - Time for sound to travel 1 mm"
   },
   "aBlinkOfAnEye": {
-    "value": "5 - A blink of an eye"
+    "value": " - A blink of an eye"
   },
   "oneMinute": {
-    "value": "6 - One minute"
+    "value": " - One minute"
   },
   "oneYear": {
-    "value": "7 - One year"
+    "value": " - One year"
   },
   "averageHumanLifespan": {
-    "value": "8 - Average human lifespan"
+    "value": " - Average human lifespan"
   },
   "ageOfTheUniverse": {
-    "value": "9 - Age of the Universe"
+    "value": " - Age of the Universe"
   },
   "lifetimeOfLongestLivedStars": {
-    "value": "10 - Lifetime of longest lived stars"
+    "value": " - Lifetime of longest lived stars"
+  },
+  "A": {
+    "value": "<span style=\"font-family: monospace;\">A</span>"
+  },
+  "B": {
+    "value": "<span style=\"font-family: monospace;\">B</span>"
+  },
+  "C": {
+    "value": "<span style=\"font-family: monospace;\">C</span>"
+  },
+  "D": {
+    "value": "<span style=\"font-family: monospace;\">D</span>"
+  },
+  "E": {
+    "value": "<span style=\"font-family: monospace;\">E</span>"
+  },
+  "F": {
+    "value": "<span style=\"font-family: monospace;\">F</span>"
+  },
+  "G": {
+    "value": "<span style=\"font-family: monospace;\">G</span>"
+  },
+  "H": {
+    "value": "<span style=\"font-family: monospace;\">H</span>"
+  },
+  "I": {
+    "value": "<span style=\"font-family: monospace;\">I</span>"
+  },
+  "J": {
+    "value": "<span style=\"font-family: monospace;\">J</span>"
   }
 }
