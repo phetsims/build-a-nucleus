@@ -14,7 +14,6 @@ import BANModel from '../../common/model/BANModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import NuclideIdentifier from '../../common/NuclideIdentifier.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // types
 type DecayModelSelfOptions = {};
@@ -26,7 +25,6 @@ export type DecayModelOptions =
 class DecayModel extends BANModel {
 
   public halfLifeNumberProperty: NumberProperty;
-  public isStableBooleanProperty: BooleanProperty;
 
   constructor( providedOptions?: DecayModelOptions ) {
 
@@ -39,11 +37,8 @@ class DecayModel extends BANModel {
     // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
     super( 92, 146, options );
 
-    // keep track of the half-life number
+    // the half-life number
     this.halfLifeNumberProperty = new NumberProperty( 0 );
-
-    // keep track of the stability
-    this.isStableBooleanProperty = new BooleanProperty( true );
 
     // update the half-life and stability
     Property.multilink( [ this.protonCountProperty, this.neutronCountProperty ], ( protonCount, neutronCount ) => {
@@ -69,7 +64,6 @@ class DecayModel extends BANModel {
 
   public reset(): void {
     this.halfLifeNumberProperty.reset();
-    this.isStableBooleanProperty.reset();
     super.reset();
   }
 
