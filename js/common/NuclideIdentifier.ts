@@ -514,6 +514,30 @@ const NuclideIdentifier = {
     const isStable = NuclideIdentifier.isStable( numProtons, numNeutrons );
     const halfLife = NuclideIdentifier.getNuclideHalfLife( numProtons, numNeutrons );
     return !( !isStable && halfLife === undefined );
+  },
+
+  // Get the next isotope for the given nuclide that exists, if there is one, otherwise return false
+  getNextExistingIsotope: ( numProtons: number, numNeutrons: number ): number[] | boolean => {
+    let increaseNeutrons = 0;
+    while ( increaseNeutrons <= 2 && NuclideIdentifier.getNuclideHalfLife( numProtons, numNeutrons + increaseNeutrons ) === undefined ) {
+      increaseNeutrons++;
+    }
+    if ( NuclideIdentifier.getNuclideHalfLife( numProtons, numNeutrons + increaseNeutrons ) !== undefined ) {
+      return [ numProtons, numNeutrons + increaseNeutrons ];
+    }
+    return false;
+  },
+
+  // Get the next isotone for the given nuclide that exists, if there is one, otherwise return false
+  getNextExistingIsotone: ( numProtons: number, numNeutrons: number ): number[] | boolean => {
+    let increaseProtons = 0;
+    while ( increaseProtons <= 2 && NuclideIdentifier.getNuclideHalfLife( numProtons + increaseProtons, numNeutrons ) === undefined ) {
+      increaseProtons++;
+    }
+    if ( NuclideIdentifier.getNuclideHalfLife( numProtons + increaseProtons, numNeutrons ) !== undefined ) {
+      return [ numProtons + increaseProtons, numNeutrons ];
+    }
+    return false;
   }
 };
 
