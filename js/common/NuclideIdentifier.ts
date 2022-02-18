@@ -505,7 +505,7 @@ const NuclideIdentifier = {
   },
 
   // Get the half-life of a nuclide with the specified number of protons and neutrons.
-  getNuclideHalfLife: ( numProtons: number, numNeutrons: number ): number | undefined => {
+  getNuclideHalfLife: ( numProtons: number, numNeutrons: number ): number | undefined | null => {
     return HalfLifeConstants[ numProtons ][ numNeutrons ];
   },
 
