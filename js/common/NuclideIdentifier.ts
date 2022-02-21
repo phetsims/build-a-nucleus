@@ -531,10 +531,15 @@ const NuclideIdentifier = {
   // Get the next isotone for the given nuclide that exists, if there is one, otherwise return false
   getNextExistingIsotone: ( numProtons: number, numNeutrons: number ): number[] | boolean => {
     let increaseProtons = 0;
-    while ( increaseProtons <= 2 && NuclideIdentifier.getNuclideHalfLife( numProtons + increaseProtons, numNeutrons ) === undefined ) {
+    while ( increaseProtons <= 2 &&
+            NuclideIdentifier.getNuclideHalfLife( numProtons + increaseProtons, numNeutrons ) === undefined &&
+            !NuclideIdentifier.isStable( numProtons + increaseProtons, numNeutrons )
+      ) {
       increaseProtons++;
     }
-    if ( NuclideIdentifier.getNuclideHalfLife( numProtons + increaseProtons, numNeutrons ) !== undefined ) {
+    if ( NuclideIdentifier.getNuclideHalfLife( numProtons + increaseProtons, numNeutrons ) !== undefined ||
+         NuclideIdentifier.isStable( numProtons + increaseProtons, numNeutrons )
+    ) {
       return [ numProtons + increaseProtons, numNeutrons ];
     }
     return false;

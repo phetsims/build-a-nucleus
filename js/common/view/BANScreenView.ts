@@ -19,6 +19,8 @@ import { ProfileColorProperty, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import NuclideIdentifier from '../NuclideIdentifier.js';
 
 // types
 type BuildANucleusScreenViewSelfOptions = {};
@@ -102,6 +104,29 @@ class BANScreenView extends ScreenView {
     } );
     model.neutronCountProperty.link( neutronCount => {
       nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
+    } );
+
+    Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
+      if ( !NuclideIdentifier.doesExist( protonCount, neutronCount ) ) {
+        // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
+        const nextIsotope = NuclideIdentifier.getNextExistingIsotope( protonCount, neutronCount );
+        const nextIsotone = NuclideIdentifier.getNextExistingIsotone( protonCount, neutronCount );
+
+        // if the nextIsotone does not exist, disable the proton up arrow
+        if ( !nextIsotone ) {
+          protonArrowButtons.getChildAt( 0 ).enabled = false;
+        }
+
+        // if the nextIsotope does not exist, disable the neutron up arrow
+        if ( !nextIsotope ) {
+          neutronArrowButtons.getChildAt( 0 ).enabled = false;
+        }
+      }
+      else {
+        // re-enable the up arrow buttons on the nucleons
+        protonArrowButtons.getChildAt( 0 ).enabled = protonCount !== model.protonCountProperty.range!.max;
+        neutronArrowButtons.getChildAt( 0 ).enabled = neutronCount !== model.neutronCountProperty.range!.max;
+      }
     } );
   }
 
