@@ -24,6 +24,12 @@ const BANColors = {
   neutronColorProperty: new ProfileColorProperty( buildANucleus, 'neutronColor', {
     default: Color.GRAY
   } ),
+  electronColorProperty: new ProfileColorProperty( buildANucleus, 'electronColor', {
+    default: Color.BLUE
+  } ),
+  positronColorProperty: new ProfileColorProperty( buildANucleus, 'positronColor', {
+    default: new Color( 53, 182, 74 )
+  } ),
 
   // background color for panels in this sim
   panelBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'panelBackground', {

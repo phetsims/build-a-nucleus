@@ -85,5 +85,35 @@
   },
   "J": {
     "value": "<span style=\"font-family: monospace;\">J</span>"
+  },
+  "availableDecays": {
+    "value": "Available Decays"
+  },
+  "proton": {
+    "value": "Proton"
+  },
+  "neutron": {
+    "value": "Neutron"
+  },
+  "electron": {
+    "value": "Electron"
+  },
+  "positron": {
+    "value": "Positron"
+  },
+  "alphaDecay": {
+    "value": "α decay"
+  },
+  "betaMinusDecay": {
+    "value": "β<sup>-</sup> decay"
+  },
+  "betaPlusDecay": {
+    "value": "β<sup>+</sup> decay"
+  },
+  "protonEmission": {
+    "value": "Proton emission"
+  },
+  "neutronEmission": {
+    "value": "Neutron emission"
   }
 }

@@ -35,7 +35,7 @@ class DecayScreenView extends BANScreenView {
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty );
-    halfLifeInformationNode.left = this.layoutBounds.minX + 60;
+    halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 50;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
   }
