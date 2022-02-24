@@ -46,7 +46,7 @@ const BANColors = {
     default: new Color( 255, 153, 255 )
   } ),
 
-  // color of the legend arrows in the Expanded Timescale
+  // color of the legend arrows in the Half-life Timescale
   legendArrowColorProperty: new ProfileColorProperty( buildANucleus, 'legendArrowColor', {
     default: new Color( 4, 4, 255 )
   } ),
@@ -54,6 +54,16 @@ const BANColors = {
   // half-life info dialog background
   infoDialogBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'infoDialogBackground', {
     default: new Color( 255, 254, 244 )
+  } ),
+
+  // color of the decay buttons
+  decayButtonColorProperty: new ProfileColorProperty( buildANucleus, 'decayButtonColor', {
+    default: new Color( 251, 178, 64 )
+  } ),
+
+  // color of the lines, arrows, and 'plus' symbols in the Available Decays panel
+  blueDecayIconSymbolsColorProperty: new ProfileColorProperty( buildANucleus, 'blueDecayIconSymbolsColor', {
+    default: Color.BLUE
   } )
 };
 

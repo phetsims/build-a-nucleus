@@ -30,6 +30,8 @@ export type BuildANucleusScreenViewOptions =
   & Required<Pick<PhetioObjectOptions, 'tandem'>>;
 
 class BANScreenView extends ScreenView {
+  public readonly resetAllButton: ResetAllButton;
+  public readonly nucleonCountPanel: NucleonCountPanel;
 
   constructor( model: BANModel, providedOptions?: BuildANucleusScreenViewOptions ) {
 
@@ -41,10 +43,10 @@ class BANScreenView extends ScreenView {
 
     super( options );
 
-    const nucleonCountPanel = new NucleonCountPanel( model.protonCountProperty, model.neutronCountProperty );
-    nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
-    nucleonCountPanel.left = this.layoutBounds.maxX - 200;
-    this.addChild( nucleonCountPanel );
+    this.nucleonCountPanel = new NucleonCountPanel( model.protonCountProperty, model.neutronCountProperty );
+    this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
+    this.nucleonCountPanel.left = this.layoutBounds.maxX - 200;
+    this.addChild( this.nucleonCountPanel );
 
     // function to create the arrow buttons, which change the value of the nucleonCountProperty by -1 or +1
     const createArrowButtons = ( nucleonCountProperty: NumberProperty, nucleonColorProperty: ProfileColorProperty ): VBox => {
@@ -78,7 +80,7 @@ class BANScreenView extends ScreenView {
     neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 2;
     this.addChild( neutronArrowButtons );
 
-    const resetAllButton = new ResetAllButton( {
+    this.resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         model.reset();
@@ -88,7 +90,7 @@ class BANScreenView extends ScreenView {
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: options.tandem.createTandem( 'resetAllButton' )
     } );
-    this.addChild( resetAllButton );
+    this.addChild( this.resetAllButton );
 
     // function to create observers that disable the arrow buttons when the nucleonCountProperty values are at its min
     // or max range

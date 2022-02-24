@@ -14,6 +14,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import BANScreenView from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
+import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 
 // types
 type DecayScreenViewSelfOptions = {};
@@ -38,6 +39,13 @@ class DecayScreenView extends BANScreenView {
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 50;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
+
+    const availableDecaysPanel = new AvailableDecaysPanel();
+    availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
+    availableDecaysPanel.bottom = this.resetAllButton.top - 20;
+    this.addChild( availableDecaysPanel );
+
+    this.nucleonCountPanel.left = availableDecaysPanel.left;
   }
 
   public reset(): void {
