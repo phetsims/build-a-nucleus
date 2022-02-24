@@ -11,7 +11,7 @@ import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.j
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
@@ -27,7 +27,7 @@ type BuildANucleusScreenViewSelfOptions = {};
 export type BuildANucleusScreenViewOptions =
   BuildANucleusScreenViewSelfOptions
   & PhetioObjectOptions
-  & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+  & RequiredTandem<PhetioObjectOptions>;
 
 class BANScreenView extends ScreenView {
   public readonly resetAllButton: ResetAllButton;

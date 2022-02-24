@@ -9,7 +9,7 @@
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANScreenView from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
@@ -21,7 +21,7 @@ type DecayScreenViewSelfOptions = {};
 export type DecayScreenViewOptions =
   DecayScreenViewSelfOptions
   & PhetioObjectOptions
-  & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+  & RequiredTandem<PhetioObjectOptions>;
 
 class DecayScreenView extends BANScreenView {
 

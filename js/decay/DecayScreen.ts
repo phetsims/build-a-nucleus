@@ -13,11 +13,11 @@ import BANColors from '../common/BANColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
+import { PhetioObjectOptions, RequiredTandem } from '../../../tandem/js/PhetioObject.js';
 
 // types
 type DecayScreenSelfOptions = {};
-export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & RequiredTandem<PhetioObjectOptions>;
 
 class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 

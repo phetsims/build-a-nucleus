@@ -8,7 +8,7 @@
 
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
@@ -19,7 +19,7 @@ type BuildANucleusModelSelfOptions = {};
 export type BuildANucleusModelOptions =
   BuildANucleusModelSelfOptions
   & PhetioObjectOptions
-  & Required<Pick<PhetioObjectOptions, 'tandem'>>;
+  & RequiredTandem<PhetioObjectOptions>;
 
 class BANModel {
 
