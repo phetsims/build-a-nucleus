@@ -57,34 +57,34 @@
     "value": " - Lifetime of longest lived stars"
   },
   "A": {
-    "value": "<span style=\"font-family: monospace;\">A</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>A</b></span>"
   },
   "B": {
-    "value": "<span style=\"font-family: monospace;\">B</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>B</b></span>"
   },
   "C": {
-    "value": "<span style=\"font-family: monospace;\">C</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>C</b></span>"
   },
   "D": {
-    "value": "<span style=\"font-family: monospace;\">D</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>D</b></span>"
   },
   "E": {
-    "value": "<span style=\"font-family: monospace;\">E</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>E</b></span>"
   },
   "F": {
-    "value": "<span style=\"font-family: monospace;\">F</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>F</b></span>"
   },
   "G": {
-    "value": "<span style=\"font-family: monospace;\">G</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>G</b></span>"
   },
   "H": {
-    "value": "<span style=\"font-family: monospace;\">H</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>H</b></span>"
   },
   "I": {
-    "value": "<span style=\"font-family: monospace;\">I</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>I</b></span>"
   },
   "J": {
-    "value": "<span style=\"font-family: monospace;\">J</span>"
+    "value": "<span style=\"font-family: monospace;\"><b>J</b></span>"
   },
   "availableDecays": {
     "value": "Available Decays"
