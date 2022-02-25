@@ -166,7 +166,7 @@ class HalfLifeNumberLineNode extends Node {
       this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
     } );
 
-    // Only show the half-life arrow if the nuclide is not stable
+    // Don't show the half-life arrow if the half-life data is unknown or we are in the start/default state
     isStableBooleanProperty.link( isStable => {
       if ( isStable ) {
         this.removeChild( halfLifeArrow );
