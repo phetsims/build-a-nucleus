@@ -17,7 +17,7 @@ import { PhetioObjectOptions, RequiredTandem } from '../../../tandem/js/PhetioOb
 
 // types
 type DecayScreenSelfOptions = {};
-export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & RequiredTandem<PhetioObjectOptions>;
+export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & RequiredTandem;
 
 class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 

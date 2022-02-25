@@ -27,7 +27,7 @@ type BuildANucleusScreenViewSelfOptions = {};
 export type BuildANucleusScreenViewOptions =
   BuildANucleusScreenViewSelfOptions
   & PhetioObjectOptions
-  & RequiredTandem<PhetioObjectOptions>;
+  & RequiredTandem;
 
 class BANScreenView extends ScreenView {
   public readonly resetAllButton: ResetAllButton;

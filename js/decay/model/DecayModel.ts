@@ -20,7 +20,7 @@ type DecayModelSelfOptions = {};
 export type DecayModelOptions =
   DecayModelSelfOptions
   & PhetioObjectOptions
-  & RequiredTandem<PhetioObjectOptions>;
+  & RequiredTandem;
 
 class DecayModel extends BANModel {
 

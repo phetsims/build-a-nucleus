@@ -21,7 +21,7 @@ type DecayScreenViewSelfOptions = {};
 export type DecayScreenViewOptions =
   DecayScreenViewSelfOptions
   & PhetioObjectOptions
-  & RequiredTandem<PhetioObjectOptions>;
+  & RequiredTandem;
 
 class DecayScreenView extends BANScreenView {
 

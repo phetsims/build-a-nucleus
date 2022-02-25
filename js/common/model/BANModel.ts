@@ -19,7 +19,7 @@ type BuildANucleusModelSelfOptions = {};
 export type BuildANucleusModelOptions =
   BuildANucleusModelSelfOptions
   & PhetioObjectOptions
-  & RequiredTandem<PhetioObjectOptions>;
+  & RequiredTandem;
 
 class BANModel {
 
