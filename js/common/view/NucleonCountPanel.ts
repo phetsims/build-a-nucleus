@@ -15,6 +15,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
+import ParticleType from '../../decay/view/ParticleType.js';
 
 // types
 type NucleonLabel = {
@@ -40,13 +41,13 @@ class NucleonCountPanel extends Panel {
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
 
     // function to create the nucleon labels and add them to panelContents
-    const nucleonLabel = ( nucleonString: string, nucleonType: string, nucleonCountProperty: NumberProperty ): NucleonLabel => {
+    const nucleonLabel = ( nucleonString: string, nucleonType: ParticleType, nucleonCountProperty: NumberProperty ): NucleonLabel => {
 
       const nucleonTitle = new Text( nucleonString, {
         font: LABEL_FONT
       } );
       nucleonTitle.maxWidth = MAX_TITLE_WIDTH;
-      const nucleonParticleNode = new ParticleNode( nucleonType, PARTICLE_RADIUS );
+      const nucleonParticleNode = new ParticleNode( nucleonType.name.toLowerCase(), PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
       nucleonTitle.left = nucleonParticleNode.right + nucleonParticleNode.width / 2;
       nucleonTitle.top = nucleonContents.top;
@@ -72,8 +73,8 @@ class NucleonCountPanel extends Panel {
     };
 
     // create the nucleon labels
-    const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, 'proton', protonCountProperty );
-    const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, 'neutron', neutronCountProperty );
+    const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, ParticleType.PROTON, protonCountProperty );
+    const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, ParticleType.NEUTRON, neutronCountProperty );
 
     // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's
     protonLabel.contents.top = 0;

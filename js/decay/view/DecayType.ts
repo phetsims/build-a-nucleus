@@ -25,12 +25,12 @@ class DecayType extends EnumerationValue {
 
   static enumeration = new Enumeration( DecayType );
 
-  public readonly decayType: string;
+  public readonly label: string;
 
-  constructor( decayType: string ) {
+  constructor( label: string ) {
     super();
 
-    this.decayType = decayType;
+    this.label = label;
 
   }
 }
