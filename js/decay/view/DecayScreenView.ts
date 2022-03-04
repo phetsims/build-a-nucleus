@@ -15,6 +15,17 @@ import BANScreenView from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
+import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
+import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import { Text } from '../../../../scenery/js/imports.js';
+import ShredConstants from '../../../../shred/js/ShredConstants.js';
+import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import BANColors from '../../common/BANColors.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+
+// constants
+const LABEL_FONT = new PhetFont( 24 );
 
 // types
 type DecayScreenViewSelfOptions = {};
@@ -40,10 +51,33 @@ class DecayScreenView extends BANScreenView {
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
 
+    // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel();
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );
+
+    const symbolNode = new SymbolNode( model.protonCountProperty, model.massNumberProperty, {
+      scale: 0.25
+    } );
+    const symbolAccordionBox = new AccordionBox( symbolNode, {
+      titleNode: new Text( buildANucleusStrings.symbol, {
+        font: LABEL_FONT,
+        maxWidth: ShredConstants.ACCORDION_BOX_TITLE_MAX_WIDTH
+      } ),
+      fill: BANColors.panelBackgroundColorProperty,
+      minWidth: 50,
+      contentAlign: 'center',
+      titleAlignX: 'left',
+      expandedProperty: new BooleanProperty( true ),
+      expandCollapseButtonOptions: {
+        touchAreaXDilation: 12,
+        touchAreaYDilation: 12
+      }
+    } );
+    symbolAccordionBox.right = availableDecaysPanel.right;
+    symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
+    this.addChild( symbolAccordionBox );
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
   }

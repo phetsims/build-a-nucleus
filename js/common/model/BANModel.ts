@@ -13,6 +13,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // types
 type BuildANucleusModelSelfOptions = {};
@@ -26,6 +27,7 @@ class BANModel {
   public readonly protonCountProperty: NumberProperty;
   public readonly neutronCountProperty: NumberProperty;
   public isStableBooleanProperty: BooleanProperty;
+  public readonly massNumberProperty: DerivedProperty<number, [ protonCount: number, neutronCount: number ]>;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BuildANucleusModelOptions ) {
 
@@ -49,6 +51,12 @@ class BANModel {
       range: new Range( 0, maximumNeutronNumber )
     } );
 
+    // TODO: add numberType but won't allow it b/c IReadOnlyProperty?
+    // the number of protons and neutrons
+    this.massNumberProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( ( protonCount, neutronCount ) => protonCount + neutronCount )
+    );
+
     // the stability of the nuclide with a given number of protons and neutrons
     this.isStableBooleanProperty = new BooleanProperty( true );
   }
@@ -56,6 +64,7 @@ class BANModel {
   public reset(): void {
     this.protonCountProperty.reset();
     this.neutronCountProperty.reset();
+    this.massNumberProperty.reset();
     this.isStableBooleanProperty.reset();
   }
 

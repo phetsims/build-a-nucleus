@@ -115,5 +115,8 @@
   },
   "neutronEmission": {
     "value": "Neutron emission"
+  },
+  "symbol": {
+    "value": "Symbol"
   }
 }

@@ -48,7 +48,8 @@ type StringsType = {
   'betaMinusDecay': string,
   'betaPlusDecay': string,
   'protonEmission': string,
-  'neutronEmission': string
+  'neutronEmission': string,
+  'symbol': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
