@@ -28,6 +28,9 @@ const TITLE_FONT = new PhetFont( 24 );
 const SPACING = 10;
 const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
 const ALPHA_PARTICLE_SPACING = -5;
+const BUTTON_TEXT_BOTTOM_MARGIN = 8;
+const BUTTON_HEIGHT = 35;
+const BUTTON_CONTENT_WIDTH = 175;
 
 class AvailableDecaysPanel extends Panel {
 
@@ -50,15 +53,19 @@ class AvailableDecaysPanel extends Panel {
 
     // create the decay buttons
     const decayButtons: RectangularPushButton[] = [];
+
+    // manually layout the button text due to the superscripts causing the normal layout to look out of place
     const createDecayButton = ( decayType: DecayType ): void => {
+      const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
+      const buttonText = new RichText( decayType.label, { font: LABEL_FONT, maxWidth: BUTTON_CONTENT_WIDTH } );
+
+      assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
+      buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
+      buttonBackgroundRectangle.addChild( buttonText );
+
       decayButtons.push( new RectangularPushButton( {
-        content: new Rectangle( 0, 0, 0, 10, { // TODO: How come the width can be zero?
-          children: [
-            // TODO: How to center align its vertical position?
-            new RichText( decayType.label, { font: LABEL_FONT, maxWidth: 175 } )
-          ]
-        } ),
-        minWidth: 175,
+        content: buttonBackgroundRectangle,
+        yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
         enabled: false
       } ) );
@@ -80,11 +87,11 @@ class AvailableDecaysPanel extends Panel {
 
     // function to create the right-aligned horizontal motion lines used in the decay icons ( the top and bottom lines are
     // shorter than the middle line )
-    const motionLines: Line[] = [];
-    for ( let i = 0; i < 3; i++ ) {
-      motionLines.push( new Line( 0, 0, i % 2 === 0 ? 25 : 40, 0, { stroke: BANColors.blueDecayIconSymbolsColorProperty } ) );
-    }
     const createMotionLines = ( spacingBetweenLines: number ): VBox => {
+      const motionLines: Line[] = [];
+      for ( let i = 0; i < 3; i++ ) {
+        motionLines.push( new Line( 0, 0, i % 2 === 0 ? 25 : 40, 0, { stroke: BANColors.blueDecayIconSymbolsColorProperty } ) );
+      }
       return new VBox( {
         children: motionLines,
         spacing: spacingBetweenLines,
@@ -96,7 +103,7 @@ class AvailableDecaysPanel extends Panel {
     const createNucleonEmissionIcon = ( particleType: ParticleType ) => {
       return new HBox( {
         children: [
-          createMotionLines( 5 ),
+          createMotionLines( 3 ),
           new ParticleNode( particleType.name.toLowerCase(), NUCLEON_PARTICLE_RADIUS )
         ],
         spacing: SPACING / 4
@@ -137,7 +144,7 @@ class AvailableDecaysPanel extends Panel {
         // alpha decay icon ( four slightly overlapping particle nodes, two on top and two on the bottom, with motion lines to their left )
         new HBox( {
           children: [
-            createMotionLines( 8 ), // TODO: This doesn't change the spacing of the motion lines, only the first call of this function changes it.
+            createMotionLines( 5 ),
             new VBox( {
               children: [
                 createHalfAlphaParticle( [ createParticleNode( ParticleType.PROTON ), createParticleNode( ParticleType.NEUTRON ) ] ),
