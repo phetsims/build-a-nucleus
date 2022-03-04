@@ -8,7 +8,7 @@
 
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
+import { RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
@@ -16,11 +16,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // types
-type BuildANucleusModelSelfOptions = {};
-export type BuildANucleusModelOptions =
-  BuildANucleusModelSelfOptions
-  & PhetioObjectOptions
-  & RequiredTandem;
+export type BANModelOptions = RequiredTandem;
 
 class BANModel {
 
@@ -29,9 +25,9 @@ class BANModel {
   public isStableBooleanProperty: BooleanProperty;
   public readonly massNumberProperty: DerivedProperty<number, [ protonCount: number, neutronCount: number ]>;
 
-  constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BuildANucleusModelOptions ) {
+  constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
-    const options = optionize<BuildANucleusModelOptions, BuildANucleusModelSelfOptions, PhetioObjectOptions>( {
+    const options = optionize<BANModelOptions, {}>( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
@@ -51,7 +47,6 @@ class BANModel {
       range: new Range( 0, maximumNeutronNumber )
     } );
 
-    // TODO: add numberType but won't allow it b/c IReadOnlyProperty?
     // the number of protons and neutrons
     this.massNumberProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
       ( ( protonCount, neutronCount ) => protonCount + neutronCount )

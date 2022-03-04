@@ -8,19 +8,14 @@
 
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import BANModel from '../../common/model/BANModel.js';
+import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 
 // types
-type DecayModelSelfOptions = {};
-export type DecayModelOptions =
-  DecayModelSelfOptions
-  & PhetioObjectOptions
-  & RequiredTandem;
+export type DecayModelOptions = BANModelOptions;
 
 class DecayModel extends BANModel {
 
@@ -28,7 +23,7 @@ class DecayModel extends BANModel {
 
   constructor( providedOptions?: DecayModelOptions ) {
 
-    const options = optionize<DecayModelOptions, DecayModelSelfOptions, PhetioObjectOptions>( {
+    const options = optionize<DecayModelOptions, {}, BANModelOptions>( {
 
       // phet-io options
       tandem: Tandem.REQUIRED

@@ -9,9 +9,8 @@
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
-import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import BANScreenView from '../../common/view/BANScreenView.js';
+import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
@@ -28,17 +27,13 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 const LABEL_FONT = new PhetFont( 24 );
 
 // types
-type DecayScreenViewSelfOptions = {};
-export type DecayScreenViewOptions =
-  DecayScreenViewSelfOptions
-  & PhetioObjectOptions
-  & RequiredTandem;
+export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView {
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
-    const options = optionize<DecayScreenViewOptions, DecayScreenViewSelfOptions, PhetioObjectOptions>( {
+    const options = optionize<DecayScreenViewOptions, {}, BANScreenViewOptions>( {
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );

@@ -6,27 +6,25 @@
  * @author Luisa Vargas
  */
 
-import Screen from '../../../joist/js/Screen.js';
+import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
 import BANColors from '../common/BANColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import { PhetioObjectOptions, RequiredTandem } from '../../../tandem/js/PhetioObject.js';
+import { RequiredTandem } from '../../../tandem/js/PhetioObject.js';
 
 // types
-type DecayScreenSelfOptions = {};
-export type DecayScreenOptions = DecayScreenSelfOptions & PhetioObjectOptions & RequiredTandem;
+export type DecayScreenOptions = ScreenOptions & RequiredTandem;
 
 class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
   constructor( providedOptions?: DecayScreenOptions ) {
 
-    const options = optionize<DecayScreenOptions, DecayScreenSelfOptions, PhetioObjectOptions>( {
+    const options = optionize<DecayScreenOptions, {}, ScreenOptions>( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
 
-      // @ts-ignore TODO: get screenBackgroundColorProperty from screen options when that exists
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 
       // phet-io options

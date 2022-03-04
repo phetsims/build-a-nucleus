@@ -6,12 +6,12 @@
  * @author Luisa Vargas
  */
 
-import ScreenView from '../../../../joist/js/ScreenView.js';
+import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import { PhetioObjectOptions, RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
+import { RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
@@ -23,19 +23,15 @@ import Property from '../../../../axon/js/Property.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 
 // types
-type BuildANucleusScreenViewSelfOptions = {};
-export type BuildANucleusScreenViewOptions =
-  BuildANucleusScreenViewSelfOptions
-  & PhetioObjectOptions
-  & RequiredTandem;
+export type BANScreenViewOptions = ScreenViewOptions & RequiredTandem;
 
 class BANScreenView extends ScreenView {
   public readonly resetAllButton: ResetAllButton;
   public readonly nucleonCountPanel: NucleonCountPanel;
 
-  constructor( model: BANModel, providedOptions?: BuildANucleusScreenViewOptions ) {
+  constructor( model: BANModel, providedOptions?: BANScreenViewOptions ) {
 
-    const options = optionize<BuildANucleusScreenViewOptions, BuildANucleusScreenViewSelfOptions, PhetioObjectOptions>( {
+    const options = optionize<BANScreenViewOptions, {}, ScreenViewOptions>( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
