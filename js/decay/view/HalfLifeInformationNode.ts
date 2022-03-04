@@ -30,11 +30,11 @@ class HalfLifeInformationNode extends Node {
 
     // create and add the halfLifeNumberLineNode
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
-      numberLineStartExponent: -18,
-      numberLineEndExponent: 18,
+      numberLineStartExponent: -24,
+      numberLineEndExponent: 24,
       tickMarkExtent: 18,
       numberLineLabelFont: new PhetFont( 15 ),
-      numberLineWidth: 450,
+      numberLineWidth: 550,
       halfLifeArrowLength: 30,
       isHalfLifeLabelFixed: true
     } );

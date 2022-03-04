@@ -108,6 +108,9 @@ class BANScreenView extends ScreenView {
       nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
     } );
 
+    // TODO: Fix issue with disabling arrows when moving from larger nuclides to smaller nuclides
+    // TODO: Also fix issue when it gets stuck on certain nuclides due to disabling both 'up' arrows
+    // function to prevent a user from creating nuclides that do not exist on the chart
     Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
       if ( !NuclideIdentifier.doesExist( protonCount, neutronCount ) ) {
         // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)

@@ -166,6 +166,7 @@ class HalfLifeNumberLineNode extends Node {
       this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
     } );
 
+    // TODO: Peg the indicator to the right when the half-life goes off-scale or the nuclide is stable
     // Don't show the half-life arrow if the half-life data is unknown or we are in the start/default state
     isStableBooleanProperty.link( isStable => {
       if ( isStable ) {

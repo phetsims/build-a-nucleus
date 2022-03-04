@@ -11,9 +11,13 @@ import buildANucleus from '../buildANucleus.js';
 const BANConstants = {
 
   SCREEN_VIEW_X_MARGIN: 15,
-  SCREEN_VIEW_Y_MARGIN: 15
+  SCREEN_VIEW_Y_MARGIN: 15,
 
-  //TODO
+  // radius of the particle node used on the NucleonCountPanel and AvailableDecaysPanel
+  PARTICLE_RADIUS: 7,
+
+  // font size of the content labels in the NucleonCountPanel and AvailableDecaysPanel
+  BUTTONS_AND_LEGEND_FONT_SIZE: 18
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

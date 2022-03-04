@@ -16,6 +16,7 @@ import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import ParticleType from '../../decay/view/ParticleType.js';
+import BANConstants from '../BANConstants.js';
 
 // types
 type NucleonLabel = {
@@ -25,17 +26,18 @@ type NucleonLabel = {
 };
 
 // constants, empirically determined
-const LABEL_FONT = new PhetFont( 17 );
+const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
 const MAX_TITLE_WIDTH = 115;
 const MIN_VERTICAL_SPACING = 16;
-const PARTICLE_RADIUS = 6;
+const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
 
 class NucleonCountPanel extends Panel {
 
   constructor( protonCountProperty: NumberProperty, neutronCountProperty: NumberProperty ) {
 
     const options = {
-      fill: BANColors.panelBackgroundColorProperty
+      fill: BANColors.panelBackgroundColorProperty,
+      xMargin: 10
     };
 
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
