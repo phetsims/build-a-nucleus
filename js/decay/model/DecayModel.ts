@@ -13,7 +13,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../../common/model/BANModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import NuclideIdentifier from '../../common/NuclideIdentifier.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 
 // types
 type DecayModelSelfOptions = {};
@@ -44,15 +44,15 @@ class DecayModel extends BANModel {
     Property.multilink( [ this.protonCountProperty, this.neutronCountProperty ], ( protonCount, neutronCount ) => {
 
       // the nuclide exists
-      if ( NuclideIdentifier.doesExist( protonCount, neutronCount ) ) {
-        this.isStableBooleanProperty.value = NuclideIdentifier.isStable( protonCount, neutronCount );
+      if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
+        this.isStableBooleanProperty.value = AtomIdentifier.isStable( protonCount, neutronCount );
 
         if ( this.isStableBooleanProperty.value ) {
           this.halfLifeNumberProperty.value = 0;
         }
         // if the nuclide is unstable and its half-life data is not missing, update its half-life
-        else if ( NuclideIdentifier.getNuclideHalfLife( protonCount, neutronCount ) !== null ) {
-          this.halfLifeNumberProperty.value = NuclideIdentifier.getNuclideHalfLife( protonCount, neutronCount )!;
+        else if ( AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount ) !== null ) {
+          this.halfLifeNumberProperty.value = AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount )!;
         }
       }
       else {
