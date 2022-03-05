@@ -56,7 +56,8 @@ class NucleonCountPanel extends Panel {
       nucleonParticleNode.centerY = nucleonTitle.centerY;
       panelContents.addChild( nucleonContents );
 
-      const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountProperty.range, {
+      assert && assert( nucleonCountProperty.range );
+      const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountProperty.range!, {
         align: 'right',
         textOptions: {
           font: LABEL_FONT
