@@ -8,15 +8,16 @@
 
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import { RequiredTandem } from '../../../../tandem/js/PhetioObject.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { PickRequired } from '../../../../phet-core/js/types/PickRequired.js';
 
 // types
-export type BANModelOptions = RequiredTandem;
+export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 
 class BANModel {
 
