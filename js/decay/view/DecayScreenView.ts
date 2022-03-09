@@ -65,6 +65,8 @@ class DecayScreenView extends BANScreenView {
       minWidth: 50,
       contentAlign: 'center',
       contentXMargin: 30,
+      buttonXMargin: 8,
+      buttonYMargin: 8,
       titleAlignX: 'left',
       expandedProperty: new BooleanProperty( true )
     } );
