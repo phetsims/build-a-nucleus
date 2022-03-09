@@ -16,6 +16,8 @@ type StringsType = {
   'seconds': string,
   'halfLifePattern': string,
   'halfLifeColon': string,
+  'halfLifeUnknown': string,
+  'halfLifeInfinitySymbol': string,
   'lessStable': string,
   'moreStable': string,
   'halfLifeTimescale': string,
@@ -49,7 +51,9 @@ type StringsType = {
   'betaPlusDecay': string,
   'protonEmission': string,
   'neutronEmission': string,
-  'symbol': string
+  'symbol': string,
+  'stable': string,
+  'unstable': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

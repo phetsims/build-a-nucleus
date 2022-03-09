@@ -17,6 +17,12 @@
   "halfLifeColon": {
     "value": "Half-life:"
   },
+  "halfLifeUnknown": {
+    "value": "Half-life: Unknown"
+  },
+  "halfLifeInfinitySymbol": {
+    "value": "Half-life: ∞"
+  },
   "lessStable": {
     "value": "less stable"
   },
@@ -118,5 +124,11 @@
   },
   "symbol": {
     "value": "Symbol"
+  },
+  "stable": {
+    "value": "Stable"
+  },
+  "unstable": {
+    "value": "Unstable"
   }
 }
