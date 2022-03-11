@@ -17,7 +17,6 @@ type StringsType = {
   'halfLifePattern': string,
   'halfLifeColon': string,
   'halfLifeUnknown': string,
-  'halfLifeInfinitySymbol': string,
   'lessStable': string,
   'moreStable': string,
   'halfLifeTimescale': string,

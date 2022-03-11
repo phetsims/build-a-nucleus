@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Color, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -24,7 +24,6 @@ import BANColors from '../../common/BANColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -84,7 +83,7 @@ class DecayScreenView extends BANScreenView {
       fill: 'black',
       center: new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top ),
       visible: true
-      //maxWidth: modelViewTransform.modelToViewDeltaX( particleAtom.innerElectronShellRadius * 1.4 )
+      // TODO: maxWidth
     } );
     this.addChild( stabilityIndicator );
 
@@ -109,10 +108,11 @@ class DecayScreenView extends BANScreenView {
     model.protonCountProperty.link( updateStabilityIndicator );
     model.neutronCountProperty.link( updateStabilityIndicator );
 
-    // @private - Create the textual readout for the element name.
+    // TODO: show "Does not form" in the elementName's place when a nuclide that does not exist is built
+    // Create the textual readout for the element name.
     const elementName = new Text( '', {
       font: STABILITY_AND_ELEMENT_NAME_FONT,
-      fill: PhetColorScheme.RED_COLORBLIND,
+      fill: Color.RED,
       center: stabilityIndicator.center.plusXY( 0, 60 )
     } );
     this.addChild( elementName );

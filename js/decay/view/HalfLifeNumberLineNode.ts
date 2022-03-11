@@ -29,6 +29,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANConstants from '../../common/BANConstants.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -161,20 +162,37 @@ class HalfLifeNumberLineNode extends Node {
       } );
     }
 
-    // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
-    halfLifeNumberProperty.link( halfLifeNumber => {
-      halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
-      this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
-    } );
-
-    // TODO: Peg the indicator to the right when the half-life goes off-scale or the nuclide is stable
-    // Don't show the half-life arrow if the half-life data is unknown or we are in the start/default state
-    isStableBooleanProperty.link( isStable => {
-      if ( isStable ) {
+    // function to show or hide the halfLifeArrow
+    const showHalfLifeArrow = ( show: boolean ) => {
+      if ( show && !this.hasChild( halfLifeArrow ) ) {
+        this.addChild( halfLifeArrow );
+      }
+      else if ( !show ) {
         this.removeChild( halfLifeArrow );
       }
+    };
+
+    // TODO: Peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
+    // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
+    halfLifeNumberProperty.link( halfLifeNumber => {
+
+      // the nuclide is stable
+      if ( isStableBooleanProperty.value ) {
+        showHalfLifeArrow( true );
+        halfLifeText.setText( buildANucleusStrings.halfLifeColon + ' ' + MathSymbols.INFINITY );
+        // peg the indicator to the right when stable
+        this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+      }
+      // if the nuclide is unstable but the half-life data is unknown
+      else if ( halfLifeNumber === -1 ) {
+        showHalfLifeArrow( false );
+        halfLifeText.setText( buildANucleusStrings.halfLifeUnknown );
+      }
+      // the nuclide is unstable and the half-life data is known
       else {
-        this.addChild( halfLifeArrow );
+        showHalfLifeArrow( true );
+        halfLifeText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
+        this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
       }
     } );
   }
