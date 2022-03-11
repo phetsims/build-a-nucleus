@@ -17,7 +17,13 @@ const BANConstants = {
   PARTICLE_RADIUS: 7,
 
   // font size of the content labels in the NucleonCountPanel and AvailableDecaysPanel
-  BUTTONS_AND_LEGEND_FONT_SIZE: 18
+  BUTTONS_AND_LEGEND_FONT_SIZE: 18,
+
+  // half-life number line starting exponent
+  HALF_LIFE_NUMBER_LINE_START_EXPONENT: -24,
+
+  // half-life number line ending exponent
+  HALF_LIFE_NUMBER_LINE_END_EXPONENT: 24
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

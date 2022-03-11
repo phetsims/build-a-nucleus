@@ -13,6 +13,7 @@ import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import BANConstants from '../../common/BANConstants.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
@@ -43,7 +44,7 @@ class DecayModel extends BANModel {
         this.isStableBooleanProperty.value = AtomIdentifier.isStable( protonCount, neutronCount );
 
         if ( this.isStableBooleanProperty.value ) {
-          this.halfLifeNumberProperty.value = 0;
+          this.halfLifeNumberProperty.value = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT );
         }
         // if the nuclide is unstable and its half-life data is not missing, update its half-life
         else if ( AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount ) !== null ) {

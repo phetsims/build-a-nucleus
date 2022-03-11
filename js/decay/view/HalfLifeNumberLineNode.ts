@@ -28,11 +28,10 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import BANConstants from '../../common/BANConstants.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
-  numberLineStartExponent: number,
-  numberLineEndExponent: number,
   tickMarkExtent: number,
   numberLineLabelFont: PhetFont,
   numberLineWidth: number,
@@ -44,6 +43,8 @@ export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & 
 
 // constants
 const TITLE_FONT = new PhetFont( 24 );
+const NUMBER_LINE_START_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_START_EXPONENT;
+const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT;
 
 class HalfLifeNumberLineNode extends Node {
 
@@ -61,12 +62,12 @@ class HalfLifeNumberLineNode extends Node {
     this.labelFont = options.numberLineLabelFont;
 
     const viewWidth = options.numberLineWidth;
-    const numberLineLength = new Range( options.numberLineStartExponent, options.numberLineEndExponent ).getLength();
+    const numberLineLength = new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT ).getLength();
     const tickMarkLength = viewWidth / numberLineLength;
 
     // TODO: Fix the view Y's
     this.modelViewTransform = ModelViewTransform2.createRectangleMapping(
-      new Bounds2( options.numberLineStartExponent, 0, options.numberLineEndExponent, 1 ),
+      new Bounds2( NUMBER_LINE_START_EXPONENT, 0, NUMBER_LINE_END_EXPONENT, 1 ),
       new Bounds2( 0, 0, viewWidth, tickMarkLength )
     );
 
@@ -83,7 +84,7 @@ class HalfLifeNumberLineNode extends Node {
     const numberLineNode = new Node();
     const chartTransform = new ChartTransform( {
       viewWidth: viewWidth,
-      modelXRange: new Range( options.numberLineStartExponent, options.numberLineEndExponent )
+      modelXRange: new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT )
     } );
     const tickXSpacing = 3;
     this.tickMarkSet = new TickMarkSet( chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
@@ -100,8 +101,8 @@ class HalfLifeNumberLineNode extends Node {
     tickLabelSet.top = this.tickMarkSet.bottom;
     numberLineNode.addChild( tickLabelSet );
     const numberLine = new Line( {
-      x1: this.modelViewTransform.modelToViewX( options.numberLineStartExponent ), y1: this.tickMarkSet.centerY,
-      x2: this.modelViewTransform.modelToViewX( options.numberLineEndExponent ), y2: this.tickMarkSet.centerY,
+      x1: this.modelViewTransform.modelToViewX( NUMBER_LINE_START_EXPONENT ), y1: this.tickMarkSet.centerY,
+      x2: this.modelViewTransform.modelToViewX( NUMBER_LINE_END_EXPONENT ), y2: this.tickMarkSet.centerY,
       stroke: Color.BLACK
     } );
     numberLineNode.addChild( numberLine );

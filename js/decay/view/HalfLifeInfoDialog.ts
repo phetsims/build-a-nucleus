@@ -60,8 +60,6 @@ class HalfLifeInfoDialog extends Dialog {
 
     // create and add the halfLifeNumberLineNode
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
-      numberLineStartExponent: -24,
-      numberLineEndExponent: 24,
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
       numberLineWidth: 750,
