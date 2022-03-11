@@ -132,7 +132,7 @@ class DecayScreenView extends BANScreenView {
     updateElementName(); // Do the initial update.
 
     // Hook up update listeners.
-    model.protonCountProperty.link( updateElementName );
+    model.massNumberProperty.link( updateElementName );
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
   }
