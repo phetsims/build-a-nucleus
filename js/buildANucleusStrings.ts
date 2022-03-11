@@ -52,7 +52,8 @@ type StringsType = {
   'neutronEmission': string,
   'symbol': string,
   'stable': string,
-  'unstable': string
+  'unstable': string,
+  'doesNotForm': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

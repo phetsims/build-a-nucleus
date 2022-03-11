@@ -127,5 +127,8 @@
   },
   "unstable": {
     "value": "Unstable"
+  },
+  "doesNotForm": {
+    "value": "Does not form"
   }
 }

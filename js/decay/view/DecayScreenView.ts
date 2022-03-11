@@ -108,7 +108,6 @@ class DecayScreenView extends BANScreenView {
     model.protonCountProperty.link( updateStabilityIndicator );
     model.neutronCountProperty.link( updateStabilityIndicator );
 
-    // TODO: show "Does not form" in the elementName's place when a nuclide that does not exist is built
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
       font: STABILITY_AND_ELEMENT_NAME_FONT,
@@ -120,7 +119,13 @@ class DecayScreenView extends BANScreenView {
     // Define the update function for the element name.
     const updateElementName = () => {
       let name = AtomIdentifier.getName( model.protonCountProperty.value );
-      if ( name.length === 0 ) {
+
+      // show "Does not form" in the elementName's place when a nuclide that does not exist on Earth is built
+      if ( !AtomIdentifier.doesExist( model.protonCountProperty.value, model.neutronCountProperty.value ) &&
+        model.massNumberProperty.value !== 0 ) {
+        name = buildANucleusStrings.doesNotForm;
+      }
+      else if ( name.length === 0 ) {
         name = '';
       }
       else {
