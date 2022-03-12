@@ -61,7 +61,6 @@ class DecayModel extends BANModel {
       // the nuclide does not exist
       else {
         this.halfLifeNumberProperty.reset();
-        this.isStableBooleanProperty.reset();
       }
     } );
   }
