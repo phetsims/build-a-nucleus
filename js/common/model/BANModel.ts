@@ -12,9 +12,9 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -23,8 +23,9 @@ class BANModel {
 
   public readonly protonCountProperty: NumberProperty;
   public readonly neutronCountProperty: NumberProperty;
-  public isStableBooleanProperty: BooleanProperty;
+  public isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
   public readonly massNumberProperty: DerivedProperty<number, [ protonCount: number, neutronCount: number ]>;
+  public readonly doesNuclideExistBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -50,11 +51,17 @@ class BANModel {
 
     // the number of protons and neutrons
     this.massNumberProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
-      ( ( protonCount, neutronCount ) => protonCount + neutronCount )
+      ( protonCount: number, neutronCount: number ) => protonCount + neutronCount
     );
 
     // the stability of the nuclide with a given number of protons and neutrons
-    this.isStableBooleanProperty = new BooleanProperty( true );
+    this.isStableBooleanProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) => AtomIdentifier.isStable( protonCount, neutronCount )
+    );
+
+    // if a nuclide with a given number of protons and neutrons exists
+    this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount ) );
   }
 
   public reset(): void {

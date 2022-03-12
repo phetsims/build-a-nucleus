@@ -36,26 +36,28 @@ class DecayModel extends BANModel {
     // the half-life number
     this.halfLifeNumberProperty = new NumberProperty( 0 );
 
-    // update the half-life and stability
+    // update the half-life
     Property.multilink( [ this.protonCountProperty, this.neutronCountProperty ], ( protonCount, neutronCount ) => {
 
       // the nuclide exists
-      if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
-        this.isStableBooleanProperty.value = AtomIdentifier.isStable( protonCount, neutronCount );
+      if ( this.doesNuclideExistBooleanProperty.value ) {
 
         // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
         if ( this.isStableBooleanProperty.value ) {
           this.halfLifeNumberProperty.value = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT );
         }
+
         // the nuclide is unstable and its half-life data is missing, set -1 as the half-life as a placeholder
         else if ( AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount ) === null ) {
           this.halfLifeNumberProperty.value = -1;
         }
+
         // the nuclide is unstable and its half-life data is not missing, update its half-life
         else {
           this.halfLifeNumberProperty.value = AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount )!;
         }
       }
+
       // the nuclide does not exist
       else {
         this.halfLifeNumberProperty.reset();

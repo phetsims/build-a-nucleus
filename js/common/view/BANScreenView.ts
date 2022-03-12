@@ -108,7 +108,7 @@ class BANScreenView extends ScreenView {
     // TODO: Also fix issue when it gets stuck on certain nuclides due to disabling both 'up' arrows
     // function to prevent a user from creating nuclides that do not exist on the chart
     Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
-      if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
+      if ( !model.doesNuclideExistBooleanProperty.value ) {
         // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
         const nextIsotope = AtomIdentifier.getNextExistingIsotope( protonCount, neutronCount );
         const nextIsotone = AtomIdentifier.getNextExistingIsotone( protonCount, neutronCount );

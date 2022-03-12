@@ -102,11 +102,14 @@ class DecayScreenView extends BANScreenView {
       }
       stabilityIndicator.center = new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top );
     };
-    updateStabilityIndicator(); // Do initial update.
 
     // Add the listeners that control the label content
     model.protonCountProperty.link( updateStabilityIndicator );
     model.neutronCountProperty.link( updateStabilityIndicator );
+    const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
+      stabilityIndicator.visible = visible;
+    };
+    model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
@@ -121,8 +124,7 @@ class DecayScreenView extends BANScreenView {
       let name = AtomIdentifier.getName( model.protonCountProperty.value );
 
       // show "Does not form" in the elementName's place when a nuclide that does not exist on Earth is built
-      if ( !AtomIdentifier.doesExist( model.protonCountProperty.value, model.neutronCountProperty.value ) &&
-        model.massNumberProperty.value !== 0 ) {
+      if ( !model.doesNuclideExistBooleanProperty.value && model.massNumberProperty.value !== 0 ) {
         name = buildANucleusStrings.doesNotForm;
       }
       else if ( name.length === 0 ) {
@@ -134,10 +136,10 @@ class DecayScreenView extends BANScreenView {
       elementName.text = name;
       elementName.center = stabilityIndicator.center.plusXY( 0, 60 );
     };
-    updateElementName(); // Do the initial update.
 
     // Hook up update listeners.
-    model.massNumberProperty.link( updateElementName );
+    model.protonCountProperty.link( updateElementName );
+    model.neutronCountProperty.link( updateElementName );
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
   }

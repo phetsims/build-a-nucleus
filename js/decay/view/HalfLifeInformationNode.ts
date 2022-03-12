@@ -17,15 +17,15 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
 
 class HalfLifeInformationNode extends Node {
 
-  constructor( halfLifeNumberProperty: NumberProperty, isStableBooleanProperty: BooleanProperty ) {
-
+  constructor( halfLifeNumberProperty: NumberProperty,
+               isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> ) {
     super();
 
     // create and add the halfLifeNumberLineNode
