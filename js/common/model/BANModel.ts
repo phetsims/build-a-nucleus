@@ -67,7 +67,6 @@ class BANModel {
   public reset(): void {
     this.protonCountProperty.reset();
     this.neutronCountProperty.reset();
-    this.isStableBooleanProperty.reset();
   }
 
   /**
