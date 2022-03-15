@@ -24,6 +24,7 @@ import BANColors from '../../common/BANColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Property from '../../../../axon/js/Property.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -88,9 +89,9 @@ class DecayScreenView extends BANScreenView {
     this.addChild( stabilityIndicator );
 
     // Define the update function for the stability indicator.
-    const updateStabilityIndicator = () => {
-      if ( model.protonCountProperty.value > 0 ) {
-        if ( AtomIdentifier.isStable( model.protonCountProperty.value, model.neutronCountProperty.value ) ) {
+    const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
+      if ( protonCount > 0 ) {
+        if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
           stabilityIndicator.text = buildANucleusStrings.stable;
         }
         else {
@@ -104,8 +105,9 @@ class DecayScreenView extends BANScreenView {
     };
 
     // Add the listeners that control the label content
-    model.protonCountProperty.link( updateStabilityIndicator );
-    model.neutronCountProperty.link( updateStabilityIndicator );
+    Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) => updateStabilityIndicator( protonCount, neutronCount )
+     );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
       stabilityIndicator.visible = visible;
     };
@@ -120,26 +122,28 @@ class DecayScreenView extends BANScreenView {
     this.addChild( elementName );
 
     // Define the update function for the element name.
-    const updateElementName = () => {
-      let name = AtomIdentifier.getName( model.protonCountProperty.value );
+    const updateElementName = ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) => {
+      let name = AtomIdentifier.getName( protonCount );
 
       // show "Does not form" in the elementName's place when a nuclide that does not exist on Earth is built
-      if ( !model.doesNuclideExistBooleanProperty.value && model.massNumberProperty.value !== 0 ) {
+      if ( !doesNuclideExist && massNumber !== 0 ) {
         name = buildANucleusStrings.doesNotForm;
       }
       else if ( name.length === 0 ) {
         name = '';
       }
       else {
-        name += ' - ' + model.massNumberProperty.value.toString();
+        name += ' - ' + massNumber.toString();
       }
       elementName.text = name;
       elementName.center = stabilityIndicator.center.plusXY( 0, 60 );
     };
 
     // Hook up update listeners.
-    model.protonCountProperty.link( updateElementName );
-    model.neutronCountProperty.link( updateElementName );
+    Property.multilink( [ model.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty ],
+    ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
+      updateElementName( protonCount, doesNuclideExist, massNumber )
+    );
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
   }

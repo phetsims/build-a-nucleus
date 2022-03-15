@@ -174,7 +174,6 @@ class HalfLifeNumberLineNode extends Node {
       }
     };
 
-    // TODO: better way of splitting up these if's - maybe 3 nested ifs?
     // TODO: Peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {

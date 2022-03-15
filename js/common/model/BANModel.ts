@@ -61,7 +61,8 @@ class BANModel {
 
     // if a nuclide with a given number of protons and neutrons exists
     this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount ) );
+      ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount )
+    );
   }
 
   public reset(): void {

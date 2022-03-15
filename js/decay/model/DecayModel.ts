@@ -36,6 +36,7 @@ class DecayModel extends BANModel {
     // the half-life number
     this.halfLifeNumberProperty = new NumberProperty( 0 );
 
+    // TODO: Should be a derived property
     // update the half-life
     Property.multilink( [ this.protonCountProperty, this.neutronCountProperty ], ( protonCount, neutronCount ) => {
 
