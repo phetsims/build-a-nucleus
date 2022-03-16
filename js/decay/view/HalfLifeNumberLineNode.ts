@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Range from '../../../../dot/js/Range.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Line, Node, NodeOptions, RichText } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Line, Node, NodeOptions, RichText, Text } from '../../../../scenery/js/imports.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -24,12 +24,12 @@ import Easing from '../../../../twixt/js/Easing.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import Utils from '../../../../dot/js/Utils.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -129,30 +129,28 @@ class HalfLifeNumberLineNode extends Node {
     } );
     this.arrowAnimation = null;
 
-    // return the half-life label and number readout string
-    const halfLifeTextFillIn = ( halfLife: string ): string => {
-      const decimal = halfLife.slice( 0, halfLife.indexOf( 'e' ) );
-      if ( decimal === '0.0' ) {
-        return buildANucleusStrings.halfLifeColon;
-      }
-      const exponentSliceIndex = halfLife.indexOf( '+' ) === -1 ? halfLife.indexOf( 'e' ) : halfLife.indexOf( '+' );
-      return StringUtils.fillIn( buildANucleusStrings.halfLifePattern, {
-        decimal: decimal,
-        exponent: halfLife.slice( exponentSliceIndex + 1 )
-      } ) + ' ' + buildANucleusStrings.s;
-    };
-
     // create and add the half life label and number readout
     const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
       font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
     } );
-    const halfLifeString = halfLifeNumberProperty.value.toExponential( 1 );
-    const halfLifeNumberText = new RichText( halfLifeTextFillIn( halfLifeString ), {
-      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont,
-      supScale: 0.6,
-      supYOffset: -1
+    // would be either the infinity symbol, 'Unknown', or empty
+    const halfLifeValueText = new RichText( '', {
+      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
     } );
-    const halfLifeText = new HBox( { children: [ halfLifeColonText, halfLifeNumberText ], align: 'top', spacing: 10 } );
+    // the half life number in scientific notation with an 's' for seconds at the end
+    const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
+      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
+    } );
+    const halfLifeNumberText = new HBox( {
+      children: [
+        halfLifeScientificNotation,
+        new Text( buildANucleusStrings.s, { font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont } )
+      ],
+      align: 'bottom',
+      spacing: 10
+    } );
+    // TODO: okay to assume that the sim will start w/o showing the half life number?
+    const halfLifeText = new HBox( { children: [ halfLifeColonText, halfLifeValueText ], align: 'top', spacing: 10 } );
     halfLifeText.bottom = options.isHalfLifeLabelFixed ? this.top : halfLifeArrow.top;
     if ( options.isHalfLifeLabelFixed ) {
       halfLifeText.left = this.centerX - this.width / 4;
@@ -180,37 +178,53 @@ class HalfLifeNumberLineNode extends Node {
       }
     };
 
+    // function to show the halfLifeNumberText (true) or the halfLifeValueText (false)
+    const showHalfLifeNumber = ( show: boolean ) => {
+      if ( show && halfLifeText.hasChild( halfLifeValueText ) ) {
+        halfLifeText.replaceChild( halfLifeValueText, halfLifeNumberText );
+      }
+      else if ( !show && halfLifeText.hasChild( halfLifeNumberText ) ) {
+        halfLifeText.replaceChild( halfLifeNumberText, halfLifeValueText );
+      }
+    };
+
     // TODO: Peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {
 
-      // the nuclide does not exist
-      if ( halfLifeNumber === 0 ) {
-        showHalfLifeArrow( false );
-        halfLifeNumberText.setText( '' );
-        halfLifeNumberText.setFont( options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont );
-        this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
-      }
       // the nuclide is stable
-      else if ( isStableBooleanProperty.value ) {
+      if ( isStableBooleanProperty.value ) {
         showHalfLifeArrow( true );
-        halfLifeNumberText.setText( MathSymbols.INFINITY );
-        halfLifeNumberText.setFont( options.numberLineLargeLabelFont );
+        showHalfLifeNumber( false );
+        halfLifeValueText.setText( MathSymbols.INFINITY );
+        halfLifeValueText.setFont( options.numberLineLargeLabelFont );
         // peg the indicator to the right when stable
         this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
       }
-      // the nuclide is unstable but the half-life data is unknown
-      else if ( halfLifeNumber === -1 ) {
-        showHalfLifeArrow( false );
-        halfLifeNumberText.setText( buildANucleusStrings.unknown );
-        halfLifeNumberText.setFont( options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont );
-      }
-      // the nuclide is unstable and the half-life data is known
+      // the nuclide is unstable or does not exist
       else {
-        showHalfLifeArrow( true );
-        halfLifeNumberText.setText( halfLifeTextFillIn( halfLifeNumber.toExponential( 1 ) ) );
-        halfLifeNumberText.setFont( options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont );
-        this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+        halfLifeValueText.setFont( options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont );
+
+        // the nuclide does not exist
+        if ( halfLifeNumber === 0 ) {
+          showHalfLifeArrow( false );
+          showHalfLifeNumber( false );
+          halfLifeValueText.setText( '' );
+          this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+        }
+        // the nuclide is unstable but the half-life data is unknown
+        else if ( halfLifeNumber === -1 ) {
+          showHalfLifeArrow( false );
+          showHalfLifeNumber( false );
+          halfLifeValueText.setText( buildANucleusStrings.unknown );
+        }
+        // the nuclide is unstable and the half-life data is known
+        else {
+          showHalfLifeArrow( true );
+          showHalfLifeNumber( true );
+          halfLifeValueText.setText( '' );
+          this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+        }
       }
     } );
   }
