@@ -14,7 +14,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import BANTimescalePoints from '../model/BANTimescalePoints.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
@@ -25,7 +24,8 @@ const LEGEND_FONT = new PhetFont( 20 );
 
 class HalfLifeInfoDialog extends Dialog {
 
-  constructor( halfLifeNumberProperty: NumberProperty,
+  constructor( halfLifeNumberProperty: DerivedProperty<number,
+                 [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>,
                isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> ) {
 
     const leftSideStrings = [

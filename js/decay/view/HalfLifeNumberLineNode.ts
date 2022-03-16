@@ -56,7 +56,8 @@ class HalfLifeNumberLineNode extends Node {
   private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
   private readonly labelFont: PhetFont | undefined;
 
-  constructor( halfLifeNumberProperty: NumberProperty,
+  constructor( halfLifeNumberProperty: DerivedProperty<number,
+                 [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>,
                isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
