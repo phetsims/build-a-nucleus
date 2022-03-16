@@ -12,13 +12,16 @@
     "value": "seconds"
   },
   "halfLifePattern": {
-    "value": "Half-life: {{decimal}} x 10<sup>{{exponent}}</sup> s"
+    "value": "{{decimal}} x 10<sup>{{exponent}}</sup>"
   },
   "halfLifeColon": {
     "value": "Half-life:"
   },
-  "halfLifeUnknown": {
-    "value": "Half-life: Unknown"
+  "unknown": {
+    "value": "Unknown"
+  },
+  "s": {
+    "value": "s"
   },
   "lessStable": {
     "value": "less stable"

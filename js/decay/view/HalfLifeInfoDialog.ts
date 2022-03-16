@@ -63,6 +63,7 @@ class HalfLifeInfoDialog extends Dialog {
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
+      numberLineLargeLabelFont: new PhetFont( 30 ),
       numberLineWidth: 750,
       halfLifeArrowLength: 80,
       isHalfLifeLabelFixed: false

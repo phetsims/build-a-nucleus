@@ -32,6 +32,7 @@ class HalfLifeInformationNode extends Node {
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
       tickMarkExtent: 18,
       numberLineLabelFont: new PhetFont( 15 ),
+      numberLineLargeLabelFont: new PhetFont( 35 ),
       numberLineWidth: 550,
       halfLifeArrowLength: 30,
       isHalfLifeLabelFixed: true
