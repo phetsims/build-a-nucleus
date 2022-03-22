@@ -71,8 +71,8 @@ class DecayModel extends BANModel {
         else {
           return halfLife;
         }
-
-      } );
+       }
+    );
   }
 
   public reset(): void {

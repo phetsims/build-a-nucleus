@@ -130,6 +130,7 @@ class AvailableDecaysPanel extends Panel {
         spacing: ALPHA_PARTICLE_SPACING
       } );
     };
+
     // function to create an alpha decay icon ( four slightly overlapping particle nodes, two on top and two on the bottom,
     // with motion lines to their left )
     const createAlphaDecayIcon = (): HBox => {

@@ -133,10 +133,12 @@ class HalfLifeNumberLineNode extends Node {
     const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
       font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
     } );
-    // would be either the infinity symbol, 'Unknown', or empty
+
+    // would be either the infinity symbol, 'Unknown', or empty, or infinity
     const halfLifeValueText = new RichText( '', {
       font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
     } );
+
     // the half life number in scientific notation with an 's' for seconds at the end
     const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
       font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
@@ -149,8 +151,14 @@ class HalfLifeNumberLineNode extends Node {
       align: 'bottom',
       spacing: 10
     } );
-    // TODO: okay to assume that the sim will start w/o showing the half life number?
-    const halfLifeText = new HBox( { children: [ halfLifeColonText, halfLifeValueText ], align: 'top', spacing: 10 } );
+
+    // TODO: align the left and right side in the infinity case, and align the halfLifeText node so it doesnt jump up and down
+    // waiting for CK to take a look at this
+    const halfLifeText = new HBox( {
+      children: [ halfLifeColonText, halfLifeValueText ],
+      align: 'bottom',
+      spacing: 10
+    } );
     halfLifeText.bottom = options.isHalfLifeLabelFixed ? this.top : halfLifeArrow.top;
     if ( options.isHalfLifeLabelFixed ) {
       halfLifeText.left = this.centerX - this.width / 4;
@@ -182,9 +190,11 @@ class HalfLifeNumberLineNode extends Node {
     const showHalfLifeNumber = ( show: boolean ) => {
       if ( show && halfLifeText.hasChild( halfLifeValueText ) ) {
         halfLifeText.replaceChild( halfLifeValueText, halfLifeNumberText );
+        halfLifeNumberText.bottom = halfLifeColonText.bottom;
       }
       else if ( !show && halfLifeText.hasChild( halfLifeNumberText ) ) {
         halfLifeText.replaceChild( halfLifeNumberText, halfLifeValueText );
+        halfLifeValueText.bottom = halfLifeColonText.bottom;
       }
     };
 
@@ -195,12 +205,14 @@ class HalfLifeNumberLineNode extends Node {
       // the nuclide is stable
       if ( isStableBooleanProperty.value ) {
         showHalfLifeArrow( true );
-        showHalfLifeNumber( false );
         halfLifeValueText.setText( MathSymbols.INFINITY );
         halfLifeValueText.setFont( options.numberLineLargeLabelFont );
+        showHalfLifeNumber( false );
+
         // peg the indicator to the right when stable
         this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
       }
+
       // the nuclide is unstable or does not exist
       else {
         halfLifeValueText.setFont( options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont );
@@ -212,12 +224,14 @@ class HalfLifeNumberLineNode extends Node {
           halfLifeValueText.setText( '' );
           this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
         }
+
         // the nuclide is unstable but the half-life data is unknown
         else if ( halfLifeNumber === -1 ) {
           showHalfLifeArrow( false );
           showHalfLifeNumber( false );
           halfLifeValueText.setText( buildANucleusStrings.unknown );
         }
+
         // the nuclide is unstable and the half-life data is known
         else {
           showHalfLifeArrow( true );
