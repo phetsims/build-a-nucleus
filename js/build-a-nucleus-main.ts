@@ -31,7 +31,6 @@ const simOptions = {
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
   const sim = new Sim( buildANucleusTitleString, [
-    // @ts-ignore TODO-TS: why?
     new DecayScreen()
   ], simOptions );
   sim.start();
