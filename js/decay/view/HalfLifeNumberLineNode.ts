@@ -33,12 +33,12 @@ import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotati
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
-  tickMarkExtent: number,
-  numberLineLabelFont: PhetFont,
-  numberLineLargeLabelFont: PhetFont,
-  numberLineWidth: number,
-  halfLifeArrowLength: number,
-  isHalfLifeLabelFixed: boolean // if the half-life label is fixed, place it centered above the number line, otherwise,
+  tickMarkExtent: number;
+  numberLineLabelFont: PhetFont;
+  numberLineLargeLabelFont: PhetFont;
+  numberLineWidth: number;
+  halfLifeArrowLength: number;
+  isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
   // animate its position with the half-life arrow
 };
 export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & NodeOptions;

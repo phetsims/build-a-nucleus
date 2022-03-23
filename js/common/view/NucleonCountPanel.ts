@@ -20,9 +20,9 @@ import BANConstants from '../BANConstants.js';
 
 // types
 type NucleonLabel = {
-  title: Text,
-  numberDisplay: NumberDisplay,
-  contents: HBox
+  title: Text;
+  numberDisplay: NumberDisplay;
+  contents: HBox;
 };
 
 // constants, empirically determined
