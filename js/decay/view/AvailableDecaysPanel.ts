@@ -22,6 +22,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -39,7 +40,9 @@ class AvailableDecaysPanel extends Panel {
                neutronEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
                betaMinusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
                betaPlusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
-               alphaDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>
+               alphaDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
+               protonCountProperty: NumberProperty,
+               neutronCountProperty: NumberProperty
   ) {
 
     const options = {
@@ -72,6 +75,34 @@ class AvailableDecaysPanel extends Panel {
           return alphaDecayEnabled;
         default:
           return protonEmissionEnabled; // TODO: what to do as default?? get lint error otherwise 'no default case'
+          // can't just put break bc get error 'Expected to return a value at the end of arrow function.'
+      }
+    };
+
+    // function that creates the listeners for the decay buttons. Changes the protonCountProperty and neutronCountProperty
+    // values depending on the decay type
+    const createDecayButtonListener = ( decayType: DecayType ) => {
+      switch( decayType ) {
+        case DecayType.PROTON_EMISSION:
+          protonCountProperty.value--;
+          break;
+        case DecayType.NEUTRON_EMISSION:
+          neutronCountProperty.value--;
+          break;
+        case DecayType.BETA_MINUS_DECAY:
+          neutronCountProperty.value--;
+          protonCountProperty.value++;
+          break;
+        case DecayType.BETA_PLUS_DECAY:
+          neutronCountProperty.value++;
+          protonCountProperty.value--;
+          break;
+        case DecayType.ALPHA_DECAY:
+          neutronCountProperty.value -= 2;
+          protonCountProperty.value -= 2;
+          break;
+        default:
+          break;
       }
     };
 
@@ -89,7 +120,8 @@ class AvailableDecaysPanel extends Panel {
         content: buttonBackgroundRectangle,
         yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
-        enabledProperty: returnEnabledDecayButtonProperty( decayType )
+        enabledProperty: returnEnabledDecayButtonProperty( decayType ),
+        listener: () => { createDecayButtonListener( decayType ); }
       } );
     };
 
