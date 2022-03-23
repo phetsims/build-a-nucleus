@@ -2,7 +2,7 @@
 
 /**
  * Half-life information section at the top half of the Decay screen contains the units label, 'more stable' and 'less
- * stable' arrow indicators and the info button.
+ * stable' arrow indicators.
  *
  * @author Luisa Vargas
  */
@@ -12,10 +12,7 @@ import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import { Text, Node } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import BANColors from '../../common/BANColors.js';
-import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // constants
@@ -68,19 +65,6 @@ class HalfLifeInformationNode extends Node {
     // create and add the 'less stable' and 'more  stable' arrow and text set
     arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, buildANucleusStrings.lessStable );
     arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, buildANucleusStrings.moreStable );
-
-    // create and add the HalfLifeInfoDialog
-    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty );
-
-    // create and add the info button
-    const infoButton = new InfoButton( {
-      listener: () => halfLifeInfoDialog.show(),
-      baseColor: BANColors.infoButtonColorProperty,
-      maxHeight: 45,
-      bottom: halfLifeNumberLineNode.centerY - 15,
-      right: halfLifeNumberLineNode.right
-    } );
-    this.addChild( infoButton );
   }
 }
 

@@ -25,6 +25,8 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
+import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
+import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -64,6 +66,19 @@ class DecayScreenView extends BANScreenView {
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );
+
+    // create and add the HalfLifeInfoDialog
+    const halfLifeInfoDialog = new HalfLifeInfoDialog( model.halfLifeNumberProperty, model.isStableBooleanProperty );
+
+    // create and add the info button
+    const infoButton = new InfoButton( {
+      listener: () => halfLifeInfoDialog.show(),
+      baseColor: BANColors.infoButtonColorProperty,
+      maxHeight: 45,
+      top: this.nucleonCountPanel.top,
+      right: halfLifeInformationNode.right
+    } );
+    this.addChild( infoButton );
 
     // create and add the symbol node in an accordion box
     const symbolNode = new SymbolNode( model.protonCountProperty, model.massNumberProperty, {
