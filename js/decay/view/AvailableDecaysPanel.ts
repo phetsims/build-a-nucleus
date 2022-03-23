@@ -21,6 +21,7 @@ import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -34,7 +35,12 @@ const BUTTON_CONTENT_WIDTH = 175;
 
 class AvailableDecaysPanel extends Panel {
 
-  constructor() {
+  constructor( protonEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
+               neutronEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
+               betaMinusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
+               betaPlusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
+               alphaDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>
+  ) {
 
     const options = {
       xMargin: 15,
@@ -51,6 +57,24 @@ class AvailableDecaysPanel extends Panel {
     titleNode.centerX = contentNode.centerX;
     contentNode.addChild( titleNode );
 
+    // function to return the correct enabled derived property for each type of decay
+    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> => {
+      switch( decayType ) {
+        case DecayType.PROTON_EMISSION:
+          return protonEmissionEnabled;
+        case DecayType.NEUTRON_EMISSION:
+          return neutronEmissionEnabled;
+        case DecayType.BETA_MINUS_DECAY:
+          return betaMinusDecayEnabled;
+        case DecayType.BETA_PLUS_DECAY:
+          return betaPlusDecayEnabled;
+        case DecayType.ALPHA_DECAY:
+          return alphaDecayEnabled;
+        default:
+          return protonEmissionEnabled; // TODO: what to do as default?? get lint error otherwise 'no default case'
+      }
+    };
+
     // function to create the decay buttons
     // manually layout the button text due to the superscripts causing the normal layout to look out of place
     const createDecayButton = ( decayType: DecayType ): RectangularPushButton => {
@@ -65,7 +89,7 @@ class AvailableDecaysPanel extends Panel {
         content: buttonBackgroundRectangle,
         yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
-        enabled: false
+        enabledProperty: returnEnabledDecayButtonProperty( decayType )
       } );
     };
 

@@ -13,14 +13,19 @@ import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DecayType from '../view/DecayType.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
 
 class DecayModel extends BANModel {
 
-  public halfLifeNumberProperty: DerivedProperty<number,
-    [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>;
+  public halfLifeNumberProperty: DerivedProperty<number, [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>;
+  public protonEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public neutronEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public betaMinusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public betaPlusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public alphaDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
 
   constructor( providedOptions?: DecayModelOptions ) {
 
@@ -71,7 +76,36 @@ class DecayModel extends BANModel {
         else {
           return halfLife;
         }
-       }
+      }
+    );
+
+    // function which would return whether a given nuclide (defined by the number of protons and neutrons) has a certain
+    // available decay type
+    const createDecayEnabledListener = ( protonCount: number, neutronCount: number, decayType: DecayType ): boolean => {
+      const decays = AtomIdentifier.getAvailableDecays( protonCount, neutronCount );
+      return decays.includes( decayType.name );
+    };
+
+    // create the decay enabled properties for all five decays possible
+    this.protonEmissionEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) =>
+        createDecayEnabledListener( protonCount, neutronCount, DecayType.PROTON_EMISSION )
+    );
+    this.neutronEmissionEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) =>
+        createDecayEnabledListener( protonCount, neutronCount, DecayType.NEUTRON_EMISSION )
+    );
+    this.betaMinusDecayEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) =>
+        createDecayEnabledListener( protonCount, neutronCount, DecayType.BETA_MINUS_DECAY )
+    );
+    this.betaPlusDecayEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) =>
+        createDecayEnabledListener( protonCount, neutronCount, DecayType.BETA_PLUS_DECAY )
+    );
+    this.alphaDecayEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+      ( protonCount: number, neutronCount: number ) =>
+        createDecayEnabledListener( protonCount, neutronCount, DecayType.ALPHA_DECAY )
     );
   }
 
