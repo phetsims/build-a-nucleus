@@ -47,6 +47,7 @@ export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & 
 const TITLE_FONT = new PhetFont( 24 );
 const NUMBER_LINE_START_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_START_EXPONENT;
 const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT;
+const HALF_LIFE_ARROW_ANIMATION_DURATION = 0.7; // in seconds
 
 class HalfLifeNumberLineNode extends Node {
 
@@ -259,7 +260,7 @@ class HalfLifeNumberLineNode extends Node {
       this.arrowAnimation = new Animation( {
         to: newXPosition,
         property: this.arrowXPositionProperty,
-        duration: 0.5,
+        duration: HALF_LIFE_ARROW_ANIMATION_DURATION,
         easing: Easing.QUADRATIC_IN_OUT
       } );
     }
@@ -272,7 +273,7 @@ class HalfLifeNumberLineNode extends Node {
           to: newXPosition,
           property: this.halfLifeTextXPositionProperty
         } ],
-        duration: 0.5,
+        duration: HALF_LIFE_ARROW_ANIMATION_DURATION,
         easing: Easing.QUADRATIC_IN_OUT
       } );
     }

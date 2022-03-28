@@ -130,7 +130,7 @@ class AvailableDecaysPanel extends Panel {
     // function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon
     const createParticleNode = ( particleType: ParticleType ): ParticleNode => {
       return new ParticleNode( particleType.name.toLowerCase(),
-        particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : NUCLEON_PARTICLE_RADIUS * 0.8
+        particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : NUCLEON_PARTICLE_RADIUS * 0.7
       );
     };
 
@@ -172,7 +172,7 @@ class AvailableDecaysPanel extends Panel {
             headWidth: 7.5
           } ),
           isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON ),
-          new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 10, 2.5 ) } ),
+          new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
           isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
         ],
         spacing: SPACING / 3
