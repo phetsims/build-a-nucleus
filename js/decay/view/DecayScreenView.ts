@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Color, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -31,6 +31,7 @@ import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 // constants
 const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_AND_ELEMENT_NAME_FONT = new PhetFont( 20 );
+const ELECTRON_CLOUD_RADIUS = 130;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -136,6 +137,17 @@ class DecayScreenView extends BANScreenView {
       stabilityIndicator.visible = visible;
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
+
+    // create and add the electron cloud
+    const electronCloud = new Circle( {
+      radius: ELECTRON_CLOUD_RADIUS,
+      fill: new RadialGradient( 0, 0, 0, 0, 0, ELECTRON_CLOUD_RADIUS )
+        .addColorStop( 0.2, 'rgba( 116, 208, 246, 0 )' )
+        .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' )
+    } );
+    electronCloud.centerX = stabilityIndicator.centerX;
+    electronCloud.top = stabilityIndicator.bottom + 10;
+    this.addChild( electronCloud );
 
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
