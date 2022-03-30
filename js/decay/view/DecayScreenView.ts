@@ -53,17 +53,8 @@ class DecayScreenView extends BANScreenView {
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
 
-    // TODO: should i just pass in the model?
     // create and add the available decays panel at the center right of the decay screen
-    const availableDecaysPanel = new AvailableDecaysPanel(
-      model.protonEmissionEnabled,
-      model.neutronEmissionEnabled,
-      model.betaMinusDecayEnabled,
-      model.betaPlusDecayEnabled,
-      model.alphaDecayEnabled,
-      model.protonCountProperty,
-      model.neutronCountProperty
-    );
+    const availableDecaysPanel = new AvailableDecaysPanel( model );
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );

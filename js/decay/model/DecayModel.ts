@@ -21,11 +21,11 @@ export type DecayModelOptions = BANModelOptions;
 class DecayModel extends BANModel {
 
   public halfLifeNumberProperty: DerivedProperty<number, [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>;
-  public protonEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
-  public neutronEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
-  public betaMinusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
-  public betaPlusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
-  public alphaDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public protonEmissionEnabledProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public neutronEmissionEnabledProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public betaMinusDecayEnabledProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public betaPlusDecayEnabledProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public alphaDecayEnabledProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
 
   constructor( providedOptions?: DecayModelOptions ) {
 
@@ -87,23 +87,23 @@ class DecayModel extends BANModel {
     };
 
     // create the decay enabled properties for all five decays possible
-    this.protonEmissionEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+    this.protonEmissionEnabledProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.PROTON_EMISSION )
     );
-    this.neutronEmissionEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+    this.neutronEmissionEnabledProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.NEUTRON_EMISSION )
     );
-    this.betaMinusDecayEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+    this.betaMinusDecayEnabledProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.BETA_MINUS_DECAY )
     );
-    this.betaPlusDecayEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+    this.betaPlusDecayEnabledProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.BETA_PLUS_DECAY )
     );
-    this.alphaDecayEnabled = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
+    this.alphaDecayEnabledProperty = new DerivedProperty( [ this.protonCountProperty, this.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.ALPHA_DECAY )
     );

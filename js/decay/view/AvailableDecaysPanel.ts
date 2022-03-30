@@ -22,7 +22,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import DecayModel from '../model/DecayModel.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -36,14 +36,7 @@ const BUTTON_CONTENT_WIDTH = 175;
 
 class AvailableDecaysPanel extends Panel {
 
-  constructor( protonEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
-               neutronEmissionEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
-               betaMinusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
-               betaPlusDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
-               alphaDecayEnabled: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
-               protonCountProperty: NumberProperty,
-               neutronCountProperty: NumberProperty
-  ) {
+  constructor( model: DecayModel ) {
 
     const options = {
       xMargin: 15,
@@ -64,18 +57,18 @@ class AvailableDecaysPanel extends Panel {
     const returnEnabledDecayButtonProperty = ( decayType: DecayType ): DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> => {
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          return protonEmissionEnabled;
+          return model.protonEmissionEnabledProperty;
         case DecayType.NEUTRON_EMISSION:
-          return neutronEmissionEnabled;
+          return model.neutronEmissionEnabledProperty;
         case DecayType.BETA_MINUS_DECAY:
-          return betaMinusDecayEnabled;
+          return model.betaMinusDecayEnabledProperty;
         case DecayType.BETA_PLUS_DECAY:
-          return betaPlusDecayEnabled;
+          return model.betaPlusDecayEnabledProperty;
         case DecayType.ALPHA_DECAY:
-          return alphaDecayEnabled;
+          return model.alphaDecayEnabledProperty;
         default:
-          return protonEmissionEnabled; // TODO: what to do as default?? get lint error otherwise 'no default case'
-          // can't just put break bc get error 'Expected to return a value at the end of arrow function.'
+          assert && assert( false, 'No valid decay type found: ' + decayType );
+          return model.protonEmissionEnabledProperty;
       }
     };
 
@@ -84,22 +77,22 @@ class AvailableDecaysPanel extends Panel {
     const createDecayButtonListener = ( decayType: DecayType ) => {
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          protonCountProperty.value--;
+          model.protonCountProperty.value--;
           break;
         case DecayType.NEUTRON_EMISSION:
-          neutronCountProperty.value--;
+          model.neutronCountProperty.value--;
           break;
         case DecayType.BETA_MINUS_DECAY:
-          neutronCountProperty.value--;
-          protonCountProperty.value++;
+          model.neutronCountProperty.value--;
+          model.protonCountProperty.value++;
           break;
         case DecayType.BETA_PLUS_DECAY:
-          neutronCountProperty.value++;
-          protonCountProperty.value--;
+          model.neutronCountProperty.value++;
+          model.protonCountProperty.value--;
           break;
         case DecayType.ALPHA_DECAY:
-          neutronCountProperty.value -= 2;
-          protonCountProperty.value -= 2;
+          model.neutronCountProperty.value -= 2;
+          model.protonCountProperty.value -= 2;
           break;
         default:
           break;
