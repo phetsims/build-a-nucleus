@@ -36,7 +36,7 @@ class DecayModel extends BANModel {
     }, providedOptions );
 
     // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
-    super( 92, 146, options );
+    super( BANConstants.MAX_NUMBER_OF_PROTONS, BANConstants.MAX_NUMBER_OF_NEUTRONS, options );
 
     // the half-life number
     this.halfLifeNumberProperty = new DerivedProperty(

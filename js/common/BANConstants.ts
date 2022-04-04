@@ -23,7 +23,13 @@ const BANConstants = {
   HALF_LIFE_NUMBER_LINE_START_EXPONENT: -24,
 
   // half-life number line ending exponent
-  HALF_LIFE_NUMBER_LINE_END_EXPONENT: 24
+  HALF_LIFE_NUMBER_LINE_END_EXPONENT: 24,
+
+  // the maximum number of protons
+  MAX_NUMBER_OF_PROTONS: 92,
+
+  // the maximum number of neutrons,
+  MAX_NUMBER_OF_NEUTRONS: 146
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

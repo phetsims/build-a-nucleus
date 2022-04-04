@@ -31,7 +31,8 @@ import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 // constants
 const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_AND_ELEMENT_NAME_FONT = new PhetFont( 20 );
-const ELECTRON_CLOUD_RADIUS = 130;
+const MIN_NUCLEON_CLOUD_RADIUS = 42.5; // empirically determined
+const MAX_NUCLEON_CLOUD_RADIUS = 130; // empirically determined
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -129,16 +130,46 @@ class DecayScreenView extends BANScreenView {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // create and add the electron cloud
-    const electronCloud = new Circle( {
-      radius: ELECTRON_CLOUD_RADIUS,
-      fill: new RadialGradient( 0, 0, 0, 0, 0, ELECTRON_CLOUD_RADIUS )
+    // create and add the nucleon cloud
+    const nucleonCloud = new Circle( {
+      radius: MIN_NUCLEON_CLOUD_RADIUS,
+      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_NUCLEON_CLOUD_RADIUS )
         .addColorStop( 0.2, 'rgba( 116, 208, 246, 0 )' )
         .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' )
     } );
-    electronCloud.centerX = stabilityIndicator.centerX;
-    electronCloud.top = stabilityIndicator.bottom + 10;
-    this.addChild( electronCloud );
+    nucleonCloud.centerX = stabilityIndicator.centerX;
+    nucleonCloud.top = 290; // empirically determined
+    this.addChild( nucleonCloud );
+
+    // function that updates the size of the nucleon cloud based on the massNumber
+    const update = ( massNumber: number ) => {
+
+      // the radius in femtometres (fm), based on the equation on the radius of the nucleus:
+      // r = 1.2 fm * A^(1/3), where A is the mass number
+      const realRadiusNumber = 1.2 * Math.pow( massNumber, 1 / 3 );
+
+      if ( realRadiusNumber === 0 ) {
+        nucleonCloud.radius = 1E-5; // arbitrary non-zero value
+        nucleonCloud.fill = 'transparent';
+      }
+      else {
+        const radius = MIN_NUCLEON_CLOUD_RADIUS +
+                       (
+                         ( MAX_NUCLEON_CLOUD_RADIUS - MIN_NUCLEON_CLOUD_RADIUS ) /
+                         ( 1.2 * Math.pow( BANConstants.MAX_NUMBER_OF_PROTONS + BANConstants.MAX_NUMBER_OF_NEUTRONS, 1 / 3 ) ) // max realReadiusNumber
+                       )
+                       * realRadiusNumber;
+        nucleonCloud.radius = radius;
+        nucleonCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius )
+          .addColorStop( 0.2, 'rgba( 116, 208, 246, 0 )' )
+          .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' );
+        nucleonCloud.centerX = stabilityIndicator.centerX;
+        nucleonCloud.top = 290; // empirically determined
+      }
+    };
+
+    // update the cloud size as the massNumber changes
+    model.massNumberProperty.link( update );
 
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
