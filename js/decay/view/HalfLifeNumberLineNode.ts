@@ -199,7 +199,6 @@ class HalfLifeNumberLineNode extends Node {
       }
     };
 
-    // TODO: Peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
     halfLifeNumberProperty.link( halfLifeNumber => {
 
@@ -238,7 +237,14 @@ class HalfLifeNumberLineNode extends Node {
           showHalfLifeArrow( true );
           showHalfLifeNumber( true );
           halfLifeValueText.setText( '' );
-          this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+
+          // peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
+          if ( halfLifeNumber > Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
+            this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ), options.isHalfLifeLabelFixed );
+          }
+          else {
+            this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+          }
         }
       }
     } );
