@@ -137,6 +137,15 @@ class BANScreenView extends ScreenView {
         else {
           neutronArrowButtons.getChildAt( 1 ).enabled = false;
         }
+
+        // If removing a proton forms an isotope that does not exist, then disable the proton down arrow button
+        if ( AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount ) ) {
+          // re-enable the proton down arrow button
+          protonArrowButtons.getChildAt( 1 ).enabled = protonCount !== model.protonCountProperty.range!.min;
+        }
+        else {
+          protonArrowButtons.getChildAt( 1 ).enabled = false;
+        }
       }
     } );
   }
