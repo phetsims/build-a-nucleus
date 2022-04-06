@@ -25,6 +25,9 @@ const BANConstants = {
   // half-life number line ending exponent
   HALF_LIFE_NUMBER_LINE_END_EXPONENT: 24,
 
+  // the exponent on the half life number line that represents a stable nuclide
+  HALF_LIFE_NUMBER_LINE_STABLE_EXPONENT: 26,
+
   // the maximum number of protons
   MAX_NUMBER_OF_PROTONS: 92,
 
