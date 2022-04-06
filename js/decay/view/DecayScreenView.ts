@@ -104,7 +104,7 @@ class DecayScreenView extends BANScreenView {
       fill: 'black',
       center: new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top ),
       visible: true,
-      maxWidth: 125 // empirically determined, from the stabilityIndicator in AtomNode
+      maxWidth: 200 // empirically determined
     } );
     this.addChild( stabilityIndicator );
 
@@ -112,7 +112,7 @@ class DecayScreenView extends BANScreenView {
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {
         if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
-          stabilityIndicator.text = buildANucleusStrings.stable;
+          stabilityIndicator.text = buildANucleusStrings.stableDoesNotDecay;
         }
         else {
           stabilityIndicator.text = buildANucleusStrings.unstable;

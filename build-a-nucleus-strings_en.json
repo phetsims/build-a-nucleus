@@ -122,8 +122,8 @@
   "symbol": {
     "value": "Symbol"
   },
-  "stable": {
-    "value": "Stable"
+  "stableDoesNotDecay": {
+    "value": "Stable (does not decay)"
   },
   "unstable": {
     "value": "Unstable"

@@ -14,7 +14,6 @@ type StringsType = {
   'protonsColon': string,
   'neutronsColon': string,
   'seconds': string,
-  'halfLifePattern': string,
   'halfLifeColon': string,
   'unknown': string,
   's': string,
@@ -52,7 +51,7 @@ type StringsType = {
   'protonEmission': string,
   'neutronEmission': string,
   'symbol': string,
-  'stable': string,
+  'stableDoesNotDecay': string,
   'unstable': string,
   'doesNotForm': string
 };
