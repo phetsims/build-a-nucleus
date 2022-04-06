@@ -21,6 +21,8 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
+import merge from '../../../../phet-core/js/merge.js';
 
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
@@ -44,37 +46,70 @@ class BANScreenView extends ScreenView {
     this.nucleonCountPanel.left = this.layoutBounds.maxX - 200;
     this.addChild( this.nucleonCountPanel );
 
-    // function to create the arrow buttons, which change the value of the nucleonCountProperty by -1 or +1
-    const createArrowButtons = ( nucleonCountProperty: NumberProperty, nucleonColorProperty: ProfileColorProperty ): VBox => {
-      const arrowButtonConfig = {
-        arrowWidth: 14,  // empirically determined
-        arrowHeight: 14, // empirically determined
-        spacing: 7,      // empirically determined
-        arrowFill: nucleonColorProperty
-      };
-      const upArrowButton = new ArrowButton( 'up', () => {
-        nucleonCountProperty.value =
-          Math.min( nucleonCountProperty.range!.max, nucleonCountProperty.value + 1 );
-      }, arrowButtonConfig );
-      const downArrowButton = new ArrowButton( 'down', () => {
-        nucleonCountProperty.value =
-          Math.max( nucleonCountProperty.range!.min, nucleonCountProperty.value - 1 );
-      }, arrowButtonConfig );
+    const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
+    const arrowButtonOptions = {
+      arrowWidth: 14,
+      arrowHeight: 14
+    };
+
+    // function to create the listeners the increase or decrease the given nucleon count properties by a value of +1 or -1
+    const createIncreaseNucleonCountListener = ( firstNucleonCountProperty: NumberProperty, secondNucleonCountProperty?: NumberProperty ) => {
+      firstNucleonCountProperty.value = Math.min( firstNucleonCountProperty.range!.max, firstNucleonCountProperty.value + 1 );
+      if ( secondNucleonCountProperty ) {
+        secondNucleonCountProperty.value = Math.min( secondNucleonCountProperty.range!.max, secondNucleonCountProperty.value + 1 );
+      }
+    };
+    const createDecreaseNucleonCountListener = ( firstNucleonCountProperty: NumberProperty, secondNucleonCountProperty?: NumberProperty ) => {
+      firstNucleonCountProperty.value = Math.max( firstNucleonCountProperty.range!.min, firstNucleonCountProperty.value - 1 );
+      if ( secondNucleonCountProperty ) {
+        secondNucleonCountProperty.value = Math.max( secondNucleonCountProperty.range!.min, secondNucleonCountProperty.value - 1 );
+      }
+    };
+
+    // function to create the single arrow buttons
+    const createSingleArrowButtons = ( nucleonCountProperty: NumberProperty, nucleonColorProperty: ProfileColorProperty ): VBox => {
+      const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
+      const upArrowButton = new ArrowButton( 'up', () => createIncreaseNucleonCountListener( nucleonCountProperty ),
+        singleArrowButtonOptions );
+      const downArrowButton = new ArrowButton( 'down', () => createDecreaseNucleonCountListener( nucleonCountProperty ),
+        singleArrowButtonOptions );
       return new VBox( {
         children: [ upArrowButton, downArrowButton ],
-        spacing: arrowButtonConfig.spacing
+        spacing: arrowButtonSpacing
       } );
     };
 
-    // create the arrow buttons
-    const protonArrowButtons = createArrowButtons( model.protonCountProperty, BANColors.protonColorProperty );
+    // create the single arrow buttons
+    const protonArrowButtons = createSingleArrowButtons( model.protonCountProperty, BANColors.protonColorProperty );
     protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     protonArrowButtons.left = this.layoutBounds.minX + 50;
     this.addChild( protonArrowButtons );
-    const neutronArrowButtons = createArrowButtons( model.neutronCountProperty, BANColors.neutronColorProperty );
+    const neutronArrowButtons = createSingleArrowButtons( model.neutronCountProperty, BANColors.neutronColorProperty );
     neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 2;
     this.addChild( neutronArrowButtons );
+
+    // function to create the double arrow buttons
+    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
+      return new DoubleArrowButton( direction,
+        direction === 'up' ?
+        () => createIncreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ) :
+        () => createDecreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ),
+        merge( {
+          leftArrowFill: BANColors.protonColorProperty,
+          rightArrowFill: BANColors.neutronColorProperty
+        }, arrowButtonOptions )
+      );
+    };
+
+    // create the double arrow buttons
+    const doubleArrowButtons = new VBox( {
+      children: [ createDoubleArrowButtons( 'up' ), createDoubleArrowButtons( 'down' ) ],
+      spacing: arrowButtonSpacing
+    } );
+    doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
+    doubleArrowButtons.centerX = protonArrowButtons.right + ( neutronArrowButtons.left - protonArrowButtons.right ) / 2;
+    this.addChild( doubleArrowButtons );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -91,36 +126,44 @@ class BANScreenView extends ScreenView {
     // function to create observers that disable the arrow buttons when the nucleonCountProperty values are at its min
     // or max range
     const nucleonCountPropertyObserver = ( nucleonCount: number, nucleonArrowButtons: VBox, nucleonCountProperty: NumberProperty ) => {
+
       // up arrow button
       nucleonArrowButtons.getChildAt( 0 ).enabled = nucleonCount !== nucleonCountProperty.range!.max;
+
       // down arrow button
       nucleonArrowButtons.getChildAt( 1 ).enabled = nucleonCount !== nucleonCountProperty.range!.min;
     };
+
     // create the observers to disable the arrow buttons, see the comment on the observer above
     model.protonCountProperty.link( protonCount => {
       nucleonCountPropertyObserver( protonCount, protonArrowButtons, model.protonCountProperty );
+      nucleonCountPropertyObserver( protonCount, doubleArrowButtons, model.protonCountProperty );
     } );
     model.neutronCountProperty.link( neutronCount => {
       nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
+      nucleonCountPropertyObserver( neutronCount, doubleArrowButtons, model.neutronCountProperty );
     } );
 
-    // TODO: Don't allow any nuclides that don't form to be created (Feb. 23 meeting - for nuclides that do not exist)
     // function to prevent a user from creating nuclides that do not exist on the chart
     Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
 
       // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
       if ( !model.doesNuclideExistBooleanProperty.value ) {
+
+        // TODO: disable all buttons once the nucleons are added
         const nextIsotope = AtomIdentifier.getNextExistingIsotope( protonCount, neutronCount );
         const nextIsotone = AtomIdentifier.getNextExistingIsotone( protonCount, neutronCount );
 
         // if the nextIsotone does not exist, disable the proton up arrow
         if ( !nextIsotone ) {
           protonArrowButtons.getChildAt( 0 ).enabled = false;
+          doubleArrowButtons.getChildAt( 0 ).enabled = false;
         }
 
         // if the nextIsotope does not exist, disable the neutron up arrow
         if ( !nextIsotope ) {
           neutronArrowButtons.getChildAt( 0 ).enabled = false;
+          doubleArrowButtons.getChildAt( 0 ).enabled = false;
         }
       }
       else {
