@@ -109,14 +109,14 @@ class DecayModel extends BANModel {
     );
   }
 
-  public reset(): void {
+  public override reset(): void {
     super.reset();
   }
 
   /**
    * @param {number} dt - time step, in seconds
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     //TODO
   }
 }

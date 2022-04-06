@@ -206,14 +206,14 @@ class DecayScreenView extends BANScreenView {
     this.nucleonCountPanel.left = availableDecaysPanel.left;
   }
 
-  public reset(): void {
+  public override reset(): void {
     //TODO
   }
 
   /**
    * @param {number} dt - time step, in seconds
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     //TODO
   }
 }
