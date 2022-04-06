@@ -141,7 +141,7 @@ class DecayScreenView extends BANScreenView {
         .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' )
     } );
     nucleonCloud.centerX = stabilityIndicator.centerX;
-    nucleonCloud.top = 290; // empirically determined
+    nucleonCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
     this.addChild( nucleonCloud );
 
     // function that updates the size of the nucleon cloud based on the massNumber
@@ -166,8 +166,6 @@ class DecayScreenView extends BANScreenView {
         nucleonCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius )
           .addColorStop( 0.2, 'rgba( 116, 208, 246, 0 )' )
           .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' );
-        nucleonCloud.centerX = stabilityIndicator.centerX;
-        nucleonCloud.top = 290; // empirically determined
       }
     };
 

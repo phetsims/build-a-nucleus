@@ -86,7 +86,7 @@ class BANScreenView extends ScreenView {
     this.addChild( protonArrowButtons );
     const neutronArrowButtons = createSingleArrowButtons( model.neutronCountProperty, BANColors.neutronColorProperty );
     neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 2;
+    neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 1.75;
     this.addChild( neutronArrowButtons );
 
     // function to create the double arrow buttons
@@ -123,7 +123,7 @@ class BANScreenView extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    // function to create observers that disable the arrow buttons when the nucleonCountProperty values are at its min
+    // function to create observers that disable the single arrow buttons when the nucleonCountProperty values are at its min
     // or max range
     const nucleonCountPropertyObserver = ( nucleonCount: number, nucleonArrowButtons: VBox, nucleonCountProperty: NumberProperty ) => {
 
@@ -137,15 +137,20 @@ class BANScreenView extends ScreenView {
     // create the observers to disable the arrow buttons, see the comment on the observer above
     model.protonCountProperty.link( protonCount => {
       nucleonCountPropertyObserver( protonCount, protonArrowButtons, model.protonCountProperty );
-      nucleonCountPropertyObserver( protonCount, doubleArrowButtons, model.protonCountProperty );
     } );
     model.neutronCountProperty.link( neutronCount => {
       nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
-      nucleonCountPropertyObserver( neutronCount, doubleArrowButtons, model.neutronCountProperty );
     } );
 
     // function to prevent a user from creating nuclides that do not exist on the chart
     Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
+
+      // observers that disable the double arrow buttons when the protonCountProperty and the neutronCountProperty are at
+      // its max or min range
+      doubleArrowButtons.getChildAt( 0 ).enabled = protonCount !== model.protonCountProperty.range!.max &&
+                                                   neutronCount !== model.neutronCountProperty.range!.max;
+      doubleArrowButtons.getChildAt( 1 ).enabled = protonCount !== model.protonCountProperty.range!.min &&
+                                                   neutronCount !== model.neutronCountProperty.range!.min;
 
       // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
       if ( !model.doesNuclideExistBooleanProperty.value ) {
