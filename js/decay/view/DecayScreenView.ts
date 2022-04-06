@@ -29,10 +29,13 @@ import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 
 // constants
+
 const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_AND_ELEMENT_NAME_FONT = new PhetFont( 20 );
-const MIN_NUCLEON_CLOUD_RADIUS = 42.5; // empirically determined
-const MAX_NUCLEON_CLOUD_RADIUS = 130; // empirically determined
+
+// empirically determined, from the ElectronCloudView radius
+const MIN_NUCLEON_CLOUD_RADIUS = 42.5;
+const MAX_NUCLEON_CLOUD_RADIUS = 130;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -100,8 +103,8 @@ class DecayScreenView extends BANScreenView {
       font: STABILITY_AND_ELEMENT_NAME_FONT,
       fill: 'black',
       center: new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top ),
-      visible: true
-      // TODO: maxWidth
+      visible: true,
+      maxWidth: 125 // empirically determined, from the stabilityIndicator in AtomNode
     } );
     this.addChild( stabilityIndicator );
 
@@ -156,7 +159,7 @@ class DecayScreenView extends BANScreenView {
         const radius = MIN_NUCLEON_CLOUD_RADIUS +
                        (
                          ( MAX_NUCLEON_CLOUD_RADIUS - MIN_NUCLEON_CLOUD_RADIUS ) /
-                         ( 1.2 * Math.pow( BANConstants.MAX_NUMBER_OF_PROTONS + BANConstants.MAX_NUMBER_OF_NEUTRONS, 1 / 3 ) ) // max realReadiusNumber
+                         ( 1.2 * Math.pow( BANConstants.MAX_NUMBER_OF_PROTONS + BANConstants.MAX_NUMBER_OF_NEUTRONS, 1 / 3 ) ) // max realRadiusNumber
                        )
                        * realRadiusNumber;
         nucleonCloud.radius = radius;

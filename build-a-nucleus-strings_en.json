@@ -11,9 +11,6 @@
   "seconds": {
     "value": "seconds"
   },
-  "halfLifePattern": {
-    "value": "{{decimal}} x 10<sup>{{exponent}}</sup>"
-  },
   "halfLifeColon": {
     "value": "Half-life:"
   },

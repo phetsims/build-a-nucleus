@@ -104,12 +104,12 @@ class BANScreenView extends ScreenView {
       nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
     } );
 
-    // TODO: Fix issue with disabling arrows when moving from larger nuclides to smaller nuclides
-    // TODO: Also fix issue when it gets stuck on certain nuclides due to disabling both 'up' arrows
+    // TODO: Don't allow any nuclides that don't form to be created (Feb. 23 meeting - for nuclides that do not exist)
     // function to prevent a user from creating nuclides that do not exist on the chart
     Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
+
+      // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
       if ( !model.doesNuclideExistBooleanProperty.value ) {
-        // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
         const nextIsotope = AtomIdentifier.getNextExistingIsotope( protonCount, neutronCount );
         const nextIsotone = AtomIdentifier.getNextExistingIsotone( protonCount, neutronCount );
 
@@ -124,9 +124,28 @@ class BANScreenView extends ScreenView {
         }
       }
       else {
+
         // re-enable the up arrow buttons on the nucleons
         protonArrowButtons.getChildAt( 0 ).enabled = protonCount !== model.protonCountProperty.range!.max;
         neutronArrowButtons.getChildAt( 0 ).enabled = neutronCount !== model.neutronCountProperty.range!.max;
+
+        // If removing a neutron forms an isotope that does not exist, then disable the neutron down arrow button
+        if ( AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount ) ) {
+          // re-enable the neutron down arrow button
+          neutronArrowButtons.getChildAt( 1 ).enabled = neutronCount !== model.neutronCountProperty.range!.min;
+        }
+        else {
+          neutronArrowButtons.getChildAt( 1 ).enabled = false;
+        }
+
+        // If removing a proton forms an isotope that does not exist, then disable the proton down arrow button
+        if ( AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount ) ) {
+          // re-enable the proton down arrow button
+          protonArrowButtons.getChildAt( 1 ).enabled = protonCount !== model.protonCountProperty.range!.min;
+        }
+        else {
+          protonArrowButtons.getChildAt( 1 ).enabled = false;
+        }
       }
     } );
   }
