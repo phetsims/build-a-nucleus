@@ -129,6 +129,12 @@
     "value": "Unstable"
   },
   "doesNotForm": {
-    "value": "Does not form"
+    "value": "does not form"
+  },
+  "protons": {
+    "value": "Protons"
+  },
+  "neutrons": {
+    "value": "Neutrons"
   }
 }

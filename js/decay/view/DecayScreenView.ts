@@ -104,7 +104,7 @@ class DecayScreenView extends BANScreenView {
       fill: 'black',
       center: new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top ),
       visible: true,
-      maxWidth: 200 // empirically determined
+      maxWidth: 225
     } );
     this.addChild( stabilityIndicator );
 
@@ -137,8 +137,8 @@ class DecayScreenView extends BANScreenView {
     const nucleonCloud = new Circle( {
       radius: MIN_NUCLEON_CLOUD_RADIUS,
       fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_NUCLEON_CLOUD_RADIUS )
-        .addColorStop( 0.2, 'rgba( 116, 208, 246, 0 )' )
-        .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' )
+        .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
+        .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' )
     } );
     nucleonCloud.centerX = stabilityIndicator.centerX;
     nucleonCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
@@ -164,8 +164,8 @@ class DecayScreenView extends BANScreenView {
                        * realRadiusNumber;
         nucleonCloud.radius = radius;
         nucleonCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius )
-          .addColorStop( 0.2, 'rgba( 116, 208, 246, 0 )' )
-          .addColorStop( 1, 'rgba( 116, 208, 246, 200 )' );
+          .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
+          .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' );
       }
     };
 
@@ -176,7 +176,8 @@ class DecayScreenView extends BANScreenView {
     const elementName = new Text( '', {
       font: STABILITY_AND_ELEMENT_NAME_FONT,
       fill: Color.RED,
-      center: stabilityIndicator.center.plusXY( 0, 60 )
+      center: stabilityIndicator.center.plusXY( 0, 60 ),
+      maxWidth: 250
     } );
     this.addChild( elementName );
 
@@ -184,9 +185,9 @@ class DecayScreenView extends BANScreenView {
     const updateElementName = ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) => {
       let name = AtomIdentifier.getName( protonCount );
 
-      // show "Does not form" in the elementName's place when a nuclide that does not exist on Earth is built
+      // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
       if ( !doesNuclideExist && massNumber !== 0 ) {
-        name = buildANucleusStrings.doesNotForm;
+        name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
       }
       else if ( name.length === 0 ) {
         name = '';

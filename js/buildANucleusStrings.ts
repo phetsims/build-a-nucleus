@@ -53,7 +53,9 @@ type StringsType = {
   'symbol': string,
   'stableDoesNotDecay': string,
   'unstable': string,
-  'doesNotForm': string
+  'doesNotForm': string,
+  'protons': string,
+  'neutrons': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
