@@ -33,10 +33,6 @@ import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_AND_ELEMENT_NAME_FONT = new PhetFont( 20 );
 
-// empirically determined, from the ElectronCloudView radius
-const MIN_NUCLEON_CLOUD_RADIUS = 42.5;
-const MAX_NUCLEON_CLOUD_RADIUS = 130;
-
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
 

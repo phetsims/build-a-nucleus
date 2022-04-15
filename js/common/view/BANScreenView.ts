@@ -103,9 +103,22 @@ class BANScreenView extends ScreenView {
         .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
         .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' )
     } );
-    this.electronCloud.centerX = doubleArrowButtons.centerX;
+    this.electronCloud.centerX = 335;
     this.electronCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
     this.addChild( this.electronCloud );
+
+    // function to create the double arrow buttons
+    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
+      return new DoubleArrowButton( direction,
+        direction === 'up' ?
+        () => createIncreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ) :
+        () => createDecreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ),
+        merge( {
+          leftArrowFill: BANColors.protonColorProperty,
+          rightArrowFill: BANColors.neutronColorProperty
+        }, arrowButtonOptions )
+      );
+    };
 
     // create the double arrow buttons
     const doubleArrowButtons = new VBox( {
