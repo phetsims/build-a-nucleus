@@ -14,7 +14,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { ProfileColorProperty, VBox } from '../../../../scenery/js/imports.js';
+import { ProfileColorProperty, VBox, Circle, RadialGradient } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -24,10 +24,17 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
 
+
+// empirically determined, from the ElectronCloudView radius
+const MIN_NUCLEON_CLOUD_RADIUS = 42.5;
+const MAX_NUCLEON_CLOUD_RADIUS = 130;
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
 
 class BANScreenView extends ScreenView {
+  protected readonly electronCloud: Circle;
+  static readonly MAX_NUCLEON_CLOUD_RADIUS: number = MAX_NUCLEON_CLOUD_RADIUS;
+  static readonly MIN_NUCLEON_CLOUD_RADIUS: number = MIN_NUCLEON_CLOUD_RADIUS;
   public readonly resetAllButton: ResetAllButton;
   public readonly nucleonCountPanel: NucleonCountPanel;
 
@@ -89,18 +96,16 @@ class BANScreenView extends ScreenView {
     neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 1.75;
     this.addChild( neutronArrowButtons );
 
-    // function to create the double arrow buttons
-    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
-      return new DoubleArrowButton( direction,
-        direction === 'up' ?
-        () => createIncreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ) :
-        () => createDecreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ),
-        merge( {
-          leftArrowFill: BANColors.protonColorProperty,
-          rightArrowFill: BANColors.neutronColorProperty
-        }, arrowButtonOptions )
-      );
-    };
+    // create and add the electron cloud
+    this.electronCloud = new Circle( {
+      radius: MIN_NUCLEON_CLOUD_RADIUS,
+      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_NUCLEON_CLOUD_RADIUS )
+        .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
+        .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' )
+    } );
+    this.electronCloud.centerX = doubleArrowButtons.centerX;
+    this.electronCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
+    this.addChild( this.electronCloud );
 
     // create the double arrow buttons
     const doubleArrowButtons = new VBox( {

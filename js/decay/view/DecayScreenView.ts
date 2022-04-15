@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Color, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -137,44 +137,33 @@ class DecayScreenView extends BANScreenView {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // create and add the nucleon cloud
-    const nucleonCloud = new Circle( {
-      radius: MIN_NUCLEON_CLOUD_RADIUS,
-      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_NUCLEON_CLOUD_RADIUS )
-        .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
-        .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' )
-    } );
-    nucleonCloud.centerX = stabilityIndicator.centerX;
-    nucleonCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
-    this.addChild( nucleonCloud );
-
-    // function that updates the size of the nucleon cloud based on the massNumber
-    const update = ( massNumber: number ) => {
+    // function that updates the size of the electron cloud based on the massNumber
+    const updateCloudSize = ( massNumber: number ) => {
 
       // the radius in femtometres (fm), based on the equation on the radius of the nucleus:
       // r = 1.2 fm * A^(1/3), where A is the mass number
       const realRadiusNumber = 1.2 * Math.pow( massNumber, 1 / 3 );
 
       if ( realRadiusNumber === 0 ) {
-        nucleonCloud.radius = 1E-5; // arbitrary non-zero value
-        nucleonCloud.fill = 'transparent';
+        this.electronCloud.radius = 1E-5; // arbitrary non-zero value
+        this.electronCloud.fill = 'transparent';
       }
       else {
-        const radius = MIN_NUCLEON_CLOUD_RADIUS +
+        const radius = BANScreenView.MIN_NUCLEON_CLOUD_RADIUS +
                        (
-                         ( MAX_NUCLEON_CLOUD_RADIUS - MIN_NUCLEON_CLOUD_RADIUS ) /
+                         ( BANScreenView.MAX_NUCLEON_CLOUD_RADIUS - BANScreenView.MIN_NUCLEON_CLOUD_RADIUS ) /
                          ( 1.2 * Math.pow( BANConstants.MAX_NUMBER_OF_PROTONS + BANConstants.MAX_NUMBER_OF_NEUTRONS, 1 / 3 ) ) // max realRadiusNumber
                        )
                        * realRadiusNumber;
-        nucleonCloud.radius = radius;
-        nucleonCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius )
+        this.electronCloud.radius = radius;
+        this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius )
           .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
           .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' );
       }
     };
 
     // update the cloud size as the massNumber changes
-    model.massNumberProperty.link( update );
+    model.massNumberProperty.link( updateCloudSize );
 
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
