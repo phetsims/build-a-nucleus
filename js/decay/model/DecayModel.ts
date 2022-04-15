@@ -49,7 +49,7 @@ class DecayModel extends BANModel {
 
           // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
           if ( isStable ) {
-            halfLife = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_STABLE_EXPONENT );
+            halfLife = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT );
           }
 
           // the nuclide is unstable and its half-life data is missing, set -1 as the half-life as a placeholder

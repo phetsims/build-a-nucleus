@@ -48,19 +48,18 @@ export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & 
 const TITLE_FONT = new PhetFont( 24 );
 const NUMBER_LINE_START_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_START_EXPONENT;
 const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT;
-const HALF_LIFE_ARROW_ANIMATION_DURATION = 0.7; // in seconds
 
 class HalfLifeNumberLineNode extends Node {
 
   private readonly arrowXPositionProperty: NumberProperty;
   private readonly tickMarkSet: TickMarkSet;
   private modelViewTransform: ModelViewTransform2;
-  private arrowAnimation: null | Animation;
+  private arrowXPositionAnimation: null | Animation;
   private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
   private readonly labelFont: PhetFont | undefined;
   private arrowRotationAnimation: null | Animation;
   private readonly halfLifeArrowRotationProperty: NumberProperty;
-  private readonly halfLifeArrowYPositionProperty: NumberProperty;
+  private halfLifeArrowLength: number | undefined;
 
   constructor( halfLifeNumberProperty: DerivedProperty<number,
                  [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>,
@@ -70,6 +69,7 @@ class HalfLifeNumberLineNode extends Node {
 
     const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>( {}, providedOptions );
     this.labelFont = options.numberLineLabelFont;
+    this.halfLifeArrowLength = options.halfLifeArrowLength;
 
     const viewWidth = options.numberLineWidth;
     const numberLineLength = new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT ).getLength();
@@ -119,20 +119,21 @@ class HalfLifeNumberLineNode extends Node {
     this.addChild( numberLineNode );
 
     // create and add the halfLifeArrow
-    const halfLifeArrow = new ArrowNode( 0, -options.halfLifeArrowLength, 0, this.tickMarkSet.centerY, {
+    const arrowNode = new ArrowNode( 0, 0, 0, options.halfLifeArrowLength, {
       fill: BANColors.halfLifeColorProperty,
       stroke: null,
       tailWidth: 4,
       headWidth: 12
     } );
-    this.addChild( halfLifeArrow );
+    const halfLifeArrow = new Node();
+    halfLifeArrow.addChild( arrowNode );
 
     // keep track of the x position of the half-life arrow in model coordinates
     this.arrowXPositionProperty = new NumberProperty( 0 );
     this.arrowXPositionProperty.link( xPosition => {
-      halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY );
+      halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY - options.halfLifeArrowLength );
     } );
-    this.arrowAnimation = null;
+    this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
 
     // create and add the half life label and number readout
@@ -165,7 +166,7 @@ class HalfLifeNumberLineNode extends Node {
       align: 'bottom',
       spacing: 10
     } );
-    halfLifeText.bottom = options.isHalfLifeLabelFixed ? this.top : halfLifeArrow.top;
+    halfLifeText.bottom = halfLifeArrow.top;
     if ( options.isHalfLifeLabelFixed ) {
       halfLifeText.left = this.centerX - this.width / 4;
     }
@@ -175,19 +176,16 @@ class HalfLifeNumberLineNode extends Node {
     this.addChild( halfLifeText );
 
     // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
-    const halfLifeArrowTop = halfLifeArrow.top; // use the top position of the halfLifeArrow when its first set since it rotates afterwards
     if ( !options.isHalfLifeLabelFixed ) {
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
-        halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrowTop - halfLifeText.height );
+        halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - halfLifeText.height );
       } );
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
-    this.halfLifeArrowYPositionProperty = new NumberProperty( halfLifeArrow.bottom );
-    Property.multilink( [ this.halfLifeArrowRotationProperty, this.halfLifeArrowYPositionProperty ], ( rotation: number, yPosition: number ) => {
+    Property.multilink( [ this.halfLifeArrowRotationProperty ], ( rotation: number ) => {
       halfLifeArrow.rotation = rotation;
-      halfLifeArrow.bottom = yPosition;
     } );
 
     // function to show or hide the halfLifeArrow
@@ -270,22 +268,24 @@ class HalfLifeNumberLineNode extends Node {
   private moveHalfLifePointerSet( halfLife: number, isHalfLifeLabelFixed: boolean ): void {
     const newXPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
 
+    const arrowXPositionAnimationDuration = 0.7; // in seconds
+
     // animate the half-life arrow's x position
-    if ( this.arrowAnimation ) {
-      this.arrowAnimation.stop();
-      this.arrowAnimation = null;
+    if ( this.arrowXPositionAnimation ) {
+      this.arrowXPositionAnimation.stop();
+      this.arrowXPositionAnimation = null;
     }
 
     if ( isHalfLifeLabelFixed ) {
-      this.arrowAnimation = new Animation( {
+      this.arrowXPositionAnimation = new Animation( {
         to: newXPosition,
         property: this.arrowXPositionProperty,
-        duration: HALF_LIFE_ARROW_ANIMATION_DURATION,
+        duration: arrowXPositionAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );
     }
     else {
-      this.arrowAnimation = new Animation( {
+      this.arrowXPositionAnimation = new Animation( {
         targets: [ {
           to: newXPosition,
           property: this.arrowXPositionProperty
@@ -293,15 +293,12 @@ class HalfLifeNumberLineNode extends Node {
           to: newXPosition,
           property: this.halfLifeTextXPositionProperty
         } ],
-        duration: HALF_LIFE_ARROW_ANIMATION_DURATION,
+        duration: arrowXPositionAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );
     }
-    this.arrowAnimation.start();
 
-    this.arrowAnimation.finishEmitter.addListener( () => {
-      this.arrowAnimation = null;
-    } );
+    const arrowRotationAnimationDuration = 0.05; // in seconds
 
     // if the halfLife number is stable, then animate the arrow's rotation
     if ( this.arrowRotationAnimation ) {
@@ -309,36 +306,40 @@ class HalfLifeNumberLineNode extends Node {
       this.arrowRotationAnimation = null;
     }
 
-    if ( halfLife === Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_STABLE_EXPONENT ) ) {
+    if ( halfLife === Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
+      // rotate arrow horizontally, pointing right
       this.arrowRotationAnimation = new Animation( {
-        targets: [ {
-          to: -Math.PI / 2,
-          property: this.halfLifeArrowRotationProperty
-        }, {
-          to: this.tickMarkSet.centerY - 20,
-          property: this.halfLifeArrowYPositionProperty
-        } ],
-        duration: HALF_LIFE_ARROW_ANIMATION_DURATION,
+        to: -Math.PI / 2,
+        property: this.halfLifeArrowRotationProperty,
+        duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
+      } );
+
+      this.arrowXPositionAnimation.then( this.arrowRotationAnimation );
+      this.arrowXPositionAnimation.start();
+
+      this.arrowRotationAnimation.finishEmitter.addListener( () => {
+        this.arrowRotationAnimation = null;
+        this.arrowXPositionAnimation = null;
       } );
     }
     else {
+      // rotate arrow back vertically, pointing down
       this.arrowRotationAnimation = new Animation( {
-        targets: [ {
-          to: 0,
-          property: this.halfLifeArrowRotationProperty
-        }, {
-          to: this.tickMarkSet.centerY,
-          property: this.halfLifeArrowYPositionProperty
-        } ],
-        duration: HALF_LIFE_ARROW_ANIMATION_DURATION,
+        to: 0,
+        property: this.halfLifeArrowRotationProperty,
+        duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );
+
+      this.arrowRotationAnimation.then( this.arrowXPositionAnimation );
+      this.arrowRotationAnimation.start();
+
+      this.arrowXPositionAnimation.finishEmitter.addListener( () => {
+        this.arrowXPositionAnimation = null;
+        this.arrowRotationAnimation = null;
+      } );
     }
-    this.arrowRotationAnimation.start();
-    this.arrowRotationAnimation.finishEmitter.addListener( () => {
-      this.arrowRotationAnimation = null;
-    } );
   }
 
   /**

@@ -57,6 +57,10 @@ class DecayScreenView extends BANScreenView {
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
 
+    // use this constant since everything else is positioned off of the halfLifeInformationNode and the centerX changes
+    // as the halfLifeArrow in the halfLifeInformationNode moves
+    const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
+
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model );
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
@@ -102,7 +106,7 @@ class DecayScreenView extends BANScreenView {
     const stabilityIndicator = new Text( '', {
       font: STABILITY_AND_ELEMENT_NAME_FONT,
       fill: 'black',
-      center: new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top ),
+      center: new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top ),
       visible: true,
       maxWidth: 225
     } );
@@ -121,7 +125,7 @@ class DecayScreenView extends BANScreenView {
       else {
         stabilityIndicator.text = '';
       }
-      stabilityIndicator.center = new Vector2( halfLifeInformationNode.centerX, availableDecaysPanel.top );
+      stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
     };
 
     // Add the listeners that control the label content
@@ -177,7 +181,7 @@ class DecayScreenView extends BANScreenView {
       font: STABILITY_AND_ELEMENT_NAME_FONT,
       fill: Color.RED,
       center: stabilityIndicator.center.plusXY( 0, 60 ),
-      maxWidth: 250
+      maxWidth: 325
     } );
     this.addChild( elementName );
 
