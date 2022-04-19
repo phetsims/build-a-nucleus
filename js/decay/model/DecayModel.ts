@@ -29,7 +29,7 @@ class DecayModel extends BANModel {
 
   constructor( providedOptions?: DecayModelOptions ) {
 
-    const options = optionize<DecayModelOptions, {}, BANModelOptions>( {
+    const options = optionize<DecayModelOptions, {}, BANModelOptions>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED

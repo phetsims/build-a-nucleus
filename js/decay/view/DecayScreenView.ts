@@ -40,7 +40,7 @@ class DecayScreenView extends BANScreenView {
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
-    const options = optionize<DecayScreenViewOptions, {}, BANScreenViewOptions>( {
+    const options = optionize<DecayScreenViewOptions, {}, BANScreenViewOptions>()( {
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );

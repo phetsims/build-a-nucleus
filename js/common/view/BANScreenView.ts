@@ -40,7 +40,7 @@ class BANScreenView extends ScreenView {
 
   constructor( model: BANModel, providedOptions?: BANScreenViewOptions ) {
 
-    const options = optionize<BANScreenViewOptions, {}, ScreenViewOptions>( {
+    const options = optionize<BANScreenViewOptions, {}, ScreenViewOptions>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED

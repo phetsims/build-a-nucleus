@@ -34,7 +34,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
 
   constructor( direction: DoubleArrowButtonDirection, callback: () => void, providedOptions?: DoubleArrowButtonOptions ) {
 
-    const options = optionize<DoubleArrowButtonOptions, SelfOptions, RectangularPushButtonOptions>( {
+    const options = optionize<DoubleArrowButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
 
       // options for the button
       cursor: 'pointer',

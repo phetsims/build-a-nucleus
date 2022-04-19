@@ -29,7 +29,7 @@ class BANModel {
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
-    const options = optionize<BANModelOptions, {}>( {
+    const options = optionize<BANModelOptions, {}>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
