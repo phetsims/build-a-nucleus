@@ -274,17 +274,17 @@ class DecayScreenView extends BANScreenView {
   protected override placeNucleon( particle: Particle, atom: ParticleAtom ) {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
       atom.addParticle( particle );
+      // TODO: once arrows are working with the creator node, add line here to make the ParticleView's  not pickable
     }
     else {
-      // TODO: animate particle
       // animate particle back to its stack and then remove it
-      if ( particle.type === ParticleType.PROTON.label.toLowerCase() ) {
-        particle.setPositionAndDestination( this.protonsCreatorNode.center );
+      if ( particle.type === ParticleType.PROTON.name.toLowerCase() ) {
+        particle.destinationProperty.value = this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center );
       }
-      else if ( particle.type === ParticleType.NEUTRON.label.toLowerCase() ) {
-        particle.setPositionAndDestination( this.neutronsCreatorNode.center );
+      else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
+        particle.destinationProperty.value = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
       }
-      this.model.removeParticle( particle );
+      particle.animationEndedEmitter.addListener( () => { this.model.removeParticle( particle ); } );
     }
   }
 
