@@ -14,7 +14,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { ProfileColorProperty, VBox, Circle, RadialGradient } from '../../../../scenery/js/imports.js';
+import { PressListenerEvent, ProfileColorProperty, VBox, Circle, RadialGradient, Text, Node } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -23,6 +23,15 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import ParticleView from '../../../../shred/js/view/ParticleView.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import buildANucleusStrings from '../../buildANucleusStrings.js';
+import NucleonCreatorNode from './NucleonCreatorNode.js';
+import ParticleType from '../../decay/view/ParticleType.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -30,13 +39,25 @@ const MIN_NUCLEON_CLOUD_RADIUS = 42.5;
 const MAX_NUCLEON_CLOUD_RADIUS = 130;
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
+export type ParticleViewMap = {
+  [ key: number ]: ParticleView;
+};
+
+// constants
+const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 120;
 
 class BANScreenView extends ScreenView {
+  public readonly resetAllButton: ResetAllButton;
+  public readonly nucleonCountPanel: NucleonCountPanel;
+  protected model: BANModel;
+  private readonly particleViewMap: ParticleViewMap;
+  protected readonly particleViewLayerNode: Node;
+  protected modelViewTransform: ModelViewTransform2;
+  protected readonly protonsCreatorNode: NucleonCreatorNode;
+  protected readonly neutronsCreatorNode: NucleonCreatorNode;
   protected readonly electronCloud: Circle;
   static readonly MAX_NUCLEON_CLOUD_RADIUS: number = MAX_NUCLEON_CLOUD_RADIUS;
   static readonly MIN_NUCLEON_CLOUD_RADIUS: number = MIN_NUCLEON_CLOUD_RADIUS;
-  public readonly resetAllButton: ResetAllButton;
-  public readonly nucleonCountPanel: NucleonCountPanel;
 
   constructor( model: BANModel, providedOptions?: BANScreenViewOptions ) {
 
@@ -48,6 +69,19 @@ class BANScreenView extends ScreenView {
 
     super( options );
 
+    this.model = model;
+
+    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
+      Vector2.ZERO,
+      new Vector2( 335, 339 ), // the center of the atom node
+      1.0 );
+
+    // ParticleView.id => {ParticleView} - lookup map for efficiency
+    this.particleViewMap = {};
+
+    // where the ParticleView's are
+    this.particleViewLayerNode = new Node();
+
     this.nucleonCountPanel = new NucleonCountPanel( model.protonCountProperty, model.neutronCountProperty );
     this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.nucleonCountPanel.left = this.layoutBounds.maxX - 200;
@@ -58,6 +92,28 @@ class BANScreenView extends ScreenView {
       arrowWidth: 14,
       arrowHeight: 14
     };
+
+    // function to create the double arrow buttons
+    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
+      return new DoubleArrowButton( direction,
+        direction === 'up' ?
+        () => createIncreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ) :
+        () => createDecreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ),
+        merge( {
+          leftArrowFill: BANColors.protonColorProperty,
+          rightArrowFill: BANColors.neutronColorProperty
+        }, arrowButtonOptions )
+      );
+    };
+
+    // create the double arrow buttons
+    const doubleArrowButtons = new VBox( {
+      children: [ createDoubleArrowButtons( 'up' ), createDoubleArrowButtons( 'down' ) ],
+      spacing: arrowButtonSpacing
+    } );
+    doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
+    doubleArrowButtons.centerX = 335;
+    this.addChild( doubleArrowButtons );
 
     // function to create the listeners the increase or decrease the given nucleon count properties by a value of +1 or -1
     const createIncreaseNucleonCountListener = ( firstNucleonCountProperty: NumberProperty, secondNucleonCountProperty?: NumberProperty ) => {
@@ -89,11 +145,11 @@ class BANScreenView extends ScreenView {
     // create the single arrow buttons
     const protonArrowButtons = createSingleArrowButtons( model.protonCountProperty, BANColors.protonColorProperty );
     protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    protonArrowButtons.left = this.layoutBounds.minX + 50;
+    protonArrowButtons.right = doubleArrowButtons.left - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     this.addChild( protonArrowButtons );
     const neutronArrowButtons = createSingleArrowButtons( model.neutronCountProperty, BANColors.neutronColorProperty );
     neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    neutronArrowButtons.left = ( this.layoutBounds.maxX - this.layoutBounds.minX ) / 1.75;
+    neutronArrowButtons.left = doubleArrowButtons.right + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     this.addChild( neutronArrowButtons );
 
     // create and add the electron cloud
@@ -107,27 +163,27 @@ class BANScreenView extends ScreenView {
     this.electronCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
     this.addChild( this.electronCloud );
 
-    // function to create the double arrow buttons
-    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
-      return new DoubleArrowButton( direction,
-        direction === 'up' ?
-        () => createIncreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ) :
-        () => createDecreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ),
-        merge( {
-          leftArrowFill: BANColors.protonColorProperty,
-          rightArrowFill: BANColors.neutronColorProperty
-        }, arrowButtonOptions )
-      );
-    };
+    // create and add the Protons and Neutrons label
+    const protonsLabel = new Text( buildANucleusStrings.protons, { font: new PhetFont( 20 ) } );
+    protonsLabel.bottom = doubleArrowButtons.bottom;
+    protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
+    this.addChild( protonsLabel );
 
-    // create the double arrow buttons
-    const doubleArrowButtons = new VBox( {
-      children: [ createDoubleArrowButtons( 'up' ), createDoubleArrowButtons( 'down' ) ],
-      spacing: arrowButtonSpacing
-    } );
-    doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    doubleArrowButtons.centerX = protonArrowButtons.right + ( neutronArrowButtons.left - protonArrowButtons.right ) / 2;
-    this.addChild( doubleArrowButtons );
+    const neutronsLabel = new Text( buildANucleusStrings.neutrons, { font: new PhetFont( 20 ) } );
+    neutronsLabel.bottom = doubleArrowButtons.bottom;
+    neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
+    this.addChild( neutronsLabel );
+
+    // create and add the NucleonCreatorNode for the protons and neutrons
+    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, this );
+    this.protonsCreatorNode.top = doubleArrowButtons.top;
+    this.protonsCreatorNode.centerX = protonsLabel.centerX;
+    this.addChild( this.protonsCreatorNode );
+
+    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, this );
+    this.neutronsCreatorNode.top = doubleArrowButtons.top;
+    this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
+    this.addChild( this.neutronsCreatorNode );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -214,6 +270,44 @@ class BANScreenView extends ScreenView {
         }
       }
     } );
+
+    // called when a Particle finished being dragged
+    const particleDragFinished = ( particle: Particle ) => { this.placeNucleon( particle, this.model.particleAtom ); };
+
+    // add ParticleView's to match the model
+    this.model.nucleons.addItemAddedListener( ( particle: Particle ) => {
+      const particleView = new ParticleView( particle, this.modelViewTransform );
+
+      this.particleViewMap[ particleView.particle.id ] = particleView;
+      this.addParticleView( particle, particleView );
+
+      // @ts-ignore TODO-TS: Fix listener type
+      particle.dragEndedEmitter.addListener( particleDragFinished );
+    } );
+
+    // remove ParticleView's to match the model
+    this.model.nucleons.addItemRemovedListener( ( particle: Particle ) => {
+      const particleView = this.findParticleView( particle );
+
+      // @ts-ignore TODO-TS: Fix listener type
+      particle.dragEndedEmitter.removeListener( particleDragFinished );
+
+      delete this.particleViewMap[ particleView.particle.id ];
+
+      particleView.dispose();
+    } );
+
+    // add the particleViewLayerNode
+    this.addChild( this.particleViewLayerNode );
+  }
+
+  /**
+   * Add a particle to the model and immediately start dragging it with the provided event.
+   */
+  public addAndDragParticle( event: PressListenerEvent, particle: Particle ) {
+    this.model.addParticle( particle );
+    const particleView = this.findParticleView( particle );
+    particleView.startSyntheticDrag( event );
   }
 
   public reset(): void {
@@ -226,6 +320,19 @@ class BANScreenView extends ScreenView {
   public step( dt: number ): void {
     //TODO
   }
+
+  /**
+   * Given a Particle, find our current display (ParticleView) of it.
+   */
+  public findParticleView( particle: Particle ): ParticleView {
+    const particleView = this.particleViewMap[ particle.id ];
+    assert && assert( particleView, 'Did not find matching ParticleView' );
+    return particleView;
+  }
+
+  protected placeNucleon( particle: Particle, particleAtom: ParticleAtom ) {}
+
+  protected addParticleView( particle: Particle, particleView: ParticleView ) {}
 }
 
 buildANucleus.register( 'BANScreenView', BANScreenView );

@@ -25,7 +25,7 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import Utils from '../../../../dot/js/Utils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
-import { optionize3 } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
@@ -67,7 +67,7 @@ class HalfLifeNumberLineNode extends Node {
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
-    const options = optionize3<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {}, providedOptions );
+    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {}, providedOptions );
     this.labelFont = options.numberLineLabelFont;
     this.halfLifeArrowLength = options.halfLifeArrowLength;
 

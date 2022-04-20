@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Color, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Color, RadialGradient, Text, Node } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -27,16 +27,25 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
 import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
+import AtomNode from '../../../../shred/js/view/AtomNode.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import ParticleType from './ParticleType.js';
+import ParticleView from '../../../../shred/js/view/ParticleView.js';
 
 // constants
-
 const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_AND_ELEMENT_NAME_FONT = new PhetFont( 20 );
+const NUCLEON_CAPTURE_RADIUS = 100;
+const NUM_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView {
+
+  public static NUM_NUCLEON_LAYERS: number;
+  private nucleonLayers: Node[];
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -46,6 +55,8 @@ class DecayScreenView extends BANScreenView {
     }, providedOptions );
 
     super( model, options );
+
+    this.model = model;
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty );
@@ -194,7 +205,87 @@ class DecayScreenView extends BANScreenView {
       updateElementName( protonCount, doesNuclideExist, massNumber )
     );
 
+    // create and add the AtomNode
+    const atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
+      showCenterX: false,
+      showElementNameProperty: new Property( false ),
+      showNeutralOrIonProperty: new Property( false ),
+      showStableOrUnstableProperty: new Property( false ),
+      electronShellDepictionProperty: new Property( 'cloud' )
+    } );
+    atomNode.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
+    this.addChild( atomNode );
+
     this.nucleonCountPanel.left = availableDecaysPanel.left;
+
+    // Add the layers where the nucleons will exist.
+    this.nucleonLayers = [];
+    _.times( NUM_NUCLEON_LAYERS, () => {
+      const nucleonLayer = new Node();
+      this.nucleonLayers.push( nucleonLayer );
+      this.particleViewLayerNode.addChild( nucleonLayer );
+    } );
+    this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
+  }
+
+  // Add ParticleView to the correct nucleonLayer
+  protected override addParticleView( particle: Particle, particleView: ParticleView ) {
+    this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
+
+    // Add a listener that adjusts a nucleon's z-order layering.
+    particle.zLayerProperty.link( zLayer => {
+      assert && assert(
+        this.nucleonLayers.length > zLayer,
+        'zLayer for nucleon exceeds number of layers, max number may need increasing.'
+      );
+      // Determine whether nucleon view is on the correct layer.
+      let onCorrectLayer = false;
+      this.nucleonLayers[ zLayer ].children.forEach( particleView => {
+        // @ts-ignore TODO-TS: How do you assume sub-types of children?
+        if ( particleView.particle === particle ) {
+          onCorrectLayer = true;
+        }
+      } );
+
+      if ( !onCorrectLayer ) {
+
+        // Remove particle view from its current layer.
+        let particleView = null;
+        for ( let layerIndex = 0; layerIndex < this.nucleonLayers.length && particleView === null; layerIndex++ ) {
+          for ( let childIndex = 0; childIndex < this.nucleonLayers[ layerIndex ].children.length; childIndex++ ) {
+            // @ts-ignore TODO-TS: How do you assume sub-types of children?
+            if ( this.nucleonLayers[ layerIndex ].children[ childIndex ].particle === particle ) {
+              particleView = this.nucleonLayers[ layerIndex ].children[ childIndex ];
+              this.nucleonLayers[ layerIndex ].removeChildAt( childIndex );
+              break;
+            }
+          }
+        }
+
+        // Add the particle view to its new layer.
+        assert && assert( particleView !== null, 'Particle view not found during relayering' );
+        // @ts-ignore TODO-TS: How do you assume sub-types of children?
+        this.nucleonLayers[ zLayer ].addChild( particleView );
+      }
+    } );
+  }
+
+  // Define a function that will decide where to put nucleons.
+  protected override placeNucleon( particle: Particle, atom: ParticleAtom ) {
+    if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
+      atom.addParticle( particle );
+    }
+    else {
+      // TODO: animate particle
+      // animate particle back to its stack and then remove it
+      if ( particle.type === ParticleType.PROTON.label.toLowerCase() ) {
+        particle.setPositionAndDestination( this.protonsCreatorNode.center );
+      }
+      else if ( particle.type === ParticleType.NEUTRON.label.toLowerCase() ) {
+        particle.setPositionAndDestination( this.neutronsCreatorNode.center );
+      }
+      this.model.removeParticle( particle );
+    }
   }
 
   public override reset(): void {
@@ -208,6 +299,9 @@ class DecayScreenView extends BANScreenView {
     //TODO
   }
 }
+
+// export for usage when creating shred Particles
+DecayScreenView.NUM_NUCLEON_LAYERS = NUM_NUCLEON_LAYERS;
 
 buildANucleus.register( 'DecayScreenView', DecayScreenView );
 export default DecayScreenView;
