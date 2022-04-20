@@ -298,7 +298,7 @@ class HalfLifeNumberLineNode extends Node {
       } );
     }
 
-    const arrowRotationAnimationDuration = 0.05; // in seconds
+    const arrowRotationAnimationDuration = 0.1; // in seconds
 
     // if the halfLife number is stable, then animate the arrow's rotation
     if ( this.arrowRotationAnimation ) {
