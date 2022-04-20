@@ -254,7 +254,7 @@ class AvailableDecaysPanel extends Panel {
       return new HBox( {
         children: [
           new ParticleNode( particleType.name.toLowerCase(), NUCLEON_PARTICLE_RADIUS ),
-          new Text( particleType.name, { font: LABEL_FONT } )
+          new Text( particleType.label, { font: LABEL_FONT } )
         ],
         spacing: SPACING
       } );
