@@ -136,5 +136,8 @@
   },
   "neutrons": {
     "value": "Neutrons"
+  },
+  "showElectronCloud": {
+    "value": "Show electron cloud"
   }
 }

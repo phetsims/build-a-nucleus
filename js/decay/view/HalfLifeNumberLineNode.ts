@@ -125,6 +125,7 @@ class HalfLifeNumberLineNode extends Node {
       headWidth: 12
     } );
     const halfLifeArrow = new Node();
+    this.addChild( halfLifeArrow );
     halfLifeArrow.addChild( arrowNode );
 
     // keep track of the x position of the half-life arrow in model coordinates
@@ -189,12 +190,7 @@ class HalfLifeNumberLineNode extends Node {
 
     // function to show or hide the halfLifeArrow
     const showHalfLifeArrow = ( show: boolean ) => {
-      if ( show && !this.hasChild( halfLifeArrow ) ) {
-        this.addChild( halfLifeArrow );
-      }
-      else if ( !show && this.hasChild( halfLifeArrow ) ) {
-        this.removeChild( halfLifeArrow );
-      }
+      halfLifeArrow.visible = show;
     };
 
     // function to show the halfLifeNumberText (true) or the halfLifeValueText (false)

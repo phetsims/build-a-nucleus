@@ -35,8 +35,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 
 
 // empirically determined, from the ElectronCloudView radius
-const MIN_CLOUD_RADIUS = 42.5;
-const MAX_CLOUD_RADIUS = 130;
+const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
+const MAX_ELECTRON_CLOUD_RADIUS = 130;
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = {
@@ -57,8 +57,8 @@ class BANScreenView extends ScreenView {
   protected readonly protonsCreatorNode: NucleonCreatorNode;
   protected readonly neutronsCreatorNode: NucleonCreatorNode;
   protected readonly electronCloud: Circle;
-  static readonly MAX_CLOUD_RADIUS: number = MAX_CLOUD_RADIUS;
-  static readonly MIN_CLOUD_RADIUS: number = MIN_CLOUD_RADIUS;
+  static readonly MAX_ELECTRON_CLOUD_RADIUS: number = MAX_ELECTRON_CLOUD_RADIUS;
+  static readonly MIN_ELECTRON_CLOUD_RADIUS: number = MIN_ELECTRON_CLOUD_RADIUS;
 
   constructor( model: BANModel, providedOptions?: BANScreenViewOptions ) {
 
@@ -155,10 +155,10 @@ class BANScreenView extends ScreenView {
 
     // create and add the electron cloud
     this.electronCloud = new Circle( {
-      radius: MIN_CLOUD_RADIUS,
-      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_CLOUD_RADIUS )
-        .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
-        .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' )
+      radius: MIN_ELECTRON_CLOUD_RADIUS,
+      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_ELECTRON_CLOUD_RADIUS )
+        .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
+        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
     } );
     this.electronCloud.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
     this.addChild( this.electronCloud );

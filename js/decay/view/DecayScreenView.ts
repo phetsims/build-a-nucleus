@@ -32,10 +32,11 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from './ParticleType.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
-const STABILITY_AND_ELEMENT_NAME_FONT = new PhetFont( 20 );
+const STABILITY_ELEMENT_AND_CHECKBOX_FONT = new PhetFont( 20 );
 const NUCLEON_CAPTURE_RADIUS = 100;
 const NUM_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
@@ -74,6 +75,19 @@ class DecayScreenView extends BANScreenView {
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );
 
+    // show the electron cloud by default
+    const showElectronCloudBooleanProperty = new BooleanProperty( true );
+    showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
+
+    // create and add the electronCloud checkbox
+    const showElectronCloudCheckbox = new Checkbox(
+      new Text( buildANucleusStrings.showElectronCloud, { font: STABILITY_ELEMENT_AND_CHECKBOX_FONT } ),
+      showElectronCloudBooleanProperty
+    );
+    showElectronCloudCheckbox.left = availableDecaysPanel.left;
+    showElectronCloudCheckbox.top = availableDecaysPanel.bottom + 25;
+    this.addChild( showElectronCloudCheckbox );
+
     // create and add the HalfLifeInfoDialog
     const halfLifeInfoDialog = new HalfLifeInfoDialog( model.halfLifeNumberProperty, model.isStableBooleanProperty );
 
@@ -111,7 +125,7 @@ class DecayScreenView extends BANScreenView {
 
     // create and add stability indicator
     const stabilityIndicator = new Text( '', {
-      font: STABILITY_AND_ELEMENT_NAME_FONT,
+      font: STABILITY_ELEMENT_AND_CHECKBOX_FONT,
       fill: 'black',
       center: new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top ),
       visible: true,
@@ -158,16 +172,16 @@ class DecayScreenView extends BANScreenView {
         this.electronCloud.fill = 'transparent';
       }
       else {
-        const radius = BANScreenView.MIN_CLOUD_RADIUS +
+        const radius = BANScreenView.MIN_ELECTRON_CLOUD_RADIUS +
                        (
-                         ( BANScreenView.MAX_CLOUD_RADIUS - BANScreenView.MIN_CLOUD_RADIUS ) /
+                         ( BANScreenView.MAX_ELECTRON_CLOUD_RADIUS - BANScreenView.MIN_ELECTRON_CLOUD_RADIUS ) /
                          ( 1.2 * Math.pow( BANConstants.MAX_NUMBER_OF_PROTONS + BANConstants.MAX_NUMBER_OF_NEUTRONS, 1 / 3 ) ) // max realRadiusNumber
                        )
                        * realRadiusNumber;
         this.electronCloud.radius = radius;
         this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius )
-          .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
-          .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' );
+          .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
+          .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' );
       }
     };
 
@@ -176,7 +190,7 @@ class DecayScreenView extends BANScreenView {
 
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
-      font: STABILITY_AND_ELEMENT_NAME_FONT,
+      font: STABILITY_ELEMENT_AND_CHECKBOX_FONT,
       fill: Color.RED,
       center: stabilityIndicator.center.plusXY( 0, 60 ),
       maxWidth: 325
