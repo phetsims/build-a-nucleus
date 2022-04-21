@@ -98,7 +98,9 @@ class BANModel {
    * Remove a Particle from the model
    */
   public removeParticle( particle: Particle ): void {
-    this.nucleons.remove( particle );
+    if ( this.nucleons.includes( particle ) ) {
+      this.nucleons.remove( particle );
+    }
   }
 
   public reset(): void {
