@@ -317,7 +317,7 @@ class BANScreenView extends ScreenView {
   /**
    * @param {number} dt - time step, in seconds
    */
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     //TODO
   }
 
