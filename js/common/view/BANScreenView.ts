@@ -35,8 +35,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 
 
 // empirically determined, from the ElectronCloudView radius
-const MIN_NUCLEON_CLOUD_RADIUS = 42.5;
-const MAX_NUCLEON_CLOUD_RADIUS = 130;
+const MIN_CLOUD_RADIUS = 42.5;
+const MAX_CLOUD_RADIUS = 130;
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = {
@@ -57,8 +57,8 @@ class BANScreenView extends ScreenView {
   protected readonly protonsCreatorNode: NucleonCreatorNode;
   protected readonly neutronsCreatorNode: NucleonCreatorNode;
   protected readonly electronCloud: Circle;
-  static readonly MAX_NUCLEON_CLOUD_RADIUS: number = MAX_NUCLEON_CLOUD_RADIUS;
-  static readonly MIN_NUCLEON_CLOUD_RADIUS: number = MIN_NUCLEON_CLOUD_RADIUS;
+  static readonly MAX_CLOUD_RADIUS: number = MAX_CLOUD_RADIUS;
+  static readonly MIN_CLOUD_RADIUS: number = MIN_CLOUD_RADIUS;
 
   constructor( model: BANModel, providedOptions?: BANScreenViewOptions ) {
 
@@ -113,7 +113,7 @@ class BANScreenView extends ScreenView {
       spacing: arrowButtonSpacing
     } );
     doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    doubleArrowButtons.centerX = 335;
+    doubleArrowButtons.centerX = this.modelViewTransform.modelToViewX( model.particleAtom.positionProperty.value.x );
     this.addChild( doubleArrowButtons );
 
     // function to create the listeners the increase or decrease the given nucleon count properties by a value of +1 or -1
@@ -155,13 +155,12 @@ class BANScreenView extends ScreenView {
 
     // create and add the electron cloud
     this.electronCloud = new Circle( {
-      radius: MIN_NUCLEON_CLOUD_RADIUS,
-      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_NUCLEON_CLOUD_RADIUS )
+      radius: MIN_CLOUD_RADIUS,
+      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_CLOUD_RADIUS )
         .addColorStop( 0, 'rgba( 116, 208, 246, 200 )' )
         .addColorStop( 0.9, 'rgba( 116, 208, 246, 0 )' )
     } );
-    this.electronCloud.centerX = 335;
-    this.electronCloud.centerY = ( this.layoutBounds.maxY - this.layoutBounds.minY ) / 2 + 30; // empirically determined
+    this.electronCloud.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
     this.addChild( this.electronCloud );
 
     // create and add the Protons and Neutrons label

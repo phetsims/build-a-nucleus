@@ -144,7 +144,9 @@ class DecayScreenView extends BANScreenView {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // function that updates the size of the electron cloud based on the massNumber
+    // TODO: correctly update the cloud size if we choose to have it represent an electron cloud
+    // function that updates the size of the electron cloud based on the protonNumber since the nuclides created are neutral
+    // meaning the number of electrons is the same as the number of protons
     const updateCloudSize = ( massNumber: number ) => {
 
       // the radius in femtometres (fm), based on the equation on the radius of the nucleus:
@@ -156,9 +158,9 @@ class DecayScreenView extends BANScreenView {
         this.electronCloud.fill = 'transparent';
       }
       else {
-        const radius = BANScreenView.MIN_NUCLEON_CLOUD_RADIUS +
+        const radius = BANScreenView.MIN_CLOUD_RADIUS +
                        (
-                         ( BANScreenView.MAX_NUCLEON_CLOUD_RADIUS - BANScreenView.MIN_NUCLEON_CLOUD_RADIUS ) /
+                         ( BANScreenView.MAX_CLOUD_RADIUS - BANScreenView.MIN_CLOUD_RADIUS ) /
                          ( 1.2 * Math.pow( BANConstants.MAX_NUMBER_OF_PROTONS + BANConstants.MAX_NUMBER_OF_NEUTRONS, 1 / 3 ) ) // max realRadiusNumber
                        )
                        * realRadiusNumber;
