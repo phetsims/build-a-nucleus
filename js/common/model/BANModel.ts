@@ -18,6 +18,7 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -26,9 +27,9 @@ class BANModel {
 
   public readonly protonCountProperty: NumberProperty;
   public readonly neutronCountProperty: NumberProperty;
-  public isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
-  public readonly massNumberProperty: DerivedProperty<number, [ protonCount: number, neutronCount: number ]>;
-  public readonly doesNuclideExistBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>;
+  public isStableBooleanProperty: IReadOnlyProperty<boolean>;
+  public readonly massNumberProperty: IReadOnlyProperty<number>;
+  public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
   public nucleons: ObservableArray<Particle>;
   public particleAtom: ParticleAtom;
 

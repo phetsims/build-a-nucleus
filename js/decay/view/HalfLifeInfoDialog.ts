@@ -15,7 +15,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import BANTimescalePoints from '../model/BANTimescalePoints.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
@@ -24,9 +24,8 @@ const LEGEND_FONT = new PhetFont( 20 );
 
 class HalfLifeInfoDialog extends Dialog {
 
-  constructor( halfLifeNumberProperty: DerivedProperty<number,
-                 [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>,
-               isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> ) {
+  constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
+               isStableBooleanProperty: IReadOnlyProperty<boolean> ) {
 
     const leftSideStrings = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.timescaleItem,

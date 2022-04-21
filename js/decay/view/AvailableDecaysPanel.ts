@@ -21,8 +21,8 @@ import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayModel from '../model/DecayModel.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -54,7 +54,7 @@ class AvailableDecaysPanel extends Panel {
     contentNode.addChild( titleNode );
 
     // function to return the correct enabled derived property for each type of decay
-    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> => {
+    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): IProperty<boolean> => {
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
           return model.protonEmissionEnabledProperty;

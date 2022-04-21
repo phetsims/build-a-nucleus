@@ -47,6 +47,7 @@ export type ParticleViewMap = {
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 120;
 
 class BANScreenView extends ScreenView {
+
   public readonly resetAllButton: ResetAllButton;
   public readonly nucleonCountPanel: NucleonCountPanel;
   protected model: BANModel;

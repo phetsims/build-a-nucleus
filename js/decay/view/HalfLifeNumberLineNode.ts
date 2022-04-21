@@ -28,9 +28,9 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
 import Property from '../../../../axon/js/Property.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -61,9 +61,8 @@ class HalfLifeNumberLineNode extends Node {
   private readonly halfLifeArrowRotationProperty: NumberProperty;
   private halfLifeArrowLength: number | undefined;
 
-  constructor( halfLifeNumberProperty: DerivedProperty<number,
-                 [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>,
-               isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]>,
+  constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
+               isStableBooleanProperty: IReadOnlyProperty<boolean>,
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 

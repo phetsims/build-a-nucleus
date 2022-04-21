@@ -13,16 +13,15 @@ import { Text, Node } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
 
 class HalfLifeInformationNode extends Node {
 
-  constructor( halfLifeNumberProperty: DerivedProperty<number,
-                 [ protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ]>,
-               isStableBooleanProperty: DerivedProperty<boolean, [ protonCount: number, neutronCount: number ]> ) {
+  constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
+               isStableBooleanProperty: IReadOnlyProperty<boolean> ) {
     super();
 
     // create and add the halfLifeNumberLineNode
