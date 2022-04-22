@@ -44,7 +44,7 @@ export type ParticleViewMap = {
 };
 
 // constants
-const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 120;
+const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 150;
 
 class BANScreenView extends ScreenView {
 

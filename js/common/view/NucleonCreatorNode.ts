@@ -7,7 +7,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import { Node } from '../../../../scenery/js/imports.js';
+import { DragListener, Node } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANScreenView from './BANScreenView.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
@@ -24,24 +24,19 @@ class NucleonCreatorNode extends Node {
     this.addChild( targetNode );
     this.touchArea = this.localBounds.dilated( 10 );
 
-    // TODO: Convert to using forwarding listener
-    this.addInputListener( {
-      down: ( event: any ) => {
-        if ( !event.canStartPress() ) { return; }
+    this.addInputListener( DragListener.createForwardingListener( event => {
+      // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
+      const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
+      const particle = new Particle( particleType.name.toLowerCase(), {
+        maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
+      } );
 
-        // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
-        const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
-        const particle = new Particle( particleType.name.toLowerCase(), {
-          maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
-        } );
+      // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
+      particle.setPositionAndDestination( viewPosition.minus( particle.positionProperty.value ) );
 
-        // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
-        particle.setPositionAndDestination( viewPosition.minus( particle.positionProperty.value ) );
-
-        // Create and start dragging the new particle
-        screenView.addAndDragParticle( event, particle );
-      }
-    } );
+      // Create and start dragging the new particle
+      screenView.addAndDragParticle( event, particle );
+    } ) );
   }
 }
 

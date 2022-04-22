@@ -8,7 +8,7 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
-import { HBox, Line, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Line, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HSeparator from '../../../../sun/js/HSeparator.js';
@@ -42,7 +42,7 @@ class AvailableDecaysPanel extends Panel {
       xMargin: 15,
       yMargin: 15,
       fill: '#F2F2F2',
-      stroke: '#E4E4E4'
+      stroke: Color.BLACK
     };
 
     // TODO: investigate why a rectangle is needed, why isn't the contentNode centered correctly with just a node?
