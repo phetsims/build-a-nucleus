@@ -300,7 +300,12 @@ class DecayScreenView extends BANScreenView {
       else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
         particle.destinationProperty.value = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
       }
-      particle.animationEndedEmitter.addListener( () => { this.model.removeParticle( particle ); } );
+      // TODO: is this line necessary? because was getting this assertion error "Error: Assertion failed: item not found in Array"
+      // so that must mean it was never added to begin with? but how come that's possible/allowed?
+      particle.animationEndedEmitter.addListener( () => {
+        atom.removeParticle( particle );
+        this.model.removeParticle( particle );
+      } );
     }
   }
 
