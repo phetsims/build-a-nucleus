@@ -16,6 +16,8 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayType from '../view/DecayType.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
@@ -109,6 +111,17 @@ class DecayModel extends BANModel {
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.ALPHA_DECAY )
     );
+  }
+
+  /**
+   * Animate particle to the given destination and then remove it.
+   */
+  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ) {
+    particle.destinationProperty.value = destination;
+
+    particle.animationEndedEmitter.addListener( () => {
+      this.model.removeParticle( particle );
+    } );
   }
 
   public override reset(): void {

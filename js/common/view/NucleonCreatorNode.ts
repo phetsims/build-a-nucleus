@@ -14,10 +14,11 @@ import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
+import BANModel from '../model/BANModel.js';
 
 class NucleonCreatorNode extends Node {
 
-  constructor( particleType: ParticleType, screenView: BANScreenView ) {
+  constructor( particleType: ParticleType, screenView: BANScreenView<BANModel> ) {
     super();
 
     const targetNode = new ParticleNode( particleType.name.toLowerCase(), 10 );

@@ -32,6 +32,7 @@ class BANModel {
   public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
   public nucleons: ObservableArray<Particle>;
   public particleAtom: ParticleAtom;
+  protected model: this;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -42,6 +43,8 @@ class BANModel {
     }, providedOptions );
 
     console.log( options.tandem );
+
+    this.model = this;
 
     // Create the atom that the user will build, modify, and generally play with.
     this.particleAtom = new ParticleAtom();
@@ -98,9 +101,7 @@ class BANModel {
    * Remove a Particle from the model
    */
   public removeParticle( particle: Particle ): void {
-    if ( this.nucleons.includes( particle ) ) {
-      this.nucleons.remove( particle );
-    }
+    this.nucleons.remove( particle );
   }
 
   public reset(): void {

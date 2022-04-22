@@ -46,11 +46,11 @@ export type ParticleViewMap = {
 // constants
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 150;
 
-class BANScreenView extends ScreenView {
+abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
   public readonly resetAllButton: ResetAllButton;
   public readonly nucleonCountPanel: NucleonCountPanel;
-  protected model: BANModel;
+  protected model: M;
   private readonly particleViewMap: ParticleViewMap;
   protected readonly particleViewLayerNode: Node;
   protected modelViewTransform: ModelViewTransform2;
@@ -60,7 +60,7 @@ class BANScreenView extends ScreenView {
   static readonly MAX_ELECTRON_CLOUD_RADIUS: number = MAX_ELECTRON_CLOUD_RADIUS;
   static readonly MIN_ELECTRON_CLOUD_RADIUS: number = MIN_ELECTRON_CLOUD_RADIUS;
 
-  constructor( model: BANModel, providedOptions?: BANScreenViewOptions ) {
+  protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
     const options = optionize<BANScreenViewOptions, {}, ScreenViewOptions>()( {
 
@@ -272,7 +272,7 @@ class BANScreenView extends ScreenView {
     } );
 
     // called when a Particle finished being dragged
-    const particleDragFinished = ( particle: Particle ) => { this.placeNucleon( particle, this.model.particleAtom ); };
+    const particleDragFinished = ( particle: Particle ) => { this.dragEndedListener( particle, this.model.particleAtom ); };
 
     // add ParticleView's to match the model
     this.model.nucleons.addItemAddedListener( ( particle: Particle ) => {
@@ -330,7 +330,7 @@ class BANScreenView extends ScreenView {
     return particleView;
   }
 
-  protected placeNucleon( particle: Particle, particleAtom: ParticleAtom ) {}
+  protected dragEndedListener( particle: Particle, particleAtom: ParticleAtom ) {}
 
   protected addParticleView( particle: Particle, particleView: ParticleView ) {}
 }

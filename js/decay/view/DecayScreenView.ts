@@ -43,7 +43,7 @@ const NUM_NUCLEON_LAYERS = 22; // This is based on max number of particles, may 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
 
-class DecayScreenView extends BANScreenView {
+class DecayScreenView extends BANScreenView<DecayModel> {
 
   public static NUM_NUCLEON_LAYERS: number;
   private nucleonLayers: Node[];
@@ -287,24 +287,23 @@ class DecayScreenView extends BANScreenView {
   }
 
   // Define a function that will decide where to put nucleons.
-  protected override placeNucleon( particle: Particle, atom: ParticleAtom ) {
+  protected override dragEndedListener( particle: Particle, atom: ParticleAtom ) {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
       atom.addParticle( particle );
       // TODO: once arrows are working with the creator node, add line here to make the ParticleView's  not pickable
     }
     else {
-      // animate particle back to its stack and then remove it
+      const particleView = this.findParticleView( particle );
+      particleView.inputEnabled = false;
+
+      // TODO: might need to add a check to see if particle is already on its way to the destination passed in
+      // animate particle back to its stack
       if ( particle.type === ParticleType.PROTON.name.toLowerCase() ) {
-        particle.destinationProperty.value = this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center );
+        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
       }
       else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
-        particle.destinationProperty.value = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
+        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
       }
-      // TODO: is this line necessary? because was getting this assertion error "Error: Assertion failed: item not found in Array"
-      // so that must mean it was never added to begin with? but how come that's possible/allowed?
-      particle.animationEndedEmitter.addListener( () => {
-        this.model.removeParticle( particle );
-      } );
     }
   }
 
