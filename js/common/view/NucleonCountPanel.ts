@@ -37,7 +37,8 @@ class NucleonCountPanel extends Panel {
 
     const options = {
       fill: BANColors.panelBackgroundColorProperty,
-      xMargin: 10
+      xMargin: 10,
+      stroke: BANConstants.PANEL_STROKE
     };
 
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined

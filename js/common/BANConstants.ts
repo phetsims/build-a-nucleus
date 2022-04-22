@@ -7,6 +7,7 @@
  */
 
 import buildANucleus from '../buildANucleus.js';
+import { Color } from '../../../scenery/js/imports.js';
 
 const BANConstants = {
 
@@ -29,7 +30,9 @@ const BANConstants = {
   MAX_NUMBER_OF_PROTONS: 92,
 
   // the maximum number of neutrons,
-  MAX_NUMBER_OF_NEUTRONS: 146
+  MAX_NUMBER_OF_NEUTRONS: 146,
+
+  PANEL_STROKE: Color.GRAY
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

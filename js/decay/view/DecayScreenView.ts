@@ -117,7 +117,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       buttonXMargin: 8,
       buttonYMargin: 8,
       titleAlignX: 'left',
-      expandedProperty: new BooleanProperty( true )
+      expandedProperty: new BooleanProperty( true ),
+      stroke: BANConstants.PANEL_STROKE
     } );
     symbolAccordionBox.right = availableDecaysPanel.right;
     symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
