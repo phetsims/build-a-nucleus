@@ -95,10 +95,10 @@ class DecayScreenView extends BANScreenView {
     const infoButton = new InfoButton( {
       listener: () => halfLifeInfoDialog.show(),
       baseColor: BANColors.infoButtonColorProperty,
-      maxHeight: 45,
-      top: this.nucleonCountPanel.top,
-      right: halfLifeInformationNode.right
+      maxHeight: 30
     } );
+    infoButton.top = halfLifeInformationNode.top;
+    infoButton.left = halfLifeInformationNode.left + 100;
     this.addChild( infoButton );
 
     // create and add the symbol node in an accordion box
@@ -303,7 +303,6 @@ class DecayScreenView extends BANScreenView {
       // TODO: is this line necessary? because was getting this assertion error "Error: Assertion failed: item not found in Array"
       // so that must mean it was never added to begin with? but how come that's possible/allowed?
       particle.animationEndedEmitter.addListener( () => {
-        atom.removeParticle( particle );
         this.model.removeParticle( particle );
       } );
     }
