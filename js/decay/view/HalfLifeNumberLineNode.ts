@@ -27,18 +27,18 @@ import Utils from '../../../../dot/js/Utils.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
-import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
 import Property from '../../../../axon/js/Property.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import InfinityNode from './InfinityNode.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
+  numberLineWidth: number;
   tickMarkExtent: number;
   numberLineLabelFont: PhetFont;
-  numberLineLargeLabelFont: PhetFont;
-  numberLineWidth: number;
   halfLifeArrowLength: number;
+  halfLifeDisplayScale?: number;
   isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
   // animate its position with the half-life arrow
 };
@@ -66,7 +66,9 @@ class HalfLifeNumberLineNode extends Node {
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
-    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {}, providedOptions );
+    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {
+      halfLifeDisplayScale: 1
+    }, providedOptions );
     this.labelFont = options.numberLineLabelFont;
     this.halfLifeArrowLength = options.halfLifeArrowLength;
 
@@ -136,50 +138,57 @@ class HalfLifeNumberLineNode extends Node {
     this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
 
-    // create and add the half life label and number readout
-    const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
-      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
+    // create and add the half life display, which is a parent node used to contain the number readout, the infinity
+    // symbol, and the 'Unknown' text.
+    const halfLifeDisplayNode = new Node( {
+      scale: options.halfLifeDisplayScale
     } );
+    this.addChild( halfLifeDisplayNode );
 
-    // would be either the infinity symbol, 'Unknown', or empty, or infinity
-    const halfLifeValueText = new RichText( '', {
-      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
+    // create and add the text for "Half-life:"
+    const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
+      font: TITLE_FONT
     } );
+    halfLifeDisplayNode.addChild( halfLifeColonText );
+    halfLifeDisplayNode.centerX = this.centerX - 75;
+    halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
+
+    // create and add the "Unknown" text
+    const halfLifeUnknownText = new RichText( buildANucleusStrings.unknown, {
+      font: TITLE_FONT
+    } );
+    halfLifeUnknownText.left = halfLifeColonText.right + 8;
+    halfLifeUnknownText.bottom = halfLifeColonText.bottom;
+    halfLifeDisplayNode.addChild( halfLifeUnknownText );
+
+    // create and add the infinity node, which represents a math infinity symbol
+    const infinityNode = new InfinityNode();
+    infinityNode.left = halfLifeUnknownText.left;
+    infinityNode.bottom = halfLifeUnknownText.bottom - 5; // offset to match the apparent bottom position of the text
+    halfLifeDisplayNode.addChild( infinityNode );
 
     // the half life number in scientific notation with an 's' for seconds at the end
     const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
-      font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont
+      font: TITLE_FONT
     } );
     const halfLifeNumberText = new HBox( {
       children: [
         halfLifeScientificNotation,
-        new Text( buildANucleusStrings.s, { font: options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont } )
+        new Text( buildANucleusStrings.s, { font: TITLE_FONT } )
       ],
       align: 'bottom',
       spacing: 10
     } );
-
-    // TODO: align the left and right side in the infinity case, and align the halfLifeText node so it doesnt jump up and down
-    // waiting for CK to take a look at this
-    const halfLifeText = new HBox( {
-      children: [ halfLifeColonText, halfLifeValueText ],
-      align: 'bottom',
-      spacing: 10
-    } );
-    halfLifeText.bottom = halfLifeArrow.top;
-    if ( options.isHalfLifeLabelFixed ) {
-      halfLifeText.left = this.centerX - this.width / 4;
-    }
-    else {
-      halfLifeText.centerX = halfLifeArrow.centerX;
-    }
-    this.addChild( halfLifeText );
+    halfLifeNumberText.left = halfLifeUnknownText.left;
+    halfLifeDisplayNode.addChild( halfLifeNumberText );
 
     // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
-        halfLifeText.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeText.width / 2, halfLifeArrow.top - halfLifeText.height );
+        halfLifeDisplayNode.translation =
+          new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeDisplayNode.width / 2,
+            halfLifeArrow.top - 8 );
       } );
     }
 
@@ -193,27 +202,18 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow.visible = show;
     };
 
-    // function to show the halfLifeNumberText (true) or the halfLifeValueText (false)
-    const showHalfLifeNumber = ( show: boolean ) => {
-      if ( show && halfLifeText.hasChild( halfLifeValueText ) ) {
-        halfLifeText.replaceChild( halfLifeValueText, halfLifeNumberText );
-        halfLifeNumberText.bottom = halfLifeColonText.bottom;
-      }
-      else if ( !show && halfLifeText.hasChild( halfLifeNumberText ) ) {
-        halfLifeText.replaceChild( halfLifeNumberText, halfLifeValueText );
-        halfLifeValueText.bottom = halfLifeColonText.bottom;
-      }
-    };
-
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
+    // TODO: Repositioning the halfLifeNumberText in updateHalfLifeDisplay relies on the listener for
+    //  halfLifeNumberProperty in ScientificNotationNode to fire first, so the bounds of halfLifeNumberText are correct here.
     halfLifeNumberProperty.link( halfLifeNumber => {
 
       // the nuclide is stable
       if ( isStableBooleanProperty.value ) {
         showHalfLifeArrow( true );
-        halfLifeValueText.setText( MathSymbols.INFINITY );
-        halfLifeValueText.setFont( options.numberLineLargeLabelFont );
-        showHalfLifeNumber( false );
+
+        infinityNode.visible = true;
+        halfLifeUnknownText.visible = false;
+        halfLifeNumberText.visible = false;
 
         // peg the indicator to the right when stable
         this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
@@ -221,28 +221,33 @@ class HalfLifeNumberLineNode extends Node {
 
       // the nuclide is unstable or does not exist
       else {
-        halfLifeValueText.setFont( options.isHalfLifeLabelFixed ? TITLE_FONT : options.numberLineLabelFont );
+        infinityNode.visible = false;
 
         // the nuclide does not exist
         if ( halfLifeNumber === 0 ) {
           showHalfLifeArrow( false );
-          showHalfLifeNumber( false );
-          halfLifeValueText.setText( '' );
+
+          halfLifeUnknownText.visible = false;
+          halfLifeNumberText.visible = false;
+
           this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
         }
 
         // the nuclide is unstable but the half-life data is unknown
         else if ( halfLifeNumber === -1 ) {
           showHalfLifeArrow( false );
-          showHalfLifeNumber( false );
-          halfLifeValueText.setText( buildANucleusStrings.unknown );
+
+          halfLifeUnknownText.visible = true;
+          halfLifeNumberText.visible = false;
         }
 
         // the nuclide is unstable and the half-life data is known
         else {
           showHalfLifeArrow( true );
-          showHalfLifeNumber( true );
-          halfLifeValueText.setText( '' );
+
+          halfLifeUnknownText.visible = false;
+          halfLifeNumberText.visible = true;
+          halfLifeNumberText.bottom = halfLifeColonText.bottom;
 
           // peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
           if ( halfLifeNumber > Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {

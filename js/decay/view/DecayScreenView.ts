@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Color, RadialGradient, Text, Node } from '../../../../scenery/js/imports.js';
+import { Color, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -25,8 +25,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
-import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
-import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
@@ -88,19 +86,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     showElectronCloudCheckbox.top = availableDecaysPanel.bottom + 25;
     this.addChild( showElectronCloudCheckbox );
 
-    // create and add the HalfLifeInfoDialog
-    const halfLifeInfoDialog = new HalfLifeInfoDialog( model.halfLifeNumberProperty, model.isStableBooleanProperty );
-
-    // create and add the info button
-    const infoButton = new InfoButton( {
-      listener: () => halfLifeInfoDialog.show(),
-      baseColor: BANColors.infoButtonColorProperty,
-      maxHeight: 30
-    } );
-    infoButton.top = halfLifeInformationNode.top;
-    infoButton.left = halfLifeInformationNode.left + 100;
-    this.addChild( infoButton );
-
     // create and add the symbol node in an accordion box
     const symbolNode = new SymbolNode( model.protonCountProperty, model.massNumberProperty, {
       scale: 0.3
@@ -153,7 +138,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // Add the listeners that control the label content
     Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => updateStabilityIndicator( protonCount, neutronCount )
-     );
+    );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
       stabilityIndicator.visible = visible;
     };
@@ -218,8 +203,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // Hook up update listeners.
     Property.multilink( [ model.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty ],
-    ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
-      updateElementName( protonCount, doesNuclideExist, massNumber )
+      ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
+        updateElementName( protonCount, doesNuclideExist, massNumber )
     );
 
     // create and add the AtomNode

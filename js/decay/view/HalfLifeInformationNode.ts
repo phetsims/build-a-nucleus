@@ -9,11 +9,14 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
-import { Text, Node } from '../../../../scenery/js/imports.js';
+import { Node, Text } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
+import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
+import BANColors from '../../common/BANColors.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
@@ -28,12 +31,24 @@ class HalfLifeInformationNode extends Node {
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
       tickMarkExtent: 18,
       numberLineLabelFont: new PhetFont( 15 ),
-      numberLineLargeLabelFont: new PhetFont( 35 ),
       numberLineWidth: 550,
       halfLifeArrowLength: 30,
       isHalfLifeLabelFixed: true
     } );
     this.addChild( halfLifeNumberLineNode );
+
+    // create and add the HalfLifeInfoDialog
+    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty );
+
+    // create and add the info button
+    const infoButton = new InfoButton( {
+      listener: () => halfLifeInfoDialog.show(),
+      baseColor: BANColors.infoButtonColorProperty,
+      maxHeight: 30
+    } );
+    infoButton.top = halfLifeNumberLineNode.top - 1.5;
+    infoButton.left = halfLifeNumberLineNode.left + 124;
+    this.addChild( infoButton );
 
     // create and add the units label on the number line
     const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: LABEL_FONT } );
