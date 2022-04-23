@@ -6,14 +6,14 @@
  * @author Luisa Vargas
  */
 
-import Sim from '../../joist/js/Sim.js';
+import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import buildANucleusStrings from './buildANucleusStrings.js';
 import DecayScreen from './decay/DecayScreen.js';
 
 const buildANucleusTitleString = buildANucleusStrings[ 'build-a-nucleus' ].title;
 
-const simOptions = {
+const simOptions: SimOptions = {
 
   //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
   credits: {
