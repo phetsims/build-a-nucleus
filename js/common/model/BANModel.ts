@@ -18,6 +18,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import ParticleType from '../../decay/view/ParticleType.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -31,6 +32,8 @@ class BANModel {
   public particleAtom: ParticleAtom;
   public protonCountRange: Range;
   public neutronCountRange: Range;
+  public incomingProtons: ObservableArray<Particle>;
+  public incomingNeutrons: ObservableArray<Particle>;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -45,8 +48,12 @@ class BANModel {
     // Create the atom that the user will build, modify, and generally play with.
     this.particleAtom = new ParticleAtom();
 
-    // arrays of proton and neutron Particle's that exist but are not in the nucleus
+    // arrays of proton and neutron Particle's that exist in all places
     this.nucleons = createObservableArray();
+
+    // array of particles sent to the nucleus but not there yet
+    this.incomingProtons = createObservableArray();
+    this.incomingNeutrons = createObservableArray();
 
     // the range of the number of protons allowed
     this.protonCountRange = new Range( 0, maximumProtonNumber );
@@ -74,6 +81,9 @@ class BANModel {
    * Add a Particle to the model
    */
   public addParticle( particle: Particle ): void {
+    assert && assert( particle.type === ParticleType.PROTON.name.toLowerCase() ||
+                      particle.type === ParticleType.NEUTRON.name.toLowerCase(),
+      'Nucleons must be of type proton or neutron' );
     this.nucleons.push( particle );
   }
 

@@ -32,6 +32,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -142,12 +143,19 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // function to create the arrow enabled properties
     const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
-      return new DerivedProperty( [ model.doesNuclideExistBooleanProperty, model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
-        ( doesNuclideExist, protonCount, neutronCount ) => {
+      return new DerivedProperty( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty,
+          model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty ],
+        ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount ) => {
+
+          const protonCount = atomProtonCount + incomingProtonsCount;
+          const neutronCount = atomNeutronCount + incomingNeutronsCount;
+
           const nextIsoExists = secondParticleType ?
                                 !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
                                 !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
                                 !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
+
+          const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
           const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
           if ( nuclideExistsBoolean && nextIsoExists ) {
             return false;
@@ -202,13 +210,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
         this.returnParticleToStack( secondNucleonType );
       }
     };
-    
+
     // function to create the single arrow buttons
     const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): VBox => {
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
       const upArrowButton = new ArrowButton( 'up', () => createIncreaseNucleonCountListener( nucleonType ),
         merge( {
-          enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
+            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
           },
           singleArrowButtonOptions )
       );
@@ -325,9 +333,25 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     particle.setPositionAndDestination( this.modelViewTransform.viewToModelPosition( origin ) );
     particle.destinationProperty.value = this.model.particleAtom.positionProperty.value;
     this.model.addParticle( particle );
+
+    if ( particleType === ParticleType.PROTON ) {
+      this.model.incomingProtons.push( particle );
+    }
+    else {
+      this.model.incomingNeutrons.push( particle );
+    }
+
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
         this.model.particleAtom.addParticle( particle );
+
+        if ( particleType === ParticleType.PROTON ) {
+          arrayRemove( this.model.incomingProtons, particle );
+        }
+        else {
+          arrayRemove( this.model.incomingNeutrons, particle );
+        }
+
         particle.animationEndedEmitter.removeAllListeners();
       }
     } );
