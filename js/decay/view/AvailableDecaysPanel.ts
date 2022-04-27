@@ -77,22 +77,22 @@ class AvailableDecaysPanel extends Panel {
     const createDecayButtonListener = ( decayType: DecayType ) => {
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          model.protonCountProperty.value--;
+          // model.protonCountProperty.value--;
           break;
         case DecayType.NEUTRON_EMISSION:
-          model.neutronCountProperty.value--;
+          // model.neutronCountProperty.value--;
           break;
         case DecayType.BETA_MINUS_DECAY:
-          model.neutronCountProperty.value--;
-          model.protonCountProperty.value++;
+          // model.neutronCountProperty.value--;
+          // model.protonCountProperty.value++;
           break;
         case DecayType.BETA_PLUS_DECAY:
-          model.neutronCountProperty.value++;
-          model.protonCountProperty.value--;
+          // model.neutronCountProperty.value++;
+          // model.protonCountProperty.value--;
           break;
         case DecayType.ALPHA_DECAY:
-          model.neutronCountProperty.value -= 2;
-          model.protonCountProperty.value -= 2;
+          // model.neutronCountProperty.value -= 2;
+          // model.protonCountProperty.value -= 2;
           break;
         default:
           break;

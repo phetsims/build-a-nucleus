@@ -11,12 +11,13 @@ import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../BANColors.js';
 import { Text, HBox, Rectangle } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import BANConstants from '../BANConstants.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
 
 // types
 type NucleonLabel = {
@@ -33,7 +34,8 @@ const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
 
 class NucleonCountPanel extends Panel {
 
-  constructor( protonCountProperty: NumberProperty, neutronCountProperty: NumberProperty ) {
+  constructor( protonCountProperty: IReadOnlyProperty<number>, protonCountRange: Range,
+               neutronCountProperty: IReadOnlyProperty<number>, neutronCountRange: Range ) {
 
     const options = {
       fill: BANColors.panelBackgroundColorProperty,
@@ -44,7 +46,8 @@ class NucleonCountPanel extends Panel {
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
 
     // function to create the nucleon labels and add them to panelContents
-    const nucleonLabel = ( nucleonString: string, nucleonType: ParticleType, nucleonCountProperty: NumberProperty ): NucleonLabel => {
+    const nucleonLabel = ( nucleonString: string, nucleonType: ParticleType,
+                           nucleonCountProperty: IReadOnlyProperty<number>, nucleonCountRange: Range ): NucleonLabel => {
 
       const nucleonTitle = new Text( nucleonString, {
         font: LABEL_FONT
@@ -57,8 +60,7 @@ class NucleonCountPanel extends Panel {
       nucleonParticleNode.centerY = nucleonTitle.centerY;
       panelContents.addChild( nucleonContents );
 
-      assert && assert( nucleonCountProperty.range );
-      const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountProperty.range!, {
+      const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountRange, {
         align: 'right',
         textOptions: {
           font: LABEL_FONT
@@ -77,8 +79,10 @@ class NucleonCountPanel extends Panel {
     };
 
     // create the nucleon labels
-    const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, ParticleType.PROTON, protonCountProperty );
-    const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, ParticleType.NEUTRON, neutronCountProperty );
+    const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, ParticleType.PROTON, protonCountProperty,
+      protonCountRange );
+    const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, ParticleType.NEUTRON, neutronCountProperty,
+      neutronCountRange );
 
     // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's
     protonLabel.contents.top = 0;

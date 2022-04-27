@@ -17,8 +17,6 @@ import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import { PressListenerEvent, ProfileColorProperty, VBox, Circle, RadialGradient, Text, Node } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
@@ -32,6 +30,8 @@ import NucleonCreatorNode from './NucleonCreatorNode.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import DecayScreenView from '../../decay/view/DecayScreenView.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -83,7 +83,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // where the ParticleView's are
     this.particleViewLayerNode = new Node();
 
-    this.nucleonCountPanel = new NucleonCountPanel( model.protonCountProperty, model.neutronCountProperty );
+    this.nucleonCountPanel = new NucleonCountPanel( model.particleAtom.protonCountProperty, model.protonCountRange,
+      model.particleAtom.neutronCountProperty, model.neutronCountRange );
     this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.nucleonCountPanel.left = this.layoutBounds.maxX - 200;
     this.addChild( this.nucleonCountPanel );
@@ -94,15 +95,87 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       arrowHeight: 14
     };
 
+    // return if any nuclides exist above, below, or to the left or right of a given nuclide
+    const getNextOrPreviousIso = ( direction: string, particleType: ParticleType, protonCount: number, neutronCount: number ) => {
+
+      if ( direction === 'up' ) {
+
+        // proton up arrow
+        if ( particleType === ParticleType.PROTON ) {
+          return AtomIdentifier.doesNextIsotoneExist( protonCount, neutronCount );
+        }
+
+        // neutron up arrow
+        return AtomIdentifier.doesNextIsotopeExist( protonCount, neutronCount );
+      }
+
+      // proton down arrow
+      if ( particleType === ParticleType.PROTON ) {
+        return AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount );
+      }
+
+      // neutron down arrow
+      return AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount );
+    };
+
+    // function to return whether the protonCount or neutronCount is at its min or max range
+    const returnNucleonCountAtRange = ( direction: string, particleType: ParticleType, protonCount: number, neutronCount: number ) => {
+      if ( direction === 'up' ) {
+
+        // proton up arrow
+        if ( particleType === ParticleType.PROTON ) {
+          return protonCount !== model.protonCountRange.max;
+        }
+
+        // neutron up arrow
+        return neutronCount !== model.neutronCountRange.max;
+      }
+
+      // proton down arrow
+      if ( particleType === ParticleType.PROTON ) {
+        return protonCount !== model.protonCountRange.min;
+      }
+
+      // neutron down arrow
+      return neutronCount !== model.neutronCountRange.min;
+    };
+
+    // function to create the arrow enabled properties
+    const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
+      return new DerivedProperty( [ model.doesNuclideExistBooleanProperty, model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
+        ( doesNuclideExist, protonCount, neutronCount ) => {
+          const nextIsoExists = secondParticleType ?
+                                !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
+                                !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
+                                !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
+          const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
+          if ( nuclideExistsBoolean && nextIsoExists ) {
+            return false;
+          }
+          return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
+                                      returnNucleonCountAtRange( direction, secondParticleType, protonCount, neutronCount ) :
+                 returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount );
+        } );
+    };
+
+    // create the arrow enabled properties
+    const protonUpArrowEnabledProperty = createArrowEnabledProperty( 'up', ParticleType.PROTON );
+    const neutronUpArrowEnabledProperty = createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
+    const doubleUpArrowEnabledProperty = createArrowEnabledProperty( 'up', ParticleType.PROTON, ParticleType.NEUTRON );
+    const protonDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON );
+    const neutronDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
+    const doubleDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
+
     // function to create the double arrow buttons
     const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
       return new DoubleArrowButton( direction,
         direction === 'up' ?
-        () => createIncreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ) :
-        () => createDecreaseNucleonCountListener( model.protonCountProperty, model.neutronCountProperty ),
+        () => createIncreaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
+        () => createDecreaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ),
         merge( {
           leftArrowFill: BANColors.protonColorProperty,
-          rightArrowFill: BANColors.neutronColorProperty
+          rightArrowFill: BANColors.neutronColorProperty,
+          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty
         }, arrowButtonOptions )
       );
     };
@@ -117,26 +190,34 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.addChild( doubleArrowButtons );
 
     // function to create the listeners the increase or decrease the given nucleon count properties by a value of +1 or -1
-    const createIncreaseNucleonCountListener = ( firstNucleonCountProperty: NumberProperty, secondNucleonCountProperty?: NumberProperty ) => {
-      firstNucleonCountProperty.value = Math.min( firstNucleonCountProperty.range!.max, firstNucleonCountProperty.value + 1 );
-      if ( secondNucleonCountProperty ) {
-        secondNucleonCountProperty.value = Math.min( secondNucleonCountProperty.range!.max, secondNucleonCountProperty.value + 1 );
+    const createIncreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
+      this.createParticleFromStack( firstNucleonType );
+      if ( secondNucleonType ) {
+        this.createParticleFromStack( secondNucleonType );
       }
     };
-    const createDecreaseNucleonCountListener = ( firstNucleonCountProperty: NumberProperty, secondNucleonCountProperty?: NumberProperty ) => {
-      firstNucleonCountProperty.value = Math.max( firstNucleonCountProperty.range!.min, firstNucleonCountProperty.value - 1 );
-      if ( secondNucleonCountProperty ) {
-        secondNucleonCountProperty.value = Math.max( secondNucleonCountProperty.range!.min, secondNucleonCountProperty.value - 1 );
+    const createDecreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
+      this.returnParticleToStack( firstNucleonType );
+      if ( secondNucleonType ) {
+        this.returnParticleToStack( secondNucleonType );
       }
     };
-
+    
     // function to create the single arrow buttons
-    const createSingleArrowButtons = ( nucleonCountProperty: NumberProperty, nucleonColorProperty: ProfileColorProperty ): VBox => {
+    const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): VBox => {
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
-      const upArrowButton = new ArrowButton( 'up', () => createIncreaseNucleonCountListener( nucleonCountProperty ),
-        singleArrowButtonOptions );
-      const downArrowButton = new ArrowButton( 'down', () => createDecreaseNucleonCountListener( nucleonCountProperty ),
-        singleArrowButtonOptions );
+      const upArrowButton = new ArrowButton( 'up', () => createIncreaseNucleonCountListener( nucleonType ),
+        merge( {
+          enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
+          },
+          singleArrowButtonOptions )
+      );
+      const downArrowButton = new ArrowButton( 'down', () => createDecreaseNucleonCountListener( nucleonType ),
+        merge( {
+            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty
+          },
+          singleArrowButtonOptions )
+      );
       return new VBox( {
         children: [ upArrowButton, downArrowButton ],
         spacing: arrowButtonSpacing
@@ -144,11 +225,11 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     };
 
     // create the single arrow buttons
-    const protonArrowButtons = createSingleArrowButtons( model.protonCountProperty, BANColors.protonColorProperty );
+    const protonArrowButtons = createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
     protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     protonArrowButtons.right = doubleArrowButtons.left - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     this.addChild( protonArrowButtons );
-    const neutronArrowButtons = createSingleArrowButtons( model.neutronCountProperty, BANColors.neutronColorProperty );
+    const neutronArrowButtons = createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
     neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     neutronArrowButtons.left = doubleArrowButtons.right + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     this.addChild( neutronArrowButtons );
@@ -197,82 +278,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    // function to create observers that disable the single arrow buttons when the nucleonCountProperty values are at its min
-    // or max range
-    const nucleonCountPropertyObserver = ( nucleonCount: number, nucleonArrowButtons: VBox, nucleonCountProperty: NumberProperty ) => {
-
-      // up arrow button
-      nucleonArrowButtons.getChildAt( 0 ).enabled = nucleonCount !== nucleonCountProperty.range!.max;
-
-      // down arrow button
-      nucleonArrowButtons.getChildAt( 1 ).enabled = nucleonCount !== nucleonCountProperty.range!.min;
-    };
-
-    // create the observers to disable the arrow buttons, see the comment on the observer above
-    model.protonCountProperty.link( protonCount => {
-      nucleonCountPropertyObserver( protonCount, protonArrowButtons, model.protonCountProperty );
-    } );
-    model.neutronCountProperty.link( neutronCount => {
-      nucleonCountPropertyObserver( neutronCount, neutronArrowButtons, model.neutronCountProperty );
-    } );
-
-    // function to prevent a user from creating nuclides that do not exist on the chart
-    Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ], ( protonCount, neutronCount ) => {
-
-      // observers that disable the double arrow buttons when the protonCountProperty and the neutronCountProperty are at
-      // its max or min range
-      doubleArrowButtons.getChildAt( 0 ).enabled = protonCount !== model.protonCountProperty.range!.max &&
-                                                   neutronCount !== model.neutronCountProperty.range!.max;
-      doubleArrowButtons.getChildAt( 1 ).enabled = protonCount !== model.protonCountProperty.range!.min &&
-                                                   neutronCount !== model.neutronCountProperty.range!.min;
-
-      // if on a nuclide that does not exist, check if there are nuclides ahead (next isotones, or isotopes)
-      if ( !model.doesNuclideExistBooleanProperty.value ) {
-
-        // TODO: disable all buttons once the nucleons are added
-        const nextIsotope = AtomIdentifier.getNextExistingIsotope( protonCount, neutronCount );
-        const nextIsotone = AtomIdentifier.getNextExistingIsotone( protonCount, neutronCount );
-
-        // if the nextIsotone does not exist, disable the proton up arrow
-        if ( !nextIsotone ) {
-          protonArrowButtons.getChildAt( 0 ).enabled = false;
-          doubleArrowButtons.getChildAt( 0 ).enabled = false;
-        }
-
-        // if the nextIsotope does not exist, disable the neutron up arrow
-        if ( !nextIsotope ) {
-          neutronArrowButtons.getChildAt( 0 ).enabled = false;
-          doubleArrowButtons.getChildAt( 0 ).enabled = false;
-        }
-      }
-      else {
-
-        // re-enable the up arrow buttons on the nucleons
-        protonArrowButtons.getChildAt( 0 ).enabled = protonCount !== model.protonCountProperty.range!.max;
-        neutronArrowButtons.getChildAt( 0 ).enabled = neutronCount !== model.neutronCountProperty.range!.max;
-
-        // If removing a neutron forms an isotope that does not exist, then disable the neutron down arrow button
-        if ( AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount ) ) {
-          // re-enable the neutron down arrow button
-          neutronArrowButtons.getChildAt( 1 ).enabled = neutronCount !== model.neutronCountProperty.range!.min;
-        }
-        else {
-          neutronArrowButtons.getChildAt( 1 ).enabled = false;
-        }
-
-        // If removing a proton forms an isotope that does not exist, then disable the proton down arrow button
-        if ( AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount ) ) {
-          // re-enable the proton down arrow button
-          protonArrowButtons.getChildAt( 1 ).enabled = protonCount !== model.protonCountProperty.range!.min;
-        }
-        else {
-          protonArrowButtons.getChildAt( 1 ).enabled = false;
-        }
-      }
-    } );
-
     // called when a Particle finished being dragged
     const particleDragFinished = ( particle: Particle ) => { this.dragEndedListener( particle, this.model.particleAtom ); };
+
+    const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
+      if ( isUserControlled && this.model.particleAtom.containsParticle( particle ) ) {
+        this.model.particleAtom.removeParticle( particle );
+      }
+    };
 
     // add ParticleView's to match the model
     this.model.nucleons.addItemAddedListener( ( particle: Particle ) => {
@@ -283,6 +296,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       // @ts-ignore TODO-TS: Fix listener type
       particle.dragEndedEmitter.addListener( particleDragFinished );
+
+      // TODO: unlink userControlledListener
+      particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
     } );
 
     // remove ParticleView's to match the model
@@ -299,6 +315,47 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // add the particleViewLayerNode
     this.addChild( this.particleViewLayerNode );
+  }
+
+  private createParticleFromStack( particleType: ParticleType ) {
+    const particle = new Particle( particleType.name.toLowerCase(), {
+      maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
+    } );
+    const origin = particleType === ParticleType.PROTON ? this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
+    particle.setPositionAndDestination( this.modelViewTransform.viewToModelPosition( origin ) );
+    particle.destinationProperty.value = this.model.particleAtom.positionProperty.value;
+    this.model.addParticle( particle );
+    particle.animationEndedEmitter.addListener( () => {
+      if ( !this.model.particleAtom.containsParticle( particle ) ) {
+        this.model.particleAtom.addParticle( particle );
+        particle.animationEndedEmitter.removeAllListeners();
+      }
+    } );
+  }
+
+  private returnParticleToStack( particleType: ParticleType ) {
+
+    const creatorNodePosition = particleType === ParticleType.PROTON ?
+                                this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
+
+    // array of all the particles of particleType
+    const particles = [ ...this.model.nucleons ];
+
+    _.remove( particles, particle => {
+      return particle.destinationProperty.value.equals( this.modelViewTransform.viewToModelPosition( creatorNodePosition ) )
+             || particle.type !== particleType.name.toLowerCase();
+    } );
+
+    const sortedParticles = _.sortBy( particles, particle => {
+      return particle!.positionProperty.value.distance( creatorNodePosition );
+    } );
+
+    const particleToReturn = sortedParticles.shift();
+    assert && assert( particleToReturn, 'There is no particle of this type in the atom.' );
+    if ( particleToReturn ) {
+      this.model.particleAtom.removeParticle( particleToReturn );
+      this.animateAndRemoveNucleon( particleToReturn, this.modelViewTransform.viewToModelPosition( creatorNodePosition ) );
+    }
   }
 
   /**
@@ -328,6 +385,17 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const particleView = this.particleViewMap[ particle.id ];
     assert && assert( particleView, 'Did not find matching ParticleView' );
     return particleView;
+  }
+
+  /**
+   * Animate particle to the given destination and then remove it.
+   */
+  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ) {
+    particle.destinationProperty.value = destination;
+
+    particle.animationEndedEmitter.addListener( () => {
+      this.model.removeParticle( particle );
+    } );
   }
 
   protected dragEndedListener( particle: Particle, particleAtom: ParticleAtom ) {}

@@ -87,7 +87,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( showElectronCloudCheckbox );
 
     // create and add the symbol node in an accordion box
-    const symbolNode = new SymbolNode( model.protonCountProperty, model.massNumberProperty, {
+    const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.massNumberProperty, {
       scale: 0.3
     } );
     const symbolAccordionBox = new AccordionBox( symbolNode, {
@@ -136,7 +136,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // Add the listeners that control the label content
-    Property.multilink( [ model.protonCountProperty, model.neutronCountProperty ],
+    Property.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => updateStabilityIndicator( protonCount, neutronCount )
     );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
@@ -202,7 +202,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // Hook up update listeners.
-    Property.multilink( [ model.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty ],
+    Property.multilink( [ model.particleAtom.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty ],
       ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
         updateElementName( protonCount, doesNuclideExist, massNumber )
     );
@@ -285,10 +285,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       // TODO: might need to add a check to see if particle is already on its way to the destination passed in
       // animate particle back to its stack
       if ( particle.type === ParticleType.PROTON.name.toLowerCase() ) {
-        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
+        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
       }
       else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
-        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
+        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
       }
     }
   }
