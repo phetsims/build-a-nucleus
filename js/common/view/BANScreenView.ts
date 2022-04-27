@@ -366,8 +366,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const particles = [ ...this.model.nucleons ];
 
     _.remove( particles, particle => {
-      return particle.destinationProperty.value.equals( this.modelViewTransform.viewToModelPosition( creatorNodePosition ) )
-             || particle.type !== particleType.name.toLowerCase();
+      return !this.model.particleAtom.containsParticle( particle ) || particle.type !== particleType.name.toLowerCase();
     } );
 
     const sortedParticles = _.sortBy( particles, particle => {
@@ -375,10 +374,11 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
 
     const particleToReturn = sortedParticles.shift();
-    assert && assert( particleToReturn, 'There is no particle of this type in the atom.' );
     if ( particleToReturn ) {
+      assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
+        'There is no particle of this type in the atom.' );
       this.model.particleAtom.removeParticle( particleToReturn );
-      this.animateAndRemoveNucleon( particleToReturn, this.modelViewTransform.viewToModelPosition( creatorNodePosition ) );
+      this.model.animateAndRemoveNucleon( particleToReturn, this.modelViewTransform.viewToModelPosition( creatorNodePosition ) );
     }
   }
 
