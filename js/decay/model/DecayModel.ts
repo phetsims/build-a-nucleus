@@ -16,6 +16,10 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayType from '../view/DecayType.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
+import ParticleType from '../view/ParticleType.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
@@ -109,6 +113,20 @@ class DecayModel extends BANModel {
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.ALPHA_DECAY )
     );
+  }
+
+  public emitNucleon( particleType: ParticleType, visibleModelBounds: Bounds2 ) {
+    const proton = this.particleAtom.extractParticle( particleType.name.toLowerCase() );
+
+    const destinationBounds = visibleModelBounds.dilated( 300 );
+
+    let randomVector = Vector2.ZERO;
+    while ( visibleModelBounds.containsPoint( randomVector ) ) {
+      randomVector = new Vector2( dotRandom.nextDoubleBetween( destinationBounds.minX, destinationBounds.maxX ),
+        dotRandom.nextDoubleBetween( destinationBounds.minY, destinationBounds.maxY ) );
+    }
+
+    this.animateAndRemoveNucleon( proton, randomVector );
   }
 
   public override reset(): void {

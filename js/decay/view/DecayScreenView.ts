@@ -68,7 +68,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
 
     // create and add the available decays panel at the center right of the decay screen
-    const availableDecaysPanel = new AvailableDecaysPanel( model );
+    const availableDecaysPanel = new AvailableDecaysPanel( model, this.modelViewTransform, this.visibleBoundsProperty );
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );
@@ -228,6 +228,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.particleViewLayerNode.addChild( nucleonLayer );
     } );
     this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
+
+    // add the particleViewLayerNode
+    this.addChild( this.particleViewLayerNode );
   }
 
   // Add ParticleView to the correct nucleonLayer
@@ -285,10 +288,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       // TODO: might need to add a check to see if particle is already on its way to the destination passed in
       // animate particle back to its stack
       if ( particle.type === ParticleType.PROTON.name.toLowerCase() ) {
-        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
+        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
       }
       else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
-        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
+        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
       }
     }
   }

@@ -81,7 +81,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // ParticleView.id => {ParticleView} - lookup map for efficiency
     this.particleViewMap = {};
 
-    // where the ParticleView's are
+    // where the ParticleView's are, is added at the end of subclasses for the correct z order
     this.particleViewLayerNode = new Node();
 
     this.nucleonCountPanel = new NucleonCountPanel( model.particleAtom.protonCountProperty, model.protonCountRange,
@@ -321,8 +321,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particleView.dispose();
     } );
 
-    // add the particleViewLayerNode
-    this.addChild( this.particleViewLayerNode );
   }
 
   private createParticleFromStack( particleType: ParticleType ) {
@@ -409,17 +407,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const particleView = this.particleViewMap[ particle.id ];
     assert && assert( particleView, 'Did not find matching ParticleView' );
     return particleView;
-  }
-
-  /**
-   * Animate particle to the given destination and then remove it.
-   */
-  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ) {
-    particle.destinationProperty.value = destination;
-
-    particle.animationEndedEmitter.addListener( () => {
-      this.model.removeParticle( particle );
-    } );
   }
 
   protected dragEndedListener( particle: Particle, particleAtom: ParticleAtom ) {}

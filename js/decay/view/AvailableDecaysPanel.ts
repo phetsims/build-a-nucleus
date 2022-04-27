@@ -23,6 +23,9 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DecayModel from '../model/DecayModel.js';
 import IProperty from '../../../../axon/js/IProperty.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -36,7 +39,7 @@ const BUTTON_CONTENT_WIDTH = 175;
 
 class AvailableDecaysPanel extends Panel {
 
-  constructor( model: DecayModel ) {
+  constructor( model: DecayModel, modelViewTransform: ModelViewTransform2, visibleBoundsProperty: IReadOnlyProperty<Bounds2> ) {
 
     const options = {
       xMargin: 15,
@@ -72,15 +75,15 @@ class AvailableDecaysPanel extends Panel {
       }
     };
 
-    // function that creates the listeners for the decay buttons. Changes the protonCountProperty and neutronCountProperty
-    // values depending on the decay type
+    // function that creates the listeners for the decay buttons. Emits teh specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
+      const visibleModelBounds = modelViewTransform.viewToModelBounds( visibleBoundsProperty.value );
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          // model.protonCountProperty.value--;
+          model.emitNucleon( ParticleType.PROTON, visibleModelBounds );
           break;
         case DecayType.NEUTRON_EMISSION:
-          // model.neutronCountProperty.value--;
+          model.emitNucleon( ParticleType.NEUTRON, visibleModelBounds );
           break;
         case DecayType.BETA_MINUS_DECAY:
           // model.neutronCountProperty.value--;

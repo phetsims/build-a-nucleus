@@ -19,6 +19,7 @@ import createObservableArray, { ObservableArray } from '../../../../axon/js/crea
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from '../../decay/view/ParticleType.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -75,6 +76,17 @@ class BANModel {
     this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount )
     );
+  }
+
+  /**
+   * Animate particle to the given destination and then remove it.
+   */
+  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ) {
+    particle.destinationProperty.value = destination;
+
+    particle.animationEndedEmitter.addListener( () => {
+      this.removeParticle( particle );
+    } );
   }
 
   /**
