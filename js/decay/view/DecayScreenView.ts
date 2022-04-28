@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Color, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -207,6 +207,26 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         updateElementName( protonCount, doesNuclideExist, massNumber )
     );
 
+    // create and add the dashed empty circle at the center
+    const lineWidth = 1;
+    const emptyAtomCircle = new Circle( {
+      radius: ShredConstants.NUCLEON_RADIUS - lineWidth,
+      stroke: Color.GRAY,
+      lineDash: [ 2, 2 ],
+      lineWidth: lineWidth
+    } );
+    emptyAtomCircle.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
+    this.addChild( emptyAtomCircle );
+
+    // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to shown it when there's
+    // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the
+    // atomNode center. However, if the electronCloud is showing, then only show the emptyAtomCircle when there are zero
+    // nucleons
+    Property.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
+      showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
+      emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
+    } );
+
     // create and add the AtomNode
     const atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
       showCenterX: false,
@@ -215,7 +235,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       showStableOrUnstableProperty: new Property( false ),
       electronShellDepictionProperty: new Property( 'cloud' )
     } );
-    atomNode.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
+    atomNode.center = emptyAtomCircle.center;
     this.addChild( atomNode );
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
