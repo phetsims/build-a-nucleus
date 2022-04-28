@@ -33,6 +33,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -147,22 +148,30 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
           model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty ],
         ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount ) => {
 
-          const protonCount = atomProtonCount + incomingProtonsCount;
-          const neutronCount = atomNeutronCount + incomingNeutronsCount;
-
-          const nextIsoExists = secondParticleType ?
-                                !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
-                                !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
-                                !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
-
-          const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
-          const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
-          if ( nuclideExistsBoolean && nextIsoExists ) {
+          // disable all buttons if the nuclide does not exist
+          if ( !AtomIdentifier.doesExist( atomProtonCount, atomNeutronCount ) && model.massNumberProperty.value !== 0 ) {
             return false;
           }
-          return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
-                                      returnNucleonCountAtRange( direction, secondParticleType, protonCount, neutronCount ) :
-                 returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount );
+
+          else {
+            const protonCount = atomProtonCount + incomingProtonsCount;
+            const neutronCount = atomNeutronCount + incomingNeutronsCount;
+
+            const nextIsoExists = secondParticleType ?
+                                  !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
+                                  !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
+                                  !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
+
+            const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
+            const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
+            if ( nuclideExistsBoolean && nextIsoExists ) {
+              return false;
+            }
+            return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
+                                        returnNucleonCountAtRange( direction, secondParticleType, protonCount, neutronCount ) :
+                   returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount );
+          }
+
         } );
     };
 
@@ -319,6 +328,28 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       delete this.particleViewMap[ particleView.particle.id ];
 
       particleView.dispose();
+    } );
+
+
+    // TODO: handle cases where either a proton or a neutron can be added to create a nuclide that does not exist (ex. Carbon-15)
+    // only show a nuclide that does not exist for one second and then remove the nucleon that created a nuclide that
+    // does not exist
+    model.doesNuclideExistBooleanProperty.link( doesNuclideExist => {
+      stepTimer.setTimeout( () => {
+        if ( !doesNuclideExist ) {
+          // the previous isotope exists, meaning a proton was added to create a nuclide that does not exist
+          if ( AtomIdentifier.doesPreviousIsotopeExist( model.particleAtom.protonCountProperty.value,
+            model.particleAtom.neutronCountProperty.value ) ) {
+            this.returnParticleToStack( ParticleType.NEUTRON );
+          }
+
+          // the previous isotone exists, meaning a proton was added to create a nuclide that does not exist
+          else if ( AtomIdentifier.doesPreviousIsotoneExist( model.particleAtom.protonCountProperty.value,
+            model.particleAtom.neutronCountProperty.value ) ) {
+            this.returnParticleToStack( ParticleType.PROTON );
+          }
+        }
+      }, 1000 ); // show the nuclide for one second
     } );
 
   }
