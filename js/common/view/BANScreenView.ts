@@ -148,14 +148,15 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
           model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty ],
         ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount ) => {
 
+          const protonCount = atomProtonCount + incomingProtonsCount;
+          const neutronCount = atomNeutronCount + incomingNeutronsCount;
+
           // disable all buttons if the nuclide does not exist
-          if ( !AtomIdentifier.doesExist( atomProtonCount, atomNeutronCount ) && model.massNumberProperty.value !== 0 ) {
+          if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) && model.massNumberProperty.value !== 0 ) {
             return false;
           }
 
           else {
-            const protonCount = atomProtonCount + incomingProtonsCount;
-            const neutronCount = atomNeutronCount + incomingNeutronsCount;
 
             const nextIsoExists = secondParticleType ?
                                   !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
@@ -164,7 +165,10 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
             const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
             const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
-            if ( nuclideExistsBoolean && nextIsoExists ) {
+
+            // it is allowed to go back the default starting case of zero protons and zero neutrons even though a nuclide
+            // with zero protons and zero neutrons does not exist
+            if ( nuclideExistsBoolean && nextIsoExists && atomProtonCount !== 1 && atomNeutronCount !== 1 ) {
               return false;
             }
             return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
