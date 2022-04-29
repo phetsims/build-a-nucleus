@@ -115,7 +115,7 @@ class DecayModel extends BANModel {
     );
   }
 
-  public emitNucleon( particleType: ParticleType, visibleModelBounds: Bounds2 ) {
+  public emitNucleon( particleType: ParticleType, visibleModelBounds: Bounds2 ): void {
     const proton = this.particleAtom.extractParticle( particleType.name.toLowerCase() );
 
     const destinationBounds = visibleModelBounds.dilated( 300 );

@@ -254,7 +254,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   }
 
   // Add ParticleView to the correct nucleonLayer
-  protected override addParticleView( particle: Particle, particleView: ParticleView ) {
+  protected override addParticleView( particle: Particle, particleView: ParticleView ): void {
     this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
 
     // Add a listener that adjusts a nucleon's z-order layering.
@@ -296,7 +296,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   }
 
   // Define a function that will decide where to put nucleons.
-  protected override dragEndedListener( particle: Particle, atom: ParticleAtom ) {
+  protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
       atom.addParticle( particle );
       // TODO: once arrows are working with the creator node, add line here to make the ParticleView's  not pickable

@@ -81,7 +81,7 @@ class BANModel {
   /**
    * Animate particle to the given destination and then remove it.
    */
-  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ) {
+  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ): void {
     particle.destinationProperty.value = destination;
 
     particle.animationEndedEmitter.addListener( () => {

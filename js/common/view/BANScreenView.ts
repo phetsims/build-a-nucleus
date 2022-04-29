@@ -358,7 +358,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
   }
 
-  private createParticleFromStack( particleType: ParticleType ) {
+  private createParticleFromStack( particleType: ParticleType ): void {
     const particle = new Particle( particleType.name.toLowerCase(), {
       maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
     } );
@@ -390,7 +390,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
   }
 
-  private returnParticleToStack( particleType: ParticleType ) {
+  private returnParticleToStack( particleType: ParticleType ): void {
 
     const creatorNodePosition = particleType === ParticleType.PROTON ?
                                 this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
@@ -418,7 +418,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   /**
    * Add a particle to the model and immediately start dragging it with the provided event.
    */
-  public addAndDragParticle( event: PressListenerEvent, particle: Particle ) {
+  public addAndDragParticle( event: PressListenerEvent, particle: Particle ): void {
     this.model.addParticle( particle );
     const particleView = this.findParticleView( particle );
     particleView.startSyntheticDrag( event );
@@ -444,9 +444,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     return particleView;
   }
 
-  protected dragEndedListener( particle: Particle, particleAtom: ParticleAtom ) {}
+  protected dragEndedListener( particle: Particle, particleAtom: ParticleAtom ): void {}
 
-  protected addParticleView( particle: Particle, particleView: ParticleView ) {}
+  protected addParticleView( particle: Particle, particleView: ParticleView ): void {}
 }
 
 buildANucleus.register( 'BANScreenView', BANScreenView );
