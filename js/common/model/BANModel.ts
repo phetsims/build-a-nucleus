@@ -20,6 +20,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -35,6 +36,7 @@ class BANModel {
   public neutronCountRange: Range;
   public incomingProtons: ObservableArray<Particle>;
   public incomingNeutrons: ObservableArray<Particle>;
+  public doubleArrowButtonClickedBooleanProperty: BooleanProperty;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -55,6 +57,9 @@ class BANModel {
     // array of particles sent to the nucleus but not there yet
     this.incomingProtons = createObservableArray();
     this.incomingNeutrons = createObservableArray();
+
+    // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
+    this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
     // the range of the number of protons allowed
     this.protonCountRange = new Range( 0, maximumProtonNumber );

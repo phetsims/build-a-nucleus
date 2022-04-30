@@ -79,7 +79,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox(
-      new Text( buildANucleusStrings.showElectronCloud, { font: STABILITY_ELEMENT_AND_CHECKBOX_FONT } ),
+      new Text( buildANucleusStrings.electronCloud, { font: STABILITY_ELEMENT_AND_CHECKBOX_FONT } ),
       showElectronCloudBooleanProperty
     );
     showElectronCloudCheckbox.left = availableDecaysPanel.left;

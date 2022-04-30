@@ -56,7 +56,7 @@ type StringsType = {
   'doesNotForm': string,
   'protons': string,
   'neutrons': string,
-  'showElectronCloud': string
+  'electronCloud': string
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

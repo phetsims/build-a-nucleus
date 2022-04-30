@@ -137,7 +137,7 @@
   "neutrons": {
     "value": "Neutrons"
   },
-  "showElectronCloud": {
-    "value": "Show Electron Cloud"
+  "electronCloud": {
+    "value": "Electron Cloud"
   }
 }

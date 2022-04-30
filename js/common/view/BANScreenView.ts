@@ -151,7 +151,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
           const protonCount = atomProtonCount + incomingProtonsCount;
           const neutronCount = atomNeutronCount + incomingNeutronsCount;
 
-          // disable all buttons if the nuclide does not exist
+          // disable all arrow buttons if the nuclide does not exist
           if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) && model.massNumberProperty.value !== 0 ) {
             return false;
           }
@@ -168,7 +168,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
             // it is allowed to go back the default starting case of zero protons and zero neutrons even though a nuclide
             // with zero protons and zero neutrons does not exist
-            if ( nuclideExistsBoolean && nextIsoExists && atomProtonCount !== 1 && atomNeutronCount !== 1 ) {
+            if ( nuclideExistsBoolean && nextIsoExists && ( atomProtonCount + atomNeutronCount ) > 1 ) {
               return false;
             }
             return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
@@ -255,6 +255,20 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     neutronArrowButtons.left = doubleArrowButtons.right + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     this.addChild( neutronArrowButtons );
 
+    // function to keep track of when a double arrow button was clicked
+    const createSingleOrDoubleArrowButtonClickedListener = ( isDoubleArrowButton: boolean, arrowButtons: VBox ) => {
+      arrowButtons.getChildren().forEach( arrowButton => {
+        // @ts-ignore TODO-TS: addListener isn't a  method on Node's, only on ArrowButton's
+        arrowButton.addListener( () => {
+          model.doubleArrowButtonClickedBooleanProperty.value = isDoubleArrowButton;
+        } );
+      } );
+    };
+
+    createSingleOrDoubleArrowButtonClickedListener( true, doubleArrowButtons );
+    createSingleOrDoubleArrowButtonClickedListener( false, protonArrowButtons );
+    createSingleOrDoubleArrowButtonClickedListener( false, neutronArrowButtons );
+
     // create and add the electron cloud
     this.electronCloud = new Circle( {
       radius: MIN_ELECTRON_CLOUD_RADIUS,
@@ -340,19 +354,25 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // does not exist
     model.doesNuclideExistBooleanProperty.link( doesNuclideExist => {
       stepTimer.setTimeout( () => {
-        if ( !doesNuclideExist ) {
+        // check when the double arrow buttons were clicked to update the atom only when both nucleons of a double arrow
+        // button have been added/removed from the atom
+        if ( !doesNuclideExist && !model.doubleArrowButtonClickedBooleanProperty.value ) {
+          const protonCount = model.particleAtom.protonCountProperty.value;
+          const neutronCount = model.particleAtom.neutronCountProperty.value;
+
           // the previous isotope exists, meaning a proton was added to create a nuclide that does not exist
-          if ( AtomIdentifier.doesPreviousIsotopeExist( model.particleAtom.protonCountProperty.value,
-            model.particleAtom.neutronCountProperty.value ) ) {
+          if ( AtomIdentifier.doesPreviousIsotopeExist( protonCount,
+            neutronCount ) ) {
             this.returnParticleToStack( ParticleType.NEUTRON );
           }
 
           // the previous isotone exists, meaning a proton was added to create a nuclide that does not exist
-          else if ( AtomIdentifier.doesPreviousIsotoneExist( model.particleAtom.protonCountProperty.value,
-            model.particleAtom.neutronCountProperty.value ) ) {
+          else if ( AtomIdentifier.doesPreviousIsotoneExist( protonCount,
+            neutronCount ) ) {
             this.returnParticleToStack( ParticleType.PROTON );
           }
         }
+        model.doubleArrowButtonClickedBooleanProperty.value = false;
       }, 1000 ); // show the nuclide for one second
     } );
 
