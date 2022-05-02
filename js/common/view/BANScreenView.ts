@@ -158,7 +158,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
           else {
 
-            const nextIsoExists = secondParticleType ?
+            const nextOrPreviousIsoExists = secondParticleType ?
                                   !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
                                   !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
                                   !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
@@ -166,9 +166,11 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
             const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
             const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
 
+            const doesPreviousNuclideExist = secondParticleType && direction === 'down' ? !AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) : nextOrPreviousIsoExists;
+
             // it is allowed to go back the default starting case of zero protons and zero neutrons even though a nuclide
             // with zero protons and zero neutrons does not exist
-            if ( nuclideExistsBoolean && nextIsoExists && ( atomProtonCount + atomNeutronCount ) > 1 ) {
+            if ( nuclideExistsBoolean && doesPreviousNuclideExist && ( atomProtonCount + atomNeutronCount ) > 1 ) {
               return false;
             }
             return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
@@ -354,6 +356,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // does not exist
     model.doesNuclideExistBooleanProperty.link( doesNuclideExist => {
       stepTimer.setTimeout( () => {
+        // TODO: if a double arrow button was clicked, return both the proton and neutron
         // check when the double arrow buttons were clicked to update the atom only when both nucleons of a double arrow
         // button have been added/removed from the atom
         if ( !doesNuclideExist && !model.doubleArrowButtonClickedBooleanProperty.value ) {
