@@ -33,7 +33,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -61,6 +60,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly electronCloud: Circle;
   static readonly MAX_ELECTRON_CLOUD_RADIUS: number = MAX_ELECTRON_CLOUD_RADIUS;
   static readonly MIN_ELECTRON_CLOUD_RADIUS: number = MIN_ELECTRON_CLOUD_RADIUS;
+  private timeSinceCountdownStarted: number;
+  private previousProtonCount: number;
+  private previousNeutronCount: number;
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
@@ -73,6 +75,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     super( options );
 
     this.model = model;
+    this.timeSinceCountdownStarted = 0;
+    this.previousProtonCount = 0;
+    this.previousNeutronCount = 0;
 
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       Vector2.ZERO,
@@ -349,38 +354,10 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       particleView.dispose();
     } );
-
-
-    // TODO: handle cases where either a proton or a neutron can be added to create a nuclide that does not exist (ex. Carbon-15)
-    // only show a nuclide that does not exist for one second and then remove the nucleon that created a nuclide that
-    // does not exist
-    model.doesNuclideExistBooleanProperty.link( doesNuclideExist => {
-      stepTimer.setTimeout( () => {
-        // TODO: if a double arrow button was clicked, return both the proton and neutron
-        // check when the double arrow buttons were clicked to update the atom only when both nucleons of a double arrow
-        // button have been added/removed from the atom
-        if ( !doesNuclideExist && !model.doubleArrowButtonClickedBooleanProperty.value ) {
-          const protonCount = model.particleAtom.protonCountProperty.value;
-          const neutronCount = model.particleAtom.neutronCountProperty.value;
-
-          // the previous isotope exists, meaning a proton was added to create a nuclide that does not exist
-          if ( AtomIdentifier.doesPreviousIsotopeExist( protonCount,
-            neutronCount ) ) {
-            this.returnParticleToStack( ParticleType.NEUTRON );
-          }
-
-          // the previous isotone exists, meaning a proton was added to create a nuclide that does not exist
-          else if ( AtomIdentifier.doesPreviousIsotoneExist( protonCount,
-            neutronCount ) ) {
-            this.returnParticleToStack( ParticleType.PROTON );
-          }
-        }
-        model.doubleArrowButtonClickedBooleanProperty.value = false;
-      }, 1000 ); // show the nuclide for one second
-    } );
-
   }
 
+  // TODO: consider moving these to the model - will need to send the position of the creator nodes back to the model in
+  //  the constructor of the screen view
   private createParticleFromStack( particleType: ParticleType ): void {
     const particle = new Particle( particleType.name.toLowerCase(), {
       maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
@@ -413,6 +390,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
   }
 
+  // TODO: consider moving these to the model
   private returnParticleToStack( particleType: ParticleType ): void {
 
     const creatorNodePosition = particleType === ParticleType.PROTON ?
@@ -455,7 +433,45 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
    * @param {number} dt - time step, in seconds
    */
   public override step( dt: number ): void {
-    //TODO
+    const protonCount = this.model.particleAtom.protonCountProperty.value;
+    const neutronCount = this.model.particleAtom.neutronCountProperty.value;
+
+    if ( !this.model.doesNuclideExistBooleanProperty.value && ( protonCount + neutronCount ) > 0 ) {
+      this.timeSinceCountdownStarted += dt;
+    }
+    else {
+      this.timeSinceCountdownStarted = 0;
+
+      // keep track of the old values of protonCountProperty and neutronCountProperty to know which value increased
+      this.previousProtonCount = protonCount;
+      this.previousNeutronCount = neutronCount;
+    }
+
+    // show the nuclide that does not exist for one second, then return the necessary particles
+    if ( this.timeSinceCountdownStarted >= 1 ) {
+      this.timeSinceCountdownStarted = 0;
+
+      // TODO: change this because it is a bit hacky, uses a boolean property to keep track of if a double arrow button
+      //  was clicked
+      // a proton and neutron were added to create a nuclide that does not exist, so return a proton and neutron
+      if ( this.model.doubleArrowButtonClickedBooleanProperty.value &&
+           AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) ) {
+        this.returnParticleToStack( ParticleType.NEUTRON );
+        this.returnParticleToStack( ParticleType.PROTON );
+      }
+
+      // the neutronCount increased to create a nuclide that does not exist, so return a neutron to the stack
+      else if ( this.previousNeutronCount < neutronCount &&
+                AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount ) ) {
+        this.returnParticleToStack( ParticleType.NEUTRON );
+      }
+
+      // the protonCount increased to create a nuclide that does not exist, so return a proton to the stack
+      else if ( this.previousProtonCount < protonCount &&
+                AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount ) ) {
+        this.returnParticleToStack( ParticleType.PROTON );
+      }
+    }
   }
 
   /**

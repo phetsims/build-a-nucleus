@@ -319,13 +319,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   public override reset(): void {
     //TODO
   }
-
-  /**
-   * @param {number} dt - time step, in seconds
-   */
-  public override step( dt: number ): void {
-    //TODO
-  }
 }
 
 // export for usage when creating shred Particles
