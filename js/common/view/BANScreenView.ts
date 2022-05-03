@@ -30,9 +30,7 @@ import NucleonCreatorNode from './NucleonCreatorNode.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -60,9 +58,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly electronCloud: Circle;
   static readonly MAX_ELECTRON_CLOUD_RADIUS: number = MAX_ELECTRON_CLOUD_RADIUS;
   static readonly MIN_ELECTRON_CLOUD_RADIUS: number = MIN_ELECTRON_CLOUD_RADIUS;
-  private timeSinceCountdownStarted: number;
-  private previousProtonCount: number;
-  private previousNeutronCount: number;
+  public static protonsCreatorNodeModelCenter: Vector2;
+  public static neutronsCreatorNodeModelCenter: Vector2;
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
@@ -75,9 +72,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     super( options );
 
     this.model = model;
-    this.timeSinceCountdownStarted = 0;
-    this.previousProtonCount = 0;
-    this.previousNeutronCount = 0;
 
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       Vector2.ZERO,
@@ -217,17 +211,17 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     doubleArrowButtons.centerX = this.modelViewTransform.modelToViewX( model.particleAtom.positionProperty.value.x );
     this.addChild( doubleArrowButtons );
 
-    // function to create the listeners the increase or decrease the given nucleon count properties by a value of +1 or -1
+    // function to create the listeners that create or remove a particle
     const createIncreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
-      this.createParticleFromStack( firstNucleonType );
+      this.model.createParticleFromStack( firstNucleonType );
       if ( secondNucleonType ) {
-        this.createParticleFromStack( secondNucleonType );
+        this.model.createParticleFromStack( secondNucleonType );
       }
     };
     const createDecreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
-      this.returnParticleToStack( firstNucleonType );
+      this.model.returnParticleToStack( firstNucleonType );
       if ( secondNucleonType ) {
-        this.returnParticleToStack( secondNucleonType );
+        this.model.returnParticleToStack( secondNucleonType );
       }
     };
 
@@ -308,6 +302,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
+    BANScreenView.protonsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center );
+    BANScreenView.neutronsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
+
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
@@ -356,66 +353,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
   }
 
-  // TODO: consider moving these to the model - will need to send the position of the creator nodes back to the model in
-  //  the constructor of the screen view
-  private createParticleFromStack( particleType: ParticleType ): void {
-    const particle = new Particle( particleType.name.toLowerCase(), {
-      maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
-    } );
-    const origin = particleType === ParticleType.PROTON ? this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
-    particle.setPositionAndDestination( this.modelViewTransform.viewToModelPosition( origin ) );
-    particle.destinationProperty.value = this.model.particleAtom.positionProperty.value;
-    this.model.addParticle( particle );
-
-    if ( particleType === ParticleType.PROTON ) {
-      this.model.incomingProtons.push( particle );
-    }
-    else {
-      this.model.incomingNeutrons.push( particle );
-    }
-
-    particle.animationEndedEmitter.addListener( () => {
-      if ( !this.model.particleAtom.containsParticle( particle ) ) {
-        this.model.particleAtom.addParticle( particle );
-
-        if ( particleType === ParticleType.PROTON ) {
-          arrayRemove( this.model.incomingProtons, particle );
-        }
-        else {
-          arrayRemove( this.model.incomingNeutrons, particle );
-        }
-
-        particle.animationEndedEmitter.removeAllListeners();
-      }
-    } );
-  }
-
-  // TODO: consider moving these to the model
-  private returnParticleToStack( particleType: ParticleType ): void {
-
-    const creatorNodePosition = particleType === ParticleType.PROTON ?
-                                this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
-
-    // array of all the particles of particleType
-    const particles = [ ...this.model.nucleons ];
-
-    _.remove( particles, particle => {
-      return !this.model.particleAtom.containsParticle( particle ) || particle.type !== particleType.name.toLowerCase();
-    } );
-
-    const sortedParticles = _.sortBy( particles, particle => {
-      return particle!.positionProperty.value.distance( creatorNodePosition );
-    } );
-
-    const particleToReturn = sortedParticles.shift();
-    if ( particleToReturn ) {
-      assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
-        'There is no particle of this type in the atom.' );
-      this.model.particleAtom.removeParticle( particleToReturn );
-      this.model.animateAndRemoveNucleon( particleToReturn, this.modelViewTransform.viewToModelPosition( creatorNodePosition ) );
-    }
-  }
-
   /**
    * Add a particle to the model and immediately start dragging it with the provided event.
    */
@@ -433,45 +370,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
    * @param {number} dt - time step, in seconds
    */
   public override step( dt: number ): void {
-    const protonCount = this.model.particleAtom.protonCountProperty.value;
-    const neutronCount = this.model.particleAtom.neutronCountProperty.value;
-
-    if ( !this.model.doesNuclideExistBooleanProperty.value && ( protonCount + neutronCount ) > 0 ) {
-      this.timeSinceCountdownStarted += dt;
-    }
-    else {
-      this.timeSinceCountdownStarted = 0;
-
-      // keep track of the old values of protonCountProperty and neutronCountProperty to know which value increased
-      this.previousProtonCount = protonCount;
-      this.previousNeutronCount = neutronCount;
-    }
-
-    // show the nuclide that does not exist for one second, then return the necessary particles
-    if ( this.timeSinceCountdownStarted >= 1 ) {
-      this.timeSinceCountdownStarted = 0;
-
-      // TODO: change this because it is a bit hacky, uses a boolean property to keep track of if a double arrow button
-      //  was clicked
-      // a proton and neutron were added to create a nuclide that does not exist, so return a proton and neutron
-      if ( this.model.doubleArrowButtonClickedBooleanProperty.value &&
-           AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) ) {
-        this.returnParticleToStack( ParticleType.NEUTRON );
-        this.returnParticleToStack( ParticleType.PROTON );
-      }
-
-      // the neutronCount increased to create a nuclide that does not exist, so return a neutron to the stack
-      else if ( this.previousNeutronCount < neutronCount &&
-                AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount ) ) {
-        this.returnParticleToStack( ParticleType.NEUTRON );
-      }
-
-      // the protonCount increased to create a nuclide that does not exist, so return a proton to the stack
-      else if ( this.previousProtonCount < protonCount &&
-                AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount ) ) {
-        this.returnParticleToStack( ParticleType.PROTON );
-      }
-    }
   }
 
   /**

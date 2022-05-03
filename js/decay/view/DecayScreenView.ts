@@ -144,7 +144,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // TODO: correctly update the cloud size if we choose to have it represent an electron cloud
+    // TODO: correctly update the cloud size
     // function that updates the size of the electron cloud based on the protonNumber since the nuclides created are neutral
     // meaning the number of electrons is the same as the number of protons
     const updateCloudSize = ( massNumber: number ) => {
