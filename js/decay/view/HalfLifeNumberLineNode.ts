@@ -31,6 +31,8 @@ import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotati
 import Property from '../../../../axon/js/Property.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import InfinityNode from './InfinityNode.js';
+import DecayScreenView from './DecayScreenView.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -41,6 +43,9 @@ type HalfLifeNumberLineNodeSelfOptions = {
   halfLifeDisplayScale?: number;
   isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
   // animate its position with the half-life arrow
+  protonCountProperty?: IReadOnlyProperty<number>;
+  doesNuclideExistBooleanProperty?: IReadOnlyProperty<boolean>;
+  massNumberProperty?: IReadOnlyProperty<number>;
 };
 export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & NodeOptions;
 
@@ -67,7 +72,10 @@ class HalfLifeNumberLineNode extends Node {
     super();
 
     const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {
-      halfLifeDisplayScale: 1
+      halfLifeDisplayScale: 1,
+      protonCountProperty: new NumberProperty( 0 ),
+      doesNuclideExistBooleanProperty: new BooleanProperty( false ),
+      massNumberProperty: new NumberProperty( 0 )
     }, providedOptions );
     this.labelFont = options.numberLineLabelFont;
     this.halfLifeArrowLength = options.halfLifeArrowLength;
@@ -133,7 +141,8 @@ class HalfLifeNumberLineNode extends Node {
     // keep track of the x position of the half-life arrow in model coordinates
     this.arrowXPositionProperty = new NumberProperty( 0 );
     this.arrowXPositionProperty.link( xPosition => {
-      halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY - options.halfLifeArrowLength );
+      halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ),
+        this.tickMarkSet.centerY - options.halfLifeArrowLength );
     } );
     this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
@@ -182,13 +191,40 @@ class HalfLifeNumberLineNode extends Node {
     halfLifeNumberText.left = halfLifeUnknownText.left;
     halfLifeDisplayNode.addChild( halfLifeNumberText );
 
-    // keep track of the x position of the halfLifeText in model coordinates, if the half-life text is a label to the arrow
+    // if the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
+
+      const distanceBetweenElementNameAndHalfLifeText = 10;
+      const distanceBetweenHalfLifeTextAndArrow = 8;
+
+      // Create the textual readout for the element name.
+      const elementName = new Text( '', {
+        font: this.labelFont,
+        fill: Color.RED,
+        maxWidth: 325
+      } );
+      elementName.center = halfLifeDisplayNode.center.minusXY( 0, elementName.height + 10 );
+      this.addChild( elementName );
+
+      // Hook up update listeners.
+      Property.multilink( [ options.protonCountProperty, options.doesNuclideExistBooleanProperty, options.massNumberProperty ],
+        ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
+          DecayScreenView.updateElementName( elementName, protonCount, doesNuclideExist, massNumber,
+            halfLifeDisplayNode.center.minusXY( 0, elementName.height + distanceBetweenElementNameAndHalfLifeText ) )
+      );
+
+      // keep track of the x position of the halfLifeText in model coordinates
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
+
         halfLifeDisplayNode.translation =
           new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeDisplayNode.width / 2,
-            halfLifeArrow.top - 8 );
+            halfLifeArrow.top - distanceBetweenHalfLifeTextAndArrow );
+
+        elementName.translation =
+          new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - elementName.width / 2,
+            halfLifeArrow.top - elementName.height - distanceBetweenHalfLifeTextAndArrow
+            - distanceBetweenElementNameAndHalfLifeText );
       } );
     }
 
@@ -251,7 +287,8 @@ class HalfLifeNumberLineNode extends Node {
 
           // peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
           if ( halfLifeNumber > Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
-            this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ), options.isHalfLifeLabelFixed );
+            this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ),
+              options.isHalfLifeLabelFixed );
           }
           else {
             this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );

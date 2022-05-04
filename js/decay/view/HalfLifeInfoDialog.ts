@@ -25,7 +25,10 @@ const LEGEND_FONT = new PhetFont( 20 );
 class HalfLifeInfoDialog extends Dialog {
 
   constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
-               isStableBooleanProperty: IReadOnlyProperty<boolean> ) {
+               isStableBooleanProperty: IReadOnlyProperty<boolean>,
+               protonCountProperty: IReadOnlyProperty<number>,
+               doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>,
+               massNumberProperty: IReadOnlyProperty<number> ) {
 
     const leftSideStrings = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.timescaleItem,
@@ -65,7 +68,10 @@ class HalfLifeInfoDialog extends Dialog {
       numberLineWidth: 750,
       halfLifeArrowLength: 80,
       halfLifeDisplayScale: 0.8,
-      isHalfLifeLabelFixed: false
+      isHalfLifeLabelFixed: false,
+      protonCountProperty: protonCountProperty,
+      doesNuclideExistBooleanProperty: doesNuclideExistBooleanProperty,
+      massNumberProperty: massNumberProperty
     } );
 
     const contents = new VBox( {

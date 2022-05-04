@@ -24,7 +24,10 @@ const LABEL_FONT = new PhetFont( 14 );
 class HalfLifeInformationNode extends Node {
 
   constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
-               isStableBooleanProperty: IReadOnlyProperty<boolean> ) {
+               isStableBooleanProperty: IReadOnlyProperty<boolean>,
+               protonCountProperty: IReadOnlyProperty<number>,
+               doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>,
+               massNumberProperty: IReadOnlyProperty<number> ) {
     super();
 
     // create and add the halfLifeNumberLineNode
@@ -38,7 +41,8 @@ class HalfLifeInformationNode extends Node {
     this.addChild( halfLifeNumberLineNode );
 
     // create and add the HalfLifeInfoDialog
-    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty );
+    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty,
+      protonCountProperty, doesNuclideExistBooleanProperty, massNumberProperty );
 
     // create and add the info button
     const infoButton = new InfoButton( {

@@ -46,6 +46,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public static NUM_NUCLEON_LAYERS: number;
   private nucleonLayers: Node[];
+  private readonly elementName: Text;
+  private readonly stabilityIndicator: Text;
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -59,7 +61,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.model = model;
 
     // create and add the half-life information node at the top half of the decay screen
-    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty );
+    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
+      model.particleAtom.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 30;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
@@ -111,29 +114,29 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( symbolAccordionBox );
 
     // create and add stability indicator
-    const stabilityIndicator = new Text( '', {
+    this.stabilityIndicator = new Text( '', {
       font: STABILITY_ELEMENT_AND_CHECKBOX_FONT,
       fill: 'black',
-      center: new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top ),
       visible: true,
       maxWidth: 225
     } );
-    this.addChild( stabilityIndicator );
+    this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
+    this.addChild( this.stabilityIndicator );
 
     // Define the update function for the stability indicator.
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {
         if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
-          stabilityIndicator.text = buildANucleusStrings.stableDoesNotDecay;
+          this.stabilityIndicator.text = buildANucleusStrings.stableDoesNotDecay;
         }
         else {
-          stabilityIndicator.text = buildANucleusStrings.unstable;
+          this.stabilityIndicator.text = buildANucleusStrings.unstable;
         }
       }
       else {
-        stabilityIndicator.text = '';
+        this.stabilityIndicator.text = '';
       }
-      stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
+      this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
     };
 
     // Add the listeners that control the label content
@@ -141,7 +144,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       ( protonCount: number, neutronCount: number ) => updateStabilityIndicator( protonCount, neutronCount )
     );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
-      stabilityIndicator.visible = visible;
+      this.stabilityIndicator.visible = visible;
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
@@ -193,36 +196,19 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // Create the textual readout for the element name.
-    const elementName = new Text( '', {
+    this.elementName = new Text( '', {
       font: STABILITY_ELEMENT_AND_CHECKBOX_FONT,
       fill: Color.RED,
-      center: stabilityIndicator.center.plusXY( 0, 60 ),
       maxWidth: 325
     } );
-    this.addChild( elementName );
-
-    // Define the update function for the element name.
-    const updateElementName = ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) => {
-      let name = AtomIdentifier.getName( protonCount );
-
-      // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
-      if ( !doesNuclideExist && massNumber !== 0 ) {
-        name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
-      }
-      else if ( name.length === 0 ) {
-        name = '';
-      }
-      else {
-        name += ' - ' + massNumber.toString();
-      }
-      elementName.text = name;
-      elementName.center = stabilityIndicator.center.plusXY( 0, 60 );
-    };
+    this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+    this.addChild( this.elementName );
 
     // Hook up update listeners.
     Property.multilink( [ model.particleAtom.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty ],
       ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
-        updateElementName( protonCount, doesNuclideExist, massNumber )
+        DecayScreenView.updateElementName( this.elementName, protonCount, doesNuclideExist, massNumber,
+          this.stabilityIndicator.center.plusXY( 0, 60 ) )
     );
 
     // create and add the dashed empty circle at the center
@@ -269,6 +255,24 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // add the particleViewLayerNode
     this.addChild( this.particleViewLayerNode );
+  }
+
+  // Define the update function for the element name.
+  public static updateElementName( elementNameText: Text, protonCount: number, doesNuclideExist: boolean, massNumber: number, center: Vector2 ): void {
+    let name = AtomIdentifier.getName( protonCount );
+
+    // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
+    if ( !doesNuclideExist && massNumber !== 0 ) {
+      name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
+    }
+    else if ( name.length === 0 ) {
+      name = '';
+    }
+    else {
+      name += ' - ' + massNumber.toString();
+    }
+    elementNameText.text = name;
+    elementNameText.center = center;
   }
 
   // Add ParticleView to the correct nucleonLayer

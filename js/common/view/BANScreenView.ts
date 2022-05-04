@@ -167,7 +167,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
             // it is allowed to go back the default starting case of zero protons and zero neutrons even though a nuclide
             // with zero protons and zero neutrons does not exist
-            if ( nuclideExistsBoolean && doesPreviousNuclideExist && ( atomProtonCount + atomNeutronCount ) > 1 ) {
+            if ( nuclideExistsBoolean && doesPreviousNuclideExist && ( atomProtonCount + atomNeutronCount ) > 2 ) {
               return false;
             }
             return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
