@@ -35,7 +35,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
-const MAX_ELECTRON_CLOUD_RADIUS = 130;
+
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = {
@@ -56,8 +56,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly protonsCreatorNode: NucleonCreatorNode;
   protected readonly neutronsCreatorNode: NucleonCreatorNode;
   protected readonly electronCloud: Circle;
-  static readonly MAX_ELECTRON_CLOUD_RADIUS: number = MAX_ELECTRON_CLOUD_RADIUS;
-  static readonly MIN_ELECTRON_CLOUD_RADIUS: number = MIN_ELECTRON_CLOUD_RADIUS;
   public static protonsCreatorNodeModelCenter: Vector2;
   public static neutronsCreatorNodeModelCenter: Vector2;
 

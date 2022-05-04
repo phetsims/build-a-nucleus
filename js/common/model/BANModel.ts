@@ -40,9 +40,9 @@ class BANModel {
   public incomingProtons: ObservableArray<Particle>;
   public incomingNeutrons: ObservableArray<Particle>;
   public doubleArrowButtonClickedBooleanProperty: BooleanProperty;
-  private timeSinceCountdownStarted: number;
-  private previousProtonCount: number;
-  private previousNeutronCount: number;
+  private timeSinceCountdownStarted = 0;
+  private previousProtonCount = 0;
+  private previousNeutronCount = 0;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -53,10 +53,6 @@ class BANModel {
     }, providedOptions );
 
     console.log( options.tandem );
-
-    this.timeSinceCountdownStarted = 0;
-    this.previousProtonCount = 0;
-    this.previousNeutronCount = 0;
 
     // Create the atom that the user will build, modify, and generally play with.
     this.particleAtom = new ParticleAtom();
