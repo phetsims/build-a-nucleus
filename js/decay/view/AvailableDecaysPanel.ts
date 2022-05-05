@@ -39,7 +39,8 @@ const BUTTON_CONTENT_WIDTH = 175;
 
 class AvailableDecaysPanel extends Panel {
 
-  constructor( model: DecayModel, modelViewTransform: ModelViewTransform2, visibleBoundsProperty: IReadOnlyProperty<Bounds2> ) {
+  constructor( model: DecayModel, modelViewTransform: ModelViewTransform2, visibleBoundsProperty: IReadOnlyProperty<Bounds2>,
+               emitNucleon: ( particleType: ParticleType, visibleModelBounds: Bounds2 ) => void ) {
 
     const options = {
       xMargin: 15,
@@ -75,15 +76,15 @@ class AvailableDecaysPanel extends Panel {
       }
     };
 
-    // function that creates the listeners for the decay buttons. Emits teh specified particle depending on the decay type
+    // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
       const visibleModelBounds = modelViewTransform.viewToModelBounds( visibleBoundsProperty.value );
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          model.emitNucleon( ParticleType.PROTON, visibleModelBounds );
+          emitNucleon( ParticleType.PROTON, visibleModelBounds );
           break;
         case DecayType.NEUTRON_EMISSION:
-          model.emitNucleon( ParticleType.NEUTRON, visibleModelBounds );
+          emitNucleon( ParticleType.NEUTRON, visibleModelBounds );
           break;
         case DecayType.BETA_MINUS_DECAY:
           // model.neutronCountProperty.value--;

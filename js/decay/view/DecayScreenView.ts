@@ -32,6 +32,8 @@ import ParticleType from './ParticleType.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -72,7 +74,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
 
     // create and add the available decays panel at the center right of the decay screen
-    const availableDecaysPanel = new AvailableDecaysPanel( model, this.modelViewTransform, this.visibleBoundsProperty );
+    const availableDecaysPanel = new AvailableDecaysPanel( model, this.modelViewTransform, this.visibleBoundsProperty,
+      this.emitNucleon.bind( this ) );
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );
@@ -317,6 +320,20 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
   }
 
+  public emitNucleon( particleType: ParticleType, visibleModelBounds: Bounds2 ): void {
+    const proton = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+
+    const destinationBounds = visibleModelBounds.dilated( 300 );
+
+    let randomVector = Vector2.ZERO;
+    while ( visibleModelBounds.containsPoint( randomVector ) ) {
+      randomVector = new Vector2( dotRandom.nextDoubleBetween( destinationBounds.minX, destinationBounds.maxX ),
+        dotRandom.nextDoubleBetween( destinationBounds.minY, destinationBounds.maxY ) );
+    }
+
+    this.animateAndRemoveNucleon( proton, randomVector );
+  }
+
   // Define a function that will decide where to put nucleons.
   protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
@@ -324,16 +341,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       // TODO: once arrows are working with the creator node, add line here to make the ParticleView's  not pickable
     }
     else {
-      const particleView = this.findParticleView( particle );
-      particleView.inputEnabled = false;
 
       // TODO: might need to add a check to see if particle is already on its way to the destination passed in
       // animate particle back to its stack
       if ( particle.type === ParticleType.PROTON.name.toLowerCase() ) {
-        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
+        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
       }
       else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
-        this.model.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
+        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
       }
     }
   }
