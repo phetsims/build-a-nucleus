@@ -336,15 +336,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   // Define a function that will decide where to put nucleons.
   protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
-    if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
-      atom.addParticle( particle );
-    }
+    if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
 
-    // if removing the particle will create a nuclide that does not exist, re-add the particle to the atom
-    else if ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) > 0 &&
-              !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
+         // if removing the particle will create a nuclide that does not exist, re-add the particle to the atom
+         ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
+           !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
+         )
     ) {
-        atom.addParticle( particle );
+      atom.addParticle( particle );
     }
 
     // only remove the particle if it will create a nuclide that exists
