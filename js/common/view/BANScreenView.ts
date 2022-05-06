@@ -147,6 +147,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       return neutronCount !== model.neutronCountRange.min;
     };
 
+    const creatorNodeEnabled = ( creatorNode: Node, enable: boolean ) => {
+      if ( creatorNode ) {
+        creatorNode.inputEnabled = enable;
+        creatorNode.opacity = enable ? 1 : 0.5;
+      }
+    };
+
     // function to create the arrow enabled properties
     const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
       return new DerivedProperty( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty,
@@ -158,10 +165,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
           // disable all arrow buttons if the nuclide does not exist
           if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) && model.massNumberProperty.value !== 0 ) {
+            creatorNodeEnabled( this.protonsCreatorNode, false );
+            creatorNodeEnabled( this.neutronsCreatorNode, false );
             return false;
           }
 
           else {
+            creatorNodeEnabled( this.protonsCreatorNode, true );
+            creatorNodeEnabled( this.neutronsCreatorNode, true );
 
             const nextOrPreviousIsoExists = secondParticleType ?
                                   !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
@@ -360,6 +371,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
   }
 
+  // TODO: only hide creator node when creating a nuclide that does exist and only show the creator node when the nucleon reaches the stack again when it's removed
+  private static creatorNodeVisible( creatorNode: Node, hide: boolean ): void {
+    if ( creatorNode.visible !== hide ) {
+      creatorNode.visible = hide;
+      creatorNode.inputEnabled = hide;
+    }
+  }
+
   public createParticleFromStack( particleType: ParticleType ): void {
     const particle = new Particle( particleType.name.toLowerCase(), {
       maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
@@ -432,6 +451,10 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     particle.animationEndedEmitter.addListener( () => {
       this.model.removeParticle( particle );
+
+      // make the creator node visible when removing the last nucleon from the particle atom
+      BANScreenView.creatorNodeVisible( particle.type === ParticleType.PROTON.name.toLowerCase() ? this.protonsCreatorNode : this.neutronsCreatorNode, true );
+      BANScreenView.creatorNodeVisible( particle.type === ParticleType.NEUTRON.name.toLowerCase() ? this.neutronsCreatorNode : this.protonsCreatorNode, true );
     } );
   }
 
@@ -459,6 +482,19 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       this.timeSinceCountdownStarted += dt;
     }
     else {
+
+      // TODO: put this in a multilink that has protonCount adn incomingProtons
+      // hide the node when at the last proton
+      if ( ( protonCount + this.model.incomingProtons.length ) === this.model.protonCountRange.max ) {
+        BANScreenView.creatorNodeVisible( this.protonsCreatorNode, false );
+      }
+
+      // TODO: put this in a multilink that has neutronCount adn incomingNuetrons
+      // hide the node when at the last neutron
+      if ( ( neutronCount + this.model.incomingNeutrons.length ) === this.model.neutronCountRange.max ) {
+        BANScreenView.creatorNodeVisible( this.neutronsCreatorNode, false );
+      }
+
       this.timeSinceCountdownStarted = 0;
 
       // keep track of the old values of protonCountProperty and neutronCountProperty to know which value increased
