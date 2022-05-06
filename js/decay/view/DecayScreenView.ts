@@ -32,8 +32,9 @@ import ParticleType from './ParticleType.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
+  import dotRandom from '../../../../dot/js/dotRandom.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -50,6 +51,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   private nucleonLayers: Node[];
   private readonly elementName: Text;
   private readonly stabilityIndicator: Text;
+  private readonly atomNode: AtomNode;
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -74,8 +76,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
 
     // create and add the available decays panel at the center right of the decay screen
-    const availableDecaysPanel = new AvailableDecaysPanel( model, this.modelViewTransform, this.visibleBoundsProperty,
-      this.emitNucleon.bind( this ) );
+    const availableDecaysPanel = new AvailableDecaysPanel( model, {
+      emitNucleon: this.emitNucleon.bind( this ),
+      emitAlphaParticle: this.emitAlphaParticle.bind( this )
+    } );
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
     this.addChild( availableDecaysPanel );
@@ -170,9 +174,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( updateCloudSize );
 
-     // Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
-     // based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
-     // range and scale to provide values that are usable for our needs on the canvas.
+    // Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
+    // based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
+    // range and scale to provide values that are usable for our needs on the canvas.
     const getElectronShellDiameter = ( numElectrons: number ) => {
       const maxElectrons = this.model.protonCountRange.max; // for uranium
       const atomicRadius = AtomIdentifier.getAtomicRadius( numElectrons );
@@ -235,15 +239,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
 
     // create and add the AtomNode
-    const atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
+    this.atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
       showCenterX: false,
       showElementNameProperty: new Property( false ),
       showNeutralOrIonProperty: new Property( false ),
       showStableOrUnstableProperty: new Property( false ),
       electronShellDepictionProperty: new Property( 'cloud' )
     } );
-    atomNode.center = emptyAtomCircle.center;
-    this.addChild( atomNode );
+    this.atomNode.center = emptyAtomCircle.center;
+    this.addChild( this.atomNode );
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
 
@@ -320,18 +324,82 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
   }
 
-  public emitNucleon( particleType: ParticleType, visibleModelBounds: Bounds2 ): void {
+  /**
+   * Removes a nucleon from the nucleus and animates it out of view.
+   */
+  public emitNucleon( particleType: ParticleType ): void {
     const proton = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+    this.animateAndRemoveNucleon( proton, this.getRandomExternalModelPosition() );
+  }
 
-    const destinationBounds = visibleModelBounds.dilated( 300 );
+  /**
+   * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
+   * particle out of view.
+   * TODO: Clean up constants and add comments as desired
+   */
+  public emitAlphaParticle(): void {
+    const numberOfProtonsInAlphaParticle = 2;
+    const numberOfNeutronsInAlphaParticle = 2;
+
+    const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
+      proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
+      .slice( 0, numberOfProtonsInAlphaParticle );
+    const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
+      neutron => neutron!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
+      .slice( 0, numberOfNeutronsInAlphaParticle );
+
+    const alphaParticle = new ParticleAtom();
+    const alphaParticleNode = new AtomNode( alphaParticle, this.modelViewTransform, {
+      showCenterX: false,
+      showElementNameProperty: new Property( false ),
+      showNeutralOrIonProperty: new Property( false ),
+      showStableOrUnstableProperty: new Property( false ),
+      electronShellDepictionProperty: new Property( 'cloud' )
+    } );
+    alphaParticleNode.center = this.atomNode.center;
+    this.addChild( alphaParticleNode );
+
+    [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
+      this.model.particleAtom.removeParticle( nucleon );
+      alphaParticle.addParticle( nucleon );
+    } );
+
+    alphaParticle.moveAllParticlesToDestination();
+    this.checkCreatorNodeVisibility( this.protonsCreatorNode, true );
+    this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
+
+    const destination = this.getRandomExternalModelPosition();
+    const animationSpeed = 300; // CSS pixels per second
+    const animationDuration = alphaParticle.positionProperty.value.distance( destination ) / animationSpeed;
+
+    const alphaParticleEmissionAnimation = new Animation( {
+      property: alphaParticle.positionProperty,
+      to: destination,
+      duration: animationDuration,
+      easing: Easing.LINEAR
+    } );
+
+    alphaParticleEmissionAnimation.endedEmitter.addListener( () => {
+      alphaParticle.dispose();
+      alphaParticleNode.dispose();
+    } );
+    alphaParticleEmissionAnimation.start();
+  }
+
+  /**
+   * Returns a random position outside of the screen view's visible bounds.
+   */
+  getRandomExternalModelPosition(): Vector2 {
+    const visibleBounds = this.visibleBoundsProperty.value;
+    const destinationBounds = visibleBounds.dilated( 300 );
 
     let randomVector = Vector2.ZERO;
-    while ( visibleModelBounds.containsPoint( randomVector ) ) {
+    while ( visibleBounds.containsPoint( randomVector ) ) {
       randomVector = new Vector2( dotRandom.nextDoubleBetween( destinationBounds.minX, destinationBounds.maxX ),
         dotRandom.nextDoubleBetween( destinationBounds.minY, destinationBounds.maxY ) );
     }
 
-    this.animateAndRemoveNucleon( proton, randomVector );
+    return this.modelViewTransform.viewToModelPosition( randomVector );
   }
 
   // Define a function that will decide where to put nucleons.

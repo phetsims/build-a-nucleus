@@ -11,6 +11,9 @@
       "path": "../vegas"
     },
     {
+      "path": "../twixt"
+    },
+    {
       "path": "../joist/tsconfig-module.json"
     },
     {

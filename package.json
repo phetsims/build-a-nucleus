@@ -14,7 +14,8 @@
     "phetLibs": [
       "bamboo",
       "build-an-atom",
-      "shred"
+      "shred",
+      "twixt"
     ],
     "simulation": true,
     "runnable": true,

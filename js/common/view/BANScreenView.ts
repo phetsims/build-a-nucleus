@@ -14,7 +14,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { PressListenerEvent, ProfileColorProperty, VBox, Circle, RadialGradient, Text, Node } from '../../../../scenery/js/imports.js';
+import { Circle, Node, PressListenerEvent, ProfileColorProperty, RadialGradient, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
@@ -175,9 +175,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
             creatorNodeEnabled( this.neutronsCreatorNode, true );
 
             const nextOrPreviousIsoExists = secondParticleType ?
-                                  !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
-                                  !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
-                                  !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
+                                            !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
+                                            !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
+                                            !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
 
             const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
             const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
@@ -372,10 +372,10 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
   // TODO: only hide creator node when creating a nuclide that does exist and only show the creator node when the nucleon reaches the stack again when it's removed
-  private static creatorNodeVisible( creatorNode: Node, hide: boolean ): void {
-    if ( creatorNode.visible !== hide ) {
-      creatorNode.visible = hide;
-      creatorNode.inputEnabled = hide;
+  protected checkCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
+    if ( creatorNode.visible !== visible ) {
+      creatorNode.visible = visible;
+      creatorNode.inputEnabled = visible;
     }
   }
 
@@ -453,8 +453,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       this.model.removeParticle( particle );
 
       // make the creator node visible when removing the last nucleon from the particle atom
-      BANScreenView.creatorNodeVisible( particle.type === ParticleType.PROTON.name.toLowerCase() ? this.protonsCreatorNode : this.neutronsCreatorNode, true );
-      BANScreenView.creatorNodeVisible( particle.type === ParticleType.NEUTRON.name.toLowerCase() ? this.neutronsCreatorNode : this.protonsCreatorNode, true );
+      this.checkCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
+                                       this.protonsCreatorNode : this.neutronsCreatorNode, true );
     } );
   }
 
@@ -486,13 +486,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       // TODO: put this in a multilink that has protonCount adn incomingProtons
       // hide the node when at the last proton
       if ( ( protonCount + this.model.incomingProtons.length ) === this.model.protonCountRange.max ) {
-        BANScreenView.creatorNodeVisible( this.protonsCreatorNode, false );
+        this.checkCreatorNodeVisibility( this.protonsCreatorNode, false );
       }
 
       // TODO: put this in a multilink that has neutronCount adn incomingNuetrons
       // hide the node when at the last neutron
       if ( ( neutronCount + this.model.incomingNeutrons.length ) === this.model.neutronCountRange.max ) {
-        BANScreenView.creatorNodeVisible( this.neutronsCreatorNode, false );
+        this.checkCreatorNodeVisibility( this.neutronsCreatorNode, false );
       }
 
       this.timeSinceCountdownStarted = 0;

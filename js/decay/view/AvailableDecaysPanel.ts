@@ -23,9 +23,6 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DecayModel from '../model/DecayModel.js';
 import IProperty from '../../../../axon/js/IProperty.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -37,17 +34,15 @@ const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
 const BUTTON_CONTENT_WIDTH = 175;
 
+type SelfOptions = {
+  emitNucleon: ( particleType: ParticleType ) => void;
+  emitAlphaParticle: () => void;
+};
+export type AvailableDecaysPanelOptions = SelfOptions;
+
 class AvailableDecaysPanel extends Panel {
 
-  constructor( model: DecayModel, modelViewTransform: ModelViewTransform2, visibleBoundsProperty: IReadOnlyProperty<Bounds2>,
-               emitNucleon: ( particleType: ParticleType, visibleModelBounds: Bounds2 ) => void ) {
-
-    const options = {
-      xMargin: 15,
-      yMargin: 15,
-      fill: '#F2F2F2',
-      stroke: BANConstants.PANEL_STROKE
-    };
+  constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
     // TODO: investigate why a rectangle is needed, why isn't the contentNode centered correctly with just a node?
     const contentNode = new Rectangle( 0, 0, 0, 0 );
@@ -78,13 +73,12 @@ class AvailableDecaysPanel extends Panel {
 
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
-      const visibleModelBounds = modelViewTransform.viewToModelBounds( visibleBoundsProperty.value );
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          emitNucleon( ParticleType.PROTON, visibleModelBounds );
+          options.emitNucleon( ParticleType.PROTON );
           break;
         case DecayType.NEUTRON_EMISSION:
-          emitNucleon( ParticleType.NEUTRON, visibleModelBounds );
+          options.emitNucleon( ParticleType.NEUTRON );
           break;
         case DecayType.BETA_MINUS_DECAY:
           // model.neutronCountProperty.value--;
@@ -95,8 +89,7 @@ class AvailableDecaysPanel extends Panel {
           // model.protonCountProperty.value--;
           break;
         case DecayType.ALPHA_DECAY:
-          // model.neutronCountProperty.value -= 2;
-          // model.protonCountProperty.value -= 2;
+          options.emitAlphaParticle();
           break;
         default:
           break;
@@ -282,7 +275,12 @@ class AvailableDecaysPanel extends Panel {
     particleLabelsLegend.centerX = contentNode.centerX;
     contentNode.addChild( particleLabelsLegend );
 
-    super( contentNode, options );
+    super( contentNode, {
+      xMargin: 15,
+      yMargin: 15,
+      fill: '#F2F2F2',
+      stroke: BANConstants.PANEL_STROKE
+    } );
   }
 }
 
