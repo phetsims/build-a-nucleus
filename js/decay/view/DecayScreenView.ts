@@ -339,6 +339,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
       atom.addParticle( particle );
     }
+
+    // if removing the particle will create a nuclide that does not exist, re-add the particle to the atom
+    else if ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) > 0 &&
+              !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
+    ) {
+        atom.addParticle( particle );
+    }
+
+    // only remove the particle if it will create a nuclide that exists
     else {
 
       // TODO: might need to add a check to see if particle is already on its way to the destination passed in
