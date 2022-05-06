@@ -275,6 +275,8 @@ class HalfLifeNumberLineNode extends Node {
 
           halfLifeUnknownText.visible = true;
           halfLifeNumberText.visible = false;
+
+          this.moveHalfLifePointerSet( 0, options.isHalfLifeLabelFixed );
         }
 
         // the nuclide is unstable and the half-life data is known

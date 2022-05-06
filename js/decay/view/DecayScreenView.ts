@@ -338,7 +338,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ) {
       atom.addParticle( particle );
-      // TODO: once arrows are working with the creator node, add line here to make the ParticleView's  not pickable
     }
     else {
 
