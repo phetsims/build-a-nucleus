@@ -414,6 +414,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Define a function that will decide where to put nucleons.
    */
   protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
+    const particleCreatorNodeCenter = particle.type === ParticleType.PROTON.name.toLowerCase() ?
+                                      this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
+
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
 
          // if removing the particle will create a nuclide that does not exist, re-add the particle to the atom
@@ -424,17 +427,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       atom.addParticle( particle );
     }
 
-    // only remove the particle if it will create a nuclide that exists
-    else {
-
+    // only animate the removal of a particle if it was dragged out of the creator node
+    else if ( particle.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
       // TODO: might need to add a check to see if particle is already on its way to the destination passed in
-      // animate particle back to its stack
-      if ( particle.type === ParticleType.PROTON.name.toLowerCase() ) {
-        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center ) );
-      }
-      else if ( particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
-        this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center ) );
-      }
+      this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 

@@ -33,6 +33,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
+import Property from '../../../../axon/js/Property.js';
 
 
 // empirically determined, from the ElectronCloudView radius
@@ -276,7 +277,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // function to keep track of when a double arrow button was clicked
     const createSingleOrDoubleArrowButtonClickedListener = ( isDoubleArrowButton: boolean, arrowButtons: VBox ) => {
       arrowButtons.getChildren().forEach( arrowButton => {
-        // @ts-ignore TODO-TS: addListener isn't a  method on Node's, only on ArrowButton's
+        // @ts-ignore TODO-TS: How do you assume sub-types of children?
         arrowButton.addListener( () => {
           model.doubleArrowButtonClickedBooleanProperty.value = isDoubleArrowButton;
         } );
@@ -368,6 +369,22 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       particleView.dispose();
       particle.dispose();
+    } );
+
+    Property.multilink( [ this.model.particleAtom.protonCountProperty, this.model.incomingProtons.lengthProperty ], ( protonCount, incomingProtonsCount ) => {
+
+      // hide the protonsCreatorNode when at the last proton
+      if ( ( protonCount + incomingProtonsCount ) === this.model.protonCountRange.max ) {
+        this.checkCreatorNodeVisibility( this.protonsCreatorNode, false );
+      }
+    } );
+
+    Property.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount ) => {
+
+      // hide the neutronsCreatorNode when at the last neutron
+      if ( ( neutronCount + incomingNeutronsCount ) === this.model.neutronCountRange.max ) {
+        this.checkCreatorNodeVisibility( this.neutronsCreatorNode, false );
+      }
     } );
   }
 
@@ -499,19 +516,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       this.timeSinceCountdownStarted += dt;
     }
     else {
-
-      // TODO: put this in a multilink that has protonCount adn incomingProtons
-      // hide the node when at the last proton
-      if ( ( protonCount + this.model.incomingProtons.length ) === this.model.protonCountRange.max ) {
-        this.checkCreatorNodeVisibility( this.protonsCreatorNode, false );
-      }
-
-      // TODO: put this in a multilink that has neutronCount adn incomingNuetrons
-      // hide the node when at the last neutron
-      if ( ( neutronCount + this.model.incomingNeutrons.length ) === this.model.neutronCountRange.max ) {
-        this.checkCreatorNodeVisibility( this.neutronsCreatorNode, false );
-      }
-
       this.timeSinceCountdownStarted = 0;
 
       // keep track of the old values of protonCountProperty and neutronCountProperty to know which value increased
