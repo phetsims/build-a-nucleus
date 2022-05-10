@@ -15,6 +15,7 @@ import ParticleType from '../../decay/view/ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import BANModel from '../model/BANModel.js';
+import BANConstants from '../BANConstants.js';
 
 class NucleonCreatorNode extends Node {
 
@@ -31,6 +32,7 @@ class NucleonCreatorNode extends Node {
       const particle = new Particle( particleType.name.toLowerCase(), {
         maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
       } );
+      particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
       particle.setPositionAndDestination( viewPosition.minus( particle.positionProperty.value ) );

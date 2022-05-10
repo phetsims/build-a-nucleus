@@ -41,6 +41,8 @@ const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_ELEMENT_AND_CHECKBOX_FONT = new PhetFont( 20 );
 const NUCLEON_CAPTURE_RADIUS = 100;
 const NUM_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
+const NUM_PROTONS_IN_ALPHA_PARTICLE = 2;
+const NUM_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -264,7 +266,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.particleViewLayerNode );
   }
 
-  // Define the update function for the element name.
+  /**
+   * Define the update function for the element name.
+   */
   public static updateElementName( elementNameText: Text, protonCount: number, doesNuclideExist: boolean, massNumber: number, center: Vector2 ): void {
     let name = AtomIdentifier.getName( protonCount );
 
@@ -282,7 +286,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     elementNameText.center = center;
   }
 
-  // Add ParticleView to the correct nucleonLayer
+  /**
+   * Add ParticleView to the correct nucleonLayer.
+   */
   protected override addParticleView( particle: Particle, particleView: ParticleView ): void {
     this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
 
@@ -335,19 +341,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
-   * TODO: Clean up constants and add comments as desired
    */
   public emitAlphaParticle(): void {
-    const numberOfProtonsInAlphaParticle = 2;
-    const numberOfNeutronsInAlphaParticle = 2;
 
+    // get the protons and neutrons closest to the center of the particleAtom
     const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
       proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, numberOfProtonsInAlphaParticle );
+      .slice( 0, NUM_PROTONS_IN_ALPHA_PARTICLE );
     const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
       neutron => neutron!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, numberOfNeutronsInAlphaParticle );
+      .slice( 0, NUM_NEUTRONS_IN_ALPHA_PARTICLE );
 
+    // create and add the alpha particle node
     const alphaParticle = new ParticleAtom();
     const alphaParticleNode = new AtomNode( alphaParticle, this.modelViewTransform, {
       showCenterX: false,
@@ -359,18 +364,21 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     alphaParticleNode.center = this.atomNode.center;
     this.addChild( alphaParticleNode );
 
+    // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
       this.model.particleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
     } );
 
+    // ensure the creator nodes are visible since particles are being removed from the particleAtom
     alphaParticle.moveAllParticlesToDestination();
     this.checkCreatorNodeVisibility( this.protonsCreatorNode, true );
     this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
 
+    // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition();
-    const animationSpeed = 300; // CSS pixels per second
-    const animationDuration = alphaParticle.positionProperty.value.distance( destination ) / animationSpeed;
+    const animationDuration = alphaParticle.positionProperty.value.distance( destination ) /
+                              BANConstants.PARTICLE_ANIMATION_SPEED;
 
     const alphaParticleEmissionAnimation = new Animation( {
       property: alphaParticle.positionProperty,
@@ -389,7 +397,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Returns a random position outside of the screen view's visible bounds.
    */
-  getRandomExternalModelPosition(): Vector2 {
+  private getRandomExternalModelPosition(): Vector2 {
     const visibleBounds = this.visibleBoundsProperty.value;
     const destinationBounds = visibleBounds.dilated( 300 );
 
@@ -402,7 +410,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     return this.modelViewTransform.viewToModelPosition( randomVector );
   }
 
-  // Define a function that will decide where to put nucleons.
+  /**
+   * Define a function that will decide where to put nucleons.
+   */
   protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
     if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
 

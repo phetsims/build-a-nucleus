@@ -32,7 +32,10 @@ const BANConstants = {
   // the maximum number of neutrons,
   MAX_NUMBER_OF_NEUTRONS: 146,
 
-  PANEL_STROKE: Color.GRAY
+  PANEL_STROKE: Color.GRAY,
+
+  // CSS pixels per second
+  PARTICLE_ANIMATION_SPEED: 300
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

@@ -371,7 +371,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
   }
 
-  // TODO: only hide creator node when creating a nuclide that does exist and only show the creator node when the nucleon reaches the stack again when it's removed
+  /**
+   * Set the input enabled and visibility of a creator node.
+   */
   protected checkCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
     if ( creatorNode.visible !== visible ) {
       creatorNode.visible = visible;
@@ -379,16 +381,25 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     }
   }
 
+  /**
+   * Create a particle of particleType at its creator node and send it (and add it) to the particleAtom.
+   */
   public createParticleFromStack( particleType: ParticleType ): void {
+
+    // create a particle at the center of its creator node
     const particle = new Particle( particleType.name.toLowerCase(), {
       maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
     } );
+    particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
     const origin = particleType === ParticleType.PROTON ?
                    BANScreenView.protonsCreatorNodeModelCenter : BANScreenView.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );
+
+    // send the particle the center of the particleAtom and add it to the model
     particle.destinationProperty.value = this.model.particleAtom.positionProperty.value;
     this.model.addParticle( particle );
 
+    // don't let the particle be clicked until it reaches the particleAtom
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
@@ -399,6 +410,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       this.model.incomingNeutrons.push( particle );
     }
 
+    // add the particle to the particleAtom once it reaches the center of the particleAtom and allow it to be clicked
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
         this.model.particleAtom.addParticle( particle );
@@ -416,23 +428,28 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
   }
 
+  /**
+   * Remove a particle of particleType from the particleAtom and send it back to its creator node.
+   */
   public returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
                                 BANScreenView.protonsCreatorNodeModelCenter : BANScreenView.neutronsCreatorNodeModelCenter;
-
-    // array of all the particles of particleType
     const particles = [ ...this.model.nucleons ];
 
+    // array of all of the particles that are of particleType and part of the particleAtom
     _.remove( particles, particle => {
       return !this.model.particleAtom.containsParticle( particle ) || particle.type !== particleType.name.toLowerCase();
     } );
 
+    // select the particle closest to its creator node
     const sortedParticles = _.sortBy( particles, particle => {
       return particle!.positionProperty.value.distance( creatorNodePosition );
     } );
-
     const particleToReturn = sortedParticles.shift();
+
     if ( particleToReturn ) {
+
+      // remove the particle from the particleAtom and send it back to its creator node position
       assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
         'There is no particle of this type in the atom.' );
       this.model.particleAtom.removeParticle( particleToReturn );
