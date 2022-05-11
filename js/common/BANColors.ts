@@ -12,7 +12,7 @@ import PhetColorScheme from '../../../scenery-phet/js/PhetColorScheme.js';
 
 const BANColors = {
 
-  // background color that for screens in this sim
+  // background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'screenBackground', {
     default: Color.WHITE
   } ),
