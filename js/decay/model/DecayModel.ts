@@ -46,8 +46,8 @@ class DecayModel extends BANModel {
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ) => {
 
         let halfLife;
-        // the nuclide exists
-        if ( doesNuclideExist ) {
+        // a nuclide of 0 protons and 0 neutrons does not exist
+        if ( doesNuclideExist && !( protonCount === 0 && neutronCount === 0 ) ) {
 
           // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
           if ( isStable ) {

@@ -185,9 +185,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
             const doesPreviousNuclideExist = secondParticleType && direction === 'down' ? !AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) : nextOrPreviousIsoExists;
 
-            // it is allowed to go back the default starting case of zero protons and zero neutrons even though a nuclide
-            // with zero protons and zero neutrons does not exist
-            if ( nuclideExistsBoolean && doesPreviousNuclideExist && ( atomProtonCount + atomNeutronCount ) > 2 ) {
+            if ( nuclideExistsBoolean && doesPreviousNuclideExist ) {
               return false;
             }
             return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
@@ -512,7 +510,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const protonCount = this.model.particleAtom.protonCountProperty.value;
     const neutronCount = this.model.particleAtom.neutronCountProperty.value;
 
-    if ( !this.model.doesNuclideExistBooleanProperty.value && ( protonCount + neutronCount ) > 0 ) {
+    if ( !this.model.doesNuclideExistBooleanProperty.value ) {
       this.timeSinceCountdownStarted += dt;
     }
     else {
