@@ -376,7 +376,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
 
     // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition();
+    const destination = this.getRandomExternalModelPosition( alphaParticleNode.width );
     const animationDuration = alphaParticle.positionProperty.value.distance( destination ) /
                               BANConstants.PARTICLE_ANIMATION_SPEED;
 
@@ -388,8 +388,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
 
     alphaParticleEmissionAnimation.endedEmitter.addListener( () => {
-      alphaParticle.dispose();
+      alphaParticle.protons.forEach( proton => {
+        this.model.removeParticle( proton );
+      } );
+      alphaParticle.neutrons.forEach( neutron => {
+        this.model.removeParticle( neutron );
+      } );
       alphaParticleNode.dispose();
+      alphaParticle.dispose();
     } );
     alphaParticleEmissionAnimation.start();
   }
@@ -397,8 +403,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Returns a random position outside of the screen view's visible bounds.
    */
-  private getRandomExternalModelPosition(): Vector2 {
-    const visibleBounds = this.visibleBoundsProperty.value;
+  private getRandomExternalModelPosition( particleWidth?: number ): Vector2 {
+    const visibleBounds = this.visibleBoundsProperty.value.dilated( particleWidth ? particleWidth : 0 );
     const destinationBounds = visibleBounds.dilated( 300 );
 
     let randomVector = Vector2.ZERO;
