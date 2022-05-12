@@ -343,7 +343,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     };
 
     // add ParticleView's to match the model
-    this.model.nucleons.addItemAddedListener( ( particle: Particle ) => {
+    this.model.particles.addItemAddedListener( ( particle: Particle ) => {
       const particleView = new ParticleView( particle, this.modelViewTransform );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
@@ -357,7 +357,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
 
     // remove ParticleView's to match the model
-    this.model.nucleons.addItemRemovedListener( ( particle: Particle ) => {
+    this.model.particles.addItemRemovedListener( ( particle: Particle ) => {
       const particleView = this.findParticleView( particle );
 
       // @ts-ignore TODO-TS: Fix listener type
@@ -403,7 +403,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // create a particle at the center of its creator node
     const particle = new Particle( particleType.name.toLowerCase(), {
-      maxZLayer: DecayScreenView.NUM_NUCLEON_LAYERS - 1
+      maxZLayer: DecayScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
     particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
     const origin = particleType === ParticleType.PROTON ?
@@ -449,7 +449,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   public returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
                                 BANScreenView.protonsCreatorNodeModelCenter : BANScreenView.neutronsCreatorNodeModelCenter;
-    const particles = [ ...this.model.nucleons ];
+    const particles = [ ...this.model.particles ];
 
     // array of all of the particles that are of particleType and part of the particleAtom
     _.remove( particles, particle => {

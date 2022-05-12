@@ -41,16 +41,16 @@ import DecayType from './DecayType.js';
 const LABEL_FONT = new PhetFont( 24 );
 const STABILITY_ELEMENT_AND_CHECKBOX_FONT = new PhetFont( 20 );
 const NUCLEON_CAPTURE_RADIUS = 100;
-const NUM_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
-const NUM_PROTONS_IN_ALPHA_PARTICLE = 2;
-const NUM_NEUTRONS_IN_ALPHA_PARTICLE = 2;
+const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
+const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
+const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView<DecayModel> {
 
-  public static NUM_NUCLEON_LAYERS: number;
+  public static NUMBER_OF_NUCLEON_LAYERS: number;
   private nucleonLayers: Node[];
   private readonly elementName: Text;
   private readonly stabilityIndicator: Text;
@@ -257,7 +257,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // Add the layers where the nucleons will exist.
     this.nucleonLayers = [];
-    _.times( NUM_NUCLEON_LAYERS, () => {
+    _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
       const nucleonLayer = new Node();
       this.nucleonLayers.push( nucleonLayer );
       this.particleViewLayerNode.addChild( nucleonLayer );
@@ -337,8 +337,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   public emitNucleon( particleType: ParticleType ): void {
     // TODO: assert that you have this particleType in the particelAtom
-    const proton = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
-    this.animateAndRemoveNucleon( proton, this.getRandomExternalModelPosition() );
+    const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+    this.animateAndRemoveNucleon( nucleon, this.getRandomExternalModelPosition() );
   }
 
   /**
@@ -347,14 +347,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   public emitAlphaParticle(): void {
     // TODO: assert that you have these 4 particles in the particelAtom
-    // TODO: check sim usages for 'num' abbreviation, change to number
     // get the protons and neutrons closest to the center of the particleAtom
     const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
       proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, NUM_PROTONS_IN_ALPHA_PARTICLE );
+      .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
     const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
       neutron => neutron!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, NUM_NEUTRONS_IN_ALPHA_PARTICLE );
+      .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
 
     // create and add the alpha particle node
     const alphaParticle = new ParticleAtom();
@@ -481,7 +480,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 }
 
 // export for usage when creating shred Particles
-DecayScreenView.NUM_NUCLEON_LAYERS = NUM_NUCLEON_LAYERS;
+DecayScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'DecayScreenView', DecayScreenView );
 export default DecayScreenView;

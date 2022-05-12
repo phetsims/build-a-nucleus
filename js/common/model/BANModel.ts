@@ -29,7 +29,7 @@ class BANModel {
   public isStableBooleanProperty: IReadOnlyProperty<boolean>;
   public readonly massNumberProperty: IReadOnlyProperty<number>;
   public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
-  public nucleons: ObservableArray<Particle>;
+  public particles: ObservableArray<Particle>;
   public particleAtom: ParticleAtom;
   public protonCountRange: Range;
   public neutronCountRange: Range;
@@ -50,8 +50,8 @@ class BANModel {
     // Create the atom that the user will build, modify, and generally play with.
     this.particleAtom = new ParticleAtom();
 
-    // arrays of proton and neutron Particle's that exist in all places
-    this.nucleons = createObservableArray();
+    // arrays of all Particle's that exist in all places
+    this.particles = createObservableArray();
 
     // array of particles sent to the nucleus but not there yet
     this.incomingProtons = createObservableArray();
@@ -89,20 +89,20 @@ class BANModel {
     assert && assert( _.some( ParticleType.enumeration.values, particleType => {
       return particle.type === particleType.name.toLowerCase();
     } ),
-      'Nucleons must be one of the types in ParticleType ' + particle.type );
-    this.nucleons.push( particle );
+      'Particles must be one of the types in ParticleType ' + particle.type );
+    this.particles.push( particle );
   }
 
   /**
    * Remove a Particle from the model
    */
   public removeParticle( particle: Particle ): void {
-    this.nucleons.remove( particle );
+    this.particles.remove( particle );
   }
 
   public reset(): void {
     this.particleAtom.clear();
-    this.nucleons.clear();
+    this.particles.clear();
   }
 
   /**
@@ -110,8 +110,8 @@ class BANModel {
    */
   public step( dt: number ): void {
     // Update particle positions.
-    this.nucleons.forEach( nucleon => {
-      nucleon.step( dt );
+    this.particles.forEach( particle => {
+      particle.step( dt );
     } );
   }
 }
