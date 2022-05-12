@@ -35,6 +35,7 @@ import LinearFunction from '../../../../dot/js/LinearFunction.js';
   import dotRandom from '../../../../dot/js/dotRandom.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import DecayType from './DecayType.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -80,7 +81,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
       emitNucleon: this.emitNucleon.bind( this ),
-      emitAlphaParticle: this.emitAlphaParticle.bind( this )
+      emitAlphaParticle: this.emitAlphaParticle.bind( this ),
+      betaDecay: this.betaDecay.bind( this )
     } );
     availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
     availableDecaysPanel.bottom = this.resetAllButton.top - 20;
@@ -334,6 +336,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Removes a nucleon from the nucleus and animates it out of view.
    */
   public emitNucleon( particleType: ParticleType ): void {
+    // TODO: assert that you have this particleType in the particelAtom
     const proton = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
     this.animateAndRemoveNucleon( proton, this.getRandomExternalModelPosition() );
   }
@@ -343,7 +346,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * particle out of view.
    */
   public emitAlphaParticle(): void {
-
+    // TODO: assert that you have these 4 particles in the particelAtom
+    // TODO: check sim usages for 'num' abbreviation, change to number
     // get the protons and neutrons closest to the center of the particleAtom
     const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
       proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
@@ -398,6 +402,37 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       alphaParticle.dispose();
     } );
     alphaParticleEmissionAnimation.start();
+  }
+
+  /**
+   * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
+   */
+  public betaDecay( betaDecayType: DecayType ): void {
+    // TODO: assert that you have particle type's necessary to do the decay
+
+    let particleArray;
+    let particleToEmit;
+    if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
+      particleArray = this.model.particleAtom.neutrons;
+      particleToEmit = new Particle( ParticleType.ELECTRON.name.toLowerCase() );
+    }
+    else {
+      particleArray = this.model.particleAtom.protons;
+      particleToEmit = new Particle( ParticleType.POSITRON.name.toLowerCase() );
+    }
+
+    // the particle that will change its nucleon type will be the one closest to the center of the atom
+    const particle = _.sortBy( [ ...particleArray ],
+      particle => particle!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
+    this.model.particleAtom.changeNucleonType( particle );
+
+    // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
+    particleToEmit.positionProperty.value = particle.positionProperty.value;
+    particleToEmit.zLayerProperty.value = particle.zLayerProperty.value + 1;
+
+    // add the particle to the model to emit it
+    this.model.addParticle( particleToEmit );
+    this.animateAndRemoveNucleon( particleToEmit, this.getRandomExternalModelPosition() );
   }
 
   /**

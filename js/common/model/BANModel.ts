@@ -86,9 +86,10 @@ class BANModel {
    * Add a Particle to the model
    */
   public addParticle( particle: Particle ): void {
-    assert && assert( particle.type === ParticleType.PROTON.name.toLowerCase() ||
-                      particle.type === ParticleType.NEUTRON.name.toLowerCase(),
-      'Nucleons must be of type proton or neutron' );
+    assert && assert( _.some( ParticleType.enumeration.values, particleType => {
+      return particle.type === particleType.name.toLowerCase();
+    } ),
+      'Nucleons must be one of the types in ParticleType ' + particle.type );
     this.nucleons.push( particle );
   }
 

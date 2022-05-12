@@ -37,6 +37,7 @@ const BUTTON_CONTENT_WIDTH = 175;
 type SelfOptions = {
   emitNucleon: ( particleType: ParticleType ) => void;
   emitAlphaParticle: () => void;
+  betaDecay: ( betaDecayType: DecayType ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
 
@@ -81,12 +82,10 @@ class AvailableDecaysPanel extends Panel {
           options.emitNucleon( ParticleType.NEUTRON );
           break;
         case DecayType.BETA_MINUS_DECAY:
-          // model.neutronCountProperty.value--;
-          // model.protonCountProperty.value++;
+          options.betaDecay( DecayType.BETA_MINUS_DECAY );
           break;
         case DecayType.BETA_PLUS_DECAY:
-          // model.neutronCountProperty.value++;
-          // model.protonCountProperty.value--;
+          options.betaDecay( DecayType.BETA_PLUS_DECAY );
           break;
         case DecayType.ALPHA_DECAY:
           options.emitAlphaParticle();
