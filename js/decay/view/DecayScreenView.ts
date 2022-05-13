@@ -336,7 +336,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Removes a nucleon from the nucleus and animates it out of view.
    */
   public emitNucleon( particleType: ParticleType ): void {
-    // TODO: assert that you have this particleType in the particelAtom
+    assert && assert( particleType === ParticleType.PROTON ? this.model.particleAtom.protonCountProperty.value >= 1 :
+                      this.model.particleAtom.neutronCountProperty.value >= 1,
+      'The particleAtom needs a ' + particleType.name + ' to emit it.' );
+
     const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
     this.animateAndRemoveNucleon( nucleon, this.getRandomExternalModelPosition() );
   }
@@ -346,7 +349,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * particle out of view.
    */
   public emitAlphaParticle(): void {
-    // TODO: assert that you have these 4 particles in the particelAtom
+    assert && assert( this.model.particleAtom.protonCountProperty.value >= 2 &&
+    this.model.particleAtom.neutronCountProperty.value >= 2,
+      'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
+
     // get the protons and neutrons closest to the center of the particleAtom
     const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
       proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
@@ -407,18 +413,25 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
   public betaDecay( betaDecayType: DecayType ): void {
-    // TODO: assert that you have particle type's necessary to do the decay
-
     let particleArray;
     let particleToEmit;
+    let nucleonTypeCountValue;
+    let nucleonTypeToChange;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = this.model.particleAtom.neutrons;
       particleToEmit = new Particle( ParticleType.ELECTRON.name.toLowerCase() );
+      nucleonTypeCountValue = this.model.particleAtom.neutronCountProperty.value;
+      nucleonTypeToChange = ParticleType.NEUTRON.name;
     }
     else {
       particleArray = this.model.particleAtom.protons;
       particleToEmit = new Particle( ParticleType.POSITRON.name.toLowerCase() );
+      nucleonTypeCountValue = this.model.particleAtom.protonCountProperty.value;
+      nucleonTypeToChange = ParticleType.PROTON.name;
     }
+
+    assert && assert( nucleonTypeCountValue >= 1,
+      'The particleAtom needs a ' + nucleonTypeToChange + ' for a ' + betaDecayType.name );
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const particle = _.sortBy( [ ...particleArray ],
