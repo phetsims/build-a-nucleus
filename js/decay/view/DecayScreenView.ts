@@ -424,8 +424,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const particle = _.sortBy( [ ...particleArray ],
       particle => particle!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
 
-    // @ts-ignore
-    this.model.particleAtom.changeNucleonType( particle );
+    // this.model.particleAtom.changeNucleonType( particle );
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
     particleToEmit.positionProperty.value = particle.positionProperty.value;
