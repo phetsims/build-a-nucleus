@@ -423,6 +423,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const particle = _.sortBy( [ ...particleArray ],
       particle => particle!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
+
+    // @ts-ignore
     this.model.particleAtom.changeNucleonType( particle );
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
