@@ -208,7 +208,7 @@ class HalfLifeNumberLineNode extends Node {
 
       // Hook up update listeners.
       Property.multilink( [ options.protonCountProperty, options.doesNuclideExistBooleanProperty, options.massNumberProperty ],
-        ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
+        ( protonCount, doesNuclideExist, massNumber ) =>
           DecayScreenView.updateElementName( elementName, protonCount, doesNuclideExist, massNumber,
             halfLifeDisplayNode.center.minusXY( 0, elementName.height + distanceBetweenElementNameAndHalfLifeText ) )
       );
@@ -229,7 +229,7 @@ class HalfLifeNumberLineNode extends Node {
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
-    Property.multilink( [ this.halfLifeArrowRotationProperty ], ( rotation: number ) => {
+    Property.multilink( [ this.halfLifeArrowRotationProperty ], rotation => {
       halfLifeArrow.rotation = rotation;
     } );
 
