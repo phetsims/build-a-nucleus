@@ -107,7 +107,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
               .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
           } )
         ],
-        spacing: 10
+        spacing: 5
       } ),
       showElectronCloudBooleanProperty
     );
@@ -387,68 +387,77 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.model.particleAtom.neutronCountProperty.value >= 2,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
-    // get the protons and neutrons closest to the center of the particleAtom
-    const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
-      proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
-    const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
-      neutron => neutron!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
+    // this is a special case where 2 protons are emitted and an alpha particle remains in the nucleus
+    if ( this.model.particleAtom.protonCountProperty.value === 4 && this.model.particleAtom.neutronCountProperty.value === 2 ) {
+      _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
+    }
 
-    // create and add the alpha particle node
-    const alphaParticle = new ParticleAtom();
-    const alphaParticleNode = new AtomNode( alphaParticle, this.modelViewTransform, {
-      showCenterX: false,
-      showElementNameProperty: new Property( false ),
-      showNeutralOrIonProperty: new Property( false ),
-      showStableOrUnstableProperty: new Property( false ),
-      electronShellDepictionProperty: new Property( 'cloud' )
-    } );
-    alphaParticleNode.center = this.atomNode.center;
-    this.addChild( alphaParticleNode );
+    // otherwise create and emit an alpha particle
+    else {
 
-    // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
-    [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
-      this.model.particleAtom.removeParticle( nucleon );
-      alphaParticle.addParticle( nucleon );
-    } );
+      // get the protons and neutrons closest to the center of the particleAtom
+      const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
+        proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
+        .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
+      const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
+        neutron => neutron!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
+        .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
 
-    // ensure the creator nodes are visible since particles are being removed from the particleAtom
-    alphaParticle.moveAllParticlesToDestination();
-    this.checkCreatorNodeVisibility( this.protonsCreatorNode, true );
-    this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
+      // create and add the alpha particle node
+      const alphaParticle = new ParticleAtom();
+      const alphaParticleNode = new AtomNode( alphaParticle, this.modelViewTransform, {
+        showCenterX: false,
+        showElementNameProperty: new Property( false ),
+        showNeutralOrIonProperty: new Property( false ),
+        showStableOrUnstableProperty: new Property( false ),
+        electronShellDepictionProperty: new Property( 'cloud' )
+      } );
+      alphaParticleNode.center = this.atomNode.center;
+      this.addChild( alphaParticleNode );
 
-    alphaParticle.protons.forEach( proton => {
-      this.findParticleView( proton ).inputEnabled = false;
-    } );
-    alphaParticle.neutrons.forEach( neutron => {
-      this.findParticleView( neutron ).inputEnabled = false;
-    } );
+      // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
+      [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
+        this.model.particleAtom.removeParticle( nucleon );
+        alphaParticle.addParticle( nucleon );
+      } );
 
-    // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition( alphaParticleNode.width );
-    const animationDuration = alphaParticle.positionProperty.value.distance( destination ) /
-                              BANConstants.PARTICLE_ANIMATION_SPEED;
+      // ensure the creator nodes are visible since particles are being removed from the particleAtom
+      alphaParticle.moveAllParticlesToDestination();
+      this.checkCreatorNodeVisibility( this.protonsCreatorNode, true );
+      this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
 
-    const alphaParticleEmissionAnimation = new Animation( {
-      property: alphaParticle.positionProperty,
-      to: destination,
-      duration: animationDuration,
-      easing: Easing.LINEAR
-    } );
-    this.model.alphaParticleAnimations.push( alphaParticleEmissionAnimation );
-
-    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       alphaParticle.protons.forEach( proton => {
-        this.model.removeParticle( proton );
+        this.findParticleView( proton ).inputEnabled = false;
       } );
       alphaParticle.neutrons.forEach( neutron => {
-        this.model.removeParticle( neutron );
+        this.findParticleView( neutron ).inputEnabled = false;
       } );
-      alphaParticleNode.dispose();
-      alphaParticle.dispose();
-    } );
-    alphaParticleEmissionAnimation.start();
+
+      // animate the particle to a random destination outside the model
+      const destination = this.getRandomExternalModelPosition( alphaParticleNode.width );
+      const animationDuration = alphaParticle.positionProperty.value.distance( destination ) /
+                                BANConstants.PARTICLE_ANIMATION_SPEED;
+
+      const alphaParticleEmissionAnimation = new Animation( {
+        property: alphaParticle.positionProperty,
+        to: destination,
+        duration: animationDuration,
+        easing: Easing.LINEAR
+      } );
+      this.model.alphaParticleAnimations.push( alphaParticleEmissionAnimation );
+
+      alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
+        alphaParticle.protons.forEach( proton => {
+          this.model.removeParticle( proton );
+        } );
+        alphaParticle.neutrons.forEach( neutron => {
+          this.model.removeParticle( neutron );
+        } );
+        alphaParticleNode.dispose();
+        alphaParticle.dispose();
+      } );
+      alphaParticleEmissionAnimation.start();
+    }
   }
 
   /**
