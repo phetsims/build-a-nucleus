@@ -58,7 +58,7 @@ class HalfLifeInfoDialog extends Dialog {
         createTextFromStrings( rightSideStrings )
       ],
       spacing: 100,
-      align: 'left'
+      align: 'top'
     } );
 
     // create and add the halfLifeNumberLineNode
