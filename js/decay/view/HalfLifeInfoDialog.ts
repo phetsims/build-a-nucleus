@@ -66,7 +66,7 @@ class HalfLifeInfoDialog extends Dialog {
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
       numberLineWidth: 750,
-      halfLifeArrowLength: 80,
+      halfLifeArrowLength: 60,
       halfLifeDisplayScale: 0.8,
       isHalfLifeLabelFixed: false,
       protonCountProperty: protonCountProperty,

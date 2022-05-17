@@ -386,7 +386,7 @@ class HalfLifeNumberLineNode extends Node {
    */
   public addArrowAndLabel( label: string, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
-    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -40,
+    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -30,
       this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
         fill: BANColors.legendArrowColorProperty,
         stroke: null,

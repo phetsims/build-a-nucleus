@@ -418,6 +418,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.checkCreatorNodeVisibility( this.protonsCreatorNode, true );
     this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
 
+    alphaParticle.protons.forEach( proton => {
+      this.findParticleView( proton ).inputEnabled = false;
+    } );
+    alphaParticle.neutrons.forEach( neutron => {
+      this.findParticleView( neutron ).inputEnabled = false;
+    } );
+
     // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition( alphaParticleNode.width );
     const animationDuration = alphaParticle.positionProperty.value.distance( destination ) /
@@ -429,8 +436,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       duration: animationDuration,
       easing: Easing.LINEAR
     } );
+    this.model.alphaParticleAnimations.push( alphaParticleEmissionAnimation );
 
-    alphaParticleEmissionAnimation.endedEmitter.addListener( () => {
+    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       alphaParticle.protons.forEach( proton => {
         this.model.removeParticle( proton );
       } );

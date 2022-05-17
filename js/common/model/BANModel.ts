@@ -20,6 +20,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Animation from '../../../../twixt/js/Animation.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -36,6 +37,7 @@ class BANModel {
   public incomingProtons: ObservableArray<Particle>;
   public incomingNeutrons: ObservableArray<Particle>;
   public doubleArrowButtonClickedBooleanProperty: BooleanProperty;
+  public alphaParticleAnimations: ObservableArray<Animation | null>;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -56,6 +58,13 @@ class BANModel {
     // array of particles sent to the nucleus but not there yet
     this.incomingProtons = createObservableArray();
     this.incomingNeutrons = createObservableArray();
+
+    // array of alpha particle animations
+    this.alphaParticleAnimations = createObservableArray();
+    this.alphaParticleAnimations.addItemRemovedListener( animation => {
+      animation && animation.stop();
+      animation = null;
+    } );
 
     // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
@@ -103,6 +112,7 @@ class BANModel {
   public reset(): void {
     this.particleAtom.clear();
     this.particles.clear();
+    this.alphaParticleAnimations.clear();
   }
 
   /**
