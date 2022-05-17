@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -95,7 +95,20 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox(
-      new Text( buildANucleusStrings.electronCloud, { font: STABILITY_ELEMENT_AND_CHECKBOX_FONT } ),
+      new HBox( {
+        children: [
+          new Text( buildANucleusStrings.electronCloud, { font: STABILITY_ELEMENT_AND_CHECKBOX_FONT } ),
+
+          // electron cloud icon
+          new Circle( {
+            radius: 18,
+            fill: new RadialGradient( 0, 0, 0, 0, 0, 18 )
+              .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
+              .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
+          } )
+        ],
+        spacing: 10
+      } ),
       showElectronCloudBooleanProperty
     );
     showElectronCloudCheckbox.left = availableDecaysPanel.left;
