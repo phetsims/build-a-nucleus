@@ -44,8 +44,8 @@ type HalfLifeNumberLineNodeSelfOptions = {
   isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
   // animate its position with the half-life arrow
   protonCountProperty?: IReadOnlyProperty<number>;
+  neutronCountProperty?: IReadOnlyProperty<number>;
   doesNuclideExistBooleanProperty?: IReadOnlyProperty<boolean>;
-  massNumberProperty?: IReadOnlyProperty<number>;
 };
 export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & NodeOptions;
 
@@ -74,8 +74,8 @@ class HalfLifeNumberLineNode extends Node {
     const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {
       halfLifeDisplayScale: 1,
       protonCountProperty: new NumberProperty( 0 ),
-      doesNuclideExistBooleanProperty: new BooleanProperty( false ),
-      massNumberProperty: new NumberProperty( 0 )
+      neutronCountProperty: new NumberProperty( 0 ),
+      doesNuclideExistBooleanProperty: new BooleanProperty( false )
     }, providedOptions );
     this.labelFont = options.numberLineLabelFont;
     this.halfLifeArrowLength = options.halfLifeArrowLength;
@@ -207,9 +207,9 @@ class HalfLifeNumberLineNode extends Node {
       this.addChild( elementName );
 
       // Hook up update listeners.
-      Property.multilink( [ options.protonCountProperty, options.doesNuclideExistBooleanProperty, options.massNumberProperty ],
-        ( protonCount, doesNuclideExist, massNumber ) =>
-          DecayScreenView.updateElementName( elementName, protonCount, doesNuclideExist, massNumber,
+      Property.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
+        ( protonCount, neutronCount, doesNuclideExist ) =>
+          DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
             halfLifeDisplayNode.center.minusXY( 0, elementName.height + distanceBetweenElementNameAndHalfLifeText ) )
       );
 

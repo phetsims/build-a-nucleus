@@ -57,6 +57,7 @@ type StringsType = {
   'protons': string;
   'neutrons': string;
   'electronCloud': string;
+  'clusterOfNeutronsPattern': string;
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

@@ -139,5 +139,8 @@
   },
   "electronCloud": {
     "value": "Electron Cloud"
+  },
+  "clusterOfNeutronsPattern": {
+    "value": "Cluster of {{neutronNumber}} neutrons"
   }
 }

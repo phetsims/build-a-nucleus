@@ -36,6 +36,7 @@ import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -69,7 +70,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
-      model.particleAtom.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty );
+      model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 30;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
@@ -216,9 +217,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.elementName );
 
     // Hook up update listeners.
-    Property.multilink( [ model.particleAtom.protonCountProperty, model.doesNuclideExistBooleanProperty, model.massNumberProperty ],
-      ( protonCount: number, doesNuclideExist: boolean, massNumber: number ) =>
-        DecayScreenView.updateElementName( this.elementName, protonCount, doesNuclideExist, massNumber,
+    Property.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
+      ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
+        DecayScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist,
           this.stabilityIndicator.center.plusXY( 0, 60 ) )
     );
 
@@ -271,15 +272,35 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Define the update function for the element name.
    */
-  public static updateElementName( elementNameText: Text, protonCount: number, doesNuclideExist: boolean, massNumber: number, center: Vector2 ): void {
+  public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number, doesNuclideExist: boolean, center: Vector2 ): void {
     let name = AtomIdentifier.getName( protonCount );
+    const massNumber = protonCount + neutronCount;
 
     // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
     if ( !doesNuclideExist && massNumber !== 0 ) {
       name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
     }
+
+    // no protons
     else if ( name.length === 0 ) {
-      name = '';
+
+      // no neutrons
+      if ( neutronCount === 0 ) {
+        name = '';
+      }
+
+      // only one neutron
+      else if ( neutronCount === 1 ) {
+        name = 1 + ' ' + ParticleType.NEUTRON.label.toLowerCase();
+      }
+
+      // multiple neutrons
+      else {
+        name = StringUtils.fillIn( buildANucleusStrings.clusterOfNeutronsPattern, {
+          neutronNumber: neutronCount
+        } );
+      }
+
     }
     else {
       name += ' - ' + massNumber.toString();
