@@ -291,7 +291,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
     if ( !doesNuclideExist && massNumber !== 0 ) {
-      name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
+
+      // no protons
+      if ( name.length === 0 ) {
+        name += massNumber.toString() + ' ' + buildANucleusStrings.neutrons.toLowerCase() + ' ' + buildANucleusStrings.doesNotForm;
+      }
+       else {
+        name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
+      }
     }
 
     // no protons
