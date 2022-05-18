@@ -302,7 +302,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
     this.addChild( protonsLabel );
 
-    const neutronsLabel = new Text( buildANucleusStrings.neutrons, { font: new PhetFont( 20 ) } );
+    const neutronsLabel = new Text( buildANucleusStrings.neutronsUppercase, { font: new PhetFont( 20 ) } );
     neutronsLabel.bottom = doubleArrowButtons.bottom;
     neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
     this.addChild( neutronsLabel );

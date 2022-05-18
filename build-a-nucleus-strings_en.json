@@ -95,8 +95,11 @@
   "proton": {
     "value": "Proton"
   },
-  "neutron": {
+  "neutronUppercase": {
     "value": "Neutron"
+  },
+  "neutronLowercase": {
+    "value": "neutron"
   },
   "electron": {
     "value": "Electron"
@@ -134,8 +137,11 @@
   "protons": {
     "value": "Protons"
   },
-  "neutrons": {
+  "neutronsUppercase": {
     "value": "Neutrons"
+  },
+  "neutronsLowercase": {
+    "value": "neutrons"
   },
   "electronCloud": {
     "value": "Electron Cloud"

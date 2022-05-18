@@ -17,7 +17,7 @@ class ParticleType extends EnumerationValue {
 
   static PROTON = new ParticleType( buildANucleusStrings.proton, BANColors.protonColorProperty );
 
-  static NEUTRON = new ParticleType( buildANucleusStrings.neutron, BANColors.neutronColorProperty );
+  static NEUTRON = new ParticleType( buildANucleusStrings.neutronUppercase, BANColors.neutronColorProperty );
 
   static ELECTRON = new ParticleType( buildANucleusStrings.electron, BANColors.electronColorProperty );
 

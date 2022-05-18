@@ -42,7 +42,8 @@ type StringsType = {
   'J': string;
   'availableDecays': string;
   'proton': string;
-  'neutron': string;
+  'neutronUppercase': string;
+  'neutronLowercase': string;
   'electron': string;
   'positron': string;
   'alphaDecay': string;
@@ -55,7 +56,8 @@ type StringsType = {
   'unstable': string;
   'doesNotForm': string;
   'protons': string;
-  'neutrons': string;
+  'neutronsUppercase': string;
+  'neutronsLowercase': string;
   'electronCloud': string;
   'clusterOfNeutronsPattern': string;
 };
