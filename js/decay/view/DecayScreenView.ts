@@ -295,7 +295,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       // no protons
       if ( name.length === 0 ) {
         // TODO: use separate string
-        name += massNumber.toString() + ' ' + buildANucleusStrings.neutrons.toLowerCase() + ' ' + buildANucleusStrings.doesNotForm;
+        const neutronString = buildANucleusStrings.neutrons;
+        name += massNumber.toString() + ' ' + neutronString.toLowerCase() + ' ' + buildANucleusStrings.doesNotForm;
       }
        else {
         name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
