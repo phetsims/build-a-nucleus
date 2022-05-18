@@ -294,6 +294,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
       // no protons
       if ( name.length === 0 ) {
+        // TODO: use separate string
         name += massNumber.toString() + ' ' + buildANucleusStrings.neutrons.toLowerCase() + ' ' + buildANucleusStrings.doesNotForm;
       }
        else {
@@ -311,7 +312,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
       // only one neutron
       else if ( neutronCount === 1 ) {
-        name = 1 + ' ' + ParticleType.NEUTRON.label.toLowerCase();
+        name = neutronCount + ' ' + ParticleType.NEUTRON.label.toLowerCase();
       }
 
       // multiple neutrons

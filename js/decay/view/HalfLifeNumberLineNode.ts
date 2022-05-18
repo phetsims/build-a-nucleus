@@ -225,6 +225,20 @@ class HalfLifeNumberLineNode extends Node {
           new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - elementName.width / 2,
             halfLifeArrow.top - elementName.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
+
+        if ( halfLifeDisplayNode.left < numberLineNode.left ) {
+          halfLifeDisplayNode.left = numberLineNode.left;
+        }
+        if ( elementName.left < numberLineNode.left ) {
+          elementName.left = numberLineNode.left;
+        }
+        // if ( halfLifeDisplayNode.right > numberLineNode.right ) {
+        //
+        //   halfLifeDisplayNode.right = numberLineNode.right;
+        // }
+        // if ( elementName.right > numberLineNode.right ) {
+        //   elementName.right = numberLineNode.right;
+        // }
       } );
     }
 
