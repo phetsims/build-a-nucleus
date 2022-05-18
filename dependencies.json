@@ -1,5 +1,5 @@
 {
-  "comment": "# build-a-nucleus 1.0.0-betaDecay.1 Wed May 18 2022 10:22:05 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# build-a-nucleus 1.0.0-betaDecay.4 Wed May 18 2022 13:04:03 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "master"
@@ -17,7 +17,7 @@
     "branch": "master"
   },
   "build-a-nucleus": {
-    "sha": "6c88787c67cadf007f038a48ce07190b6277741b",
+    "sha": "035940382a39b9f5a855345c70e76b0a42225846",
     "branch": "betaDecay"
   },
   "build-an-atom": {
