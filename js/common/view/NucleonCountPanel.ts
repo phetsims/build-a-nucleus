@@ -18,11 +18,14 @@ import ParticleType from '../../decay/view/ParticleType.js';
 import BANConstants from '../BANConstants.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // types
 type NucleonLabel = {
   title: Text;
-  numberDisplay: NumberDisplay;
+  numberDisplays: NumberDisplay[];
   contents: HBox;
 };
 
@@ -60,7 +63,8 @@ class NucleonCountPanel extends Panel {
       nucleonParticleNode.centerY = nucleonTitle.centerY;
       panelContents.addChild( nucleonContents );
 
-      const nucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountRange, {
+      // shows the new value of nucleonCountProperty
+      const newNucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonCountRange, {
         align: 'right',
         textOptions: {
           font: LABEL_FONT
@@ -68,12 +72,63 @@ class NucleonCountPanel extends Panel {
         backgroundFill: null,
         backgroundStroke: null
       } );
-      nucleonNumberDisplay.right = panelContents.right;
-      panelContents.addChild( nucleonNumberDisplay );
+      newNucleonNumberDisplay.right = panelContents.right;
+      panelContents.addChild( newNucleonNumberDisplay );
+
+      const oldNucleonCountProperty = new NumberProperty( nucleonCountProperty.value );
+
+      // shows the old value of nucleonCountProperty
+      const oldNucleonNumberDisplay = new NumberDisplay( oldNucleonCountProperty, nucleonCountRange, {
+        align: 'right',
+        textOptions: {
+          font: LABEL_FONT
+        },
+        backgroundFill: null,
+        backgroundStroke: null
+      } );
+      oldNucleonNumberDisplay.right = panelContents.right;
+      panelContents.addChild( oldNucleonNumberDisplay );
+
+      // start removing oldNucleonCountDisplay by making it more opaque
+      const startRemovingNucleonCountDisplay = new Animation( {
+        to: 0.33,
+        property: oldNucleonNumberDisplay.opacityProperty,
+        duration: 0.1, // seconds
+        easing: Easing.LINEAR
+      } );
+
+      // 'replace' the oldNucleonNumberDisplay with the newNucleonNumberDisplay
+      const addNucleonCountDisplay = new Animation( {
+        targets: [ {
+          to: 1,
+          property: newNucleonNumberDisplay.opacityProperty
+        }, {
+          to: 0,
+          property: oldNucleonNumberDisplay.opacityProperty
+        }
+        ],
+        duration: 0.1,
+        easing: Easing.LINEAR
+      } );
+
+      // start showing the newNucleonNumberDisplay when the oldNucleonNumberDisplay has started becoming opaque
+      startRemovingNucleonCountDisplay.then( addNucleonCountDisplay );
+
+      nucleonCountProperty.link( () => {
+        startRemovingNucleonCountDisplay.start();
+
+        // at the end of both animations, reset the values and opacities of oldNucleonNumberDisplay and newNucleonNumberDisplay
+        addNucleonCountDisplay.finishEmitter.addListener( () => {
+          oldNucleonCountProperty.value = nucleonCountProperty.value;
+          oldNucleonNumberDisplay.opacity = 1;
+          newNucleonNumberDisplay.opacity = 0;
+        } );
+
+      } );
 
       return {
         title: nucleonTitle,
-        numberDisplay: nucleonNumberDisplay,
+        numberDisplays: [ oldNucleonNumberDisplay, newNucleonNumberDisplay ],
         contents: nucleonContents
       };
     };
@@ -86,9 +141,13 @@ class NucleonCountPanel extends Panel {
 
     // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's
     protonLabel.contents.top = 0;
-    protonLabel.numberDisplay.centerY = protonLabel.contents.centerY;
+    protonLabel.numberDisplays.forEach( numberDisplay => {
+      numberDisplay.centerY = protonLabel.contents.centerY;
+    } );
     neutronLabel.contents.bottom = protonLabel.title.bottom + Math.max( neutronLabel.title.height, MIN_VERTICAL_SPACING );
-    neutronLabel.numberDisplay.centerY = neutronLabel.contents.centerY;
+    neutronLabel.numberDisplays.forEach( numberDisplay => {
+      numberDisplay.centerY = neutronLabel.contents.centerY;
+    } );
 
     super( panelContents, options );
   }
