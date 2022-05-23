@@ -28,11 +28,11 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
-import Property from '../../../../axon/js/Property.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import InfinityNode from './InfinityNode.js';
 import DecayScreenView from './DecayScreenView.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -207,7 +207,7 @@ class HalfLifeNumberLineNode extends Node {
       this.addChild( elementName );
 
       // Hook up update listeners.
-      Property.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
+      Multilink.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
         ( protonCount, neutronCount, doesNuclideExist ) =>
           DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
             halfLifeDisplayNode.center.minusXY( 0, elementName.height + distanceBetweenElementNameAndHalfLifeText ) )
@@ -243,7 +243,7 @@ class HalfLifeNumberLineNode extends Node {
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
-    Property.multilink( [ this.halfLifeArrowRotationProperty ], rotation => {
+    Multilink.multilink( [ this.halfLifeArrowRotationProperty ], rotation => {
       halfLifeArrow.rotation = rotation;
     } );
 

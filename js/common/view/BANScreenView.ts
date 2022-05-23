@@ -33,8 +33,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import Property from '../../../../axon/js/Property.js';
-
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -369,7 +368,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particle.dispose();
     } );
 
-    Property.multilink( [ this.model.particleAtom.protonCountProperty, this.model.incomingProtons.lengthProperty ], ( protonCount, incomingProtonsCount ) => {
+    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.incomingProtons.lengthProperty ], ( protonCount, incomingProtonsCount ) => {
 
       // hide the protonsCreatorNode when at the last proton
       if ( ( protonCount + incomingProtonsCount ) === this.model.protonCountRange.max ) {
@@ -377,7 +376,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       }
     } );
 
-    Property.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount ) => {
+    Multilink.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount ) => {
 
       // hide the neutronsCreatorNode when at the last neutron
       if ( ( neutronCount + incomingNeutronsCount ) === this.model.neutronCountRange.max ) {
