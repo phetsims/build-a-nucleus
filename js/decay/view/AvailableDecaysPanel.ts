@@ -28,7 +28,8 @@ import IProperty from '../../../../axon/js/IProperty.js';
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
 const TITLE_FONT = new PhetFont( 24 );
 const SPACING = 10;
-const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
+const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
+const ELECTRON_PARTICLE_RADIUS = NUCLEON_PARTICLE_RADIUS * 0.8;
 const ALPHA_PARTICLE_SPACING = -5;
 const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
@@ -119,7 +120,7 @@ class AvailableDecaysPanel extends Panel {
     // function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon
     const createParticleNode = ( particleType: ParticleType ): ParticleNode => {
       return new ParticleNode( particleType.name.toLowerCase(),
-        particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : NUCLEON_PARTICLE_RADIUS * 0.7
+        particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS
       );
     };
 
@@ -249,7 +250,7 @@ class AvailableDecaysPanel extends Panel {
     const createParticleLabel = ( particleType: ParticleType ): HBox => {
       return new HBox( {
         children: [
-          new ParticleNode( particleType.name.toLowerCase(), NUCLEON_PARTICLE_RADIUS ),
+          new ParticleNode( particleType.name.toLowerCase(), particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
           new Text( particleType.label, { font: LABEL_FONT } )
         ],
         spacing: SPACING
