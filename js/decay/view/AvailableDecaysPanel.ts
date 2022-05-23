@@ -33,7 +33,7 @@ const ELECTRON_PARTICLE_RADIUS = NUCLEON_PARTICLE_RADIUS * 0.8;
 const ALPHA_PARTICLE_SPACING = -5;
 const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
-const BUTTON_CONTENT_WIDTH = 175;
+const BUTTON_CONTENT_WIDTH = 145;
 
 type SelfOptions = {
   emitNucleon: ( particleType: ParticleType ) => void;
@@ -126,10 +126,18 @@ class AvailableDecaysPanel extends Panel {
 
     // function to create the right-aligned horizontal motion lines used in the decay icons ( the top and bottom lines are
     // shorter than the middle line )
-    const createMotionLines = ( spacingBetweenLines: number ): VBox => {
+    const createMotionLines = ( spacingBetweenLines: number, isShort?: boolean ): VBox => {
       const motionLines: Line[] = [];
+      let topAndBottomLineLength = 25;
+      let middleLineLength = 40;
+      if ( isShort ) {
+        topAndBottomLineLength *= 0.7;
+        middleLineLength *= 0.7;
+      }
       for ( let i = 0; i < 3; i++ ) {
-        motionLines.push( new Line( 0, 0, i % 2 === 0 ? 25 : 40, 0, { stroke: BANColors.blueDecayIconSymbolsColorProperty } ) );
+        motionLines.push( new Line( 0, 0, i % 2 === 0 ? topAndBottomLineLength : middleLineLength, 0,
+          { stroke: BANColors.blueDecayIconSymbolsColorProperty } )
+        );
       }
       return new VBox( {
         children: motionLines,
@@ -149,23 +157,37 @@ class AvailableDecaysPanel extends Panel {
       } );
     };
 
-    // function to create the icon for a beta decay ( left to right contents: a nucleon particle node, a right-pointing arrow,
-    // a different nucleon particle node than the first one, a mathematical 'plus' symbol, and an electron or positron )
-    const createBetaDecayIcon = ( isBetaMinusDecay: boolean ): HBox => {
-      return new HBox( {
+    // function to create the icon for a beta decay ( top to bottom then left to right contents: a nucleon particle node,
+    // a right-pointing arrow, a different nucleon particle node than the first one, a mathematical 'plus' symbol, motion
+    // lines, and an electron or positron )
+    const createBetaDecayIcon = ( isBetaMinusDecay: boolean ): VBox => {
+      return new VBox( {
         children: [
-          isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
-          new ArrowNode( 0, 0, 25, 0, {
-            fill: BANColors.blueDecayIconSymbolsColorProperty,
-            stroke: null,
-            tailWidth: 1,
-            headWidth: 7.5
+          new HBox( {
+            children: [
+              isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
+              new ArrowNode( 0, 0, 20, 0, {
+                fill: BANColors.blueDecayIconSymbolsColorProperty,
+                stroke: null,
+                tailWidth: 1,
+                headWidth: 7.5
+              } ),
+              isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON )
+            ],
+            spacing: SPACING / 3
           } ),
-          isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON ),
-          new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
-          isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
+          new HBox( {
+            children: [
+              new Rectangle( 0, 0, 30, 0 ),
+              new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
+              createMotionLines( 3.5, true ),
+              isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
+            ],
+            spacing: SPACING / 3
+          } )
         ],
-        spacing: SPACING / 3
+        spacing: SPACING / 1.5,
+        align: 'left'
       } );
     };
 
@@ -196,7 +218,7 @@ class AvailableDecaysPanel extends Panel {
     };
 
     // function to create the decay icons corresponding to a specific DecayType
-    const createDecayIcon = ( decayType: DecayType ): HBox | null => {
+    const createDecayIcon = ( decayType: DecayType ): HBox | VBox | null => {
       switch( decayType ) {
         case DecayType.ALPHA_DECAY:
           return createAlphaDecayIcon(); // alpha decay icon
@@ -279,7 +301,8 @@ class AvailableDecaysPanel extends Panel {
       xMargin: 15,
       yMargin: 15,
       fill: '#F2F2F2',
-      stroke: BANConstants.PANEL_STROKE
+      stroke: BANConstants.PANEL_STROKE,
+      minWidth: 322
     } );
   }
 }
