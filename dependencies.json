@@ -1,5 +1,5 @@
 {
-  "comment": "# build-a-nucleus 1.0.0-betaDecay.6 Thu May 19 2022 14:33:19 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# build-a-nucleus 1.0.0-betaDecay.7 Tue May 24 2022 15:08:03 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "master"
@@ -17,7 +17,7 @@
     "branch": "master"
   },
   "build-a-nucleus": {
-    "sha": "203a1b9fe69d2c57f5398a0d53deb9ed3dbd5c14",
+    "sha": "0b1640b57cab17956b443d4adba96974cdd40509",
     "branch": "betaDecay"
   },
   "build-an-atom": {
@@ -25,7 +25,7 @@
     "branch": "symbolNode"
   },
   "chipper": {
-    "sha": "3eb462d957cd7a978e057e0f003aeef2e858d7f6",
+    "sha": "64825ce6b95eb272208751d31c22b66a0a32c5f0",
     "branch": "master"
   },
   "dot": {
@@ -33,7 +33,7 @@
     "branch": "master"
   },
   "joist": {
-    "sha": "5e18662e15dd003f711ccbd39f7af3985318a753",
+    "sha": "b483f0a33c6c3339e77b2d1dc7135c2d021255be",
     "branch": "master"
   },
   "kite": {
@@ -41,7 +41,7 @@
     "branch": "master"
   },
   "perennial-alias": {
-    "sha": "e0e874ca03786a47ce1ac532d70c57aeebbc3c41",
+    "sha": "982e94d60ffa219c07a17a9ab7f15d9598fb6826",
     "branch": "master"
   },
   "phet-core": {
@@ -49,7 +49,11 @@
     "branch": "master"
   },
   "phet-io": {
-    "sha": "ab7ab8d4e2f70142125e4873540c5281e3e0dcb2",
+    "sha": "bb047fff83b3010c0dd5fe8a31e6b42cafec6054",
+    "branch": "master"
+  },
+  "phet-io-sim-specific": {
+    "sha": "86b5b96a46167578110ef4ecdbe13733a6d3dd34",
     "branch": "master"
   },
   "phet-io-wrappers": {
@@ -69,11 +73,11 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "e1de3e36251bfbe78799238f211a74c86afb70a3",
+    "sha": "0eb8ee8cb4c9e25bdb9a1750badf872e77c66c01",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "b501ac70b036963a3f76d68d07fee3ef78ac22de",
+    "sha": "84fd929983a56283f71d02e786eaa3877f012455",
     "branch": "master"
   },
   "sherpa": {
@@ -81,7 +85,7 @@
     "branch": "master"
   },
   "shred": {
-    "sha": "f6982297cc79f09ce3d39a83a5871b325161449f",
+    "sha": "84a635ee0f2110d1930ef707cf03d86e2b0b8fd7",
     "branch": "build-a-nucleus"
   },
   "studio": {
@@ -89,11 +93,11 @@
     "branch": "master"
   },
   "sun": {
-    "sha": "5667c48613a9bc399a5571268eb98f2747eaa853",
+    "sha": "91764c38d867cdfa27c9cdd9a70b5abe3b6d63de",
     "branch": "master"
   },
   "tambo": {
-    "sha": "ddc48673b197c396ca1d71013448439ffdf907e3",
+    "sha": "34934c60dc6bcfe153e00c4bc49f73d5d4833a04",
     "branch": "master"
   },
   "tandem": {
