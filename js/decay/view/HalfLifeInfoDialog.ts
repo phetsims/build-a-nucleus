@@ -9,7 +9,7 @@
 
 import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
-import { RichText, Text, HBox, VBox } from '../../../../scenery/js/imports.js';
+import { RichText, Text, HBox, VBox, Rectangle } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
@@ -66,7 +66,7 @@ class HalfLifeInfoDialog extends Dialog {
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
       numberLineWidth: 750,
-      halfLifeArrowLength: 60,
+      halfLifeArrowLength: 40,
       halfLifeDisplayScale: 0.8,
       isHalfLifeLabelFixed: false,
       protonCountProperty: protonCountProperty,
@@ -74,11 +74,17 @@ class HalfLifeInfoDialog extends Dialog {
       doesNuclideExistBooleanProperty: doesNuclideExistBooleanProperty
     } );
 
-    const contents = new VBox( {
+    const numberLineNodeAndLegend = new VBox( {
       children: [ legend, halfLifeNumberLineNode ],
       spacing: 30,
-      align: 'center'
+      align: 'center',
+      resize: false
     } );
+
+    // surround contents with rectangle for extra padding
+    const contents = new Rectangle( 0, 0, numberLineNodeAndLegend.width + 100, numberLineNodeAndLegend.height );
+    contents.addChild( numberLineNodeAndLegend );
+    numberLineNodeAndLegend.centerX = contents.centerX;
 
     // the half-life's of the strings, in respective order
     const halfLifeTime = [
@@ -121,6 +127,7 @@ class HalfLifeInfoDialog extends Dialog {
     super( contents, {
       title: titleNode,
       ySpacing: 20,
+      xSpacing: 0,
       bottomMargin: 20,
       fill: BANColors.infoDialogBackgroundColorProperty
     } );

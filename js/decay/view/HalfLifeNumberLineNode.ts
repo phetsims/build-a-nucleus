@@ -150,7 +150,8 @@ class HalfLifeNumberLineNode extends Node {
     // create and add the half life display, which is a parent node used to contain the number readout, the infinity
     // symbol, and the 'Unknown' text.
     const halfLifeDisplayNode = new Node( {
-      scale: options.halfLifeDisplayScale
+      scale: options.halfLifeDisplayScale,
+      excludeInvisibleChildrenFromBounds: true
     } );
     this.addChild( halfLifeDisplayNode );
 
@@ -232,13 +233,12 @@ class HalfLifeNumberLineNode extends Node {
         if ( elementName.left < numberLineNode.left ) {
           elementName.left = numberLineNode.left;
         }
-        // if ( halfLifeDisplayNode.right > numberLineNode.right ) {
-        //
-        //   halfLifeDisplayNode.right = numberLineNode.right;
-        // }
-        // if ( elementName.right > numberLineNode.right ) {
-        //   elementName.right = numberLineNode.right;
-        // }
+        if ( halfLifeDisplayNode.right > numberLineNode.right ) {
+          halfLifeDisplayNode.right = numberLineNode.right;
+        }
+        if ( elementName.right > numberLineNode.right ) {
+          elementName.right = numberLineNode.right;
+        }
       } );
     }
 
@@ -400,7 +400,7 @@ class HalfLifeNumberLineNode extends Node {
    */
   public addArrowAndLabel( label: string, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
-    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -30,
+    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -17.5,
       this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
         fill: BANColors.legendArrowColorProperty,
         stroke: null,
@@ -409,7 +409,7 @@ class HalfLifeNumberLineNode extends Node {
       } );
     this.addChild( arrow );
     const numberText = new RichText( label, { font: this.labelFont } );
-    numberText.bottom = arrow.top;
+    numberText.bottom = arrow.top + 3;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );
   }
