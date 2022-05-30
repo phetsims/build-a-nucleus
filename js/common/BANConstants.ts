@@ -37,7 +37,9 @@ const BANConstants = {
   PANEL_STROKE: Color.GRAY,
 
   // CSS pixels per second
-  PARTICLE_ANIMATION_SPEED: 300
+  PARTICLE_ANIMATION_SPEED: 300,
+
+  PANEL_CORNER_RADIUS: 8
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );
