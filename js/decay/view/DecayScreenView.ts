@@ -38,6 +38,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -475,7 +476,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   public betaDecay( betaDecayType: DecayType ): void {
     let particleArray;
-    let particleToEmit;
+    let particleToEmit: Particle;
     let nucleonTypeCountValue;
     let nucleonTypeToChange;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
@@ -504,9 +505,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     particleToEmit.positionProperty.value = particle.positionProperty.value;
     particleToEmit.zLayerProperty.value = particle.zLayerProperty.value + 1;
 
-    // add the particle to the model to emit it
-    this.model.addParticle( particleToEmit );
-    this.animateAndRemoveNucleon( particleToEmit, this.getRandomExternalModelPosition() );
+    // TODO: okay to use setTimeout?
+    // wait to remove the particleToEmit after changing the nucleon type
+    stepTimer.setTimeout( () => {
+
+      // add the particle to the model to emit it
+      this.model.addParticle( particleToEmit );
+      this.animateAndRemoveNucleon( particleToEmit, this.getRandomExternalModelPosition() );
+    }, 300 ); // in milliseconds
   }
 
   /**
