@@ -28,11 +28,11 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
-import Property from '../../../../axon/js/Property.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import InfinityNode from './InfinityNode.js';
 import DecayScreenView from './DecayScreenView.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // types
 type HalfLifeNumberLineNodeSelfOptions = {
@@ -150,7 +150,8 @@ class HalfLifeNumberLineNode extends Node {
     // create and add the half life display, which is a parent node used to contain the number readout, the infinity
     // symbol, and the 'Unknown' text.
     const halfLifeDisplayNode = new Node( {
-      scale: options.halfLifeDisplayScale
+      scale: options.halfLifeDisplayScale,
+      excludeInvisibleChildrenFromBounds: true
     } );
     this.addChild( halfLifeDisplayNode );
 
@@ -194,8 +195,8 @@ class HalfLifeNumberLineNode extends Node {
     // if the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
 
-      const distanceBetweenElementNameAndHalfLifeText = 10;
-      const distanceBetweenHalfLifeTextAndArrow = 8;
+      const distanceBetweenElementNameAndHalfLifeText = 4;
+      const distanceBetweenHalfLifeTextAndArrow = 14;
 
       // Create the textual readout for the element name.
       const elementName = new Text( '', {
@@ -207,7 +208,7 @@ class HalfLifeNumberLineNode extends Node {
       this.addChild( elementName );
 
       // Hook up update listeners.
-      Property.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
+      Multilink.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
         ( protonCount, neutronCount, doesNuclideExist ) =>
           DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
             halfLifeDisplayNode.center.minusXY( 0, elementName.height + distanceBetweenElementNameAndHalfLifeText ) )
@@ -226,24 +227,26 @@ class HalfLifeNumberLineNode extends Node {
             halfLifeArrow.top - elementName.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
 
+        // left-align the text if it goes over the left edge of the numberLineNode
         if ( halfLifeDisplayNode.left < numberLineNode.left ) {
           halfLifeDisplayNode.left = numberLineNode.left;
         }
         if ( elementName.left < numberLineNode.left ) {
           elementName.left = numberLineNode.left;
         }
-        // if ( halfLifeDisplayNode.right > numberLineNode.right ) {
-        //
-        //   halfLifeDisplayNode.right = numberLineNode.right;
-        // }
-        // if ( elementName.right > numberLineNode.right ) {
-        //   elementName.right = numberLineNode.right;
-        // }
+
+        // right-align the text if it goes over the right edge of the numberLineNode
+        if ( halfLifeDisplayNode.right > numberLineNode.right ) {
+          halfLifeDisplayNode.right = numberLineNode.right;
+        }
+        if ( elementName.right > numberLineNode.right ) {
+          elementName.right = numberLineNode.right;
+        }
       } );
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
-    Property.multilink( [ this.halfLifeArrowRotationProperty ], rotation => {
+    Multilink.multilink( [ this.halfLifeArrowRotationProperty ], rotation => {
       halfLifeArrow.rotation = rotation;
     } );
 
@@ -400,7 +403,7 @@ class HalfLifeNumberLineNode extends Node {
    */
   public addArrowAndLabel( label: string, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
-    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -30,
+    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -17.5,
       this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
         fill: BANColors.legendArrowColorProperty,
         stroke: null,
@@ -409,7 +412,7 @@ class HalfLifeNumberLineNode extends Node {
       } );
     this.addChild( arrow );
     const numberText = new RichText( label, { font: this.labelFont } );
-    numberText.bottom = arrow.top;
+    numberText.bottom = arrow.top + 3;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );
   }

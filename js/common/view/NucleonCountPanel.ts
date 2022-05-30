@@ -33,7 +33,7 @@ type NucleonLabel = {
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
 const MAX_TITLE_WIDTH = 115;
 const MIN_VERTICAL_SPACING = 16;
-const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
+const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
 
 class NucleonCountPanel extends Panel {
 
@@ -43,7 +43,8 @@ class NucleonCountPanel extends Panel {
     const options = {
       fill: BANColors.panelBackgroundColorProperty,
       xMargin: 10,
-      stroke: BANConstants.PANEL_STROKE
+      stroke: BANConstants.PANEL_STROKE,
+      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     };
 
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined

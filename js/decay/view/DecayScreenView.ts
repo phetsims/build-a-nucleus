@@ -37,6 +37,8 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 24 );
@@ -127,12 +129,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       fill: BANColors.panelBackgroundColorProperty,
       minWidth: 50,
       contentAlign: 'center',
-      contentXMargin: 30,
-      buttonXMargin: 8,
-      buttonYMargin: 8,
+      contentXMargin: 35,
+      contentYMargin: 14,
+      buttonXMargin: 12,
+      buttonYMargin: 12,
       titleAlignX: 'left',
       expandedProperty: new BooleanProperty( true ),
-      stroke: BANConstants.PANEL_STROKE
+      stroke: BANConstants.PANEL_STROKE,
+      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
     symbolAccordionBox.right = availableDecaysPanel.right;
     symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
@@ -165,7 +169,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // Add the listeners that control the label content
-    Property.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
+    Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => updateStabilityIndicator( protonCount, neutronCount )
     );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
@@ -230,7 +234,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.elementName );
 
     // Hook up update listeners.
-    Property.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
+    Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
         DecayScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist,
           this.stabilityIndicator.center.plusXY( 0, 60 ) )
@@ -251,7 +255,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the
     // atomNode center. However, if the electronCloud is showing, then only show the emptyAtomCircle when there are zero
     // nucleons
-    Property.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
+    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
       emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
@@ -472,7 +476,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   public betaDecay( betaDecayType: DecayType ): void {
     let particleArray;
-    let particleToEmit;
+    let particleToEmit: Particle;
     let nucleonTypeCountValue;
     let nucleonTypeToChange;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
@@ -501,9 +505,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     particleToEmit.positionProperty.value = particle.positionProperty.value;
     particleToEmit.zLayerProperty.value = particle.zLayerProperty.value + 1;
 
-    // add the particle to the model to emit it
-    this.model.addParticle( particleToEmit );
-    this.animateAndRemoveNucleon( particleToEmit, this.getRandomExternalModelPosition() );
+    // TODO: okay to use setTimeout?
+    // wait to remove the particleToEmit after changing the nucleon type
+    stepTimer.setTimeout( () => {
+
+      // add the particle to the model to emit it
+      this.model.addParticle( particleToEmit );
+      this.animateAndRemoveNucleon( particleToEmit, this.getRandomExternalModelPosition() );
+    }, 300 ); // in milliseconds
   }
 
   /**

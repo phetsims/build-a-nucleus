@@ -28,11 +28,12 @@ import IProperty from '../../../../axon/js/IProperty.js';
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
 const TITLE_FONT = new PhetFont( 24 );
 const SPACING = 10;
-const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
+const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
+const ELECTRON_PARTICLE_RADIUS = NUCLEON_PARTICLE_RADIUS * 0.8;
 const ALPHA_PARTICLE_SPACING = -5;
 const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
-const BUTTON_CONTENT_WIDTH = 175;
+const BUTTON_CONTENT_WIDTH = 145;
 
 type SelfOptions = {
   emitNucleon: ( particleType: ParticleType ) => void;
@@ -119,17 +120,28 @@ class AvailableDecaysPanel extends Panel {
     // function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon
     const createParticleNode = ( particleType: ParticleType ): ParticleNode => {
       return new ParticleNode( particleType.name.toLowerCase(),
-        particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : NUCLEON_PARTICLE_RADIUS * 0.7
+        particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS
       );
     };
 
     // function to create the right-aligned horizontal motion lines used in the decay icons ( the top and bottom lines are
     // shorter than the middle line )
-    const createMotionLines = ( spacingBetweenLines: number ): VBox => {
+    const createMotionLines = ( spacingBetweenLines: number, isShort?: boolean ): VBox => {
       const motionLines: Line[] = [];
-      for ( let i = 0; i < 3; i++ ) {
-        motionLines.push( new Line( 0, 0, i % 2 === 0 ? 25 : 40, 0, { stroke: BANColors.blueDecayIconSymbolsColorProperty } ) );
+      let topAndBottomLineLength = 25;
+      let middleLineLength = 40;
+
+      if ( isShort ) {
+        topAndBottomLineLength *= 0.5;
+        middleLineLength *= 0.5;
       }
+
+      for ( let i = 0; i < 3; i++ ) {
+        motionLines.push( new Line( 0, 0, i % 2 === 0 ? topAndBottomLineLength : middleLineLength, 0,
+          { stroke: BANColors.blueDecayIconSymbolsColorProperty } )
+        );
+      }
+
       return new VBox( {
         children: motionLines,
         spacing: spacingBetweenLines,
@@ -148,24 +160,26 @@ class AvailableDecaysPanel extends Panel {
       } );
     };
 
-    // function to create the icon for a beta decay ( left to right contents: a nucleon particle node, a right-pointing arrow,
-    // a different nucleon particle node than the first one, a mathematical 'plus' symbol, and an electron or positron )
+    // function to create the icon for a beta decay ( left to right contents: a nucleon particle node, a right-pointing
+    // arrow, a different nucleon particle node than the first one, a mathematical 'plus' symbol, motion lines, and an
+    // electron or positron )
     const createBetaDecayIcon = ( isBetaMinusDecay: boolean ): HBox => {
       return new HBox( {
-        children: [
-          isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
-          new ArrowNode( 0, 0, 25, 0, {
-            fill: BANColors.blueDecayIconSymbolsColorProperty,
-            stroke: null,
-            tailWidth: 1,
-            headWidth: 7.5
-          } ),
-          isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON ),
-          new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
-          isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
-        ],
-        spacing: SPACING / 3
-      } );
+            children: [
+              isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
+              new ArrowNode( 0, 0, 20, 0, {
+                fill: BANColors.blueDecayIconSymbolsColorProperty,
+                stroke: null,
+                tailWidth: 1,
+                headWidth: 7.5
+              } ),
+              isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON ),
+              new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
+              createMotionLines( 3.5, true ),
+              isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
+            ],
+            spacing: SPACING / 3
+          } );
     };
 
     // function to create half of an alpha particle ( two particle nodes beside each other, slightly overlapping )
@@ -219,7 +233,7 @@ class AvailableDecaysPanel extends Panel {
           createDecayButton( decayType ),
           createDecayIcon( decayType )!
         ],
-        spacing: SPACING * 2,
+        spacing: SPACING * 1.5,
         align: 'center'
       } );
     };
@@ -249,7 +263,7 @@ class AvailableDecaysPanel extends Panel {
     const createParticleLabel = ( particleType: ParticleType ): HBox => {
       return new HBox( {
         children: [
-          new ParticleNode( particleType.name.toLowerCase(), NUCLEON_PARTICLE_RADIUS ),
+          new ParticleNode( particleType.name.toLowerCase(), particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
           new Text( particleType.label, { font: LABEL_FONT } )
         ],
         spacing: SPACING
@@ -278,7 +292,9 @@ class AvailableDecaysPanel extends Panel {
       xMargin: 15,
       yMargin: 15,
       fill: '#F2F2F2',
-      stroke: BANConstants.PANEL_STROKE
+      stroke: BANConstants.PANEL_STROKE,
+      minWidth: 322,
+      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
   }
 }
