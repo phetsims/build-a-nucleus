@@ -195,8 +195,8 @@ class HalfLifeNumberLineNode extends Node {
     // if the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
 
-      const distanceBetweenElementNameAndHalfLifeText = 10;
-      const distanceBetweenHalfLifeTextAndArrow = 8;
+      const distanceBetweenElementNameAndHalfLifeText = 4;
+      const distanceBetweenHalfLifeTextAndArrow = 14;
 
       // Create the textual readout for the element name.
       const elementName = new Text( '', {
@@ -227,12 +227,15 @@ class HalfLifeNumberLineNode extends Node {
             halfLifeArrow.top - elementName.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
 
+        // left-align the text if it goes over the left edge of the numberLineNode
         if ( halfLifeDisplayNode.left < numberLineNode.left ) {
           halfLifeDisplayNode.left = numberLineNode.left;
         }
         if ( elementName.left < numberLineNode.left ) {
           elementName.left = numberLineNode.left;
         }
+
+        // right-align the text if it goes over the right edge of the numberLineNode
         if ( halfLifeDisplayNode.right > numberLineNode.right ) {
           halfLifeDisplayNode.right = numberLineNode.right;
         }
