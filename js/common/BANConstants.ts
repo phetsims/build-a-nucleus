@@ -15,7 +15,6 @@ const BANConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
-  // TODO: is it alright to use the constant of another file here?
   // radius of the particle node used on the NucleonCountPanel and AvailableDecaysPanel
   PARTICLE_RADIUS: ShredConstants.NUCLEON_RADIUS,
 
@@ -39,7 +38,7 @@ const BANConstants = {
   // CSS pixels per second
   PARTICLE_ANIMATION_SPEED: 300,
 
-  PANEL_CORNER_RADIUS: 8,
+  PANEL_CORNER_RADIUS: 6,
 
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
   TIME_TO_SHOW_DOES_NOT_EXIST: 1

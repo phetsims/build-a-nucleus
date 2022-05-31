@@ -41,8 +41,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 
 // constants
-const LABEL_FONT = new PhetFont( 24 );
-const STABILITY_ELEMENT_AND_CHECKBOX_FONT = new PhetFont( 20 );
+const LABEL_FONT = new PhetFont( 20 );
 const NUCLEON_CAPTURE_RADIUS = 100;
 const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
@@ -99,7 +98,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const showElectronCloudCheckbox = new Checkbox(
       new HBox( {
         children: [
-          new Text( buildANucleusStrings.electronCloud, { font: STABILITY_ELEMENT_AND_CHECKBOX_FONT } ),
+          new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT } ),
 
           // electron cloud icon
           new Circle( {
@@ -130,9 +129,12 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       minWidth: 50,
       contentAlign: 'center',
       contentXMargin: 35,
-      contentYMargin: 14,
-      buttonXMargin: 12,
-      buttonYMargin: 12,
+      contentYMargin: 16,
+      buttonXMargin: 10,
+      buttonYMargin: 10,
+      expandCollapseButtonOptions: {
+        sideLength: 18
+      },
       titleAlignX: 'left',
       expandedProperty: new BooleanProperty( true ),
       stroke: BANConstants.PANEL_STROKE,
@@ -144,7 +146,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add stability indicator
     this.stabilityIndicator = new Text( '', {
-      font: STABILITY_ELEMENT_AND_CHECKBOX_FONT,
+      font: LABEL_FONT,
       fill: 'black',
       visible: true,
       maxWidth: 225
@@ -226,7 +228,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // Create the textual readout for the element name.
     this.elementName = new Text( '', {
-      font: STABILITY_ELEMENT_AND_CHECKBOX_FONT,
+      font: LABEL_FONT,
       fill: Color.RED,
       maxWidth: 325
     } );
@@ -549,7 +551,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // only animate the removal of a particle if it was dragged out of the creator node
     else if ( particle.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      // TODO: might need to add a check to see if particle is already on its way to the destination passed in
       this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
