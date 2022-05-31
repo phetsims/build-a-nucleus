@@ -400,14 +400,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.model.particleAtom.neutronCountProperty.value >= 2,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
-    // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
-    if ( this.model.particleAtom.protonCountProperty.value === 4 && this.model.particleAtom.neutronCountProperty.value === 2 ) {
-
-      stepTimer.setTimeout( () => {
-        _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
-      }, BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * 1000 ); // in milliseconds
-    }
-
     // get the protons and neutrons closest to the center of the particleAtom
     const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
       proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
@@ -448,8 +440,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition( alphaParticleNode.width );
-    const animationDuration = alphaParticle.positionProperty.value.distance( destination ) /
-                              BANConstants.PARTICLE_ANIMATION_SPEED;
+    const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
+    const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
 
     const alphaParticleEmissionAnimation = new Animation( {
       property: alphaParticle.positionProperty,
@@ -470,6 +462,23 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       alphaParticle.dispose();
     } );
     alphaParticleEmissionAnimation.start();
+
+    // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
+    if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
+      const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
+
+      // the distance the alpha particle travelled in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
+      const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST *
+                                             ( totalDistanceAlphaParticleTravels / animationDuration );
+
+      let protonsEmitted = false;
+      alphaParticle.positionProperty.link( position => {
+        if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
+          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
+          protonsEmitted = true;
+        }
+      } );
+    }
   }
 
   /**
