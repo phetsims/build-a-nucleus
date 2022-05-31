@@ -39,7 +39,10 @@ const BANConstants = {
   // CSS pixels per second
   PARTICLE_ANIMATION_SPEED: 300,
 
-  PANEL_CORNER_RADIUS: 8
+  PANEL_CORNER_RADIUS: 8,
+
+  // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
+  TIME_TO_SHOW_DOES_NOT_EXIST: 1
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

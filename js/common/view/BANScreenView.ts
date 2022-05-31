@@ -521,7 +521,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     }
 
     // show the nuclide that does not exist for one second, then return the necessary particles
-    if ( this.timeSinceCountdownStarted >= 1 ) {
+    if ( this.timeSinceCountdownStarted >= BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST ) {
       this.timeSinceCountdownStarted = 0;
 
       // TODO: change this because it is a bit hacky, uses a boolean property to keep track of if a double arrow button
