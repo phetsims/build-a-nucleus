@@ -10,7 +10,7 @@
  */
 
 import { Shape } from '../../../../kite/js/imports.js';
-import OmitStrict from '../../../../phet-core/js/types/OmitStrict.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import { HBox, IPaint, Path } from '../../../../scenery/js/imports.js';
 import RectangularPushButton, { RectangularPushButtonOptions } from '../../../../sun/js/buttons/RectangularPushButton.js';
@@ -29,7 +29,7 @@ type SelfOptions = {
   rightArrowFill: IPaint;
 };
 
-export type DoubleArrowButtonOptions = SelfOptions & OmitStrict<RectangularPushButtonOptions, 'listener' | 'content'>;
+export type DoubleArrowButtonOptions = SelfOptions & StrictOmit<RectangularPushButtonOptions, 'listener' | 'content'>;
 
 export default class DoubleArrowButton extends RectangularPushButton {
 
