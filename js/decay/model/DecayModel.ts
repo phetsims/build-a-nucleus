@@ -115,7 +115,7 @@ class DecayModel extends BANModel {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
+   * @param dt - time step, in seconds
    */
   public override step( dt: number ): void {
     super.step( dt );

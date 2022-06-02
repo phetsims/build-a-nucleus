@@ -503,7 +503,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
+   * @param dt - time step, in seconds
    */
   public override step( dt: number ): void {
     const protonCount = this.model.particleAtom.protonCountProperty.value;
