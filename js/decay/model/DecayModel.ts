@@ -15,7 +15,6 @@ import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayType from '../view/DecayType.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
-import IProperty from '../../../../axon/js/IProperty.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
@@ -23,11 +22,11 @@ export type DecayModelOptions = BANModelOptions;
 class DecayModel extends BANModel {
 
   public halfLifeNumberProperty: IReadOnlyProperty<number>;
-  public protonEmissionEnabledProperty: IProperty<boolean>;
-  public neutronEmissionEnabledProperty: IProperty<boolean>;
-  public betaMinusDecayEnabledProperty: IProperty<boolean>;
-  public betaPlusDecayEnabledProperty: IProperty<boolean>;
-  public alphaDecayEnabledProperty: IProperty<boolean>;
+  public protonEmissionEnabledProperty: IReadOnlyProperty<boolean>;
+  public neutronEmissionEnabledProperty: IReadOnlyProperty<boolean>;
+  public betaMinusDecayEnabledProperty: IReadOnlyProperty<boolean>;
+  public betaPlusDecayEnabledProperty: IReadOnlyProperty<boolean>;
+  public alphaDecayEnabledProperty: IReadOnlyProperty<boolean>;
 
   constructor( providedOptions?: DecayModelOptions ) {
 

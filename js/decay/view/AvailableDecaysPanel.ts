@@ -22,7 +22,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DecayModel from '../model/DecayModel.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -55,7 +55,7 @@ class AvailableDecaysPanel extends Panel {
     contentNode.addChild( titleNode );
 
     // function to return the correct enabled derived property for each type of decay
-    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): IProperty<boolean> => {
+    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): IReadOnlyProperty<boolean> => {
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
           return model.protonEmissionEnabledProperty;
