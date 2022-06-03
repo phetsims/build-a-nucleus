@@ -256,8 +256,6 @@ class HalfLifeNumberLineNode extends Node {
     };
 
     // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
-    // TODO: Repositioning the halfLifeNumberText in updateHalfLifeDisplay relies on the listener for
-    //  halfLifeNumberProperty in ScientificNotationNode to fire first, so the bounds of halfLifeNumberText are correct here.
     halfLifeNumberProperty.link( halfLifeNumber => {
 
       // the nuclide is stable

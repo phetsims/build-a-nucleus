@@ -467,14 +467,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
         'There is no particle of this type in the atom.' );
       this.model.particleAtom.removeParticle( particleToReturn );
-      this.animateAndRemoveNucleon( particleToReturn, creatorNodePosition );
+      this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
     }
   }
 
   /**
    * Animate particle to the given destination and then remove it.
    */
-  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ): void {
+  public animateAndRemoveParticle( particle: Particle, destination: Vector2 ): void {
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
@@ -503,7 +503,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
+   * @param dt - time step, in seconds
    */
   public override step( dt: number ): void {
     const protonCount = this.model.particleAtom.protonCountProperty.value;
@@ -521,7 +521,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     }
 
     // show the nuclide that does not exist for one second, then return the necessary particles
-    if ( this.timeSinceCountdownStarted >= 1 ) {
+    if ( this.timeSinceCountdownStarted >= BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST ) {
       this.timeSinceCountdownStarted = 0;
 
       // TODO: change this because it is a bit hacky, uses a boolean property to keep track of if a double arrow button

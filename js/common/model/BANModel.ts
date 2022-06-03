@@ -116,7 +116,7 @@ class BANModel {
   }
 
   /**
-   * @param {number} dt - time step, in seconds
+   * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
     // Update particle positions.
