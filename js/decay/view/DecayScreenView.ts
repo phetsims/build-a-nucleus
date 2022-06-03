@@ -32,13 +32,12 @@ import ParticleType from './ParticleType.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
-  import dotRandom from '../../../../dot/js/dotRandom.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -388,7 +387,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       'The particleAtom needs a ' + particleType.name + ' to emit it.' );
 
     const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
-    this.animateAndRemoveNucleon( nucleon, this.getRandomExternalModelPosition() );
+    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
   }
 
   /**
@@ -509,20 +508,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const particle = _.sortBy( [ ...particleArray ],
       particle => particle!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
 
-    // this.model.particleAtom.changeNucleonType( particle );
-
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
     particleToEmit.positionProperty.value = particle.positionProperty.value;
     particleToEmit.zLayerProperty.value = particle.zLayerProperty.value + 1;
 
-    // TODO: okay to use setTimeout?
-    // wait to remove the particleToEmit after changing the nucleon type
-    stepTimer.setTimeout( () => {
-
-      // add the particle to the model to emit it
-      this.model.addParticle( particleToEmit );
-      this.animateAndRemoveNucleon( particleToEmit, this.getRandomExternalModelPosition() );
-    }, 300 ); // in milliseconds
+    // add the particle to the model to emit it, then change the nucleon type and remove the particle
+    this.model.addParticle( particleToEmit );
+    particleToEmit.destinationProperty.value = this.getRandomExternalModelPosition();
+    // this.model.particleAtom.changeNucleonType( particle, () => {
+    //   this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+    // } );
   }
 
   /**
@@ -560,7 +555,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // only animate the removal of a particle if it was dragged out of the creator node
     else if ( particle.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveNucleon( particle, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
+      this.animateAndRemoveParticle( particle, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 

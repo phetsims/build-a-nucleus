@@ -467,14 +467,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
         'There is no particle of this type in the atom.' );
       this.model.particleAtom.removeParticle( particleToReturn );
-      this.animateAndRemoveNucleon( particleToReturn, creatorNodePosition );
+      this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
     }
   }
 
   /**
    * Animate particle to the given destination and then remove it.
    */
-  public animateAndRemoveNucleon( particle: Particle, destination: Vector2 ): void {
+  public animateAndRemoveParticle( particle: Particle, destination: Vector2 ): void {
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
