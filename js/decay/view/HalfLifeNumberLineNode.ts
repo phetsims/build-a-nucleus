@@ -35,7 +35,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 
 // types
-type HalfLifeNumberLineNodeSelfOptions = {
+type SelfOptions = {
   numberLineWidth: number;
   tickMarkExtent: number;
   numberLineLabelFont: PhetFont;
@@ -47,7 +47,7 @@ type HalfLifeNumberLineNodeSelfOptions = {
   neutronCountProperty?: IReadOnlyProperty<number>;
   doesNuclideExistBooleanProperty?: IReadOnlyProperty<boolean>;
 };
-export type HalfLifeNumberLineNodeOptions = HalfLifeNumberLineNodeSelfOptions & NodeOptions;
+export type HalfLifeNumberLineNodeOptions = SelfOptions & NodeOptions;
 
 // constants
 const TITLE_FONT = new PhetFont( 24 );
@@ -71,7 +71,7 @@ class HalfLifeNumberLineNode extends Node {
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
-    const options = optionize<HalfLifeNumberLineNodeOptions, HalfLifeNumberLineNodeSelfOptions, NodeOptions>()( {
+    const options = optionize<HalfLifeNumberLineNodeOptions, SelfOptions, NodeOptions>()( {
       halfLifeDisplayScale: 1,
       protonCountProperty: new NumberProperty( 0 ),
       neutronCountProperty: new NumberProperty( 0 ),
