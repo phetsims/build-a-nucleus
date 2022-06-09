@@ -361,6 +361,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       // @ts-ignore TODO-TS: Fix listener type
       particle.dragEndedEmitter.removeListener( particleDragFinished );
+      particle.animationEndedEmitter.dispose();
 
       delete this.particleViewMap[ particleView.particle.id ];
 
@@ -552,7 +553,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
    */
   public findParticleView( particle: Particle ): ParticleView {
     const particleView = this.particleViewMap[ particle.id ];
-    assert && assert( particleView, 'Did not find matching ParticleView' );
+    assert && assert( particleView, 'Did not find matching ParticleView for type ' + particle.type + ' and id ' + particle.id );
     return particleView;
   }
 
