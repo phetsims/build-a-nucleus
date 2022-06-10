@@ -539,23 +539,23 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Define a function that will decide where to put nucleons.
    */
-  protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
-    const particleCreatorNodeCenter = particle.type === ParticleType.PROTON.name.toLowerCase() ?
+  protected override dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
+    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.name.toLowerCase() ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
-    if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
+    if ( nucleon.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
 
-         // if removing the particle will create a nuclide that does not exist, re-add the particle to the atom
+         // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
          ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
            !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
          )
     ) {
-      atom.addParticle( particle );
+      atom.addParticle( nucleon );
     }
 
-    // only animate the removal of a particle if it was dragged out of the creator node
-    else if ( particle.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveParticle( particle, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
+    // only animate the removal of a nucleon if it was dragged out of the creator node
+    else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
+      this.animateAndRemoveParticle( nucleon, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 
