@@ -56,6 +56,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   private readonly elementName: Text;
   private readonly stabilityIndicator: Text;
   private readonly atomNode: AtomNode;
+  private readonly symbolAccordionBox: AccordionBox;
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -119,7 +120,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.massNumberProperty, {
       scale: 0.3
     } );
-    const symbolAccordionBox = new AccordionBox( symbolNode, {
+    this.symbolAccordionBox = new AccordionBox( symbolNode, {
       titleNode: new Text( buildANucleusStrings.symbol, {
         font: LABEL_FONT,
         maxWidth: ShredConstants.ACCORDION_BOX_TITLE_MAX_WIDTH
@@ -135,13 +136,12 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         sideLength: 18
       },
       titleAlignX: 'left',
-      expandedProperty: new BooleanProperty( true ),
       stroke: BANConstants.PANEL_STROKE,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
-    symbolAccordionBox.right = availableDecaysPanel.right;
-    symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
-    this.addChild( symbolAccordionBox );
+    this.symbolAccordionBox.right = availableDecaysPanel.right;
+    this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
+    this.addChild( this.symbolAccordionBox );
 
     // create and add stability indicator
     this.stabilityIndicator = new Text( '', {
@@ -560,7 +560,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   }
 
   public override reset(): void {
-    //TODO
+    this.symbolAccordionBox.reset();
   }
 }
 
