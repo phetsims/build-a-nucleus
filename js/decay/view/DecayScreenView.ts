@@ -57,6 +57,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   private readonly stabilityIndicator: Text;
   private readonly atomNode: AtomNode;
   private readonly symbolAccordionBox: AccordionBox;
+  private readonly showElectronCloudBooleanProperty: BooleanProperty;
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -91,8 +92,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( availableDecaysPanel );
 
     // show the electron cloud by default
-    const showElectronCloudBooleanProperty = new BooleanProperty( true );
-    showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
+    this.showElectronCloudBooleanProperty = new BooleanProperty( true );
+    this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
 
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox(
@@ -110,7 +111,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         ],
         spacing: 5
       } ),
-      showElectronCloudBooleanProperty
+      this.showElectronCloudBooleanProperty
     );
     showElectronCloudCheckbox.left = availableDecaysPanel.left;
     showElectronCloudCheckbox.top = availableDecaysPanel.bottom + 25;
@@ -257,7 +258,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // atomNode center. However, if the electronCloud is showing, then only show the emptyAtomCircle when there are zero
     // nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-      showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
+      this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
       emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
 
@@ -301,7 +302,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       if ( name.length === 0 ) {
         name += massNumber.toString() + ' ' + buildANucleusStrings.neutronsLowercase + ' ' + buildANucleusStrings.doesNotForm;
       }
-       else {
+      else {
         name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
       }
     }
@@ -561,6 +562,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public override reset(): void {
     this.symbolAccordionBox.reset();
+    this.showElectronCloudBooleanProperty.reset();
   }
 }
 
