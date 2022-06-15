@@ -38,6 +38,8 @@ import Multilink from '../../../../axon/js/Multilink.js';
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 
+const TOUCH_AREA_Y_DILATION = 3;
+
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = {
@@ -212,7 +214,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
         merge( {
           leftArrowFill: BANColors.protonColorProperty,
           rightArrowFill: BANColors.neutronColorProperty,
-          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty
+          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty,
+          touchAreaYDilation: TOUCH_AREA_Y_DILATION
         }, arrowButtonOptions )
       );
     };
@@ -245,13 +248,15 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
       const upArrowButton = new ArrowButton( 'up', () => createIncreaseNucleonCountListener( nucleonType ),
         merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
+            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty,
+          touchAreaYDilation: TOUCH_AREA_Y_DILATION
           },
           singleArrowButtonOptions )
       );
       const downArrowButton = new ArrowButton( 'down', () => createDecreaseNucleonCountListener( nucleonType ),
         merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty
+            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty,
+            touchAreaYDilation: TOUCH_AREA_Y_DILATION
           },
           singleArrowButtonOptions )
       );
