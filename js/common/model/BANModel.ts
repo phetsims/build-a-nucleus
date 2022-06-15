@@ -12,6 +12,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
@@ -41,7 +42,7 @@ class BANModel {
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
-    const options = optionize<BANModelOptions, {}>()( {
+    const options = optionize<BANModelOptions, EmptyObjectType>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED

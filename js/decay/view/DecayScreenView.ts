@@ -10,6 +10,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -60,7 +61,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
-    const options = optionize<DecayScreenViewOptions, {}, BANScreenViewOptions>()( {
+    const options = optionize<DecayScreenViewOptions, EmptyObjectType, BANScreenViewOptions>()( {
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );
