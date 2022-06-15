@@ -157,7 +157,8 @@ class HalfLifeNumberLineNode extends Node {
 
     // create and add the text for "Half-life:"
     const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
-      font: TITLE_FONT
+      font: TITLE_FONT,
+      maxWidth: 115
     } );
     halfLifeDisplayNode.addChild( halfLifeColonText );
     halfLifeDisplayNode.centerX = this.centerX - 75;
@@ -165,7 +166,8 @@ class HalfLifeNumberLineNode extends Node {
 
     // create and add the "Unknown" text
     const halfLifeUnknownText = new RichText( buildANucleusStrings.unknown, {
-      font: TITLE_FONT
+      font: TITLE_FONT,
+      maxWidth: 115
     } );
     halfLifeUnknownText.left = halfLifeColonText.right + 8;
     halfLifeUnknownText.bottom = halfLifeColonText.bottom;
@@ -180,11 +182,12 @@ class HalfLifeNumberLineNode extends Node {
     // the half life number in scientific notation with an 's' for seconds at the end
     const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
       font: TITLE_FONT
+      // TODO: do you also need a maxWidth here? seems not that useful because it's already maxed out by the halfLifeNumberProperty
     } );
     const halfLifeNumberText = new HBox( {
       children: [
         halfLifeScientificNotation,
-        new Text( buildANucleusStrings.s, { font: TITLE_FONT } )
+        new Text( buildANucleusStrings.s, { font: TITLE_FONT, maxWidth: 30 } )
       ],
       align: 'bottom',
       spacing: 10
@@ -202,7 +205,7 @@ class HalfLifeNumberLineNode extends Node {
       const elementName = new Text( '', {
         font: this.labelFont,
         fill: Color.RED,
-        maxWidth: 325
+        maxWidth: 175
       } );
       elementName.center = halfLifeDisplayNode.center.minusXY( 0, elementName.height + 10 );
       this.addChild( elementName );
@@ -409,7 +412,7 @@ class HalfLifeNumberLineNode extends Node {
         headWidth: 5
       } );
     this.addChild( arrow );
-    const numberText = new RichText( label, { font: this.labelFont } );
+    const numberText = new RichText( label, { font: this.labelFont, maxWidth: 30 } );
     numberText.bottom = arrow.top + 3;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );

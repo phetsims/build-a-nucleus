@@ -53,7 +53,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public static NUMBER_OF_NUCLEON_LAYERS: number;
   private nucleonLayers: Node[];
-  private readonly elementName: Text;
   private readonly stabilityIndicator: Text;
   private readonly atomNode: AtomNode;
   private readonly symbolAccordionBox: AccordionBox;
@@ -99,7 +98,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const showElectronCloudCheckbox = new Checkbox(
       new HBox( {
         children: [
-          new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT } ),
+          new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
 
           // electron cloud icon
           new Circle( {
@@ -124,7 +123,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
       titleNode: new Text( buildANucleusStrings.symbol, {
         font: LABEL_FONT,
-        maxWidth: ShredConstants.ACCORDION_BOX_TITLE_MAX_WIDTH
+        maxWidth: 118
       } ),
       fill: BANColors.panelBackgroundColorProperty,
       minWidth: 50,
@@ -227,18 +226,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // Create the textual readout for the element name.
-    this.elementName = new Text( '', {
+    const elementName = new Text( '', {
       font: LABEL_FONT,
       fill: Color.RED,
-      maxWidth: 325
+      maxWidth: 175
     } );
-    this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
-    this.addChild( this.elementName );
+    elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+    this.addChild( elementName );
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        DecayScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist,
+        DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
           this.stabilityIndicator.center.plusXY( 0, 60 ) )
     );
 

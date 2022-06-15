@@ -31,7 +31,7 @@ type NucleonLabel = {
 
 // constants, empirically determined
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
-const MAX_TITLE_WIDTH = 115;
+const MAX_TITLE_WIDTH = 100;
 const MIN_VERTICAL_SPACING = 16;
 const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
 
@@ -53,10 +53,7 @@ class NucleonCountPanel extends Panel {
     const nucleonLabel = ( nucleonString: string, nucleonType: ParticleType,
                            nucleonCountProperty: IReadOnlyProperty<number>, nucleonCountRange: Range ): NucleonLabel => {
 
-      const nucleonTitle = new Text( nucleonString, {
-        font: LABEL_FONT
-      } );
-      nucleonTitle.maxWidth = MAX_TITLE_WIDTH;
+      const nucleonTitle = new Text( nucleonString, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
       const nucleonParticleNode = new ParticleNode( nucleonType.name.toLowerCase(), PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
       nucleonTitle.left = nucleonParticleNode.right + nucleonParticleNode.width / 2;

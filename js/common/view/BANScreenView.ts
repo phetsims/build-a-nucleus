@@ -295,13 +295,15 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.electronCloud.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
     this.addChild( this.electronCloud );
 
+    const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
+
     // create and add the Protons and Neutrons label
-    const protonsLabel = new Text( buildANucleusStrings.protons, { font: new PhetFont( 20 ) } );
+    const protonsLabel = new Text( buildANucleusStrings.protons, nucleonLabelTextOptions );
     protonsLabel.bottom = doubleArrowButtons.bottom;
     protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
     this.addChild( protonsLabel );
 
-    const neutronsLabel = new Text( buildANucleusStrings.neutronsUppercase, { font: new PhetFont( 20 ) } );
+    const neutronsLabel = new Text( buildANucleusStrings.neutronsUppercase, nucleonLabelTextOptions );
     neutronsLabel.bottom = doubleArrowButtons.bottom;
     neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
     this.addChild( neutronsLabel );
