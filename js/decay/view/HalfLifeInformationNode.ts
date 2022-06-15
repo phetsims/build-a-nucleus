@@ -55,7 +55,7 @@ class HalfLifeInformationNode extends Node {
     this.addChild( infoButton );
 
     // create and add the units label on the number line
-    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: LABEL_FONT } );
+    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: LABEL_FONT, maxWidth: 100 } );
     numberLineUnitsLabel.top = halfLifeNumberLineNode.bottom;
     numberLineUnitsLabel.centerX = halfLifeNumberLineNode.centerX;
     this.addChild( numberLineUnitsLabel );
@@ -69,7 +69,7 @@ class HalfLifeInformationNode extends Node {
         } );
       this.addChild( arrow );
 
-      const arrowText = new Text( stabilityText, { font: LABEL_FONT } );
+      const arrowText = new Text( stabilityText, { font: LABEL_FONT, maxWidth: 125 } );
       arrowText.centerY = arrow.centerY;
       if ( stabilityText === buildANucleusStrings.lessStable ) {
         arrowText.left = arrow.right + 5;

@@ -50,7 +50,7 @@ class AvailableDecaysPanel extends Panel {
     const contentNode = new Rectangle( 0, 0, 0, 0 );
 
     // create and add the title
-    const titleNode = new Text( buildANucleusStrings.availableDecays, { font: TITLE_FONT } );
+    const titleNode = new Text( buildANucleusStrings.availableDecays, { font: TITLE_FONT, maxWidth: 285 } );
     titleNode.centerX = contentNode.centerX;
     contentNode.addChild( titleNode );
 
@@ -264,7 +264,7 @@ class AvailableDecaysPanel extends Panel {
       return new HBox( {
         children: [
           new ParticleNode( particleType.name.toLowerCase(), particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
-          new Text( particleType.label, { font: LABEL_FONT } )
+          new Text( particleType.label, { font: LABEL_FONT, maxWidth: 100 } )
         ],
         spacing: SPACING
       } );

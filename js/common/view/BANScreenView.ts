@@ -296,13 +296,15 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.electronCloud.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
     this.addChild( this.electronCloud );
 
+    const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
+
     // create and add the Protons and Neutrons label
-    const protonsLabel = new Text( buildANucleusStrings.protons, { font: new PhetFont( 20 ) } );
+    const protonsLabel = new Text( buildANucleusStrings.protons, nucleonLabelTextOptions );
     protonsLabel.bottom = doubleArrowButtons.bottom;
     protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
     this.addChild( protonsLabel );
 
-    const neutronsLabel = new Text( buildANucleusStrings.neutronsUppercase, { font: new PhetFont( 20 ) } );
+    const neutronsLabel = new Text( buildANucleusStrings.neutronsUppercase, nucleonLabelTextOptions );
     neutronsLabel.bottom = doubleArrowButtons.bottom;
     neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
     this.addChild( neutronsLabel );
@@ -333,9 +335,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
     this.addChild( this.resetAllButton );
 
-    // called when a Particle finished being dragged
-    const particleDragFinished = ( particle: Particle ) => { this.dragEndedListener( particle, this.model.particleAtom ); };
-
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
       if ( isUserControlled && this.model.particleAtom.containsParticle( particle ) ) {
         this.model.particleAtom.removeParticle( particle );
@@ -349,8 +348,12 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle, particleView );
 
-      // @ts-ignore TODO-TS: Fix listener type
-      particle.dragEndedEmitter.addListener( particleDragFinished );
+      if ( particle.type === ParticleType.PROTON.label.toLowerCase() ||
+           particle.type === ParticleType.NEUTRON.label.toLowerCase() ) {
+
+        // called when a nucleon is finished being dragged
+        particle.dragEndedEmitter.addListener( () => { this.dragEndedListener( particle, this.model.particleAtom ); } );
+      }
 
       // TODO: unlink userControlledListener
       particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
@@ -360,8 +363,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.model.particles.addItemRemovedListener( ( particle: Particle ) => {
       const particleView = this.findParticleView( particle );
 
-      // @ts-ignore TODO-TS: Fix listener type
-      particle.dragEndedEmitter.removeListener( particleDragFinished );
+      particle.dragEndedEmitter.dispose();
       particle.animationEndedEmitter.dispose();
 
       delete this.particleViewMap[ particleView.particle.id ];
@@ -558,7 +560,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     return particleView;
   }
 
-  protected dragEndedListener( particle: Particle, particleAtom: ParticleAtom ): void {}
+  protected dragEndedListener( nucleon: Particle, particleAtom: ParticleAtom ): void {}
 
   protected addParticleView( particle: Particle, particleView: ParticleView ): void {}
 }

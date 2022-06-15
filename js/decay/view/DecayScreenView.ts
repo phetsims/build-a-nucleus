@@ -54,10 +54,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public static NUMBER_OF_NUCLEON_LAYERS: number;
   private nucleonLayers: Node[];
-  private readonly elementName: Text;
   private readonly stabilityIndicator: Text;
   private readonly atomNode: AtomNode;
   private readonly symbolAccordionBox: AccordionBox;
+  private readonly showElectronCloudBooleanProperty: BooleanProperty;
 
   constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -92,14 +92,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( availableDecaysPanel );
 
     // show the electron cloud by default
-    const showElectronCloudBooleanProperty = new BooleanProperty( true );
-    showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
+    this.showElectronCloudBooleanProperty = new BooleanProperty( true );
+    this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
 
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox(
       new HBox( {
         children: [
-          new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT } ),
+          new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
 
           // electron cloud icon
           new Circle( {
@@ -111,7 +111,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         ],
         spacing: 5
       } ),
-      showElectronCloudBooleanProperty
+      this.showElectronCloudBooleanProperty
     );
     showElectronCloudCheckbox.left = availableDecaysPanel.left;
     showElectronCloudCheckbox.top = availableDecaysPanel.bottom + 25;
@@ -124,7 +124,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
       titleNode: new Text( buildANucleusStrings.symbol, {
         font: LABEL_FONT,
-        maxWidth: ShredConstants.ACCORDION_BOX_TITLE_MAX_WIDTH
+        maxWidth: 118
       } ),
       fill: BANColors.panelBackgroundColorProperty,
       minWidth: 50,
@@ -227,18 +227,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // Create the textual readout for the element name.
-    this.elementName = new Text( '', {
+    const elementName = new Text( '', {
       font: LABEL_FONT,
       fill: Color.RED,
-      maxWidth: 325
+      maxWidth: 175
     } );
-    this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
-    this.addChild( this.elementName );
+    elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+    this.addChild( elementName );
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        DecayScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist,
+        DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
           this.stabilityIndicator.center.plusXY( 0, 60 ) )
     );
 
@@ -258,7 +258,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // atomNode center. However, if the electronCloud is showing, then only show the emptyAtomCircle when there are zero
     // nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-      showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
+      this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
       emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
 
@@ -302,7 +302,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       if ( name.length === 0 ) {
         name += massNumber.toString() + ' ' + buildANucleusStrings.neutronsLowercase + ' ' + buildANucleusStrings.doesNotForm;
       }
-       else {
+      else {
         name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
       }
     }
@@ -540,28 +540,29 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Define a function that will decide where to put nucleons.
    */
-  protected override dragEndedListener( particle: Particle, atom: ParticleAtom ): void {
-    const particleCreatorNodeCenter = particle.type === ParticleType.PROTON.name.toLowerCase() ?
+  protected override dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
+    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.name.toLowerCase() ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
-    if ( particle.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
+    if ( nucleon.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
 
-         // if removing the particle will create a nuclide that does not exist, re-add the particle to the atom
+         // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
          ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
            !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
          )
     ) {
-      atom.addParticle( particle );
+      atom.addParticle( nucleon );
     }
 
-    // only animate the removal of a particle if it was dragged out of the creator node
-    else if ( particle.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveParticle( particle, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
+    // only animate the removal of a nucleon if it was dragged out of the creator node
+    else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
+      this.animateAndRemoveParticle( nucleon, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 
   public override reset(): void {
     this.symbolAccordionBox.reset();
+    this.showElectronCloudBooleanProperty.reset();
   }
 }
 
