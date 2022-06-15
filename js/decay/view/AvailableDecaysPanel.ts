@@ -36,7 +36,7 @@ const BUTTON_HEIGHT = 35;
 const BUTTON_CONTENT_WIDTH = 145;
 
 type SelfOptions = {
-  emitNucleon: ( particleType: ParticleType ) => void;
+  emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
   emitAlphaParticle: () => void;
   betaDecay: ( betaDecayType: DecayType ) => void;
 };
@@ -77,7 +77,7 @@ class AvailableDecaysPanel extends Panel {
     const createDecayButtonListener = ( decayType: DecayType ) => {
       switch( decayType ) {
         case DecayType.PROTON_EMISSION:
-          options.emitNucleon( ParticleType.PROTON );
+          options.emitNucleon( ParticleType.PROTON, 'proton emission' );
           break;
         case DecayType.NEUTRON_EMISSION:
           options.emitNucleon( ParticleType.NEUTRON );

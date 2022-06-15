@@ -382,10 +382,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
-  public emitNucleon( particleType: ParticleType ): void {
+  public emitNucleon( particleType: ParticleType, fromDecay?: string ): void {
     assert && assert( particleType === ParticleType.PROTON ? this.model.particleAtom.protonCountProperty.value >= 1 :
                       this.model.particleAtom.neutronCountProperty.value >= 1,
-      'The particleAtom needs a ' + particleType.name + ' to emit it.' );
+      'The particleAtom needs a ' + particleType.name + ' to emit it. The decay: ' + fromDecay + ' cannot occur.' );
 
     const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
     this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
@@ -474,7 +474,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       let protonsEmitted = false;
       alphaParticle.positionProperty.link( position => {
         if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
-          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
+          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON, 'alpha decay' ); } );
           protonsEmitted = true;
         }
       } );
