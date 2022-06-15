@@ -9,6 +9,7 @@
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -30,7 +31,7 @@ class DecayModel extends BANModel {
 
   constructor( providedOptions?: DecayModelOptions ) {
 
-    const options = optionize<DecayModelOptions, {}, BANModelOptions>()( {
+    const options = optionize<DecayModelOptions, EmptyObjectType, BANModelOptions>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED

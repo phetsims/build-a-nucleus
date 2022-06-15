@@ -19,6 +19,7 @@ import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import EmptyObjectType from '../../../../phet-core/js/types/EmptyObjectType.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -68,7 +69,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
-    const options = optionize<BANScreenViewOptions, {}, ScreenViewOptions>()( {
+    const options = optionize<BANScreenViewOptions, EmptyObjectType, ScreenViewOptions>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
