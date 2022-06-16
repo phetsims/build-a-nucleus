@@ -57,7 +57,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected model: M;
   private readonly particleViewMap: ParticleViewMap;
   protected readonly particleViewLayerNode: Node;
-  protected modelViewTransform: ModelViewTransform2;
+  public modelViewTransform: ModelViewTransform2;
   protected readonly protonsCreatorNode: NucleonCreatorNode;
   protected readonly neutronsCreatorNode: NucleonCreatorNode;
   protected readonly electronCloud: Circle;
@@ -210,8 +210,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
       return new DoubleArrowButton( direction,
         direction === 'up' ?
-        () => createIncreaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
-        () => createDecreaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ),
+        () => increaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
+        () => decreaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ),
         merge( {
           leftArrowFill: BANColors.protonColorProperty,
           rightArrowFill: BANColors.neutronColorProperty,
@@ -231,13 +231,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.addChild( doubleArrowButtons );
 
     // function to create the listeners that create or remove a particle
-    const createIncreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
+    const increaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
       this.createParticleFromStack( firstNucleonType );
       if ( secondNucleonType ) {
         this.createParticleFromStack( secondNucleonType );
       }
     };
-    const createDecreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
+    const decreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
       this.returnParticleToStack( firstNucleonType );
       if ( secondNucleonType ) {
         this.returnParticleToStack( secondNucleonType );
@@ -247,14 +247,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // function to create the single arrow buttons
     const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): VBox => {
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
-      const upArrowButton = new ArrowButton( 'up', () => createIncreaseNucleonCountListener( nucleonType ),
+      const upArrowButton = new ArrowButton( 'up', () => increaseNucleonCountListener( nucleonType ),
         merge( {
             enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty,
           touchAreaYDilation: TOUCH_AREA_Y_DILATION
           },
           singleArrowButtonOptions )
       );
-      const downArrowButton = new ArrowButton( 'down', () => createDecreaseNucleonCountListener( nucleonType ),
+      const downArrowButton = new ArrowButton( 'down', () => decreaseNucleonCountListener( nucleonType ),
         merge( {
             enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty,
             touchAreaYDilation: TOUCH_AREA_Y_DILATION

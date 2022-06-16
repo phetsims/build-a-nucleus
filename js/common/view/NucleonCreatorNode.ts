@@ -27,6 +27,7 @@ class NucleonCreatorNode extends Node {
     this.touchArea = this.localBounds.dilated( 10 );
 
     this.addInputListener( DragListener.createForwardingListener( event => {
+
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
       const particle = new Particle( particleType.name.toLowerCase(), {
@@ -35,7 +36,9 @@ class NucleonCreatorNode extends Node {
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
-      particle.setPositionAndDestination( viewPosition.minus( particle.positionProperty.value ) );
+      particle.setPositionAndDestination(
+        screenView.modelViewTransform.viewToModelPosition( viewPosition ).minus( particle.positionProperty.value )
+      );
 
       // Create and start dragging the new particle
       screenView.addAndDragParticle( event, particle );
