@@ -24,7 +24,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 // types
 type NucleonLabel = {
-  title: Text;
+  particleNode: ParticleNode;
   numberDisplays: NumberDisplay[];
   contents: HBox;
 };
@@ -32,7 +32,7 @@ type NucleonLabel = {
 // constants, empirically determined
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
 const MAX_TITLE_WIDTH = 100;
-const MIN_VERTICAL_SPACING = 16;
+const MIN_VERTICAL_SPACING = 25;
 const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
 
 class NucleonCountPanel extends Panel {
@@ -125,7 +125,7 @@ class NucleonCountPanel extends Panel {
       } );
 
       return {
-        title: nucleonTitle,
+        particleNode: nucleonParticleNode,
         numberDisplays: [ oldNucleonNumberDisplay, newNucleonNumberDisplay ],
         contents: nucleonContents
       };
@@ -142,7 +142,7 @@ class NucleonCountPanel extends Panel {
     protonLabel.numberDisplays.forEach( numberDisplay => {
       numberDisplay.centerY = protonLabel.contents.centerY;
     } );
-    neutronLabel.contents.bottom = protonLabel.title.bottom + Math.max( neutronLabel.title.height, MIN_VERTICAL_SPACING );
+    neutronLabel.contents.bottom = protonLabel.particleNode.bottom + Math.max( neutronLabel.particleNode.height, MIN_VERTICAL_SPACING );
     neutronLabel.numberDisplays.forEach( numberDisplay => {
       numberDisplay.centerY = neutronLabel.contents.centerY;
     } );

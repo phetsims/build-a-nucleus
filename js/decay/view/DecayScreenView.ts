@@ -516,9 +516,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     this.model.addParticle( particleToEmit );
     particleToEmit.destinationProperty.value = this.getRandomExternalModelPosition();
-    // this.model.particleAtom.changeNucleonType( particle, () => {
-    //   this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
-    // } );
+    this.model.particleAtom.changeNucleonType( particle, () => {
+      this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+    } );
   }
 
   /**
