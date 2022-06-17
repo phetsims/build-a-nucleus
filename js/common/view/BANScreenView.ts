@@ -565,9 +565,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     return particleView;
   }
 
-  protected dragEndedListener( nucleon: Particle, particleAtom: ParticleAtom ): void {}
+  protected dragEndedListener( nucleon: Particle, particleAtom: ParticleAtom ): void {
+    // Please see subclass implementations
+  }
 
-  protected addParticleView( particle: Particle, particleView: ParticleView ): void {}
+  protected addParticleView( particle: Particle, particleView: ParticleView ): void {
+    // Please see subclass implementations
+  }
 }
 
 buildANucleus.register( 'BANScreenView', BANScreenView );
