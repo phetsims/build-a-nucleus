@@ -205,7 +205,7 @@ class HalfLifeNumberLineNode extends Node {
       const elementName = new Text( '', {
         font: this.labelFont,
         fill: Color.RED,
-        maxWidth: 175
+        maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
       elementName.center = halfLifeDisplayNode.center.minusXY( 0, elementName.height + 10 );
       this.addChild( elementName );

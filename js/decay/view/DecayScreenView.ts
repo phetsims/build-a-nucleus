@@ -230,7 +230,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const elementName = new Text( '', {
       font: LABEL_FONT,
       fill: Color.RED,
-      maxWidth: 175
+      maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
     } );
     elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
     this.addChild( elementName );

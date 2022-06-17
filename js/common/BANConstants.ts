@@ -41,7 +41,9 @@ const BANConstants = {
   PANEL_CORNER_RADIUS: 6,
 
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
-  TIME_TO_SHOW_DOES_NOT_EXIST: 1
+  TIME_TO_SHOW_DOES_NOT_EXIST: 1,
+
+  ELEMENT_NAME_MAX_WIDTH: 300
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );
