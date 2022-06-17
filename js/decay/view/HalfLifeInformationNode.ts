@@ -54,14 +54,8 @@ class HalfLifeInformationNode extends Node {
     infoButton.left = halfLifeNumberLineNode.left + 124;
     this.addChild( infoButton );
 
-    // create and add the units label on the number line
-    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: LABEL_FONT, maxWidth: 100 } );
-    numberLineUnitsLabel.top = halfLifeNumberLineNode.bottom;
-    numberLineUnitsLabel.centerX = halfLifeNumberLineNode.centerX;
-    this.addChild( numberLineUnitsLabel );
-
     // function to create and add the arrow and more/less stable label set
-    const arrowAndStableLabel = ( arrowNodeTailX: number, arrowNodeTipX: number, stabilityText: string ): void => {
+    const arrowAndStableLabel = ( arrowNodeTailX: number, arrowNodeTipX: number, stabilityText: string ): number => {
       const arrow = new ArrowNode( arrowNodeTailX, halfLifeNumberLineNode.bottom + 10, arrowNodeTipX,
         halfLifeNumberLineNode.bottom + 10, {
           headWidth: 6,
@@ -69,20 +63,28 @@ class HalfLifeInformationNode extends Node {
         } );
       this.addChild( arrow );
 
-      const arrowText = new Text( stabilityText, { font: LABEL_FONT, maxWidth: 125 } );
+      const arrowText = new Text( stabilityText, { font: LABEL_FONT, maxWidth: 175 } );
       arrowText.centerY = arrow.centerY;
-      if ( stabilityText === buildANucleusStrings.lessStable ) {
+      if ( arrowNodeTipX === halfLifeNumberLineNode.left ) {
         arrowText.left = arrow.right + 5;
       }
       else {
         arrowText.right = arrow.left - 5;
       }
       this.addChild( arrowText );
+      return arrow.centerY;
     };
 
-    // create and add the 'less stable' and 'more  stable' arrow and text set
-    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, buildANucleusStrings.lessStable );
+    // create and add the 'less stable' and 'more  stable' arrow and text set and return the centerY of the label's
+    const labelCenterY = arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left,
+      buildANucleusStrings.lessStable );
     arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, buildANucleusStrings.moreStable );
+
+    // create and add the units label on the number line
+    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: LABEL_FONT, maxWidth: 150 } );
+    numberLineUnitsLabel.centerY = labelCenterY;
+    numberLineUnitsLabel.centerX = halfLifeNumberLineNode.centerX;
+    this.addChild( numberLineUnitsLabel );
   }
 }
 
