@@ -81,14 +81,41 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // as the halfLifeArrow in the halfLifeInformationNode moves
     const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
 
+    // create and add the symbol node in an accordion box
+    const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.massNumberProperty, {
+      scale: 0.3
+    } );
+    this.symbolAccordionBox = new AccordionBox( symbolNode, {
+      titleNode: new Text( buildANucleusStrings.symbol, {
+        font: LABEL_FONT,
+        maxWidth: 118
+      } ),
+      fill: BANColors.panelBackgroundColorProperty,
+      minWidth: 50,
+      contentAlign: 'center',
+      contentXMargin: 35,
+      contentYMargin: 16,
+      buttonXMargin: 10,
+      buttonYMargin: 10,
+      expandCollapseButtonOptions: {
+        sideLength: 18
+      },
+      titleAlignX: 'left',
+      stroke: BANConstants.PANEL_STROKE,
+      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
+    } );
+    this.symbolAccordionBox.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
+    this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
+    this.addChild( this.symbolAccordionBox );
+
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
       emitNucleon: this.emitNucleon.bind( this ),
       emitAlphaParticle: this.emitAlphaParticle.bind( this ),
       betaDecay: this.betaDecay.bind( this )
     } );
-    availableDecaysPanel.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
-    availableDecaysPanel.bottom = this.resetAllButton.top - 20;
+    availableDecaysPanel.right = this.symbolAccordionBox.right;
+    availableDecaysPanel.top = this.symbolAccordionBox.bottom + 10;
     this.addChild( availableDecaysPanel );
 
     // show the electron cloud by default
@@ -114,35 +141,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.showElectronCloudBooleanProperty
     );
     showElectronCloudCheckbox.left = availableDecaysPanel.left;
-    showElectronCloudCheckbox.top = availableDecaysPanel.bottom + 25;
+    showElectronCloudCheckbox.bottom = this.resetAllButton.bottom;
     this.addChild( showElectronCloudCheckbox );
-
-    // create and add the symbol node in an accordion box
-    const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.massNumberProperty, {
-      scale: 0.3
-    } );
-    this.symbolAccordionBox = new AccordionBox( symbolNode, {
-      titleNode: new Text( buildANucleusStrings.symbol, {
-        font: LABEL_FONT,
-        maxWidth: 118
-      } ),
-      fill: BANColors.panelBackgroundColorProperty,
-      minWidth: 50,
-      contentAlign: 'center',
-      contentXMargin: 35,
-      contentYMargin: 16,
-      buttonXMargin: 10,
-      buttonYMargin: 10,
-      expandCollapseButtonOptions: {
-        sideLength: 18
-      },
-      titleAlignX: 'left',
-      stroke: BANConstants.PANEL_STROKE,
-      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
-    } );
-    this.symbolAccordionBox.right = availableDecaysPanel.right;
-    this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
-    this.addChild( this.symbolAccordionBox );
 
     // create and add stability indicator
     this.stabilityIndicator = new Text( '', {

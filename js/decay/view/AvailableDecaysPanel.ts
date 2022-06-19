@@ -294,7 +294,6 @@ class AvailableDecaysPanel extends Panel {
       fill: '#F2F2F2',
       stroke: BANConstants.PANEL_STROKE,
       minWidth: 322,
-      localPreferredHeight: 356,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
   }

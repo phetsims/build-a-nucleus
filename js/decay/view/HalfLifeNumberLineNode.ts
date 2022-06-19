@@ -206,14 +206,14 @@ class HalfLifeNumberLineNode extends Node {
         fill: Color.RED,
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
-      elementName.center = halfLifeDisplayNode.center.minusXY( 0, elementName.height + 10 );
+      elementName.center = halfLifeDisplayNode.center.minusXY( 0, halfLifeDisplayNode.height + 10 );
       this.addChild( elementName );
 
       // Hook up update listeners.
       Multilink.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
         ( protonCount, neutronCount, doesNuclideExist ) =>
           DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
-            halfLifeDisplayNode.center.minusXY( 0, elementName.height + distanceBetweenElementNameAndHalfLifeText ) )
+            halfLifeDisplayNode.center.minusXY( 0, halfLifeDisplayNode.height + distanceBetweenElementNameAndHalfLifeText ) )
       );
 
       // keep track of the x position of the halfLifeText in model coordinates
@@ -226,7 +226,7 @@ class HalfLifeNumberLineNode extends Node {
 
         elementName.translation =
           new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - elementName.width / 2,
-            halfLifeArrow.top - elementName.height - distanceBetweenHalfLifeTextAndArrow
+            halfLifeArrow.top - halfLifeDisplayNode.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
 
         // left-align the text if it goes over the left edge of the numberLineNode
@@ -411,8 +411,8 @@ class HalfLifeNumberLineNode extends Node {
         headWidth: 5
       } );
     this.addChild( arrow );
-    const numberText = new RichText( label, { font: this.labelFont, maxWidth: 30 } );
-    numberText.bottom = arrow.top + 3;
+    const numberText = new RichText( label, { font: this.labelFont, maxWidth: 25 } );
+    numberText.bottom = arrow.top;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );
   }
