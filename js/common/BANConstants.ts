@@ -18,6 +18,9 @@ const BANConstants = {
   // radius of the particle node used on the NucleonCountPanel and AvailableDecaysPanel
   PARTICLE_RADIUS: ShredConstants.NUCLEON_RADIUS,
 
+  // CSS pixels per second
+  PARTICLE_ANIMATION_SPEED: 300,
+
   // font size of the content labels in the NucleonCountPanel and AvailableDecaysPanel
   BUTTONS_AND_LEGEND_FONT_SIZE: 18,
 
@@ -33,17 +36,15 @@ const BANConstants = {
   // the maximum number of neutrons,
   MAX_NUMBER_OF_NEUTRONS: 146,
 
-  PANEL_STROKE: Color.GRAY,
-
-  // CSS pixels per second
-  PARTICLE_ANIMATION_SPEED: 300,
-
-  PANEL_CORNER_RADIUS: 6,
-
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
   TIME_TO_SHOW_DOES_NOT_EXIST: 1,
 
-  ELEMENT_NAME_MAX_WIDTH: 300
+  PANEL_STROKE: Color.GRAY,
+  PANEL_CORNER_RADIUS: 6,
+
+  ELEMENT_NAME_MAX_WIDTH: 300,
+  INFO_BUTTON_INDENT_DISTANCE: 124,
+  INFO_BUTTON_MAX_HEIGHT: 30
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

@@ -17,6 +17,7 @@ import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
 import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import BANColors from '../../common/BANColors.js';
+import BANConstants from '../../common/BANConstants.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
@@ -48,10 +49,10 @@ class HalfLifeInformationNode extends Node {
     const infoButton = new InfoButton( {
       listener: () => halfLifeInfoDialog.show(),
       baseColor: BANColors.infoButtonColorProperty,
-      maxHeight: 30
+      maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT
     } );
     infoButton.top = halfLifeNumberLineNode.top - 1.5;
-    infoButton.left = halfLifeNumberLineNode.left + 124;
+    infoButton.left = halfLifeNumberLineNode.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE;
     this.addChild( infoButton );
 
     // function to create and add the arrow and more/less stable label set

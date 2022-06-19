@@ -161,7 +161,7 @@ class HalfLifeNumberLineNode extends Node {
       maxWidth: 115
     } );
     halfLifeDisplayNode.addChild( halfLifeColonText );
-    halfLifeDisplayNode.centerX = this.centerX - 75;
+    halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
     halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
 
     // create and add the "Unknown" text
@@ -182,7 +182,6 @@ class HalfLifeNumberLineNode extends Node {
     // the half life number in scientific notation with an 's' for seconds at the end
     const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
       font: TITLE_FONT
-      // TODO: do you also need a maxWidth here? seems not that useful because it's already maxed out by the halfLifeNumberProperty
     } );
     const halfLifeNumberText = new HBox( {
       children: [
