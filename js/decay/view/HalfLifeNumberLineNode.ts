@@ -65,6 +65,7 @@ class HalfLifeNumberLineNode extends Node {
   private arrowRotationAnimation: null | Animation;
   private readonly halfLifeArrowRotationProperty: NumberProperty;
   private halfLifeArrowLength: number | undefined;
+  public readonly halfLifeDisplayNode: Node;
 
   constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
                isStableBooleanProperty: IReadOnlyProperty<boolean>,
@@ -149,20 +150,20 @@ class HalfLifeNumberLineNode extends Node {
 
     // create and add the half life display, which is a parent node used to contain the number readout, the infinity
     // symbol, and the 'Unknown' text.
-    const halfLifeDisplayNode = new Node( {
+    this.halfLifeDisplayNode = new Node( {
       scale: options.halfLifeDisplayScale,
       excludeInvisibleChildrenFromBounds: true
     } );
-    this.addChild( halfLifeDisplayNode );
+    this.addChild( this.halfLifeDisplayNode );
 
     // create and add the text for "Half-life:"
     const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
-    halfLifeDisplayNode.addChild( halfLifeColonText );
-    halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
-    halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
+    this.halfLifeDisplayNode.addChild( halfLifeColonText );
+    this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
+    this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
 
     // create and add the "Unknown" text
     const halfLifeUnknownText = new RichText( buildANucleusStrings.unknown, {
@@ -171,13 +172,13 @@ class HalfLifeNumberLineNode extends Node {
     } );
     halfLifeUnknownText.left = halfLifeColonText.right + 8;
     halfLifeUnknownText.bottom = halfLifeColonText.bottom;
-    halfLifeDisplayNode.addChild( halfLifeUnknownText );
+    this.halfLifeDisplayNode.addChild( halfLifeUnknownText );
 
     // create and add the infinity node, which represents a math infinity symbol
     const infinityNode = new InfinityNode();
     infinityNode.left = halfLifeUnknownText.left;
     infinityNode.bottom = halfLifeUnknownText.bottom - 5; // offset to match the apparent bottom position of the text
-    halfLifeDisplayNode.addChild( infinityNode );
+    this.halfLifeDisplayNode.addChild( infinityNode );
 
     // the half life number in scientific notation with an 's' for seconds at the end
     const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
@@ -192,7 +193,7 @@ class HalfLifeNumberLineNode extends Node {
       spacing: 10
     } );
     halfLifeNumberText.left = halfLifeUnknownText.left;
-    halfLifeDisplayNode.addChild( halfLifeNumberText );
+    this.halfLifeDisplayNode.addChild( halfLifeNumberText );
 
     // if the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
@@ -206,40 +207,40 @@ class HalfLifeNumberLineNode extends Node {
         fill: Color.RED,
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
-      elementName.center = halfLifeDisplayNode.center.minusXY( 0, halfLifeDisplayNode.height + 10 );
+      elementName.center = this.halfLifeDisplayNode.center.minusXY( 0, this.halfLifeDisplayNode.height + 10 );
       this.addChild( elementName );
 
       // Hook up update listeners.
       Multilink.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
         ( protonCount, neutronCount, doesNuclideExist ) =>
           DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
-            halfLifeDisplayNode.center.minusXY( 0, halfLifeDisplayNode.height + distanceBetweenElementNameAndHalfLifeText ) )
+            this.halfLifeDisplayNode.center.minusXY( 0, this.halfLifeDisplayNode.height + distanceBetweenElementNameAndHalfLifeText ) )
       );
 
       // keep track of the x position of the halfLifeText in model coordinates
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
 
-        halfLifeDisplayNode.translation =
-          new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - halfLifeDisplayNode.width / 2,
+        this.halfLifeDisplayNode.translation =
+          new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - this.halfLifeDisplayNode.width / 2,
             halfLifeArrow.top - distanceBetweenHalfLifeTextAndArrow );
 
         elementName.translation =
           new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - elementName.width / 2,
-            halfLifeArrow.top - halfLifeDisplayNode.height - distanceBetweenHalfLifeTextAndArrow
+            halfLifeArrow.top - this.halfLifeDisplayNode.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
 
         // left-align the text if it goes over the left edge of the numberLineNode
-        if ( halfLifeDisplayNode.left < numberLineNode.left ) {
-          halfLifeDisplayNode.left = numberLineNode.left;
+        if ( this.halfLifeDisplayNode.left < numberLineNode.left ) {
+          this.halfLifeDisplayNode.left = numberLineNode.left;
         }
         if ( elementName.left < numberLineNode.left ) {
           elementName.left = numberLineNode.left;
         }
 
         // right-align the text if it goes over the right edge of the numberLineNode
-        if ( halfLifeDisplayNode.right > numberLineNode.right ) {
-          halfLifeDisplayNode.right = numberLineNode.right;
+        if ( this.halfLifeDisplayNode.right > numberLineNode.right ) {
+          this.halfLifeDisplayNode.right = numberLineNode.right;
         }
         if ( elementName.right > numberLineNode.right ) {
           elementName.right = numberLineNode.right;

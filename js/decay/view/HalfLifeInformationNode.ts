@@ -51,7 +51,7 @@ class HalfLifeInformationNode extends Node {
       baseColor: BANColors.infoButtonColorProperty,
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT
     } );
-    infoButton.top = halfLifeNumberLineNode.top - 1.5;
+    infoButton.centerY = halfLifeNumberLineNode.halfLifeDisplayNode.centerY;
     infoButton.left = halfLifeNumberLineNode.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE;
     this.addChild( infoButton );
 
