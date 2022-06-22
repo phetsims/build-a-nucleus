@@ -28,17 +28,19 @@ export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 
 class BANModel {
 
-  public isStableBooleanProperty: IReadOnlyProperty<boolean>;
+  public readonly isStableBooleanProperty: IReadOnlyProperty<boolean>;
   public readonly massNumberProperty: IReadOnlyProperty<number>;
   public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
-  public particles: ObservableArray<Particle>;
-  public particleAtom: ParticleAtom;
-  public protonCountRange: Range;
-  public neutronCountRange: Range;
-  public incomingProtons: ObservableArray<Particle>;
-  public incomingNeutrons: ObservableArray<Particle>;
-  public doubleArrowButtonClickedBooleanProperty: BooleanProperty;
-  public alphaParticleAnimations: ObservableArray<Animation | null>;
+  public readonly particles: ObservableArray<Particle>;
+  public readonly particleAtom: ParticleAtom;
+  public readonly protonCountRange: Range;
+  public readonly neutronCountRange: Range;
+  public readonly incomingProtons: ObservableArray<Particle>;
+  public readonly incomingNeutrons: ObservableArray<Particle>;
+  public readonly doubleArrowButtonClickedBooleanProperty: BooleanProperty;
+  public readonly alphaParticleAnimations: ObservableArray<Animation | null>;
+  public readonly userControlledProtons: ObservableArray<unknown>;
+  public readonly userControlledNeutrons: ObservableArray<unknown>;
 
   constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -59,6 +61,9 @@ class BANModel {
     // array of particles sent to the nucleus but not there yet
     this.incomingProtons = createObservableArray();
     this.incomingNeutrons = createObservableArray();
+
+    this.userControlledProtons = createObservableArray();
+    this.userControlledNeutrons = createObservableArray();
 
     // array of alpha particle animations
     this.alphaParticleAnimations = createObservableArray();
@@ -97,8 +102,8 @@ class BANModel {
    */
   public addParticle( particle: Particle ): void {
     assert && assert( _.some( ParticleType.enumeration.values, particleType => {
-      return particle.type === particleType.name.toLowerCase();
-    } ),
+        return particle.type === particleType.name.toLowerCase();
+      } ),
       'Particles must be one of the types in ParticleType ' + particle.type );
     this.particles.push( particle );
   }

@@ -160,14 +160,17 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // function to create the arrow enabled properties
     const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
       return new DerivedProperty( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty,
-          model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty ],
-        ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount ) => {
+          model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty, model.userControlledProtons.lengthProperty,
+        model.userControlledNeutrons.lengthProperty ],
+        ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount,
+          userControlledProtonCount, userControlledNeutronCount ) => {
 
-          const protonCount = atomProtonCount + incomingProtonsCount;
-          const neutronCount = atomNeutronCount + incomingNeutronsCount;
+          const protonCount = atomProtonCount + incomingProtonsCount + userControlledProtonCount;
+          const neutronCount = atomNeutronCount + incomingNeutronsCount + userControlledNeutronCount;
+          const userControlledNucleonCount = userControlledNeutronCount + userControlledProtonCount;
 
           // disable all arrow buttons if the nuclide does not exist
-          if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) && model.massNumberProperty.value !== 0 ) {
+          if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) && ( model.massNumberProperty.value !== 0 || userControlledNucleonCount !== 0 ) ) {
             creatorNodeEnabled( this.protonsCreatorNode, false );
             creatorNodeEnabled( this.neutronsCreatorNode, false );
             return false;
@@ -185,7 +188,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
             const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
             const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
 
-            const doesPreviousNuclideExist = secondParticleType && direction === 'down' ? !AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) : nextOrPreviousIsoExists;
+            const doesPreviousNuclideExist = secondParticleType && direction === 'down' ?
+                                             !AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) :
+                                             nextOrPreviousIsoExists;
 
             if ( nuclideExistsBoolean && doesPreviousNuclideExist ) {
               return false;
@@ -344,6 +349,19 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       if ( isUserControlled && this.model.particleAtom.containsParticle( particle ) ) {
         this.model.particleAtom.removeParticle( particle );
       }
+
+      if ( isUserControlled && particle.type === ParticleType.PROTON.name.toLowerCase() && !this.model.userControlledProtons.includes( particle ) ) {
+        this.model.userControlledProtons.add( particle );
+      }
+      else if ( !isUserControlled && particle.type === ParticleType.PROTON.name.toLowerCase() && this.model.userControlledProtons.includes( particle ) ) {
+        this.model.userControlledProtons.remove( particle );
+      }
+      else if ( isUserControlled && particle.type === ParticleType.NEUTRON.name.toLowerCase() && !this.model.userControlledNeutrons.includes( particle ) ) {
+        this.model.userControlledNeutrons.add( particle );
+      }
+      else if ( !isUserControlled && particle.type === ParticleType.NEUTRON.name.toLowerCase() && this.model.userControlledNeutrons.includes( particle ) ) {
+        this.model.userControlledNeutrons.remove( particle );
+      }
     };
 
     // add ParticleView's to match the model
@@ -377,18 +395,20 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particle.dispose();
     } );
 
-    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.incomingProtons.lengthProperty ], ( protonCount, incomingProtonsCount ) => {
+    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.incomingProtons.lengthProperty,
+      this.model.userControlledProtons.lengthProperty ], ( protonCount, incomingProtonsCount, userControlledProtonCount ) => {
 
       // hide the protonsCreatorNode when at the last proton
-      if ( ( protonCount + incomingProtonsCount ) === this.model.protonCountRange.max ) {
+      if ( ( protonCount + incomingProtonsCount + userControlledProtonCount ) === this.model.protonCountRange.max ) {
         this.checkCreatorNodeVisibility( this.protonsCreatorNode, false );
       }
     } );
 
-    Multilink.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount ) => {
+    Multilink.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty,
+    this.model.userControlledNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount, userControlledNeutronCount ) => {
 
       // hide the neutronsCreatorNode when at the last neutron
-      if ( ( neutronCount + incomingNeutronsCount ) === this.model.neutronCountRange.max ) {
+      if ( ( neutronCount + incomingNeutronsCount + userControlledNeutronCount ) === this.model.neutronCountRange.max ) {
         this.checkCreatorNodeVisibility( this.neutronsCreatorNode, false );
       }
     } );
