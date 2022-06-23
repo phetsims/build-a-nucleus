@@ -123,23 +123,20 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
 
     // create and add the electronCloud checkbox
-    const showElectronCloudCheckbox = new Checkbox(
-      new HBox( {
-        children: [
-          new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
+    const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
+      children: [
+        new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
 
-          // electron cloud icon
-          new Circle( {
-            radius: 18,
-            fill: new RadialGradient( 0, 0, 0, 0, 0, 18 )
-              .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-              .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
-          } )
-        ],
-        spacing: 5
-      } ),
-      this.showElectronCloudBooleanProperty
-    );
+        // electron cloud icon
+        new Circle( {
+          radius: 18,
+          fill: new RadialGradient( 0, 0, 0, 0, 0, 18 )
+            .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
+            .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
+        } )
+      ],
+      spacing: 5
+    } ) );
     showElectronCloudCheckbox.left = availableDecaysPanel.left;
     showElectronCloudCheckbox.bottom = this.resetAllButton.bottom;
     this.addChild( showElectronCloudCheckbox );
