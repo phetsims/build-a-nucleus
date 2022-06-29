@@ -22,7 +22,7 @@ type StringsType = {
   'halfLifeTimescale': string;
   'timeForLightToCrossANucleus': string;
   'timeForLightToCrossAnAtom': string;
-  'chemicalReactionDuration': string;
+  'timeForLightToCrossOneThousandAtoms': string;
   'timeForSoundToTravelOneMillimeter': string;
   'aBlinkOfAnEye': string;
   'oneMinute': string;

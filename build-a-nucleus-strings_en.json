@@ -35,8 +35,8 @@
   "timeForLightToCrossAnAtom": {
     "value": " - Time for light to cross an atom"
   },
-  "chemicalReactionDuration": {
-    "value": " - Chemical reaction duration"
+  "timeForLightToCrossOneThousandAtoms": {
+    "value": " - Time for light to cross 1000 atoms"
   },
   "timeForSoundToTravelOneMillimeter": {
     "value": " - Time for sound to travel 1 mm"

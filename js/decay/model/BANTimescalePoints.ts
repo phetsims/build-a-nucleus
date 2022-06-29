@@ -12,6 +12,7 @@ import buildANucleus from '../../buildANucleus.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 
 const SECONDS_IN_A_YEAR = 365 * 24 * 60 * 60; // 365 days x 24 hrs/day x 60 min/hr x 60 sec/min
+const TIME_FOR_LIGHT_TO_CROSS_AN_ATOM = Math.pow( 10, -19 );
 
 class BANTimescalePoints extends EnumerationValue {
 
@@ -19,10 +20,11 @@ class BANTimescalePoints extends EnumerationValue {
     buildANucleusStrings.A + buildANucleusStrings.timeForLightToCrossANucleus, Math.pow( 10, -23 ) );
 
   static TIME_FOR_LIGHT_TO_CROSS_AN_ATOM = new BANTimescalePoints(
-    buildANucleusStrings.B + buildANucleusStrings.timeForLightToCrossAnAtom, Math.pow( 10, -19 ) );
+    buildANucleusStrings.B + buildANucleusStrings.timeForLightToCrossAnAtom, TIME_FOR_LIGHT_TO_CROSS_AN_ATOM );
 
-  static CHEMICAL_REACTION_DURATION = new BANTimescalePoints(
-    buildANucleusStrings.C + buildANucleusStrings.chemicalReactionDuration, 2.5e-15 );
+  static TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS = new BANTimescalePoints(
+    buildANucleusStrings.C + buildANucleusStrings.timeForLightToCrossOneThousandAtoms,
+    TIME_FOR_LIGHT_TO_CROSS_AN_ATOM * 1000 );
 
   static TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER = new BANTimescalePoints(
     buildANucleusStrings.D + buildANucleusStrings.timeForSoundToTravelOneMillimeter, 2e-6 );

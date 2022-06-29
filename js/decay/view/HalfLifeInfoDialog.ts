@@ -33,7 +33,7 @@ class HalfLifeInfoDialog extends Dialog {
     const leftSideStrings = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.timescaleItem,
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM.timescaleItem,
-      BANTimescalePoints.CHEMICAL_REACTION_DURATION.timescaleItem,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS.timescaleItem,
       BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER.timescaleItem,
       BANTimescalePoints.A_BLINK_OF_AN_EYE.timescaleItem
     ];
@@ -91,7 +91,7 @@ class HalfLifeInfoDialog extends Dialog {
     const halfLifeTime = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.numberOfSeconds,
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM.numberOfSeconds,
-      BANTimescalePoints.CHEMICAL_REACTION_DURATION.numberOfSeconds,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS.numberOfSeconds,
       BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER.numberOfSeconds,
       BANTimescalePoints.A_BLINK_OF_AN_EYE.numberOfSeconds,
       BANTimescalePoints.ONE_MINUTE.numberOfSeconds,
