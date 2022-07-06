@@ -52,7 +52,7 @@ type StringsType = {
   'protonEmission': string;
   'neutronEmission': string;
   'symbol': string;
-  'stableDoesNotDecay': string;
+  'stable': string;
   'unstable': string;
   'doesNotForm': string;
   'protons': string;

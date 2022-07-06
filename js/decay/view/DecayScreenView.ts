@@ -155,7 +155,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {
         if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
-          this.stabilityIndicator.text = buildANucleusStrings.stableDoesNotDecay;
+          this.stabilityIndicator.text = buildANucleusStrings.stable;
         }
         else {
           this.stabilityIndicator.text = buildANucleusStrings.unstable;
