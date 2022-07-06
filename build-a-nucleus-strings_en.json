@@ -148,5 +148,8 @@
   },
   "clusterOfNeutronsPattern": {
     "value": "Cluster of {{neutronNumber}} neutrons"
+  },
+  "availableDecaysInfoPanelText": {
+    "value": "You are seeing the most common decay path(s), there can be other ones. In some cases there is no known decay path."
   }
 }

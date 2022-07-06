@@ -44,7 +44,10 @@ const BANConstants = {
 
   ELEMENT_NAME_MAX_WIDTH: 300,
   INFO_BUTTON_INDENT_DISTANCE: 124,
-  INFO_BUTTON_MAX_HEIGHT: 30
+  INFO_BUTTON_MAX_HEIGHT: 30,
+
+  // font size throughout the first screen (stability strings, legend strings, accordion box titles, etc.)
+  REGULAR_FONT_SIZE: 20
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

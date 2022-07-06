@@ -16,11 +16,12 @@ import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import BANTimescalePoints from '../model/BANTimescalePoints.js';
 import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import BANConstants from '../../common/BANConstants.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
 const TITLE_FONT = new PhetFont( 32 );
-const LEGEND_FONT = new PhetFont( 20 );
+const LEGEND_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 
 class HalfLifeInfoDialog extends Dialog {
 

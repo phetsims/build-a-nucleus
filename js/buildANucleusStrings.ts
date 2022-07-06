@@ -60,6 +60,7 @@ type StringsType = {
   'neutronsLowercase': string;
   'electronCloud': string;
   'clusterOfNeutronsPattern': string;
+  'availableDecaysInfoPanelText': string;
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
