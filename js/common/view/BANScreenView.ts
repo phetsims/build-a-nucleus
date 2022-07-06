@@ -348,6 +348,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
       if ( isUserControlled && this.model.particleAtom.containsParticle( particle ) ) {
         this.model.particleAtom.removeParticle( particle );
+        this.model.particleAtom.reconfigureNucleus();
       }
 
       if ( isUserControlled && particle.type === ParticleType.PROTON.name.toLowerCase() && !this.model.userControlledProtons.includes( particle ) ) {
@@ -496,6 +497,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
         'There is no particle of this type in the atom.' );
       this.model.particleAtom.removeParticle( particleToReturn );
+      this.model.particleAtom.reconfigureNucleus();
       this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
     }
   }
