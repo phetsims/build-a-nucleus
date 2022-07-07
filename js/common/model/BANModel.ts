@@ -81,7 +81,7 @@ class BANModel {
     // the range of the number of neutrons allowed
     this.neutronCountRange = new Range( 0, maximumNeutronNumber );
 
-    // the number of protons and neutrons
+    // the number of protons and neutrons in the nucleus
     this.massNumberProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => protonCount + neutronCount
     );

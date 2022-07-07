@@ -41,10 +41,14 @@ type SelfOptions = {
   emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
   emitAlphaParticle: () => void;
   betaDecay: ( betaDecayType: DecayType ) => void;
+  storeSimState: ( decayButtonChildNumber: number ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
 
 class AvailableDecaysPanel extends Panel {
+
+  public readonly arrangedDecayButtonsAndIcons: VBox;
+  public readonly titleNode: Text;
 
   constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
@@ -75,14 +79,14 @@ class AvailableDecaysPanel extends Panel {
     // function to return the correct enabled derived property for each type of decay
     const returnEnabledDecayButtonProperty = ( decayType: DecayType ): IReadOnlyProperty<boolean> => {
       switch( decayType ) {
-        case DecayType.PROTON_EMISSION:
-          return model.protonEmissionEnabledProperty;
         case DecayType.NEUTRON_EMISSION:
           return model.neutronEmissionEnabledProperty;
-        case DecayType.BETA_MINUS_DECAY:
-          return model.betaMinusDecayEnabledProperty;
+        case DecayType.PROTON_EMISSION:
+          return model.protonEmissionEnabledProperty;
         case DecayType.BETA_PLUS_DECAY:
           return model.betaPlusDecayEnabledProperty;
+        case DecayType.BETA_MINUS_DECAY:
+          return model.betaMinusDecayEnabledProperty;
         case DecayType.ALPHA_DECAY:
           return model.alphaDecayEnabledProperty;
         default:
@@ -93,25 +97,34 @@ class AvailableDecaysPanel extends Panel {
 
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
+      let decayChildNumberInVBox = 5;
       switch( decayType ) {
-        case DecayType.PROTON_EMISSION:
-          options.emitNucleon( ParticleType.PROTON, 'proton emission' );
-          break;
         case DecayType.NEUTRON_EMISSION:
           options.emitNucleon( ParticleType.NEUTRON );
+          decayChildNumberInVBox = 4;
           break;
-        case DecayType.BETA_MINUS_DECAY:
-          options.betaDecay( DecayType.BETA_MINUS_DECAY );
+        case DecayType.PROTON_EMISSION:
+          options.emitNucleon( ParticleType.PROTON, 'proton emission' );
+          decayChildNumberInVBox = 3;
           break;
         case DecayType.BETA_PLUS_DECAY:
           options.betaDecay( DecayType.BETA_PLUS_DECAY );
+          decayChildNumberInVBox = 2;
+          break;
+        case DecayType.BETA_MINUS_DECAY:
+          options.betaDecay( DecayType.BETA_MINUS_DECAY );
+          decayChildNumberInVBox = 1;
           break;
         case DecayType.ALPHA_DECAY:
           options.emitAlphaParticle();
+          decayChildNumberInVBox = 0;
           break;
         default:
           break;
       }
+
+      // TODO: maybe this needs to go before because afterwards the simulation already changes?
+      options.storeSimState( decayChildNumberInVBox );
     };
 
     // function to create the decay buttons
@@ -314,6 +327,10 @@ class AvailableDecaysPanel extends Panel {
       minWidth: 322,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
+
+    // used when positioning the undo decay buttons
+    this.arrangedDecayButtonsAndIcons = arrangedDecayButtonsAndIcons;
+    this.titleNode = titleNode;
   }
 }
 

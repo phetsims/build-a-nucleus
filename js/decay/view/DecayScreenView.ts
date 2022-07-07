@@ -17,7 +17,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, HBox, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, Node, Path, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -39,6 +39,9 @@ import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
+import { Shape } from '../../../../kite/js/imports.js';
+import FractionsCommonColors from '../../../../fractions-common/js/common/view/FractionsCommonColors.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
@@ -46,6 +49,7 @@ const NUCLEON_CAPTURE_RADIUS = 100;
 const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
 const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
+const ICON_HEIGHT = 17;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -108,15 +112,61 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.symbolAccordionBox );
 
+    // create the undo decay button
+    const undoArrowShape = new Shape()
+      .moveTo( 0, 0 )
+      .lineTo( 0, ICON_HEIGHT )
+      .lineTo( ICON_HEIGHT, ICON_HEIGHT )
+      .lineTo( ICON_HEIGHT * 0.7, ICON_HEIGHT * 0.7 )
+      .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.1, ICON_HEIGHT * 2, ICON_HEIGHT * 0.75 )
+      .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.5, ICON_HEIGHT * 0.3, ICON_HEIGHT * 0.3 )
+      .close();
+    const undoDecayButton = new RectangularPushButton( {
+      content: new Path( undoArrowShape, {
+        fill: 'black',
+        scale: 0.7
+      } ),
+      baseColor: FractionsCommonColors.undoButtonProperty,
+      listener: () => {
+        undoDecayButton.visible = false;
+        // TODO: only restore previous state
+      }
+    } );
+    undoDecayButton.visible = false;
+    this.addChild( undoDecayButton );
+
+    // show the undoDecayButton and store the current sim state
+    const storeSimState = ( decayButtonChildNumber: number ) => {
+      repositionUndoDecayButton( decayButtonChildNumber );
+      undoDecayButton.visible = true;
+      // TODO: store current sim state
+    };
+
+    // hide the undo decay button if anything in the nucleus changes
+    Multilink.multilink( [ this.model.massNumberProperty, this.model.userControlledProtons.lengthProperty,
+        this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
+        this.model.userControlledNeutrons.lengthProperty ], () => {
+      undoDecayButton.visible = false;
+      } );
+
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
       emitNucleon: this.emitNucleon.bind( this ),
       emitAlphaParticle: this.emitAlphaParticle.bind( this ),
-      betaDecay: this.betaDecay.bind( this )
+      betaDecay: this.betaDecay.bind( this ),
+      storeSimState: storeSimState.bind( this )
     } );
     availableDecaysPanel.right = this.symbolAccordionBox.right;
     availableDecaysPanel.top = this.symbolAccordionBox.bottom + 10;
     this.addChild( availableDecaysPanel );
+
+    // reposition the undo button beside the decayButton
+    const repositionUndoDecayButton = ( decayButtonChildNumber: number ) => {
+      const decayButtonAndIcon = availableDecaysPanel.arrangedDecayButtonsAndIcons.children[ decayButtonChildNumber ];
+      undoDecayButton.centerY = decayButtonAndIcon.centerY + availableDecaysPanel.top + availableDecaysPanel.titleNode.height
+                                + availableDecaysPanel.arrangedDecayButtonsAndIcons.top + availableDecaysPanel.arrangedDecayButtonsAndIcons.topMargin + 10;
+    };
+    undoDecayButton.right = availableDecaysPanel.left - 10;
 
     // show the electron cloud by default
     this.showElectronCloudBooleanProperty = new BooleanProperty( true );
