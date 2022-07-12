@@ -75,7 +75,8 @@ class AvailableDecaysPanel extends Panel {
     );
     const decaysInfoButton = new InfoButton( {
       listener: () => decaysInfoDialog.show(),
-      maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT
+      maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
+      baseColor: 'rgb( 400, 400, 400 )'
     } );
     decaysInfoButton.centerY = titleNode.centerY;
     decaysInfoButton.left = titleNode.right + 15;
