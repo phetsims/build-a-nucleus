@@ -37,11 +37,15 @@ const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
 const BUTTON_CONTENT_WIDTH = 145;
 
+type decayTypeButtonIndexType = {
+  [ key: string ]: number;
+};
 type SelfOptions = {
   emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
   emitAlphaParticle: () => void;
   betaDecay: ( betaDecayType: DecayType ) => void;
-  storeSimState: ( decayButtonChildNumber: number ) => void;
+  storeSimState: () => void;
+  showAndRepositionUndoDecayButton: ( decayType: string ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
 
@@ -49,6 +53,7 @@ class AvailableDecaysPanel extends Panel {
 
   public readonly arrangedDecayButtonsAndIcons: VBox;
   public readonly titleNode: Text;
+  public decayTypeButtonIndexMap: decayTypeButtonIndexType;
 
   constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
@@ -97,34 +102,31 @@ class AvailableDecaysPanel extends Panel {
 
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
-      let decayChildNumberInVBox = 5;
+
+      // pass in decayType to storeSimState
+      options.storeSimState();
       switch( decayType ) {
         case DecayType.NEUTRON_EMISSION:
           options.emitNucleon( ParticleType.NEUTRON );
-          decayChildNumberInVBox = 4;
           break;
         case DecayType.PROTON_EMISSION:
           options.emitNucleon( ParticleType.PROTON, 'proton emission' );
-          decayChildNumberInVBox = 3;
           break;
         case DecayType.BETA_PLUS_DECAY:
           options.betaDecay( DecayType.BETA_PLUS_DECAY );
-          decayChildNumberInVBox = 2;
           break;
         case DecayType.BETA_MINUS_DECAY:
           options.betaDecay( DecayType.BETA_MINUS_DECAY );
-          decayChildNumberInVBox = 1;
           break;
         case DecayType.ALPHA_DECAY:
           options.emitAlphaParticle();
-          decayChildNumberInVBox = 0;
           break;
         default:
           break;
       }
 
-      // TODO: maybe this needs to go before because afterwards the simulation already changes?
-      options.storeSimState( decayChildNumberInVBox );
+      // show undo button
+      options.showAndRepositionUndoDecayButton( decayType.name.toString() );
     };
 
     // function to create the decay buttons
@@ -269,9 +271,14 @@ class AvailableDecaysPanel extends Panel {
       } );
     };
 
+    // map of decayType -> arrayIndex
+    const decayTypeButtonIndexMap: decayTypeButtonIndexType = {};
+
     // create the decay button and icon pair in a VBox
     const decayButtonsAndIcons: HBox[] = [];
-    DecayType.enumeration.values.forEach( decayType => decayButtonsAndIcons.push( createDecayButtonAndIcon( decayType ) ) );
+    DecayType.enumeration.values.forEach( decayType => {
+      decayTypeButtonIndexMap[ decayType.name.toString() ] = decayButtonsAndIcons.push( createDecayButtonAndIcon( decayType ) ) - 1;
+    } );
     const arrangedDecayButtonsAndIcons = new VBox( {
       children: decayButtonsAndIcons,
       spacing: SPACING,
@@ -331,6 +338,7 @@ class AvailableDecaysPanel extends Panel {
     // used when positioning the undo decay buttons
     this.arrangedDecayButtonsAndIcons = arrangedDecayButtonsAndIcons;
     this.titleNode = titleNode;
+    this.decayTypeButtonIndexMap = decayTypeButtonIndexMap;
   }
 }
 

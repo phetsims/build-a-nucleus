@@ -46,6 +46,7 @@ class DecayModel extends BANModel {
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ) => {
 
         let halfLife;
+
         // a nuclide of 0 protons and 0 neutrons does not exist
         if ( doesNuclideExist && !( protonCount === 0 && neutronCount === 0 ) ) {
 

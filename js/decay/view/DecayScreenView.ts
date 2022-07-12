@@ -86,7 +86,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
 
     // create and add the symbol node in an accordion box
-    const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.massNumberProperty, {
+    const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.particleAtom.massNumberProperty, {
       scale: 0.3
     } );
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
@@ -135,15 +135,19 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
 
-    // show the undoDecayButton and store the current sim state
-    const storeSimState = ( decayButtonChildNumber: number ) => {
-      repositionUndoDecayButton( decayButtonChildNumber );
-      undoDecayButton.visible = true;
+    // store the current sim state
+    const storeSimState = () => {
       // TODO: store current sim state
     };
 
+    // show the undoDecayButton
+    const showAndRepositionUndoDecayButton = ( decayType: string ) => {
+      repositionUndoDecayButton( decayType );
+      undoDecayButton.visible = true;
+    };
+
     // hide the undo decay button if anything in the nucleus changes
-    Multilink.multilink( [ this.model.massNumberProperty, this.model.userControlledProtons.lengthProperty,
+    Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
         this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
         this.model.userControlledNeutrons.lengthProperty ], () => {
       undoDecayButton.visible = false;
@@ -154,17 +158,20 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       emitNucleon: this.emitNucleon.bind( this ),
       emitAlphaParticle: this.emitAlphaParticle.bind( this ),
       betaDecay: this.betaDecay.bind( this ),
-      storeSimState: storeSimState.bind( this )
+      storeSimState: storeSimState.bind( this ),
+      showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
     } );
     availableDecaysPanel.right = this.symbolAccordionBox.right;
     availableDecaysPanel.top = this.symbolAccordionBox.bottom + 10;
     this.addChild( availableDecaysPanel );
 
     // reposition the undo button beside the decayButton
-    const repositionUndoDecayButton = ( decayButtonChildNumber: number ) => {
-      const decayButtonAndIcon = availableDecaysPanel.arrangedDecayButtonsAndIcons.children[ decayButtonChildNumber ];
-      undoDecayButton.centerY = decayButtonAndIcon.centerY + availableDecaysPanel.top + availableDecaysPanel.titleNode.height
-                                + availableDecaysPanel.arrangedDecayButtonsAndIcons.top + availableDecaysPanel.arrangedDecayButtonsAndIcons.topMargin + 10;
+    const repositionUndoDecayButton = ( decayType: string ) => {
+      const decayButtonAndIconIndex = availableDecaysPanel.decayTypeButtonIndexMap[ decayType ];
+      undoDecayButton.centerY = availableDecaysPanel.arrangedDecayButtonsAndIcons.children[ decayButtonAndIconIndex ].centerY
+                                + availableDecaysPanel.top + availableDecaysPanel.titleNode.height
+                                + availableDecaysPanel.arrangedDecayButtonsAndIcons.top
+                                + availableDecaysPanel.arrangedDecayButtonsAndIcons.topMargin + 10;
     };
     undoDecayButton.right = availableDecaysPanel.left - 10;
 

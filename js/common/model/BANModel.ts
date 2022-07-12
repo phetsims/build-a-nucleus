@@ -29,7 +29,6 @@ export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 class BANModel {
 
   public readonly isStableBooleanProperty: IReadOnlyProperty<boolean>;
-  public readonly massNumberProperty: IReadOnlyProperty<number>;
   public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
   public readonly particles: ObservableArray<Particle>;
   public readonly particleAtom: ParticleAtom;
@@ -81,11 +80,6 @@ class BANModel {
     // the range of the number of neutrons allowed
     this.neutronCountRange = new Range( 0, maximumNeutronNumber );
 
-    // the number of protons and neutrons in the nucleus
-    this.massNumberProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => protonCount + neutronCount
-    );
-
     // the stability of the nuclide with a given number of protons and neutrons
     this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => AtomIdentifier.isStable( protonCount, neutronCount )
@@ -95,6 +89,9 @@ class BANModel {
     this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount )
     );
+
+    // reconfigure the nucleus when the massNumber changes
+    this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
   }
 
   /**
