@@ -479,7 +479,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
                                 BANScreenView.protonsCreatorNodeModelCenter : BANScreenView.neutronsCreatorNodeModelCenter;
     const particles = [ ...this.model.particles ];
 
-    // array of all of the particles that are of particleType and part of the particleAtom
+    // array of all the particles that are of particleType and part of the particleAtom
     _.remove( particles, particle => {
       return !this.model.particleAtom.containsParticle( particle ) || particle.type !== particleType.name.toLowerCase();
     } );
@@ -494,7 +494,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       // remove the particle from the particleAtom and send it back to its creator node position
       assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
-        'There is no particle of this type in the atom.' );
+        'There is no particle of type in the atom.' );
       this.model.particleAtom.removeParticle( particleToReturn );
       this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
     }
@@ -503,19 +503,31 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   /**
    * Animate particle to the given destination and then remove it.
    */
-  public animateAndRemoveParticle( particle: Particle, destination: Vector2 ): void {
+  public animateAndRemoveParticle( particle: Particle, destination?: Vector2 ): void {
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
-    particle.destinationProperty.value = destination;
+    if ( destination ) {
+      particle.destinationProperty.value = destination;
 
-    particle.animationEndedEmitter.addListener( () => {
-      this.model.removeParticle( particle );
+      particle.animationEndedEmitter.addListener( () => {
+        this.removeParticleAndCheckCreatorNodeVisibility( particle );
+      } );
+    }
+    else {
+      this.removeParticleAndCheckCreatorNodeVisibility( particle );
+    }
+  }
 
-      // make the creator node visible when removing the last nucleon from the particle atom
-      this.checkCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
-                                       this.protonsCreatorNode : this.neutronsCreatorNode, true );
-    } );
+  /**
+   * Remove the given particle from the model and check the particle type's creator node visibility.
+   */
+  protected removeParticleAndCheckCreatorNodeVisibility( particle: Particle ): void {
+    this.model.removeParticle( particle );
+
+    // make the creator node visible when removing the last nucleon from the particle atom
+    this.checkCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
+                                     this.protonsCreatorNode : this.neutronsCreatorNode, true );
   }
 
   /**

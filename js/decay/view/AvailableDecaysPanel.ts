@@ -44,7 +44,7 @@ type SelfOptions = {
   emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
   emitAlphaParticle: () => void;
   betaDecay: ( betaDecayType: DecayType ) => void;
-  storeSimState: () => void;
+  storeNucleonCounts: () => void;
   showAndRepositionUndoDecayButton: ( decayType: string ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
@@ -102,9 +102,7 @@ class AvailableDecaysPanel extends Panel {
 
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
-
-      // pass in decayType to storeSimState
-      options.storeSimState();
+      options.storeNucleonCounts();
       switch( decayType ) {
         case DecayType.NEUTRON_EMISSION:
           options.emitNucleon( ParticleType.NEUTRON );
@@ -124,8 +122,6 @@ class AvailableDecaysPanel extends Panel {
         default:
           break;
       }
-
-      // show undo button
       options.showAndRepositionUndoDecayButton( decayType.name.toString() );
     };
 

@@ -112,6 +112,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.symbolAccordionBox );
 
+
+    // store the current nucleon counts
+    let oldProtonCount: number;
+    let oldNeutronCount: number;
+    const storeNucleonCounts = () => {
+      oldProtonCount = this.model.particleAtom.protonCountProperty.value;
+      oldNeutronCount = this.model.particleAtom.neutronCountProperty.value;
+    };
+
     // create the undo decay button
     const undoArrowShape = new Shape()
       .moveTo( 0, 0 )
@@ -129,15 +138,46 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       baseColor: FractionsCommonColors.undoButtonProperty,
       listener: () => {
         undoDecayButton.visible = false;
-        // TODO: only restore previous state
+        restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
+        restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
       }
     } );
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
 
-    // store the current sim state
-    const storeSimState = () => {
-      // TODO: store current sim state
+    // restore the particleAtom to have the nucleon counts before a decay occurred
+    const restorePreviousNucleonCount = ( particleType: ParticleType, oldNucleonCount: number ) => {
+      const newNucleonCount = particleType === ParticleType.PROTON ?
+                              this.model.particleAtom.protonCountProperty.value :
+                              this.model.particleAtom.neutronCountProperty.value;
+      const nucleonCountDifference = oldNucleonCount - newNucleonCount;
+
+      for ( let i = 0; i < Math.abs( nucleonCountDifference ); i++ ) {
+        if ( nucleonCountDifference > 0 ) {
+          addNucleonImmediatelyToAtom( particleType );
+        }
+        else if ( nucleonCountDifference < 0 ) {
+          removeNucleonImmediatelyFromAtom( particleType );
+        }
+      }
+    };
+
+    // remove a nucleon of a given particleType from the atom immediately
+    const removeNucleonImmediatelyFromAtom = ( particleType: ParticleType ) => {
+      const particleToRemove = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+      this.animateAndRemoveParticle( particleToRemove );
+    };
+
+    // create and add a nucleon of particleType immediately to the particleAtom
+    const addNucleonImmediatelyToAtom = ( particleType: ParticleType ) => {
+      const particle = new Particle( particleType.name.toLowerCase(), {
+        maxZLayer: DecayScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+      } );
+
+      // place the particle the center of the particleAtom and add it to the model and particleAtom
+      particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
+      this.model.addParticle( particle );
+      this.model.particleAtom.addParticle( particle );
     };
 
     // show the undoDecayButton
@@ -158,7 +198,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       emitNucleon: this.emitNucleon.bind( this ),
       emitAlphaParticle: this.emitAlphaParticle.bind( this ),
       betaDecay: this.betaDecay.bind( this ),
-      storeSimState: storeSimState.bind( this ),
+      storeNucleonCounts: storeNucleonCounts.bind( this ),
       showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
     } );
     availableDecaysPanel.right = this.symbolAccordionBox.right;
