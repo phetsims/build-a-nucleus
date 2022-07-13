@@ -71,7 +71,11 @@ class AvailableDecaysPanel extends Panel {
         font: new PhetFont( BANConstants.REGULAR_FONT_SIZE ),
         lineWrap: 400,
         maxWidth: 400
-      } )
+      } ),
+      {
+        topMargin: 40,
+        bottomMargin: 30
+      }
     );
     const decaysInfoButton = new InfoButton( {
       listener: () => decaysInfoDialog.show(),

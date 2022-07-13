@@ -150,6 +150,6 @@
     "value": "Cluster of {{neutronNumber}} neutrons"
   },
   "availableDecaysInfoPanelText": {
-    "value": "You are seeing the most common decay path(s), there can be other ones. In some cases there is no known decay path."
+    "value": "While other decays may exist, the available decays shown are the most common. In cases where there is no known decay, no available decays are shown."
   }
 }
