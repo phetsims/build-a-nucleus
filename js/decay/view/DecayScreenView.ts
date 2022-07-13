@@ -17,7 +17,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, HBox, Node, Path, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, ManualConstraint, Node, Path, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -188,10 +188,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // hide the undo decay button if anything in the nucleus changes
     Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
-        this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
-        this.model.userControlledNeutrons.lengthProperty ], () => {
+      this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
+      this.model.userControlledNeutrons.lengthProperty ], () => {
       undoDecayButton.visible = false;
-      } );
+    } );
 
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
@@ -205,13 +205,17 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     availableDecaysPanel.top = this.symbolAccordionBox.bottom + 10;
     this.addChild( availableDecaysPanel );
 
+    let manualConstraint: ManualConstraint<Node[]> | null;
+
     // reposition the undo button beside the decayButton
     const repositionUndoDecayButton = ( decayType: string ) => {
       const decayButtonAndIconIndex = availableDecaysPanel.decayTypeButtonIndexMap[ decayType ];
-      undoDecayButton.centerY = availableDecaysPanel.arrangedDecayButtonsAndIcons.children[ decayButtonAndIconIndex ].centerY
-                                + availableDecaysPanel.top + availableDecaysPanel.titleNode.height
-                                + availableDecaysPanel.arrangedDecayButtonsAndIcons.top
-                                + availableDecaysPanel.arrangedDecayButtonsAndIcons.topMargin + 10;
+      const decayButtonAndIcon = availableDecaysPanel.arrangedDecayButtonsAndIcons.children[ decayButtonAndIconIndex ];
+      manualConstraint && manualConstraint.dispose();
+      manualConstraint = new ManualConstraint( this, [ decayButtonAndIcon, undoDecayButton ],
+        ( decayButtonAndIconWrapper, undoDecayButtonWrapper ) => {
+          undoDecayButtonWrapper.centerY = decayButtonAndIconWrapper.centerY;
+        } );
     };
     undoDecayButton.right = availableDecaysPanel.left - 10;
 
