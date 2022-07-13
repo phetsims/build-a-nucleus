@@ -17,7 +17,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, HBox, ManualConstraint, Node, Path, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, ManualConstraint, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -39,9 +39,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import FractionsCommonColors from '../../../../fractions-common/js/common/view/FractionsCommonColors.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
@@ -49,7 +47,6 @@ const NUCLEON_CAPTURE_RADIUS = 100;
 const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
 const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
-const ICON_HEIGHT = 17;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -122,25 +119,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // create the undo decay button
-    const undoArrowShape = new Shape()
-      .moveTo( 0, 0 )
-      .lineTo( 0, ICON_HEIGHT )
-      .lineTo( ICON_HEIGHT, ICON_HEIGHT )
-      .lineTo( ICON_HEIGHT * 0.7, ICON_HEIGHT * 0.7 )
-      .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.1, ICON_HEIGHT * 2, ICON_HEIGHT * 0.75 )
-      .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.5, ICON_HEIGHT * 0.3, ICON_HEIGHT * 0.3 )
-      .close();
-    const undoDecayButton = new RectangularPushButton( {
-      content: new Path( undoArrowShape, {
-        fill: 'black',
-        scale: 0.7
-      } ),
-      baseColor: FractionsCommonColors.undoButtonProperty,
-      listener: () => {
-        undoDecayButton.visible = false;
-        restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
-        restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
-      }
+    const undoDecayButton = new ReturnButton( () => {
+      undoDecayButton.visible = false;
+      restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
+      restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
     } );
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
