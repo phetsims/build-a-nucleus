@@ -37,9 +37,7 @@ const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
 const BUTTON_CONTENT_WIDTH = 145;
 
-type decayTypeButtonIndexType = {
-  [ key: string ]: number;
-};
+type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
   emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
   emitAlphaParticle: () => void;
@@ -195,21 +193,21 @@ class AvailableDecaysPanel extends Panel {
     // electron or positron )
     const createBetaDecayIcon = ( isBetaMinusDecay: boolean ): HBox => {
       return new HBox( {
-            children: [
-              isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
-              new ArrowNode( 0, 0, 20, 0, {
-                fill: BANColors.blueDecayIconSymbolsColorProperty,
-                stroke: null,
-                tailWidth: 1,
-                headWidth: 7.5
-              } ),
-              isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON ),
-              new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
-              createMotionLines( 3.5, true ),
-              isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
-            ],
-            spacing: SPACING / 3
-          } );
+        children: [
+          isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
+          new ArrowNode( 0, 0, 20, 0, {
+            fill: BANColors.blueDecayIconSymbolsColorProperty,
+            stroke: null,
+            tailWidth: 1,
+            headWidth: 7.5
+          } ),
+          isBetaMinusDecay ? createParticleNode( ParticleType.PROTON ) : createParticleNode( ParticleType.NEUTRON ),
+          new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
+          createMotionLines( 3.5, true ),
+          isBetaMinusDecay ? createParticleNode( ParticleType.ELECTRON ) : createParticleNode( ParticleType.POSITRON )
+        ],
+        spacing: SPACING / 3
+      } );
     };
 
     // function to create half of an alpha particle ( two particle nodes beside each other, slightly overlapping )

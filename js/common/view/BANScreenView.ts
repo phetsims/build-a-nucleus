@@ -43,9 +43,7 @@ const TOUCH_AREA_Y_DILATION = 3;
 
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
-export type ParticleViewMap = {
-  [ key: number ]: ParticleView;
-};
+export type ParticleViewMap = Record<number, ParticleView>;
 
 // constants
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
@@ -161,7 +159,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
       return new DerivedProperty( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty,
           model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty, model.userControlledProtons.lengthProperty,
-        model.userControlledNeutrons.lengthProperty ],
+          model.userControlledNeutrons.lengthProperty ],
         ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount,
           userControlledProtonCount, userControlledNeutronCount ) => {
 
@@ -255,7 +253,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       const upArrowButton = new ArrowButton( 'up', () => increaseNucleonCountListener( nucleonType ),
         merge( {
             enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty,
-          touchAreaYDilation: TOUCH_AREA_Y_DILATION
+            touchAreaYDilation: TOUCH_AREA_Y_DILATION
           },
           singleArrowButtonOptions )
       );
@@ -405,7 +403,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
 
     Multilink.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty,
-    this.model.userControlledNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount, userControlledNeutronCount ) => {
+      this.model.userControlledNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount, userControlledNeutronCount ) => {
 
       // hide the neutronsCreatorNode when at the last neutron
       if ( ( neutronCount + incomingNeutronsCount + userControlledNeutronCount ) === this.model.neutronCountRange.max ) {
