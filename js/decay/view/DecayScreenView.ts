@@ -123,6 +123,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       undoDecayButton.visible = false;
       restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
       restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
+    }, {
+      baseColor: Color.YELLOW.darkerColor( 0.95 )
     } );
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
