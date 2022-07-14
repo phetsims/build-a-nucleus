@@ -19,7 +19,7 @@ export type InfinityNodeOptions = SelfOptions & PathOptions;
 
 class InfinityNode extends Path {
 
-  constructor( providedOptions?: InfinityNodeOptions ) {
+  public constructor( providedOptions?: InfinityNodeOptions ) {
 
     const options = optionize<InfinityNodeOptions, SelfOptions, PathOptions>()( {
       radius: 6,

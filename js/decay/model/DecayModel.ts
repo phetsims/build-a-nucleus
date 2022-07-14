@@ -29,7 +29,7 @@ class DecayModel extends BANModel {
   public betaPlusDecayEnabledProperty: IReadOnlyProperty<boolean>;
   public alphaDecayEnabledProperty: IReadOnlyProperty<boolean>;
 
-  constructor( providedOptions?: DecayModelOptions ) {
+  public constructor( providedOptions?: DecayModelOptions ) {
 
     const options = optionize<DecayModelOptions, EmptyObjectType, BANModelOptions>()( {
 

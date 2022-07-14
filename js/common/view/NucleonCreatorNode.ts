@@ -19,7 +19,7 @@ import BANConstants from '../BANConstants.js';
 
 class NucleonCreatorNode extends Node {
 
-  constructor( particleType: ParticleType, screenView: BANScreenView<BANModel> ) {
+  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel> ) {
     super();
 
     const targetNode = new ParticleNode( particleType.name.toLowerCase(), 10 );

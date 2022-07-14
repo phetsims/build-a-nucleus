@@ -13,21 +13,21 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 
 class DecayType extends EnumerationValue {
 
-  static ALPHA_DECAY = new DecayType( buildANucleusStrings.alphaDecay );
+  public static ALPHA_DECAY = new DecayType( buildANucleusStrings.alphaDecay );
 
-  static BETA_MINUS_DECAY = new DecayType( buildANucleusStrings.betaMinusDecay );
+  public static BETA_MINUS_DECAY = new DecayType( buildANucleusStrings.betaMinusDecay );
 
-  static BETA_PLUS_DECAY = new DecayType( buildANucleusStrings.betaPlusDecay );
+  public static BETA_PLUS_DECAY = new DecayType( buildANucleusStrings.betaPlusDecay );
 
-  static PROTON_EMISSION = new DecayType( buildANucleusStrings.protonEmission );
+  public static PROTON_EMISSION = new DecayType( buildANucleusStrings.protonEmission );
 
-  static NEUTRON_EMISSION = new DecayType( buildANucleusStrings.neutronEmission );
+  public static NEUTRON_EMISSION = new DecayType( buildANucleusStrings.neutronEmission );
 
-  static enumeration = new Enumeration( DecayType );
+  public static enumeration = new Enumeration( DecayType );
 
   public readonly label: string;
 
-  constructor( label: string ) {
+  public constructor( label: string ) {
     super();
 
     this.label = label;

@@ -16,43 +16,43 @@ const TIME_FOR_LIGHT_TO_CROSS_AN_ATOM = Math.pow( 10, -19 );
 
 class BANTimescalePoints extends EnumerationValue {
 
-  static TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS = new BANTimescalePoints(
+  public static TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS = new BANTimescalePoints(
     buildANucleusStrings.A + buildANucleusStrings.timeForLightToCrossANucleus, Math.pow( 10, -23 ) );
 
-  static TIME_FOR_LIGHT_TO_CROSS_AN_ATOM = new BANTimescalePoints(
+  public static TIME_FOR_LIGHT_TO_CROSS_AN_ATOM = new BANTimescalePoints(
     buildANucleusStrings.B + buildANucleusStrings.timeForLightToCrossAnAtom, TIME_FOR_LIGHT_TO_CROSS_AN_ATOM );
 
-  static TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS = new BANTimescalePoints(
+  public static TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS = new BANTimescalePoints(
     buildANucleusStrings.C + buildANucleusStrings.timeForLightToCrossOneThousandAtoms,
     TIME_FOR_LIGHT_TO_CROSS_AN_ATOM * 1000 );
 
-  static TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER = new BANTimescalePoints(
+  public static TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER = new BANTimescalePoints(
     buildANucleusStrings.D + buildANucleusStrings.timeForSoundToTravelOneMillimeter, 2e-6 );
 
-  static A_BLINK_OF_AN_EYE = new BANTimescalePoints(
+  public static A_BLINK_OF_AN_EYE = new BANTimescalePoints(
     buildANucleusStrings.E + buildANucleusStrings.aBlinkOfAnEye, 1 / 3 );
 
-  static ONE_MINUTE = new BANTimescalePoints(
+  public static ONE_MINUTE = new BANTimescalePoints(
     buildANucleusStrings.F + buildANucleusStrings.oneMinute, 60 );
 
-  static ONE_YEAR = new BANTimescalePoints(
+  public static ONE_YEAR = new BANTimescalePoints(
     buildANucleusStrings.G + buildANucleusStrings.oneYear, SECONDS_IN_A_YEAR );
 
-  static AVERAGE_HUMAN_LIFESPAN = new BANTimescalePoints(
+  public static AVERAGE_HUMAN_LIFESPAN = new BANTimescalePoints(
     buildANucleusStrings.H + buildANucleusStrings.averageHumanLifespan, 72.6 * SECONDS_IN_A_YEAR );
 
-  static AGE_OF_THE_UNIVERSE = new BANTimescalePoints(
+  public static AGE_OF_THE_UNIVERSE = new BANTimescalePoints(
     buildANucleusStrings.I + buildANucleusStrings.ageOfTheUniverse, 13.77e9 * SECONDS_IN_A_YEAR );
 
-  static LIFETIME_OF_LONGEST_LIVED_STARS = new BANTimescalePoints(
+  public static LIFETIME_OF_LONGEST_LIVED_STARS = new BANTimescalePoints(
     buildANucleusStrings.J + buildANucleusStrings.lifetimeOfLongestLivedStars, 450e18 );
 
-  static enumeration = new Enumeration( BANTimescalePoints );
+  public static enumeration = new Enumeration( BANTimescalePoints );
 
   public readonly timescaleItem: string;
   public readonly numberOfSeconds: number;
 
-  constructor( timescaleItem: string, numberOfSeconds: number ) {
+  public constructor( timescaleItem: string, numberOfSeconds: number ) {
     super();
 
     this.timescaleItem = timescaleItem;

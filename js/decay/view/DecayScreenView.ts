@@ -60,7 +60,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   private readonly symbolAccordionBox: AccordionBox;
   private readonly showElectronCloudBooleanProperty: BooleanProperty;
 
-  constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
+  public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
     const options = optionize<DecayScreenViewOptions, EmptyObjectType, BANScreenViewOptions>()( {
       // phet-io options

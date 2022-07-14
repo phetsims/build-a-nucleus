@@ -67,7 +67,7 @@ class HalfLifeNumberLineNode extends Node {
   private halfLifeArrowLength: number | undefined;
   public readonly halfLifeDisplayNode: Node;
 
-  constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
+  public constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
                isStableBooleanProperty: IReadOnlyProperty<boolean>,
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();

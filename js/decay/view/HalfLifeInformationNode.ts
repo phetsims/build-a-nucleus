@@ -24,7 +24,7 @@ const LABEL_FONT = new PhetFont( 14 );
 
 class HalfLifeInformationNode extends Node {
 
-  constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
+  public constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
                isStableBooleanProperty: IReadOnlyProperty<boolean>,
                protonCountProperty: IReadOnlyProperty<number>,
                neutronCountProperty: IReadOnlyProperty<number>,

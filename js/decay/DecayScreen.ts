@@ -21,7 +21,7 @@ export type DecayScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'ta
 
 class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
-  constructor( providedOptions?: DecayScreenOptions ) {
+  public constructor( providedOptions?: DecayScreenOptions ) {
 
     const options = optionize<DecayScreenOptions, EmptyObjectType, ScreenOptions>()( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon

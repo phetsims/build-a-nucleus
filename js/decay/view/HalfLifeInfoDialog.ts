@@ -25,7 +25,7 @@ const LEGEND_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 
 class HalfLifeInfoDialog extends Dialog {
 
-  constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
+  public constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
                isStableBooleanProperty: IReadOnlyProperty<boolean>,
                protonCountProperty: IReadOnlyProperty<number>,
                neutronCountProperty: IReadOnlyProperty<number>,

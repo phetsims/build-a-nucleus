@@ -41,7 +41,7 @@ class BANModel {
   public readonly userControlledProtons: ObservableArray<unknown>;
   public readonly userControlledNeutrons: ObservableArray<unknown>;
 
-  constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
+  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
     const options = optionize<BANModelOptions, EmptyObjectType>()( {
 

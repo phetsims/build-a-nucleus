@@ -37,7 +37,7 @@ const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
 
 class NucleonCountPanel extends Panel {
 
-  constructor( protonCountProperty: IReadOnlyProperty<number>, protonCountRange: Range,
+  public constructor( protonCountProperty: IReadOnlyProperty<number>, protonCountRange: Range,
                neutronCountProperty: IReadOnlyProperty<number>, neutronCountRange: Range ) {
 
     const options = {

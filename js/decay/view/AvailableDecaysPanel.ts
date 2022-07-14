@@ -53,7 +53,7 @@ class AvailableDecaysPanel extends Panel {
   public readonly titleNode: Text;
   public decayTypeButtonIndexMap: decayTypeButtonIndexType;
 
-  constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
+  public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
     // TODO: investigate why a rectangle is needed, why isn't the contentNode centered correctly with just a node?
     const contentNode = new Rectangle( 0, 0, 0, 0 );
