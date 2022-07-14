@@ -484,7 +484,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // select the particle closest to its creator node
     const sortedParticles = _.sortBy( particles, particle => {
-      return particle!.positionProperty.value.distance( creatorNodePosition );
+      return particle.positionProperty.value.distance( creatorNodePosition );
     } );
     const particleToReturn = sortedParticles.shift();
 

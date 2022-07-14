@@ -484,10 +484,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // get the protons and neutrons closest to the center of the particleAtom
     const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
-      proton!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
+      proton.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
       .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
     const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
-      neutron => neutron!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
+      neutron => neutron.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
       .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
 
     // create and add the alpha particle node
@@ -589,7 +589,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const particle = _.sortBy( [ ...particleArray ],
-      particle => particle!.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
+      particle => particle.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
     particleToEmit.positionProperty.value = particle.positionProperty.value;
