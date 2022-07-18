@@ -50,20 +50,29 @@ const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
 abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
-  public readonly resetAllButton: ResetAllButton;
-  public readonly nucleonCountPanel: NucleonCountPanel;
   protected model: M;
-  private readonly particleViewMap: ParticleViewMap;
-  protected readonly particleViewLayerNode: Node;
-  public modelViewTransform: ModelViewTransform2;
-  protected readonly protonsCreatorNode: NucleonCreatorNode;
-  protected readonly neutronsCreatorNode: NucleonCreatorNode;
-  protected readonly electronCloud: Circle;
-  public static protonsCreatorNodeModelCenter: Vector2;
-  public static neutronsCreatorNodeModelCenter: Vector2;
   private timeSinceCountdownStarted: number;
   private previousProtonCount: number;
   private previousNeutronCount: number;
+  public modelViewTransform: ModelViewTransform2;
+  public readonly resetAllButton: ResetAllButton;
+  public readonly nucleonCountPanel: NucleonCountPanel;
+
+  // ParticleView.id => {ParticleView} - lookup map for efficiency
+  private readonly particleViewMap: ParticleViewMap;
+
+  // where the ParticleView's are
+  protected readonly particleViewLayerNode: Node;
+
+  // the NucleonCreatorNode for the protons and neutrons
+  protected readonly protonsCreatorNode: NucleonCreatorNode;
+  protected readonly neutronsCreatorNode: NucleonCreatorNode;
+
+  // the electron cloud
+  protected readonly electronCloud: Circle;
+
+  public static protonsCreatorNodeModelCenter: Vector2;
+  public static neutronsCreatorNodeModelCenter: Vector2;
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
@@ -85,10 +94,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       new Vector2( 335, 339 ), // the center of the atom node
       1.0 );
 
-    // ParticleView.id => {ParticleView} - lookup map for efficiency
     this.particleViewMap = {};
 
-    // where the ParticleView's are, is added at the end of subclasses for the correct z order
+    // this is added at the end of subclasses for the correct z order
     this.particleViewLayerNode = new Node();
 
     this.nucleonCountPanel = new NucleonCountPanel( model.particleAtom.protonCountProperty, model.protonCountRange,
@@ -148,6 +156,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       return neutronCount !== model.neutronCountRange.min;
     };
 
+    // enable or disable the creator node and adjust the opacity accordingly
     const creatorNodeEnabled = ( creatorNode: Node, enable: boolean ) => {
       if ( creatorNode ) {
         creatorNode.inputEnabled = enable;
@@ -233,7 +242,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     doubleArrowButtons.centerX = this.modelViewTransform.modelToViewX( model.particleAtom.positionProperty.value.x );
     this.addChild( doubleArrowButtons );
 
-    // function to create the listeners that create or remove a particle
+    // functions to create the listeners that create or remove a particle
     const increaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
       this.createParticleFromStack( firstNucleonType );
       if ( secondNucleonType ) {
@@ -317,12 +326,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
     this.addChild( neutronsLabel );
 
-    // create and add the NucleonCreatorNode for the protons and neutrons
+    // create and add the NucleonCreatorNode for the protons
     this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, this );
     this.protonsCreatorNode.top = doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
+    // create and add the NucleonCreatorNode for the neutrons
     this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, this );
     this.neutronsCreatorNode.top = doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;

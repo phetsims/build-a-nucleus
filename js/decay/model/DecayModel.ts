@@ -22,7 +22,10 @@ export type DecayModelOptions = BANModelOptions;
 
 class DecayModel extends BANModel {
 
+  // the half-life number
   public halfLifeNumberProperty: IReadOnlyProperty<number>;
+
+  // the decay enabled properties for all five decays
   public protonEmissionEnabledProperty: IReadOnlyProperty<boolean>;
   public neutronEmissionEnabledProperty: IReadOnlyProperty<boolean>;
   public betaMinusDecayEnabledProperty: IReadOnlyProperty<boolean>;
@@ -40,7 +43,6 @@ class DecayModel extends BANModel {
     // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
     super( BANConstants.MAX_NUMBER_OF_PROTONS, BANConstants.MAX_NUMBER_OF_NEUTRONS, options );
 
-    // the half-life number
     this.halfLifeNumberProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ) => {
@@ -89,7 +91,7 @@ class DecayModel extends BANModel {
       return decays.includes( decayType.name );
     };
 
-    // create the decay enabled properties for all five decays possible
+    // create the decay enabled properties
     this.protonEmissionEnabledProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) =>
         createDecayEnabledListener( protonCount, neutronCount, DecayType.PROTON_EMISSION )

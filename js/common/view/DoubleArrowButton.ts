@@ -19,6 +19,7 @@ import buildANucleus from '../../buildANucleus.js';
 export type DoubleArrowButtonDirection = 'up' | 'down';
 
 type SelfOptions = {
+
   // from tip to base
   arrowHeight: number;
 

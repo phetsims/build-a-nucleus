@@ -56,15 +56,21 @@ const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT
 
 class HalfLifeNumberLineNode extends Node {
 
-  private readonly arrowXPositionProperty: NumberProperty;
-  private readonly tickMarkSet: TickMarkSet;
-  private modelViewTransform: ModelViewTransform2;
-  private arrowXPositionAnimation: null | Animation;
-  private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
-  private readonly labelFont: PhetFont | undefined;
-  private arrowRotationAnimation: null | Animation;
-  private readonly halfLifeArrowRotationProperty: NumberProperty;
   private halfLifeArrowLength: number | undefined;
+  private readonly labelFont: PhetFont | undefined;
+  private modelViewTransform: ModelViewTransform2;
+  private readonly tickMarkSet: TickMarkSet;
+  private readonly halfLifeArrowRotationProperty: NumberProperty;
+  private arrowXPositionAnimation: null | Animation;
+  private arrowRotationAnimation: null | Animation;
+
+  // x position of half-life arrow in model coordinates
+  private readonly arrowXPositionProperty: NumberProperty;
+
+  // x position of the halfLifeText in model coordinates
+  private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
+
+  // the half life display node
   public readonly halfLifeDisplayNode: Node;
 
   public constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
@@ -139,7 +145,6 @@ class HalfLifeNumberLineNode extends Node {
     this.addChild( halfLifeArrow );
     halfLifeArrow.addChild( arrowNode );
 
-    // keep track of the x position of the half-life arrow in model coordinates
     this.arrowXPositionProperty = new NumberProperty( 0 );
     this.arrowXPositionProperty.link( xPosition => {
       halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ),
@@ -217,7 +222,6 @@ class HalfLifeNumberLineNode extends Node {
             this.halfLifeDisplayNode.center.minusXY( 0, this.halfLifeDisplayNode.height + distanceBetweenElementNameAndHalfLifeText ) )
       );
 
-      // keep track of the x position of the halfLifeText in model coordinates
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
       this.halfLifeTextXPositionProperty.link( xPosition => {
 

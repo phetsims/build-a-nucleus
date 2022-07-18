@@ -49,8 +49,13 @@ export type AvailableDecaysPanelOptions = SelfOptions;
 
 class AvailableDecaysPanel extends Panel {
 
+  // decay button and icon pair
   public readonly arrangedDecayButtonsAndIcons: VBox;
+
+  // the title
   public readonly titleNode: Text;
+
+  // map of decayType => {arrayIndex}
   public decayTypeButtonIndexMap: decayTypeButtonIndexType;
 
   public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
@@ -270,7 +275,7 @@ class AvailableDecaysPanel extends Panel {
       } );
     };
 
-    // map of decayType -> arrayIndex
+    // TODO: the documentation placed with the declaration bc later on made class property, is that okay?
     const decayTypeButtonIndexMap: decayTypeButtonIndexType = {};
 
     // create the decay button and icon pair in a VBox

@@ -28,16 +28,34 @@ export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 
 class BANModel {
 
+  // the stability of the nuclide
   public readonly isStableBooleanProperty: IReadOnlyProperty<boolean>;
+
+  // if a nuclide exists
   public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
+
+  // arrays of all Particle's that exist in all places
   public readonly particles: ObservableArray<Particle>;
+
+  // the atom that the user will build, modify, and generally play with.
   public readonly particleAtom: ParticleAtom;
+
+  // the range of the number of protons allowed
   public readonly protonCountRange: Range;
+
+  // the range of the number of neutrons allowed
   public readonly neutronCountRange: Range;
+
+  // array of particles sent to the nucleus but not there yet
   public readonly incomingProtons: ObservableArray<Particle>;
   public readonly incomingNeutrons: ObservableArray<Particle>;
+
+  // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
   public readonly doubleArrowButtonClickedBooleanProperty: BooleanProperty;
+
+  // array of alpha particle animations
   public readonly alphaParticleAnimations: ObservableArray<Animation | null>;
+
   public readonly userControlledProtons: ObservableArray<unknown>;
   public readonly userControlledNeutrons: ObservableArray<unknown>;
 
@@ -51,36 +69,29 @@ class BANModel {
 
     console.log( options.tandem );
 
-    // Create the atom that the user will build, modify, and generally play with.
+    // Create the atom
     this.particleAtom = new ParticleAtom();
 
-    // arrays of all Particle's that exist in all places
     this.particles = createObservableArray();
 
-    // array of particles sent to the nucleus but not there yet
     this.incomingProtons = createObservableArray();
     this.incomingNeutrons = createObservableArray();
 
     this.userControlledProtons = createObservableArray();
     this.userControlledNeutrons = createObservableArray();
 
-    // array of alpha particle animations
     this.alphaParticleAnimations = createObservableArray();
     this.alphaParticleAnimations.addItemRemovedListener( animation => {
       animation && animation.stop();
       animation = null;
     } );
 
-    // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
-    // the range of the number of protons allowed
     this.protonCountRange = new Range( 0, maximumProtonNumber );
-
-    // the range of the number of neutrons allowed
     this.neutronCountRange = new Range( 0, maximumNeutronNumber );
 
-    // the stability of the nuclide with a given number of protons and neutrons
+    // the stability of the nuclide is determined by the given number of protons and neutrons
     this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => AtomIdentifier.isStable( protonCount, neutronCount )
     );
@@ -122,6 +133,7 @@ class BANModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
+
     // Update particle positions.
     this.particles.forEach( particle => {
       particle.step( dt );

@@ -54,10 +54,20 @@ export type DecayScreenViewOptions = BANScreenViewOptions;
 class DecayScreenView extends BANScreenView<DecayModel> {
 
   public static NUMBER_OF_NUCLEON_LAYERS: number;
+
+  // layers where nucleons exist
   private nucleonLayers: Node[];
+
+  // stability indicator
   private readonly stabilityIndicator: Text;
+
+  // the AtomNode
   private readonly atomNode: AtomNode;
+
+  // the symbol node in an accordion box
   private readonly symbolAccordionBox: AccordionBox;
+
+  // show or hide the electron cloud by default
   private readonly showElectronCloudBooleanProperty: BooleanProperty;
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
@@ -357,7 +367,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
 
-    // Add the layers where the nucleons will exist.
+    // Add the layers where the nucleons will exist
     this.nucleonLayers = [];
     _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
       const nucleonLayer = new Node();
