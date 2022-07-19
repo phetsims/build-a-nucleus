@@ -39,10 +39,16 @@ const BUTTON_CONTENT_WIDTH = 145;
 
 type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
+
+  // decay functions
   emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
   emitAlphaParticle: () => void;
   betaDecay: ( betaDecayType: DecayType ) => void;
+
+  // function to store current nucleon counts
   storeNucleonCounts: () => void;
+
+  // function to show and reposition the undo decay button
   showAndRepositionUndoDecayButton: ( decayType: string ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
@@ -275,7 +281,7 @@ class AvailableDecaysPanel extends Panel {
       } );
     };
 
-    // TODO: the documentation placed with the declaration bc later on made class property, is that okay?
+    // see this.decayTypeButtonIndexMap for detail
     const decayTypeButtonIndexMap: decayTypeButtonIndexType = {};
 
     // create the decay button and icon pair in a VBox

@@ -40,9 +40,13 @@ type SelfOptions = {
   tickMarkExtent: number;
   numberLineLabelFont: PhetFont;
   halfLifeArrowLength: number;
+
+  // scale for the halfLifeDisplayNode
   halfLifeDisplayScale?: number;
+
   isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
   // animate its position with the half-life arrow
+
   protonCountProperty?: IReadOnlyProperty<number>;
   neutronCountProperty?: IReadOnlyProperty<number>;
   doesNuclideExistBooleanProperty?: IReadOnlyProperty<boolean>;
@@ -84,6 +88,7 @@ class HalfLifeNumberLineNode extends Node {
       neutronCountProperty: new NumberProperty( 0 ),
       doesNuclideExistBooleanProperty: new BooleanProperty( false )
     }, providedOptions );
+
     this.labelFont = options.numberLineLabelFont;
     this.halfLifeArrowLength = options.halfLifeArrowLength;
 

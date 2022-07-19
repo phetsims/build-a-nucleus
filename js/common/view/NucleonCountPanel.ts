@@ -41,6 +41,8 @@ class NucleonCountPanel extends Panel {
                neutronCountProperty: IReadOnlyProperty<number>, neutronCountRange: Range ) {
 
     const options = {
+
+      // options for the panel
       fill: BANColors.panelBackgroundColorProperty,
       xMargin: 10,
       stroke: BANConstants.PANEL_STROKE,
