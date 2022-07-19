@@ -440,10 +440,11 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         this.nucleonLayers.length > zLayer,
         'zLayer for nucleon exceeds number of layers, max number may need increasing.'
       );
+
       // Determine whether nucleon view is on the correct layer.
       let onCorrectLayer = false;
-      this.nucleonLayers[ zLayer ].children.forEach( particleView => {
-        // @ts-ignore TODO-TS: How do you assume sub-types of children?
+      const nucleonLayersChildren = this.nucleonLayers[ zLayer ].getChildren() as ParticleView[];
+      nucleonLayersChildren.forEach( particleView => {
         if ( particleView.particle === particle ) {
           onCorrectLayer = true;
         }
@@ -455,9 +456,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         let particleView = null;
         for ( let layerIndex = 0; layerIndex < this.nucleonLayers.length && particleView === null; layerIndex++ ) {
           for ( let childIndex = 0; childIndex < this.nucleonLayers[ layerIndex ].children.length; childIndex++ ) {
-            // @ts-ignore TODO-TS: How do you assume sub-types of children?
-            if ( this.nucleonLayers[ layerIndex ].children[ childIndex ].particle === particle ) {
-              particleView = this.nucleonLayers[ layerIndex ].children[ childIndex ];
+            const nucleonLayersChildren = this.nucleonLayers[ layerIndex ].getChildren() as ParticleView[];
+            if ( nucleonLayersChildren[ childIndex ].particle === particle ) {
+              particleView = nucleonLayersChildren[ childIndex ];
               this.nucleonLayers[ layerIndex ].removeChildAt( childIndex );
               break;
             }

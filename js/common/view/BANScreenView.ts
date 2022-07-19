@@ -55,8 +55,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   private previousProtonCount: number;
   private previousNeutronCount: number;
   public modelViewTransform: ModelViewTransform2;
-  public readonly resetAllButton: ResetAllButton;
-  public readonly nucleonCountPanel: NucleonCountPanel;
+  public readonly resetAllButton: Node;
+  public readonly nucleonCountPanel: Node;
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency
   private readonly particleViewMap: ParticleViewMap;
@@ -65,8 +65,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly particleViewLayerNode: Node;
 
   // the NucleonCreatorNode for the protons and neutrons
-  protected readonly protonsCreatorNode: NucleonCreatorNode;
-  protected readonly neutronsCreatorNode: NucleonCreatorNode;
+  protected readonly protonsCreatorNode: Node;
+  protected readonly neutronsCreatorNode: Node;
 
   // the electron cloud
   protected readonly electronCloud: Circle;
@@ -291,8 +291,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // function to keep track of when a double arrow button was clicked
     const createSingleOrDoubleArrowButtonClickedListener = ( isDoubleArrowButton: boolean, arrowButtons: VBox ) => {
-      arrowButtons.getChildren().forEach( arrowButton => {
-        // @ts-ignore TODO-TS: How do you assume sub-types of children?
+      const arrowButtonsChildren = arrowButtons.getChildren() as ArrowButton[];
+      arrowButtonsChildren.forEach( arrowButton => {
         arrowButton.addListener( () => {
           model.doubleArrowButtonClickedBooleanProperty.value = isDoubleArrowButton;
         } );
