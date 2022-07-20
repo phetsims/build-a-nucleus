@@ -119,7 +119,7 @@ class AvailableDecaysPanel extends Panel {
           options.emitNucleon( ParticleType.NEUTRON );
           break;
         case DecayType.PROTON_EMISSION:
-          options.emitNucleon( ParticleType.PROTON, 'proton emission' );
+          options.emitNucleon( ParticleType.PROTON, decayType.name );
           break;
         case DecayType.BETA_PLUS_DECAY:
           options.betaDecay( DecayType.BETA_PLUS_DECAY );

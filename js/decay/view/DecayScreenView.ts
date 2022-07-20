@@ -565,7 +565,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       let protonsEmitted = false;
       alphaParticle.positionProperty.link( position => {
         if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
-          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON, 'alpha decay' ); } );
+          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON, DecayType.ALPHA_DECAY.name ); } );
           protonsEmitted = true;
         }
       } );
