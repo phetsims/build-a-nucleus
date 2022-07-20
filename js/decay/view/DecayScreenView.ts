@@ -503,10 +503,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const alphaParticle = new ParticleAtom();
     const alphaParticleNode = new AtomNode( alphaParticle, this.modelViewTransform, {
       showCenterX: false,
-      showElementNameProperty: new Property( false ),
-      showNeutralOrIonProperty: new Property( false ),
-      showStableOrUnstableProperty: new Property( false ),
-      electronShellDepictionProperty: new Property( 'cloud' )
+      showElementNameProperty: new BooleanProperty( false ),
+      showNeutralOrIonProperty: new BooleanProperty( false ),
+      showStableOrUnstableProperty: new BooleanProperty( false ),
+      electronShellDepictionProperty: new StringProperty( 'cloud' )
     } );
     alphaParticleNode.center = this.atomNode.center;
     this.addChild( alphaParticleNode );
