@@ -8,8 +8,7 @@
 
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import BANConstants from '../../common/BANConstants.js';

@@ -9,7 +9,7 @@
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../BANColors.js';
-import { Text, HBox, Rectangle } from '../../../../scenery/js/imports.js';
+import { HBox, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';

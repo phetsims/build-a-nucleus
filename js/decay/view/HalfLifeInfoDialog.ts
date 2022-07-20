@@ -9,7 +9,7 @@
 
 import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
-import { RichText, Text, HBox, VBox, Rectangle, Node } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
