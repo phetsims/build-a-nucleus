@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Range from '../../../../dot/js/Range.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Line, Node, NodeOptions, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Line, Node, NodeOptions, Path, RichText, Text } from '../../../../scenery/js/imports.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -33,6 +33,7 @@ import InfinityNode from './InfinityNode.js';
 import DecayScreenView from './DecayScreenView.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import IProperty from '../../../../axon/js/IProperty.js';
 
 // types
 type SelfOptions = {
@@ -60,19 +61,18 @@ const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT
 
 class HalfLifeNumberLineNode extends Node {
 
-  private halfLifeArrowLength: number | undefined;
-  private readonly labelFont: PhetFont | undefined;
+  private readonly numberLineLabelFont : PhetFont | undefined;
   private modelViewTransform: ModelViewTransform2;
-  private readonly tickMarkSet: TickMarkSet;
-  private readonly halfLifeArrowRotationProperty: NumberProperty;
+  private readonly tickMarkSet: Path;
+  private readonly halfLifeArrowRotationProperty: IProperty<number>;
   private arrowXPositionAnimation: null | Animation;
   private arrowRotationAnimation: null | Animation;
 
   // x position of half-life arrow in model coordinates
-  private readonly arrowXPositionProperty: NumberProperty;
+  private readonly arrowXPositionProperty: IProperty<number>;
 
   // x position of the halfLifeText in model coordinates
-  private readonly halfLifeTextXPositionProperty: NumberProperty | undefined;
+  private readonly halfLifeTextXPositionProperty: IProperty<number> | undefined;
 
   // the half life display node
   public readonly halfLifeDisplayNode: Node;
@@ -89,8 +89,7 @@ class HalfLifeNumberLineNode extends Node {
       doesNuclideExistBooleanProperty: new BooleanProperty( false )
     }, providedOptions );
 
-    this.labelFont = options.numberLineLabelFont;
-    this.halfLifeArrowLength = options.halfLifeArrowLength;
+    this.numberLineLabelFont = options.numberLineLabelFont;
 
     const viewWidth = options.numberLineWidth;
     const numberLineLength = new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT ).getLength();
@@ -102,10 +101,10 @@ class HalfLifeNumberLineNode extends Node {
       new Bounds2( 0, 0, viewWidth, tickMarkLength )
     );
 
-    const createExponentialLabel = ( value: number ): RichText => {
+    const createExponentialLabel = ( value: number ): Node => {
       const numberValue = value === 0 ? 1 : `10<sup>${value}</sup>`;
       return new RichText( numberValue, {
-        font: options.numberLineLabelFont,
+        font: this.numberLineLabelFont,
         supScale: 0.6,
         supYOffset: -1
       } );
@@ -213,7 +212,7 @@ class HalfLifeNumberLineNode extends Node {
 
       // Create the textual readout for the element name.
       const elementName = new Text( '', {
-        font: this.labelFont,
+        font: this.numberLineLabelFont,
         fill: Color.RED,
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
@@ -373,6 +372,7 @@ class HalfLifeNumberLineNode extends Node {
     }
 
     if ( halfLife === Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
+
       // rotate arrow horizontally, pointing right
       this.arrowRotationAnimation = new Animation( {
         to: -Math.PI / 2,
@@ -390,6 +390,7 @@ class HalfLifeNumberLineNode extends Node {
       } );
     }
     else {
+
       // rotate arrow back vertically, pointing down
       this.arrowRotationAnimation = new Animation( {
         to: 0,
@@ -421,7 +422,7 @@ class HalfLifeNumberLineNode extends Node {
         headWidth: 5
       } );
     this.addChild( arrow );
-    const numberText = new RichText( label, { font: this.labelFont, maxWidth: 25 } );
+    const numberText = new RichText( label, { font: this.numberLineLabelFont, maxWidth: 25 } );
     numberText.bottom = arrow.top;
     numberText.centerX = arrow.centerX;
     this.addChild( numberText );

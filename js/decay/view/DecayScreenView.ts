@@ -40,6 +40,7 @@ import DecayType from './DecayType.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
@@ -55,20 +56,17 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public static NUMBER_OF_NUCLEON_LAYERS: number;
 
+  private readonly stabilityIndicator: Text;
+  private readonly atomNode: Node;
+
   // layers where nucleons exist
   private nucleonLayers: Node[];
-
-  // stability indicator
-  private readonly stabilityIndicator: Text;
-
-  // the AtomNode
-  private readonly atomNode: AtomNode;
 
   // the symbol node in an accordion box
   private readonly symbolAccordionBox: AccordionBox;
 
-  // show or hide the electron cloud by default
-  private readonly showElectronCloudBooleanProperty: BooleanProperty;
+  // show or hide the electron cloud
+  private readonly showElectronCloudBooleanProperty: Property<boolean>;
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -368,7 +366,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     this.nucleonCountPanel.left = availableDecaysPanel.left;
 
-    // Add the layers where the nucleons will exist
+    // Add the nucleonLayers
     this.nucleonLayers = [];
     _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
       const nucleonLayer = new Node();
@@ -466,9 +464,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         }
 
         // Add the particle view to its new layer.
-        assert && assert( particleView !== null, 'Particle view not found during relayering' );
-        // @ts-ignore TODO-TS: How do you assume sub-types of children?
-        this.nucleonLayers[ zLayer ].addChild( particleView );
+        assert && assert( particleView, 'Particle view not found during relayering' );
+        this.nucleonLayers[ zLayer ].addChild( particleView! );
       }
     } );
   }

@@ -9,7 +9,7 @@
 
 import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
-import { RichText, Text, HBox, VBox, Rectangle } from '../../../../scenery/js/imports.js';
+import { RichText, Text, HBox, VBox, Rectangle, Node } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
@@ -47,7 +47,7 @@ class HalfLifeInfoDialog extends Dialog {
     ];
 
     // join the strings in each array, placing one on each line
-    const createTextFromStrings = ( strings: string[] ): RichText => {
+    const createTextFromStrings = ( strings: string[] ): Node => {
       return new RichText( strings.join( '<br>' ), {
         font: LEGEND_FONT,
         leading: 6,

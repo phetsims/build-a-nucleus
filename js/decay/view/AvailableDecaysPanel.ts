@@ -8,7 +8,7 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
-import { HBox, Line, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Line, Rectangle, RichText, Text, VBox, Node } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HSeparator from '../../../../sun/js/HSeparator.js';
@@ -56,10 +56,7 @@ export type AvailableDecaysPanelOptions = SelfOptions;
 class AvailableDecaysPanel extends Panel {
 
   // decay button and icon pair
-  public readonly arrangedDecayButtonsAndIcons: VBox;
-
-  // the title
-  public readonly titleNode: Text;
+  public readonly arrangedDecayButtonsAndIcons: Node;
 
   // map of decayType => {arrayIndex}
   public decayTypeButtonIndexMap: decayTypeButtonIndexType;
@@ -141,7 +138,7 @@ class AvailableDecaysPanel extends Panel {
 
     // function to create the decay buttons
     // manually layout the button text due to the superscripts causing the normal layout to look out of place
-    const createDecayButton = ( decayType: DecayType ): RectangularPushButton => {
+    const createDecayButton = ( decayType: DecayType ): Node => {
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
       const buttonText = new RichText( decayType.label, { font: LABEL_FONT, maxWidth: BUTTON_CONTENT_WIDTH } );
 
@@ -161,7 +158,7 @@ class AvailableDecaysPanel extends Panel {
     // functions to create the decay icons
 
     // function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon
-    const createParticleNode = ( particleType: ParticleType ): ParticleNode => {
+    const createParticleNode = ( particleType: ParticleType ): Node => {
       return new ParticleNode( particleType.name.toLowerCase(),
         particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS
       );
@@ -169,7 +166,7 @@ class AvailableDecaysPanel extends Panel {
 
     // function to create the right-aligned horizontal motion lines used in the decay icons ( the top and bottom lines are
     // shorter than the middle line )
-    const createMotionLines = ( spacingBetweenLines: number, isShort?: boolean ): VBox => {
+    const createMotionLines = ( spacingBetweenLines: number, isShort?: boolean ): Node => {
       const motionLines: Line[] = [];
       let topAndBottomLineLength = 25;
       let middleLineLength = 40;
@@ -193,7 +190,7 @@ class AvailableDecaysPanel extends Panel {
     };
 
     // function to create the icon for a nucleon emission ( a nucleon particle node with motion lines to its left )
-    const createNucleonEmissionIcon = ( particleType: ParticleType ): HBox => {
+    const createNucleonEmissionIcon = ( particleType: ParticleType ): Node => {
       return new HBox( {
         children: [
           createMotionLines( 4 ),
@@ -206,7 +203,7 @@ class AvailableDecaysPanel extends Panel {
     // function to create the icon for a beta decay ( left to right contents: a nucleon particle node, a right-pointing
     // arrow, a different nucleon particle node than the first one, a mathematical 'plus' symbol, motion lines, and an
     // electron or positron )
-    const createBetaDecayIcon = ( isBetaMinusDecay: boolean ): HBox => {
+    const createBetaDecayIcon = ( isBetaMinusDecay: boolean ): Node => {
       return new HBox( {
         children: [
           isBetaMinusDecay ? createParticleNode( ParticleType.NEUTRON ) : createParticleNode( ParticleType.PROTON ),
@@ -226,7 +223,7 @@ class AvailableDecaysPanel extends Panel {
     };
 
     // function to create half of an alpha particle ( two particle nodes beside each other, slightly overlapping )
-    const createHalfAlphaParticle = ( particleNodes: ParticleNode[] ): HBox => {
+    const createHalfAlphaParticle = ( particleNodes: Node[] ): Node => {
       return new HBox( {
         children: particleNodes,
         spacing: ALPHA_PARTICLE_SPACING
@@ -235,7 +232,7 @@ class AvailableDecaysPanel extends Panel {
 
     // function to create an alpha decay icon ( four slightly overlapping particle nodes, two on top and two on the bottom,
     // with motion lines to their left )
-    const createAlphaDecayIcon = (): HBox => {
+    const createAlphaDecayIcon = (): Node => {
       return new HBox( {
         children: [
           createMotionLines( 6 ),
@@ -252,7 +249,7 @@ class AvailableDecaysPanel extends Panel {
     };
 
     // function to create the decay icons corresponding to a specific DecayType
-    const createDecayIcon = ( decayType: DecayType ): HBox | null => {
+    const createDecayIcon = ( decayType: DecayType ): Node | null => {
       switch( decayType ) {
         case DecayType.ALPHA_DECAY:
           return createAlphaDecayIcon(); // alpha decay icon
@@ -270,7 +267,7 @@ class AvailableDecaysPanel extends Panel {
     };
 
     // function to create the decay button and corresponding decay icon pair
-    const createDecayButtonAndIcon = ( decayType: DecayType ): HBox => {
+    const createDecayButtonAndIcon = ( decayType: DecayType ): Node => {
       return new HBox( {
         children: [
           createDecayButton( decayType ),
@@ -285,7 +282,7 @@ class AvailableDecaysPanel extends Panel {
     const decayTypeButtonIndexMap: decayTypeButtonIndexType = {};
 
     // create the decay button and icon pair in a VBox
-    const decayButtonsAndIcons: HBox[] = [];
+    const decayButtonsAndIcons: Node[] = [];
     DecayType.enumeration.values.forEach( decayType => {
       decayTypeButtonIndexMap[ decayType.name.toString() ] = decayButtonsAndIcons.push( createDecayButtonAndIcon( decayType ) ) - 1;
     } );
@@ -308,7 +305,7 @@ class AvailableDecaysPanel extends Panel {
 
     // create and add the particle labels
     // a particle label is a particle node on the left with its corresponding particle name on the right
-    const createParticleLabel = ( particleType: ParticleType ): HBox => {
+    const createParticleLabel = ( particleType: ParticleType ): Node => {
       return new HBox( {
         children: [
           new ParticleNode( particleType.name.toLowerCase(), particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
@@ -318,7 +315,7 @@ class AvailableDecaysPanel extends Panel {
       } );
     };
     const particleLabels = ParticleType.enumeration.values.map( particleType => createParticleLabel( particleType ) );
-    const createParticleLabelsVBox = ( particleLabels: HBox[] ) => {
+    const createParticleLabelsVBox = ( particleLabels: Node[] ) => {
       return new VBox( {
         children: particleLabels,
         spacing: SPACING,
@@ -347,7 +344,6 @@ class AvailableDecaysPanel extends Panel {
 
     // used when positioning the undo decay buttons
     this.arrangedDecayButtonsAndIcons = arrangedDecayButtonsAndIcons;
-    this.titleNode = titleNode;
     this.decayTypeButtonIndexMap = decayTypeButtonIndexMap;
   }
 }

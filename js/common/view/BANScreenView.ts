@@ -57,6 +57,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   public modelViewTransform: ModelViewTransform2;
   public readonly resetAllButton: Node;
   public readonly nucleonCountPanel: Node;
+  protected readonly electronCloud: Circle;
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency
   private readonly particleViewMap: ParticleViewMap;
@@ -67,9 +68,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   // the NucleonCreatorNode for the protons and neutrons
   protected readonly protonsCreatorNode: Node;
   protected readonly neutronsCreatorNode: Node;
-
-  // the electron cloud
-  protected readonly electronCloud: Circle;
 
   public static protonsCreatorNodeModelCenter: Vector2;
   public static neutronsCreatorNodeModelCenter: Vector2;
