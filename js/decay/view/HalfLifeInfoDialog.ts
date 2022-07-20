@@ -51,7 +51,7 @@ class HalfLifeInfoDialog extends Dialog {
       return new RichText( strings.join( '<br>' ), {
         font: LEGEND_FONT,
         leading: 6,
-        maxWidth: 300
+        maxWidth: 400
       } );
     };
     const legend = new HBox( {
@@ -59,7 +59,7 @@ class HalfLifeInfoDialog extends Dialog {
         createTextFromStrings( leftSideStrings ),
         createTextFromStrings( rightSideStrings )
       ],
-      spacing: 100,
+      spacing: 70,
       align: 'top'
     } );
 
