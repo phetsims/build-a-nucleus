@@ -216,7 +216,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const doubleDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
 
     // function to create the double arrow buttons
-    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): DoubleArrowButton => {
+    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): Node => {
       return new DoubleArrowButton( direction,
         direction === 'up' ?
         () => increaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
@@ -254,7 +254,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     };
 
     // function to create the single arrow buttons
-    const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): VBox => {
+    const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): Node => {
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
       const upArrowButton = new ArrowButton( 'up', () => increaseNucleonCountListener( nucleonType ),
         merge( {
@@ -287,7 +287,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.addChild( neutronArrowButtons );
 
     // function to keep track of when a double arrow button was clicked
-    const createSingleOrDoubleArrowButtonClickedListener = ( isDoubleArrowButton: boolean, arrowButtons: VBox ) => {
+    const createSingleOrDoubleArrowButtonClickedListener = ( isDoubleArrowButton: boolean, arrowButtons: Node ) => {
       const arrowButtonsChildren = arrowButtons.getChildren() as ArrowButton[];
       arrowButtonsChildren.forEach( arrowButton => {
         arrowButton.addListener( () => {
