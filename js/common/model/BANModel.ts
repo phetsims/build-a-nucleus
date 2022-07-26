@@ -53,11 +53,14 @@ class BANModel {
   // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
   public readonly doubleArrowButtonClickedBooleanProperty: IProperty<boolean>;
 
-  // array of alpha particle animations
-  public readonly alphaParticleAnimations: ObservableArray<Animation | null>;
+  // keep track of any particle related animations that may need to be cancelled at some point
+  public readonly particleAnimations: ObservableArray<Animation | null>;
 
   public readonly userControlledProtons: ObservableArray<Particle>;
   public readonly userControlledNeutrons: ObservableArray<Particle>;
+
+  // array of all emitted particles
+  public readonly outgoingParticles: ObservableArray<Particle>;
 
   protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
 
@@ -80,8 +83,10 @@ class BANModel {
     this.userControlledProtons = createObservableArray();
     this.userControlledNeutrons = createObservableArray();
 
-    this.alphaParticleAnimations = createObservableArray();
-    this.alphaParticleAnimations.addItemRemovedListener( animation => {
+    this.outgoingParticles = createObservableArray();
+
+    this.particleAnimations = createObservableArray();
+    this.particleAnimations.addItemRemovedListener( animation => {
       animation && animation.stop();
       animation = null;
     } );
@@ -126,7 +131,7 @@ class BANModel {
   public reset(): void {
     this.particleAtom.clear();
     this.particles.clear();
-    this.alphaParticleAnimations.clear();
+    this.particleAnimations.clear();
   }
 
   /**

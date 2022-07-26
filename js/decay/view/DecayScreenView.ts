@@ -185,6 +185,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       undoDecayButton.visible = false;
     } );
 
+    undoDecayButton.visibleProperty.link( visible => {
+      if ( !visible ) {
+        this.model.outgoingParticles.forEach( particle => {
+          this.model.removeParticle( particle );
+        } );
+        this.model.outgoingParticles.clear();
+        this.model.particleAnimations.clear();
+      }
+    } );
+
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
       emitNucleon: this.emitNucleon.bind( this ),
@@ -478,6 +488,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       'The particleAtom needs a ' + particleType.name + ' to emit it. The decay: ' + fromDecay + ' cannot occur.' );
 
     const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+    this.model.outgoingParticles.add( nucleon );
     this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
   }
 
@@ -514,6 +525,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
       this.model.particleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
+      this.model.outgoingParticles.add( nucleon );
     } );
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
@@ -539,14 +551,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       duration: animationDuration,
       easing: Easing.LINEAR
     } );
-    this.model.alphaParticleAnimations.push( alphaParticleEmissionAnimation );
+    this.model.particleAnimations.push( alphaParticleEmissionAnimation );
 
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       alphaParticle.protons.forEach( proton => {
-        this.model.removeParticle( proton );
+        this.removeParticleFromModel( proton );
       } );
       alphaParticle.neutrons.forEach( neutron => {
-        this.model.removeParticle( neutron );
+        this.removeParticleFromModel( neutron );
       } );
       alphaParticleNode.dispose();
       alphaParticle.dispose();
@@ -557,12 +569,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
       const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
 
-      // the distance the alpha particle travelled in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
+      // the distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
       const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST *
                                              ( totalDistanceAlphaParticleTravels / animationDuration );
 
       let protonsEmitted = false;
       alphaParticle.positionProperty.link( position => {
+
+        // emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
         if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
           _.times( 2, () => { this.emitNucleon( ParticleType.PROTON, DecayType.ALPHA_DECAY.name ); } );
           protonsEmitted = true;
@@ -592,6 +606,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       nucleonTypeToChange = ParticleType.PROTON.name;
     }
 
+    this.model.outgoingParticles.add( particleToEmit );
     assert && assert( nucleonTypeCountValue >= 1,
       'The particleAtom needs a ' + nucleonTypeToChange + ' for a ' + betaDecayType.name );
 
@@ -606,9 +621,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     this.model.addParticle( particleToEmit );
     particleToEmit.destinationProperty.value = this.getRandomExternalModelPosition();
-    this.model.particleAtom.changeNucleonType( particle, () => {
-      this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+    // TODO: stop this callback from being called if particleToEmit is already removed with outgoingParticles (but I can't manually cause that error..)
+    const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
+      //if ( this.model.particles.includes( particleToEmit ) ) {
+        this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+      //}
     } );
+    this.model.particleAnimations.add( initialColorChangeAnimation );
   }
 
   /**
