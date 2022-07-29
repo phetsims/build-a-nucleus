@@ -105,7 +105,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
     const arrowButtonOptions = {
       arrowWidth: 14,
-      arrowHeight: 14
+      arrowHeight: 14,
+      fireOnHold: false
     };
 
     // return if any nuclides exist above, below, or to the left or right of a given nuclide
