@@ -377,8 +377,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle, particleView );
 
-      if ( particle.type === ParticleType.PROTON.label.toLowerCase() ||
-           particle.type === ParticleType.NEUTRON.label.toLowerCase() ) {
+      if ( particle.type === ParticleType.PROTON.name.toLowerCase() ||
+           particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
 
         // called when a nucleon is finished being dragged
         particle.dragEndedEmitter.addListener( () => { this.dragEndedListener( particle, this.model.particleAtom ); } );
