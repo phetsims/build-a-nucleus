@@ -12,7 +12,7 @@
 import { Shape } from '../../../../kite/js/imports.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import { HBox, IPaint, Path } from '../../../../scenery/js/imports.js';
+import { HBox, TPaint, Path } from '../../../../scenery/js/imports.js';
 import RectangularPushButton, { RectangularPushButtonOptions } from '../../../../sun/js/buttons/RectangularPushButton.js';
 import buildANucleus from '../../buildANucleus.js';
 
@@ -26,8 +26,8 @@ type SelfOptions = {
   // width of base
   arrowWidth: number;
 
-  leftArrowFill: IPaint;
-  rightArrowFill: IPaint;
+  leftArrowFill: TPaint;
+  rightArrowFill: TPaint;
 };
 
 export type DoubleArrowButtonOptions = SelfOptions & StrictOmit<RectangularPushButtonOptions, 'listener' | 'content'>;
@@ -63,7 +63,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
     arrowShape.moveTo( 0, 0 ).lineTo( options.arrowWidth / 2, options.arrowHeight ).lineTo( -options.arrowWidth / 2, options.arrowHeight ).close();
 
     // function to create a double arrow path
-    const createDoubleArrow = ( direction: DoubleArrowButtonDirection, leftArrowFill: IPaint, rightArrowFill: IPaint ) => {
+    const createDoubleArrow = ( direction: DoubleArrowButtonDirection, leftArrowFill: TPaint, rightArrowFill: TPaint ) => {
       const leftArrowPath = new Path( arrowShape, { fill: leftArrowFill } );
       const rightArrowPath = new Path( arrowShape, { fill: rightArrowFill } );
       const doubleArrow = new HBox( {
