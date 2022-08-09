@@ -14,7 +14,7 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayType from '../view/DecayType.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
@@ -22,14 +22,14 @@ export type DecayModelOptions = BANModelOptions;
 class DecayModel extends BANModel {
 
   // the half-life number
-  public halfLifeNumberProperty: IReadOnlyProperty<number>;
+  public halfLifeNumberProperty: TReadOnlyProperty<number>;
 
   // the decay enabled properties for all five decays
-  public protonEmissionEnabledProperty: IReadOnlyProperty<boolean>;
-  public neutronEmissionEnabledProperty: IReadOnlyProperty<boolean>;
-  public betaMinusDecayEnabledProperty: IReadOnlyProperty<boolean>;
-  public betaPlusDecayEnabledProperty: IReadOnlyProperty<boolean>;
-  public alphaDecayEnabledProperty: IReadOnlyProperty<boolean>;
+  public protonEmissionEnabledProperty: TReadOnlyProperty<boolean>;
+  public neutronEmissionEnabledProperty: TReadOnlyProperty<boolean>;
+  public betaMinusDecayEnabledProperty: TReadOnlyProperty<boolean>;
+  public betaPlusDecayEnabledProperty: TReadOnlyProperty<boolean>;
+  public alphaDecayEnabledProperty: TReadOnlyProperty<boolean>;
 
   public constructor( providedOptions?: DecayModelOptions ) {
 

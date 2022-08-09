@@ -22,7 +22,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DecayModel from '../model/DecayModel.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 
@@ -93,7 +93,7 @@ class AvailableDecaysPanel extends Panel {
     contentNode.addChild( decaysInfoButton );
 
     // function to return the correct enabled derived property for each type of decay
-    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): IReadOnlyProperty<boolean> => {
+    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): TReadOnlyProperty<boolean> => {
       switch( decayType ) {
         case DecayType.NEUTRON_EMISSION:
           return model.neutronEmissionEnabledProperty;

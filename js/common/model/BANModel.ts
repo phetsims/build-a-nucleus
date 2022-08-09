@@ -16,7 +16,7 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import IProperty from '../../../../axon/js/IProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from '../../decay/view/ParticleType.js';
@@ -29,10 +29,10 @@ export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 class BANModel {
 
   // the stability of the nuclide
-  public readonly isStableBooleanProperty: IReadOnlyProperty<boolean>;
+  public readonly isStableBooleanProperty: TReadOnlyProperty<boolean>;
 
   // if a nuclide exists
-  public readonly doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean>;
+  public readonly doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean>;
 
   // arrays of all Particle's that exist in all places
   public readonly particles: ObservableArray<Particle>;

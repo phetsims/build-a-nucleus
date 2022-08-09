@@ -28,7 +28,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfinityNode from './InfinityNode.js';
 import DecayScreenView from './DecayScreenView.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -48,9 +48,9 @@ type SelfOptions = {
   isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
   // animate its position with the half-life arrow
 
-  protonCountProperty?: IReadOnlyProperty<number>;
-  neutronCountProperty?: IReadOnlyProperty<number>;
-  doesNuclideExistBooleanProperty?: IReadOnlyProperty<boolean>;
+  protonCountProperty?: TReadOnlyProperty<number>;
+  neutronCountProperty?: TReadOnlyProperty<number>;
+  doesNuclideExistBooleanProperty?: TReadOnlyProperty<boolean>;
 };
 export type HalfLifeNumberLineNodeOptions = SelfOptions & NodeOptions;
 
@@ -77,8 +77,8 @@ class HalfLifeNumberLineNode extends Node {
   // the half life display node
   public readonly halfLifeDisplayNode: Node;
 
-  public constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
-               isStableBooleanProperty: IReadOnlyProperty<boolean>,
+  public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
+               isStableBooleanProperty: TReadOnlyProperty<boolean>,
                providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 

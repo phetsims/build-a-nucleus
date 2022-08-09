@@ -13,7 +13,7 @@ import { Node, Text } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import BANColors from '../../common/BANColors.js';
@@ -24,11 +24,11 @@ const LABEL_FONT = new PhetFont( 14 );
 
 class HalfLifeInformationNode extends Node {
 
-  public constructor( halfLifeNumberProperty: IReadOnlyProperty<number>,
-               isStableBooleanProperty: IReadOnlyProperty<boolean>,
-               protonCountProperty: IReadOnlyProperty<number>,
-               neutronCountProperty: IReadOnlyProperty<number>,
-               doesNuclideExistBooleanProperty: IReadOnlyProperty<boolean> ) {
+  public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
+               isStableBooleanProperty: TReadOnlyProperty<boolean>,
+               protonCountProperty: TReadOnlyProperty<number>,
+               neutronCountProperty: TReadOnlyProperty<number>,
+               doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean> ) {
     super();
 
     // create and add the halfLifeNumberLineNode

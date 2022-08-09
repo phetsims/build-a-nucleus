@@ -16,7 +16,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import ParticleType from '../../decay/view/ParticleType.js';
 import BANConstants from '../BANConstants.js';
-import IReadOnlyProperty from '../../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -37,8 +37,8 @@ const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
 
 class NucleonCountPanel extends Panel {
 
-  public constructor( protonCountProperty: IReadOnlyProperty<number>, protonCountRange: Range,
-               neutronCountProperty: IReadOnlyProperty<number>, neutronCountRange: Range ) {
+  public constructor( protonCountProperty: TReadOnlyProperty<number>, protonCountRange: Range,
+               neutronCountProperty: TReadOnlyProperty<number>, neutronCountRange: Range ) {
 
     const options = {
 
@@ -53,7 +53,7 @@ class NucleonCountPanel extends Panel {
 
     // function to create the nucleon labels and add them to panelContents
     const nucleonLabel = ( nucleonString: string, nucleonType: ParticleType,
-                           nucleonCountProperty: IReadOnlyProperty<number>, nucleonCountRange: Range ): NucleonLabel => {
+                           nucleonCountProperty: TReadOnlyProperty<number>, nucleonCountRange: Range ): NucleonLabel => {
 
       const nucleonTitle = new Text( nucleonString, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
       const nucleonParticleNode = new ParticleNode( nucleonType.name.toLowerCase(), PARTICLE_RADIUS );
