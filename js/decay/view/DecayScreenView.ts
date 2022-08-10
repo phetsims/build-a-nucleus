@@ -28,7 +28,7 @@ import Property from '../../../../axon/js/Property.js';
 import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import ParticleType from './ParticleType.js';
+import ParticleType from '../../common/view/ParticleType.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';

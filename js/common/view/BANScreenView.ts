@@ -27,7 +27,7 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import NucleonCreatorNode from './NucleonCreatorNode.js';
-import ParticleType from '../../decay/view/ParticleType.js';
+import ParticleType from './ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
@@ -70,6 +70,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
   public static protonsCreatorNodeModelCenter: Vector2;
   public static neutronsCreatorNodeModelCenter: Vector2;
+
+  protected readonly doubleArrowButtons: Node;
+  protected readonly protonArrowButtons: Node;
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
@@ -418,6 +421,10 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
         this.checkCreatorNodeVisibility( this.neutronsCreatorNode, false );
       }
     } );
+
+    // for use in positioning
+    this.doubleArrowButtons = doubleArrowButtons;
+    this.protonArrowButtons = protonArrowButtons;
   }
 
   /**

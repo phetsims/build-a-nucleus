@@ -11,7 +11,7 @@ import { DragListener, Node } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANScreenView from './BANScreenView.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import ParticleType from '../../decay/view/ParticleType.js';
+import ParticleType from './ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import BANModel from '../model/BANModel.js';

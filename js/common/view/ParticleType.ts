@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import { ProfileColorProperty } from '../../../../scenery/js/imports.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
-import BANColors from '../../common/BANColors.js';
+import BANColors from '../BANColors.js';
 
 class ParticleType extends EnumerationValue {
 

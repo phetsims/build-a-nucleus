@@ -11,6 +11,7 @@ type StringsType = {
   'build-a-nucleus': {
     'title': string;
   };
+  'decay': string;
   'protonsColon': string;
   'neutronsColon': string;
   'seconds': string;
@@ -61,6 +62,7 @@ type StringsType = {
   'electronCloud': string;
   'clusterOfNeutronsPattern': string;
   'availableDecaysInfoPanelText': string;
+  'nuclideChartIntro': string;
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

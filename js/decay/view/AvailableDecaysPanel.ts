@@ -13,7 +13,7 @@ import buildANucleusStrings from '../../buildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HSeparator from '../../../../sun/js/HSeparator.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import ParticleType from './ParticleType.js';
+import ParticleType from '../../common/view/ParticleType.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import DecayType from './DecayType.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
