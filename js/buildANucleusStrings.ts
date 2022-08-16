@@ -70,7 +70,7 @@ type StringsType = {
   'H': string;
   'HProperty': TReadOnlyProperty<string>;
   'I': string;
-  'IProperty': TReadOnlyProperty<string>;
+  'TProperty': TReadOnlyProperty<string>;
   'J': string;
   'JProperty': TReadOnlyProperty<string>;
   'availableDecays': string;

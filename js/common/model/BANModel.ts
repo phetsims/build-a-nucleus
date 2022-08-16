@@ -17,7 +17,7 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from '../view/ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -51,7 +51,7 @@ class BANModel {
   public readonly incomingNeutrons: ObservableArray<Particle>;
 
   // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
-  public readonly doubleArrowButtonClickedBooleanProperty: IProperty<boolean>;
+  public readonly doubleArrowButtonClickedBooleanProperty: TProperty<boolean>;
 
   // keep track of any particle related animations that may need to be cancelled at some point
   public readonly particleAnimations: ObservableArray<Animation | null>;

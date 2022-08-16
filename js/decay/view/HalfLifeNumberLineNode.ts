@@ -33,7 +33,7 @@ import InfinityNode from './InfinityNode.js';
 import DecayScreenView from './DecayScreenView.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import IProperty from '../../../../axon/js/IProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 
 // types
 type SelfOptions = {
@@ -64,15 +64,15 @@ class HalfLifeNumberLineNode extends Node {
   private readonly numberLineLabelFont : PhetFont | undefined;
   private modelViewTransform: ModelViewTransform2;
   private readonly tickMarkSet: Path;
-  private readonly halfLifeArrowRotationProperty: IProperty<number>;
+  private readonly halfLifeArrowRotationProperty: TProperty<number>;
   private arrowXPositionAnimation: null | Animation;
   private arrowRotationAnimation: null | Animation;
 
   // x position of half-life arrow in model coordinates
-  private readonly arrowXPositionProperty: IProperty<number>;
+  private readonly arrowXPositionProperty: TProperty<number>;
 
   // x position of the halfLifeText in model coordinates
-  private readonly halfLifeTextXPositionProperty: IProperty<number> | undefined;
+  private readonly halfLifeTextXPositionProperty: TProperty<number> | undefined;
 
   // the half life display node
   public readonly halfLifeDisplayNode: Node;
