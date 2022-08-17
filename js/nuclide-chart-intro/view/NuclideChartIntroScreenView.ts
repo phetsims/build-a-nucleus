@@ -26,6 +26,7 @@ import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
@@ -120,6 +121,12 @@ class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> 
           this.doubleArrowButtons.centerX )
     );
 
+    // create and add the periodic table and symbol
+    const periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
+    this.addChild( periodicTableAndIsotopeSymbol );
+    periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
+    periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
+
     // create and add the dashed empty circle at the center
     const lineWidth = 1;
     const emptyAtomCircle = new Circle( {
@@ -148,7 +155,7 @@ class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> 
     this.atomNode.center = emptyAtomCircle.center;
     this.addChild( this.atomNode );
 
-    this.nucleonCountPanel.left = this.protonArrowButtons.left;
+    this.nucleonCountPanel.left = this.layoutBounds.left + 20;
 
     // Add the nucleonLayers
     this.nucleonLayers = [];
