@@ -52,7 +52,7 @@ type SelfOptions = {
   neutronCountProperty?: TReadOnlyProperty<number>;
   doesNuclideExistBooleanProperty?: TReadOnlyProperty<boolean>;
 
-  font?: PhetFont;
+  unitsLabelFont?: PhetFont;
 };
 export type HalfLifeNumberLineNodeOptions = SelfOptions & NodeOptions;
 
@@ -89,7 +89,7 @@ class HalfLifeNumberLineNode extends Node {
       protonCountProperty: new NumberProperty( 0 ),
       neutronCountProperty: new NumberProperty( 0 ),
       doesNuclideExistBooleanProperty: new BooleanProperty( false ),
-      font: new PhetFont( 14 )
+      unitsLabelFont: new PhetFont( 18 )
     }, providedOptions );
 
     this.numberLineLabelFont = options.numberLineLabelFont;
@@ -329,8 +329,8 @@ class HalfLifeNumberLineNode extends Node {
     } );
 
     // create and add the units label on the number line
-    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: options.font, maxWidth: 150 } );
-    numberLineUnitsLabel.centerY = this.bottom + numberLineUnitsLabel.height;
+    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: options.unitsLabelFont, maxWidth: 150 } );
+    numberLineUnitsLabel.centerY = this.bottom + numberLineUnitsLabel.height / 2;
     numberLineUnitsLabel.centerX = this.centerX;
     this.addChild( numberLineUnitsLabel );
   }

@@ -38,7 +38,7 @@ class HalfLifeInformationNode extends Node {
       numberLineWidth: 550,
       halfLifeArrowLength: 30,
       isHalfLifeLabelFixed: true,
-      font: LABEL_FONT
+      unitsLabelFont: LABEL_FONT
     } );
     this.addChild( halfLifeNumberLineNode );
 
