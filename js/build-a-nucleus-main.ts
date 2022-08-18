@@ -10,7 +10,6 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import buildANucleusStrings from './buildANucleusStrings.js';
 import DecayScreen from './decay/DecayScreen.js';
-import ChartIntroScreen from './chart-intro/ChartIntroScreen.js';
 
 const buildANucleusTitleString = buildANucleusStrings[ 'build-a-nucleus' ].title;
 
@@ -32,8 +31,7 @@ const simOptions: SimOptions = {
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
   const sim = new Sim( buildANucleusTitleString, [
-    new DecayScreen(),
-    new ChartIntroScreen()
+    new DecayScreen()
   ], simOptions );
   sim.start();
 } );
