@@ -87,6 +87,12 @@ class DecayModel extends BANModel {
     // available decay type
     const createDecayEnabledListener = ( protonCount: number, neutronCount: number, decayType: DecayType ): boolean => {
       const decays = AtomIdentifier.getAvailableDecays( protonCount, neutronCount );
+
+      // temporarily disable the beta minus decay for U-237 since that freezes the sim. See https://github.com/phetsims/build-a-nucleus/issues/42.
+      if ( protonCount === 92 && neutronCount === 145 && decayType === DecayType.BETA_MINUS_DECAY ) {
+        return false;
+      }
+
       return decays.includes( decayType.name );
     };
 
