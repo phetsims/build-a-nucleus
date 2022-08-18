@@ -10,7 +10,7 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import buildANucleusStrings from './buildANucleusStrings.js';
 import DecayScreen from './decay/DecayScreen.js';
-import NuclideChartIntroScreen from './nuclide-chart-intro/NuclideChartIntroScreen.js';
+import ChartIntroScreen from './chart-intro/ChartIntroScreen.js';
 
 const buildANucleusTitleString = buildANucleusStrings[ 'build-a-nucleus' ].title;
 
@@ -33,7 +33,7 @@ const simOptions: SimOptions = {
 simLauncher.launch( () => {
   const sim = new Sim( buildANucleusTitleString, [
     new DecayScreen(),
-    new NuclideChartIntroScreen()
+    new ChartIntroScreen()
   ], simOptions );
   sim.start();
 } );

@@ -50,8 +50,7 @@ class HalfLifeInfoDialog extends Dialog {
     const createTextFromStrings = ( strings: string[] ): Node => {
       return new RichText( strings.join( '<br>' ), {
         font: LEGEND_FONT,
-        leading: 6,
-        maxWidth: 400
+        leading: 6
       } );
     };
     const legend = new HBox( {
@@ -60,7 +59,8 @@ class HalfLifeInfoDialog extends Dialog {
         createTextFromStrings( rightSideStrings )
       ],
       spacing: 70,
-      align: 'top'
+      align: 'top',
+      maxWidth: 870
     } );
 
     // create and add the halfLifeNumberLineNode

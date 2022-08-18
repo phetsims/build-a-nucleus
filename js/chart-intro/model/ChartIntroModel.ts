@@ -14,7 +14,7 @@ import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 // types
 export type NuclideChartIntroModelOptions = BANModelOptions;
 
-class NuclideChartIntroModel extends BANModel {
+class ChartIntroModel extends BANModel {
 
   public constructor( providedOptions?: NuclideChartIntroModelOptions ) {
 
@@ -41,5 +41,5 @@ class NuclideChartIntroModel extends BANModel {
   }
 }
 
-buildANucleus.register( 'NuclideChartIntroModel', NuclideChartIntroModel );
-export default NuclideChartIntroModel;
+buildANucleus.register( 'ChartIntroModel', ChartIntroModel );
+export default ChartIntroModel;

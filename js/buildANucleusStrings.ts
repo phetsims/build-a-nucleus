@@ -70,7 +70,7 @@ type StringsType = {
   'H': string;
   'HProperty': TReadOnlyProperty<string>;
   'I': string;
-  'TProperty': TReadOnlyProperty<string>;
+  'IProperty': TReadOnlyProperty<string>;
   'J': string;
   'JProperty': TReadOnlyProperty<string>;
   'availableDecays': string;
@@ -115,8 +115,8 @@ type StringsType = {
   'clusterOfNeutronsPatternProperty': TReadOnlyProperty<string>;
   'availableDecaysInfoPanelText': string;
   'availableDecaysInfoPanelTextProperty': TReadOnlyProperty<string>;
-  'nuclideChartIntro': string;
-  'nuclideChartIntroProperty': TReadOnlyProperty<string>;
+  'chartIntro': string;
+  'chartIntroProperty': TReadOnlyProperty<string>;
 };
 
 const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

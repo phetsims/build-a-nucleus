@@ -10,8 +10,8 @@ import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
 import BANColors from '../common/BANColors.js';
-import NuclideChartIntroModel from '../nuclide-chart-intro/model/NuclideChartIntroModel.js';
-import NuclideChartIntroScreenView from '../nuclide-chart-intro/view/NuclideChartIntroScreenView.js';
+import ChartIntroModel from '../chart-intro/model/ChartIntroModel.js';
+import ChartIntroScreenView from '../chart-intro/view/ChartIntroScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import PickRequired from '../../../phet-core/js/types/PickRequired.js';
 import buildANucleusStrings from '../buildANucleusStrings.js';
@@ -19,13 +19,13 @@ import buildANucleusStrings from '../buildANucleusStrings.js';
 // types
 export type NuclideChartIntroScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
 
-class NuclideChartIntroScreen extends Screen<NuclideChartIntroModel, NuclideChartIntroScreenView> {
+class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
   public constructor( providedOptions?: NuclideChartIntroScreenOptions ) {
 
     const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
-      name: buildANucleusStrings.nuclideChartIntro,
+      name: buildANucleusStrings.chartIntro,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 
@@ -34,12 +34,12 @@ class NuclideChartIntroScreen extends Screen<NuclideChartIntroModel, NuclideChar
     }, providedOptions );
 
     super(
-      () => new NuclideChartIntroModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new NuclideChartIntroScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      () => new ChartIntroModel( { tandem: options.tandem.createTandem( 'model' ) } ),
+      model => new ChartIntroScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
       options
     );
   }
 }
 
-buildANucleus.register( 'NuclideChartIntroScreen', NuclideChartIntroScreen );
-export default NuclideChartIntroScreen;
+buildANucleus.register( 'ChartIntroScreen', ChartIntroScreen );
+export default ChartIntroScreen;

@@ -8,7 +8,7 @@
 
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import NuclideChartIntroModel from '../model/NuclideChartIntroModel.js';
+import ChartIntroModel from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -36,7 +36,7 @@ const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
 
-class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> {
+class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   public static NUMBER_OF_NUCLEON_LAYERS: number;
 
@@ -45,7 +45,7 @@ class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> 
   // layers where nucleons exist
   private nucleonLayers: Node[];
 
-  public constructor( model: NuclideChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
+  public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
@@ -117,7 +117,7 @@ class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        NuclideChartIntroScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
+        ChartIntroScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
           this.doubleArrowButtons.centerX )
     );
 
@@ -140,7 +140,7 @@ class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> 
 
     // only show the emptyAtomCircle when there are zero nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],
-      ( protonCount, neutronCount ) => {
+      ( protonCount: number, neutronCount: number ) => {
       emptyAtomCircle.visible = ( protonCount + neutronCount ) === 0;
     } );
 
@@ -286,7 +286,7 @@ class NuclideChartIntroScreenView extends BANScreenView<NuclideChartIntroModel> 
 }
 
 // export for usage when creating shred Particles
-NuclideChartIntroScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
+ChartIntroScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
-buildANucleus.register( 'NuclideChartIntroScreenView', NuclideChartIntroScreenView );
-export default NuclideChartIntroScreenView;
+buildANucleus.register( 'ChartIntroScreenView', ChartIntroScreenView );
+export default ChartIntroScreenView;
