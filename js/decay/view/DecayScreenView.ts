@@ -17,7 +17,6 @@ import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import { Circle, Color, HBox, ManualConstraint, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
-import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import buildANucleusStrings from '../../buildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
@@ -29,14 +28,12 @@ import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from '../../common/view/ParticleType.js';
-import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from './DecayType.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
@@ -44,7 +41,6 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 const NUCLEON_CAPTURE_RADIUS = 100;
-const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
 const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
@@ -53,13 +49,7 @@ export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView<DecayModel> {
 
-  public static NUMBER_OF_NUCLEON_LAYERS: number;
-
   private readonly stabilityIndicator: Text;
-  private readonly atomNode: Node;
-
-  // layers where nucleons exist
-  private nucleonLayers: Node[];
 
   // the symbol node in an accordion box
   private readonly symbolAccordionBox: AccordionBox;
@@ -168,7 +158,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add a nucleon of particleType immediately to the particleAtom
     const addNucleonImmediatelyToAtom = ( particleType: ParticleType ) => {
       const particle = new Particle( particleType.name.toLowerCase(), {
-        maxZLayer: DecayScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+        maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
       } );
 
       // place the particle the center of the particleAtom and add it to the model and particleAtom
@@ -333,20 +323,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
-          this.stabilityIndicator.center.plusXY( 0, 60 ) )
+        BANScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist, this.stabilityIndicator.centerX )
     );
 
-    // create and add the dashed empty circle at the center
-    const lineWidth = 1;
-    const emptyAtomCircle = new Circle( {
-      radius: ShredConstants.NUCLEON_RADIUS - lineWidth,
-      stroke: Color.GRAY,
-      lineDash: [ 2, 2 ],
-      lineWidth: lineWidth
-    } );
-    emptyAtomCircle.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
-    this.addChild( emptyAtomCircle );
+    this.nucleonCountPanel.left = availableDecaysPanel.left;
 
     // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to shown it when there's
     // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the
@@ -354,123 +334,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
-      emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
-    } );
-
-    // create and add the AtomNode
-    this.atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
-      showCenterX: false,
-      showElementNameProperty: new Property( false ),
-      showNeutralOrIonProperty: new Property( false ),
-      showStableOrUnstableProperty: new Property( false ),
-      electronShellDepictionProperty: new Property( 'cloud' )
-    } );
-    this.atomNode.center = emptyAtomCircle.center;
-    this.addChild( this.atomNode );
-
-    this.nucleonCountPanel.left = availableDecaysPanel.left;
-
-    // Add the nucleonLayers
-    this.nucleonLayers = [];
-    _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
-      const nucleonLayer = new Node();
-      this.nucleonLayers.push( nucleonLayer );
-      this.particleViewLayerNode.addChild( nucleonLayer );
-    } );
-    this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
-
-    // add the particleViewLayerNode
-    this.addChild( this.particleViewLayerNode );
-  }
-
-  /**
-   * Define the update function for the element name.
-   */
-  public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number, doesNuclideExist: boolean, center: Vector2 ): void {
-    let name = AtomIdentifier.getName( protonCount );
-    const massNumber = protonCount + neutronCount;
-
-    // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
-    if ( !doesNuclideExist && massNumber !== 0 ) {
-
-      // no protons
-      if ( name.length === 0 ) {
-        name += massNumber.toString() + ' ' + buildANucleusStrings.neutronsLowercase + ' ' + buildANucleusStrings.doesNotForm;
-      }
-      else {
-        name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
-      }
-    }
-
-    // no protons
-    else if ( name.length === 0 ) {
-
-      // no neutrons
-      if ( neutronCount === 0 ) {
-        name = '';
-      }
-
-      // only one neutron
-      else if ( neutronCount === 1 ) {
-        name = neutronCount + ' ' + buildANucleusStrings.neutronLowercase;
-      }
-
-      // multiple neutrons
-      else {
-        name = StringUtils.fillIn( buildANucleusStrings.clusterOfNeutronsPattern, {
-          neutronNumber: neutronCount
-        } );
-      }
-
-    }
-    else {
-      name += ' - ' + massNumber.toString();
-    }
-    elementNameText.text = name;
-    elementNameText.center = center;
-  }
-
-  /**
-   * Add ParticleView to the correct nucleonLayer.
-   */
-  protected override addParticleView( particle: Particle, particleView: ParticleView ): void {
-    this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
-
-    // Add a listener that adjusts a nucleon's z-order layering.
-    particle.zLayerProperty.link( zLayer => {
-      assert && assert(
-        this.nucleonLayers.length > zLayer,
-        'zLayer for nucleon exceeds number of layers, max number may need increasing.'
-      );
-
-      // Determine whether nucleon view is on the correct layer.
-      let onCorrectLayer = false;
-      const nucleonLayersChildren = this.nucleonLayers[ zLayer ].getChildren() as ParticleView[];
-      nucleonLayersChildren.forEach( particleView => {
-        if ( particleView.particle === particle ) {
-          onCorrectLayer = true;
-        }
-      } );
-
-      if ( !onCorrectLayer ) {
-
-        // Remove particle view from its current layer.
-        let particleView = null;
-        for ( let layerIndex = 0; layerIndex < this.nucleonLayers.length && particleView === null; layerIndex++ ) {
-          for ( let childIndex = 0; childIndex < this.nucleonLayers[ layerIndex ].children.length; childIndex++ ) {
-            const nucleonLayersChildren = this.nucleonLayers[ layerIndex ].getChildren() as ParticleView[];
-            if ( nucleonLayersChildren[ childIndex ].particle === particle ) {
-              particleView = nucleonLayersChildren[ childIndex ];
-              this.nucleonLayers[ layerIndex ].removeChildAt( childIndex );
-              break;
-            }
-          }
-        }
-
-        // Add the particle view to its new layer.
-        assert && assert( particleView, 'Particle view not found during relayering' );
-        this.nucleonLayers[ zLayer ].addChild( particleView! );
-      }
+      this.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
   }
 
@@ -619,7 +483,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // TODO: stop this callback from being called if particleToEmit is already removed with outgoingParticles (but I can't manually cause that error..)
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
       //if ( this.model.particles.includes( particleToEmit ) ) {
-        this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+      this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
       //}
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );
@@ -669,9 +533,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.showElectronCloudBooleanProperty.reset();
   }
 }
-
-// export for usage when creating shred Particles
-DecayScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'DecayScreenView', DecayScreenView );
 export default DecayScreenView;

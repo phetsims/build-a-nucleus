@@ -13,7 +13,6 @@ import BANScreenView from './BANScreenView.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from './ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
-import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
 
@@ -31,7 +30,7 @@ class NucleonCreatorNode extends Node {
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
       const particle = new Particle( particleType.name.toLowerCase(), {
-        maxZLayer: DecayScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+        maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
       } );
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 

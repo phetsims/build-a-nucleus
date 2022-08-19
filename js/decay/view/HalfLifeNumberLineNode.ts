@@ -30,10 +30,10 @@ import BANConstants from '../../common/BANConstants.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfinityNode from './InfinityNode.js';
-import DecayScreenView from './DecayScreenView.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TProperty from '../../../../axon/js/TProperty.js';
+import BANScreenView from '../../common/view/BANScreenView.js';
 
 // types
 type SelfOptions = {
@@ -63,7 +63,7 @@ const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT
 
 class HalfLifeNumberLineNode extends Node {
 
-  private readonly numberLineLabelFont : PhetFont | undefined;
+  private readonly numberLineLabelFont: PhetFont | undefined;
   private modelViewTransform: ModelViewTransform2;
   private readonly tickMarkSet: Path;
   private readonly halfLifeArrowRotationProperty: TProperty<number>;
@@ -80,8 +80,8 @@ class HalfLifeNumberLineNode extends Node {
   public readonly halfLifeDisplayNode: Node;
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
-               isStableBooleanProperty: TReadOnlyProperty<boolean>,
-               providedOptions: HalfLifeNumberLineNodeOptions ) {
+                      isStableBooleanProperty: TReadOnlyProperty<boolean>,
+                      providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
     const options = optionize<HalfLifeNumberLineNodeOptions, SelfOptions, NodeOptions>()( {
@@ -225,8 +225,9 @@ class HalfLifeNumberLineNode extends Node {
       // Hook up update listeners.
       Multilink.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
         ( protonCount, neutronCount, doesNuclideExist ) =>
-          DecayScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
-            this.halfLifeDisplayNode.center.minusXY( 0, this.halfLifeDisplayNode.height + distanceBetweenElementNameAndHalfLifeText ) )
+          BANScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
+            this.halfLifeDisplayNode.centerX,
+            this.halfLifeDisplayNode.centerY - this.halfLifeDisplayNode.height - distanceBetweenElementNameAndHalfLifeText )
       );
 
       this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
@@ -329,7 +330,10 @@ class HalfLifeNumberLineNode extends Node {
     } );
 
     // create and add the units label on the number line
-    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, { font: options.unitsLabelFont, maxWidth: 150 } );
+    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, {
+      font: options.unitsLabelFont,
+      maxWidth: 150
+    } );
     numberLineUnitsLabel.centerY = this.bottom + numberLineUnitsLabel.height / 2;
     numberLineUnitsLabel.centerX = this.centerX;
     this.addChild( numberLineUnitsLabel );
