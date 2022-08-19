@@ -14,7 +14,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { Circle, Node, PressListenerEvent, ProfileColorProperty, RadialGradient, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, RadialGradient, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
@@ -31,14 +31,18 @@ import ParticleType from './ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import AtomNode from '../../../../shred/js/view/AtomNode.js';
+import Property from '../../../../axon/js/Property.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import ShredConstants from '../../../../shred/js/ShredConstants.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 
 const TOUCH_AREA_Y_DILATION = 3;
+const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
 export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
@@ -49,6 +53,8 @@ const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
 abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
+  public static NUMBER_OF_NUCLEON_LAYERS: number;
+
   protected model: M;
   private timeSinceCountdownStarted: number;
   private previousProtonCount: number;
@@ -57,6 +63,11 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   public readonly resetAllButton: Node;
   public readonly nucleonCountPanel: Node;
   protected readonly electronCloud: Circle;
+
+  protected readonly atomNode: Node;
+
+  // layers where nucleons exist
+  protected readonly nucleonLayers: Node[];
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency
   private readonly particleViewMap: ParticleViewMap;
@@ -73,6 +84,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
+  protected readonly emptyAtomCircle: Node;
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
@@ -102,7 +114,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.nucleonCountPanel = new NucleonCountPanel( model.particleAtom.protonCountProperty, model.protonCountRange,
       model.particleAtom.neutronCountProperty, model.neutronCountRange );
     this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
-    this.nucleonCountPanel.left = this.layoutBounds.maxX - 200;
     this.addChild( this.nucleonCountPanel );
 
     const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
@@ -422,6 +433,40 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       }
     } );
 
+    // create and add the dashed empty circle at the center
+    const lineWidth = 1;
+    this.emptyAtomCircle = new Circle( {
+      radius: ShredConstants.NUCLEON_RADIUS - lineWidth,
+      stroke: Color.GRAY,
+      lineDash: [ 2, 2 ],
+      lineWidth: lineWidth
+    } );
+    this.emptyAtomCircle.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
+    this.addChild( this.emptyAtomCircle );
+
+    // create and add the AtomNode
+    this.atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
+      showCenterX: false,
+      showElementNameProperty: new Property( false ),
+      showNeutralOrIonProperty: new Property( false ),
+      showStableOrUnstableProperty: new Property( false ),
+      electronShellDepictionProperty: new Property( 'cloud' )
+    } );
+    this.atomNode.center = this.emptyAtomCircle.center;
+    this.addChild( this.atomNode );
+
+    // Add the nucleonLayers
+    this.nucleonLayers = [];
+    _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
+      const nucleonLayer = new Node();
+      this.nucleonLayers.push( nucleonLayer );
+      this.particleViewLayerNode.addChild( nucleonLayer );
+    } );
+    this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
+
+    // add the particleViewLayerNode
+    this.addChild( this.particleViewLayerNode );
+
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
     this.protonArrowButtons = protonArrowButtons;
@@ -444,7 +489,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // create a particle at the center of its creator node
     const particle = new Particle( particleType.name.toLowerCase(), {
-      maxZLayer: DecayScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+      maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
     particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
     const origin = particleType === ParticleType.PROTON ?
@@ -541,7 +586,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
    * Remove the given particle from the model and check the particle type's creator node visibility.
    */
   protected removeParticleAndCheckCreatorNodeVisibility( particle: Particle ): void {
-   this.removeParticleFromModel( particle );
+    this.removeParticleFromModel( particle );
 
     // make the creator node visible when removing the last nucleon from the particle atom
     this.checkCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
@@ -615,14 +660,109 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     return particleView;
   }
 
+  /**
+   * Add ParticleView to the correct nucleonLayer.
+   */
+  protected addParticleView( particle: Particle, particleView: ParticleView ): void {
+    this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
+
+    // Add a listener that adjusts a nucleon's z-order layering.
+    particle.zLayerProperty.link( zLayer => {
+      assert && assert(
+        this.nucleonLayers.length > zLayer,
+        'zLayer for nucleon exceeds number of layers, max number may need increasing.'
+      );
+
+      // Determine whether nucleon view is on the correct layer.
+      let onCorrectLayer = false;
+      const nucleonLayersChildren = this.nucleonLayers[ zLayer ].getChildren() as ParticleView[];
+      nucleonLayersChildren.forEach( particleView => {
+        if ( particleView.particle === particle ) {
+          onCorrectLayer = true;
+        }
+      } );
+
+      if ( !onCorrectLayer ) {
+
+        // Remove particle view from its current layer.
+        let particleView = null;
+        for ( let layerIndex = 0; layerIndex < this.nucleonLayers.length && particleView === null; layerIndex++ ) {
+          for ( let childIndex = 0; childIndex < this.nucleonLayers[ layerIndex ].children.length; childIndex++ ) {
+            const nucleonLayersChildren = this.nucleonLayers[ layerIndex ].getChildren() as ParticleView[];
+            if ( nucleonLayersChildren[ childIndex ].particle === particle ) {
+              particleView = nucleonLayersChildren[ childIndex ];
+              this.nucleonLayers[ layerIndex ].removeChildAt( childIndex );
+              break;
+            }
+          }
+        }
+
+        // Add the particle view to its new layer.
+        assert && assert( particleView, 'Particle view not found during relayering' );
+        this.nucleonLayers[ zLayer ].addChild( particleView! );
+      }
+    } );
+  }
+
+  /**
+   * Define the update function for the element name.
+   */
+  public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number,
+                                   doesNuclideExist: boolean, centerX: number, centerY?: number ): void {
+    let name = AtomIdentifier.getName( protonCount );
+    const massNumber = protonCount + neutronCount;
+
+    // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
+    if ( !doesNuclideExist && massNumber !== 0 ) {
+
+      // no protons
+      if ( name.length === 0 ) {
+        name += massNumber.toString() + ' ' + buildANucleusStrings.neutronsLowercase + ' ' + buildANucleusStrings.doesNotForm;
+      }
+      else {
+        name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
+      }
+    }
+
+    // no protons
+    else if ( name.length === 0 ) {
+
+      // no neutrons
+      if ( neutronCount === 0 ) {
+        name = '';
+      }
+
+      // only one neutron
+      else if ( neutronCount === 1 ) {
+        name = neutronCount + ' ' + buildANucleusStrings.neutronLowercase;
+      }
+
+      // multiple neutrons
+      else {
+        name = StringUtils.fillIn( buildANucleusStrings.clusterOfNeutronsPattern, {
+          neutronNumber: neutronCount
+        } );
+      }
+
+    }
+    else {
+      name += ' - ' + massNumber.toString();
+    }
+    elementNameText.text = name;
+    elementNameText.centerX = centerX;
+    if ( centerY ) {
+      elementNameText.centerY = centerY;
+    }
+  }
+
   protected dragEndedListener( nucleon: Particle, particleAtom: ParticleAtom ): void {
     // Please see subclass implementations
   }
 
-  protected addParticleView( particle: Particle, particleView: ParticleView ): void {
-    // Please see subclass implementations
-  }
 }
+
+// export for usage when creating shred Particles
+BANScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'BANScreenView', BANScreenView );
 export default BANScreenView;
