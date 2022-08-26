@@ -35,7 +35,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
     super(
       () => new DecayModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      model => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ), preventFit: true } ),
       options
     );
   }
