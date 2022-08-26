@@ -48,6 +48,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
       yMargin: 5,
       touchAreaXDilation: 7,
       touchAreaYDilation: 7,
+      heightSizable: false,
 
       // options related to fire-on-hold feature
       fireOnHold: true,
