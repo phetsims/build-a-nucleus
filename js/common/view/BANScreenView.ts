@@ -33,7 +33,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayScreenView from '../../decay/view/DecayScreenView.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -404,22 +403,20 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particle.dispose();
     } );
 
-    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.incomingProtons.lengthProperty,
-      this.model.userControlledProtons.lengthProperty ], ( protonCount, incomingProtonsCount, userControlledProtonCount ) => {
+    // hides the given creator node if the count for that nucleon type has reached its max
+    const checkIfCreatorNodeShouldBeInvisible = ( particleType: ParticleType, maxCount: number, creatorNode: Node ) => {
+      const numberOfNucleons = [ ...this.model.particles ]
+        .filter( particle => particle.type === particleType.name.toLowerCase() ).length;
 
-      // hide the protonsCreatorNode when at the last proton
-      if ( ( protonCount + incomingProtonsCount + userControlledProtonCount ) === this.model.protonCountRange.max ) {
-        this.checkCreatorNodeVisibility( this.protonsCreatorNode, false );
+      if ( numberOfNucleons === maxCount ) {
+        this.setCreatorNodeVisibility( creatorNode, false );
       }
-    } );
+    };
 
-    Multilink.multilink( [ this.model.particleAtom.neutronCountProperty, this.model.incomingNeutrons.lengthProperty,
-      this.model.userControlledNeutrons.lengthProperty ], ( neutronCount, incomingNeutronsCount, userControlledNeutronCount ) => {
-
-      // hide the neutronsCreatorNode when at the last neutron
-      if ( ( neutronCount + incomingNeutronsCount + userControlledNeutronCount ) === this.model.neutronCountRange.max ) {
-        this.checkCreatorNodeVisibility( this.neutronsCreatorNode, false );
-      }
+    // check if each creator node should be hidden
+    this.model.particles.lengthProperty.link( numberOfParticles => {
+      checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON, this.model.protonCountRange.max, this.protonsCreatorNode );
+      checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON, this.model.neutronCountRange.max, this.neutronsCreatorNode );
     } );
 
     // for use in positioning
@@ -430,7 +427,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   /**
    * Set the input enabled and visibility of a creator node.
    */
-  protected checkCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
+  protected setCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
     if ( creatorNode.visible !== visible ) {
       creatorNode.visible = visible;
       creatorNode.inputEnabled = visible;
@@ -544,8 +541,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
    this.removeParticleFromModel( particle );
 
     // make the creator node visible when removing the last nucleon from the particle atom
-    this.checkCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
-                                     this.protonsCreatorNode : this.neutronsCreatorNode, true );
+    this.setCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
+                                   this.protonsCreatorNode : this.neutronsCreatorNode, true );
   }
 
   /**
