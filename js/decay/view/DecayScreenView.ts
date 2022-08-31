@@ -394,8 +394,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
     alphaParticle.moveAllParticlesToDestination();
-    this.checkCreatorNodeVisibility( this.protonsCreatorNode, true );
-    this.checkCreatorNodeVisibility( this.neutronsCreatorNode, true );
+    this.setCreatorNodeVisibility( this.protonsCreatorNode, true );
+    this.setCreatorNodeVisibility( this.neutronsCreatorNode, true );
 
     alphaParticle.protons.forEach( proton => {
       this.findParticleView( proton ).inputEnabled = false;
