@@ -136,8 +136,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       return AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount );
     };
 
-    // function to return whether the protonCount or neutronCount is at its min or max range
-    const returnNucleonCountAtRange = ( direction: string, particleType: ParticleType, protonCount: number, neutronCount: number ) => {
+    // function returns whether the protonCount or neutronCount is at its min or max range
+    const isNucleonCountAtRangeBounds = ( direction: string, particleType: ParticleType, protonCount: number, neutronCount: number ) => {
       if ( direction === 'up' ) {
 
         // proton up arrow
@@ -204,9 +204,9 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
             if ( nuclideExistsBoolean && doesPreviousNuclideExist ) {
               return false;
             }
-            return secondParticleType ? returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount ) &&
-                                        returnNucleonCountAtRange( direction, secondParticleType, protonCount, neutronCount ) :
-                   returnNucleonCountAtRange( direction, firstParticleType, protonCount, neutronCount );
+            return secondParticleType ? isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount ) &&
+                                        isNucleonCountAtRangeBounds( direction, secondParticleType, protonCount, neutronCount ) :
+                   isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount );
           }
 
         } );
