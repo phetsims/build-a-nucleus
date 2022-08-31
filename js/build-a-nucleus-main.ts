@@ -16,12 +16,11 @@ const buildANucleusTitleString = buildANucleusStrings[ 'build-a-nucleus' ].title
 
 const simOptions: SimOptions = {
 
-  //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
   credits: {
-    leadDesign: '',
-    softwareDevelopment: '',
-    team: '',
-    qualityAssurance: '',
+    leadDesign: 'Luisa Vargas, Ariel Paul',
+    softwareDevelopment: 'Luisa Vargas, Chris Klusendorf',
+    team: 'Jason Donev (University of Calgary), Kathy Perkins, Amy Rouinfar',
+    qualityAssurance: 'Clifford Hardin, Emily Miller, Nancy Salpepi, Kathryn Woessner',
     graphicArts: '',
     soundDesign: '',
     thanks: ''
