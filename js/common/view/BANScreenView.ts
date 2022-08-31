@@ -556,11 +556,11 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particle.destinationProperty.value = destination;
 
       particle.animationEndedEmitter.addListener( () => {
-        this.removeParticleAndCheckCreatorNodeVisibility( particle );
+        this.removeParticleAndSetCreatorNodeVisibility( particle );
       } );
     }
     else {
-      this.removeParticleAndCheckCreatorNodeVisibility( particle );
+      this.removeParticleAndSetCreatorNodeVisibility( particle );
     }
   }
 
@@ -572,7 +572,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   /**
    * Remove the given particle from the model and check the particle type's creator node visibility.
    */
-  protected removeParticleAndCheckCreatorNodeVisibility( particle: Particle ): void {
+  protected removeParticleAndSetCreatorNodeVisibility( particle: Particle ): void {
     this.removeParticleFromModel( particle );
 
     // make the creator node visible when removing the last nucleon from the particle atom
