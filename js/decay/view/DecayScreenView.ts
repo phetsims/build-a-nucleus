@@ -131,6 +131,11 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       undoDecayButton.visible = false;
       restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
       restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
+      this.model.outgoingParticles.forEach( particle => {
+        this.model.removeParticle( particle );
+      } );
+      this.model.outgoingParticles.clear();
+      this.model.particleAnimations.clear();
     }, {
       baseColor: Color.YELLOW.darkerColor( 0.95 )
     } );
@@ -183,16 +188,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
       this.model.userControlledNeutrons.lengthProperty ], () => {
       undoDecayButton.visible = false;
-    } );
-
-    undoDecayButton.visibleProperty.link( visible => {
-      if ( !visible ) {
-        this.model.outgoingParticles.forEach( particle => {
-          this.model.removeParticle( particle );
-        } );
-        this.model.outgoingParticles.clear();
-        this.model.particleAnimations.clear();
-      }
     } );
 
     // create and add the available decays panel at the center right of the decay screen
