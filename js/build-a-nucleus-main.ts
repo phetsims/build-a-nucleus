@@ -12,7 +12,7 @@ import buildANucleusStrings from './buildANucleusStrings.js';
 import DecayScreen from './decay/DecayScreen.js';
 import ChartIntroScreen from './chart-intro/ChartIntroScreen.js';
 
-const buildANucleusTitleString = buildANucleusStrings[ 'build-a-nucleus' ].title;
+const buildANucleusTitleStringProperty = buildANucleusStrings[ 'build-a-nucleus' ].titleStringProperty;
 
 const simOptions: SimOptions = {
 
@@ -30,7 +30,7 @@ const simOptions: SimOptions = {
 // launch the sim - beware that scenery Image nodes created outside of simLauncher.launch() will have zero bounds
 // until the images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70
 simLauncher.launch( () => {
-  const sim = new Sim( buildANucleusTitleString, [
+  const sim = new Sim( buildANucleusTitleStringProperty, [
     new DecayScreen(),
     new ChartIntroScreen()
   ], simOptions );
