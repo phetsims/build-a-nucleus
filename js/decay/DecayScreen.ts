@@ -14,7 +14,7 @@ import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import buildANucleusStrings from '../buildANucleusStrings.js';
+import BuildANucleusStrings from '../BuildANucleusStrings.js';
 
 // types
 export type DecayScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
@@ -25,7 +25,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
     const options = optionize<DecayScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
-      name: buildANucleusStrings.decay,
+      name: BuildANucleusStrings.decay,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 

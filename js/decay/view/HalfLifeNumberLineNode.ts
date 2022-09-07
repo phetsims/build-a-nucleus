@@ -24,7 +24,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import Utils from '../../../../dot/js/Utils.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
@@ -169,7 +169,7 @@ class HalfLifeNumberLineNode extends Node {
     this.addChild( this.halfLifeDisplayNode );
 
     // create and add the text for "Half-life:"
-    const halfLifeColonText = new RichText( buildANucleusStrings.halfLifeColon, {
+    const halfLifeColonText = new RichText( BuildANucleusStrings.halfLifeColon, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
@@ -178,7 +178,7 @@ class HalfLifeNumberLineNode extends Node {
     this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
 
     // create and add the "Unknown" text
-    const halfLifeUnknownText = new RichText( buildANucleusStrings.unknown, {
+    const halfLifeUnknownText = new RichText( BuildANucleusStrings.unknown, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
@@ -199,7 +199,7 @@ class HalfLifeNumberLineNode extends Node {
     const halfLifeNumberText = new HBox( {
       children: [
         halfLifeScientificNotation,
-        new Text( buildANucleusStrings.s, { font: TITLE_FONT, maxWidth: 30 } )
+        new Text( BuildANucleusStrings.s, { font: TITLE_FONT, maxWidth: 30 } )
       ],
       align: 'bottom',
       spacing: 10
@@ -330,7 +330,7 @@ class HalfLifeNumberLineNode extends Node {
     } );
 
     // create and add the units label on the number line
-    const numberLineUnitsLabel = new Text( buildANucleusStrings.seconds, {
+    const numberLineUnitsLabel = new Text( BuildANucleusStrings.seconds, {
       font: options.unitsLabelFont,
       maxWidth: 150
     } );

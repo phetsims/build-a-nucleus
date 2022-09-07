@@ -10,7 +10,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import { Node, Text } from '../../../../scenery/js/imports.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -77,8 +77,8 @@ class HalfLifeInformationNode extends Node {
     };
 
     // create and add the 'less stable' and 'more  stable' arrow and text set
-    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, buildANucleusStrings.lessStable );
-    arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, buildANucleusStrings.moreStable );
+    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, BuildANucleusStrings.lessStable );
+    arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, BuildANucleusStrings.moreStable );
   }
 }
 

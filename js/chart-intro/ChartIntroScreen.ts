@@ -14,7 +14,7 @@ import ChartIntroModel from '../chart-intro/model/ChartIntroModel.js';
 import ChartIntroScreenView from '../chart-intro/view/ChartIntroScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import buildANucleusStrings from '../buildANucleusStrings.js';
+import BuildANucleusStrings from '../BuildANucleusStrings.js';
 
 // types
 export type NuclideChartIntroScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
@@ -25,7 +25,7 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
     const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
-      name: buildANucleusStrings.chartIntro,
+      name: BuildANucleusStrings.chartIntro,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 

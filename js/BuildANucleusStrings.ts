@@ -119,8 +119,8 @@ type StringsType = {
   'chartIntroStringProperty': TReadOnlyProperty<string>;
 };
 
-const buildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
+const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
 
-buildANucleus.register( 'buildANucleusStrings', buildANucleusStrings );
+buildANucleus.register( 'BuildANucleusStrings', BuildANucleusStrings );
 
-export default buildANucleusStrings;
+export default BuildANucleusStrings;

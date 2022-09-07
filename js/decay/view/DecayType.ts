@@ -9,19 +9,19 @@
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import buildANucleus from '../../buildANucleus.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 
 class DecayType extends EnumerationValue {
 
-  public static ALPHA_DECAY = new DecayType( buildANucleusStrings.alphaDecay );
+  public static ALPHA_DECAY = new DecayType( BuildANucleusStrings.alphaDecay );
 
-  public static BETA_MINUS_DECAY = new DecayType( buildANucleusStrings.betaMinusDecay );
+  public static BETA_MINUS_DECAY = new DecayType( BuildANucleusStrings.betaMinusDecay );
 
-  public static BETA_PLUS_DECAY = new DecayType( buildANucleusStrings.betaPlusDecay );
+  public static BETA_PLUS_DECAY = new DecayType( BuildANucleusStrings.betaPlusDecay );
 
-  public static PROTON_EMISSION = new DecayType( buildANucleusStrings.protonEmission );
+  public static PROTON_EMISSION = new DecayType( BuildANucleusStrings.protonEmission );
 
-  public static NEUTRON_EMISSION = new DecayType( buildANucleusStrings.neutronEmission );
+  public static NEUTRON_EMISSION = new DecayType( BuildANucleusStrings.neutronEmission );
 
   public static enumeration = new Enumeration( DecayType );
 

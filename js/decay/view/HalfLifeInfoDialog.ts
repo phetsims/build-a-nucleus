@@ -11,7 +11,7 @@ import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
 import { HBox, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import BANTimescalePoints from '../model/BANTimescalePoints.js';
@@ -104,16 +104,16 @@ class HalfLifeInfoDialog extends Dialog {
 
     // the labels on the half-life's, in respective order
     const halfLifeLabels = [
-      buildANucleusStrings.A,
-      buildANucleusStrings.B,
-      buildANucleusStrings.C,
-      buildANucleusStrings.D,
-      buildANucleusStrings.E,
-      buildANucleusStrings.F,
-      buildANucleusStrings.G,
-      buildANucleusStrings.H,
-      buildANucleusStrings.I,
-      buildANucleusStrings.J
+      BuildANucleusStrings.A,
+      BuildANucleusStrings.B,
+      BuildANucleusStrings.C,
+      BuildANucleusStrings.D,
+      BuildANucleusStrings.E,
+      BuildANucleusStrings.F,
+      BuildANucleusStrings.G,
+      BuildANucleusStrings.H,
+      BuildANucleusStrings.I,
+      BuildANucleusStrings.J
     ];
 
     // create and add the half-life arrow and label
@@ -121,7 +121,7 @@ class HalfLifeInfoDialog extends Dialog {
       halfLifeNumberLineNode.addArrowAndLabel( halfLifeLabels[ i ], halfLifeTime[ i ] );
     }
 
-    const titleNode = new Text( buildANucleusStrings.halfLifeTimescale, {
+    const titleNode = new Text( BuildANucleusStrings.halfLifeTimescale, {
       font: TITLE_FONT,
       maxWidth: 0.75 * MAX_CONTENT_WIDTH
     } );

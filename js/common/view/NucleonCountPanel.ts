@@ -12,7 +12,7 @@ import BANColors from '../BANColors.js';
 import { HBox, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import ParticleType from './ParticleType.js';
 import BANConstants from '../BANConstants.js';
@@ -134,9 +134,9 @@ class NucleonCountPanel extends Panel {
     };
 
     // create the nucleon labels
-    const protonLabel = nucleonLabel( buildANucleusStrings.protonsColon, ParticleType.PROTON, protonCountProperty,
+    const protonLabel = nucleonLabel( BuildANucleusStrings.protonsColon, ParticleType.PROTON, protonCountProperty,
       protonCountRange );
-    const neutronLabel = nucleonLabel( buildANucleusStrings.neutronsColon, ParticleType.NEUTRON, neutronCountProperty,
+    const neutronLabel = nucleonLabel( BuildANucleusStrings.neutronsColon, ParticleType.NEUTRON, neutronCountProperty,
       neutronCountRange );
 
     // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's

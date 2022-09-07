@@ -17,7 +17,7 @@ import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import { Circle, Color, HBox, ManualConstraint, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -85,7 +85,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       scale: 0.3
     } );
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
-      titleNode: new Text( buildANucleusStrings.symbol, {
+      titleNode: new Text( BuildANucleusStrings.symbol, {
         font: LABEL_FONT,
         maxWidth: 118
       } ),
@@ -213,7 +213,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
       children: [
-        new Text( buildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
+        new Text( BuildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
 
         // electron cloud icon
         new Circle( {
@@ -243,10 +243,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {
         if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
-          this.stabilityIndicator.text = buildANucleusStrings.stable;
+          this.stabilityIndicator.text = BuildANucleusStrings.stable;
         }
         else {
-          this.stabilityIndicator.text = buildANucleusStrings.unstable;
+          this.stabilityIndicator.text = BuildANucleusStrings.unstable;
         }
       }
       else {

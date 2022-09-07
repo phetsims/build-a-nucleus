@@ -8,11 +8,11 @@
 
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import buildANucleusStrings from './buildANucleusStrings.js';
+import BuildANucleusStrings from './BuildANucleusStrings.js';
 import DecayScreen from './decay/DecayScreen.js';
 import ChartIntroScreen from './chart-intro/ChartIntroScreen.js';
 
-const buildANucleusTitleStringProperty = buildANucleusStrings[ 'build-a-nucleus' ].titleStringProperty;
+const buildANucleusTitleStringProperty = BuildANucleusStrings[ 'build-a-nucleus' ].titleStringProperty;
 
 const simOptions: SimOptions = {
 

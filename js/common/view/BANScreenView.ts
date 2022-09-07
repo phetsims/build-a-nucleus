@@ -25,7 +25,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import NucleonCreatorNode from './NucleonCreatorNode.js';
 import ParticleType from './ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
@@ -327,12 +327,12 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
 
     // create and add the Protons and Neutrons label
-    const protonsLabel = new Text( buildANucleusStrings.protons, nucleonLabelTextOptions );
+    const protonsLabel = new Text( BuildANucleusStrings.protons, nucleonLabelTextOptions );
     protonsLabel.bottom = doubleArrowButtons.bottom;
     protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
     this.addChild( protonsLabel );
 
-    const neutronsLabel = new Text( buildANucleusStrings.neutronsUppercase, nucleonLabelTextOptions );
+    const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercase, nucleonLabelTextOptions );
     neutronsLabel.bottom = doubleArrowButtons.bottom;
     neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
     this.addChild( neutronsLabel );
@@ -714,10 +714,10 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       // no protons
       if ( name.length === 0 ) {
-        name += massNumber.toString() + ' ' + buildANucleusStrings.neutronsLowercase + ' ' + buildANucleusStrings.doesNotForm;
+        name += massNumber.toString() + ' ' + BuildANucleusStrings.neutronsLowercase + ' ' + BuildANucleusStrings.doesNotForm;
       }
       else {
-        name += ' - ' + massNumber.toString() + ' ' + buildANucleusStrings.doesNotForm;
+        name += ' - ' + massNumber.toString() + ' ' + BuildANucleusStrings.doesNotForm;
       }
     }
 
@@ -731,12 +731,12 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       // only one neutron
       else if ( neutronCount === 1 ) {
-        name = neutronCount + ' ' + buildANucleusStrings.neutronLowercase;
+        name = neutronCount + ' ' + BuildANucleusStrings.neutronLowercase;
       }
 
       // multiple neutrons
       else {
-        name = StringUtils.fillIn( buildANucleusStrings.clusterOfNeutronsPattern, {
+        name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPattern, {
           neutronNumber: neutronCount
         } );
       }

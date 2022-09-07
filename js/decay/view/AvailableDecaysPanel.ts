@@ -9,7 +9,7 @@
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
 import { HBox, Line, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import buildANucleusStrings from '../../buildANucleusStrings.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HSeparator from '../../../../sun/js/HSeparator.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
@@ -67,13 +67,13 @@ class AvailableDecaysPanel extends Panel {
     const contentNode = new Rectangle( 0, 0, 0, 0 );
 
     // create and add the title
-    const titleNode = new Text( buildANucleusStrings.availableDecays, { font: TITLE_FONT, maxWidth: 285 } );
+    const titleNode = new Text( BuildANucleusStrings.availableDecays, { font: TITLE_FONT, maxWidth: 285 } );
     titleNode.centerX = contentNode.centerX;
     contentNode.addChild( titleNode );
 
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
-      new RichText( buildANucleusStrings.availableDecaysInfoPanelText, {
+      new RichText( BuildANucleusStrings.availableDecaysInfoPanelText, {
         font: new PhetFont( BANConstants.REGULAR_FONT_SIZE ),
         lineWrap: 400,
         maxWidth: 400
