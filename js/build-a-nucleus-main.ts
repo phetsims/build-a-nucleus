@@ -18,7 +18,7 @@ const simOptions: SimOptions = {
 
   credits: {
     leadDesign: 'Luisa Vargas, Ariel Paul',
-    softwareDevelopment: 'Michael Kauzmann, Chris Klusendorf, Marla Schulz, Luisa Vargas',
+    softwareDevelopment: 'Luisa Vargas, Michael Kauzmann, Chris Klusendorf, Marla Schulz, Martin Veillette',
     team: 'Jason Donev (University of Calgary), Kathy Perkins, Amy Rouinfar',
     qualityAssurance: 'Jaron Droder, Clifford Hardin, Emily Miller, Nancy Salpepi, Kathryn Woessner',
     graphicArts: '',
