@@ -1,5 +1,5 @@
 {
-  "comment": "# build-a-nucleus 1.0.0-rc.8 Tue Sep 06 2022 15:53:30 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# build-a-nucleus 1.0.0-rc.9 Wed Sep 07 2022 09:49:57 GMT-0600 (Mountain Daylight Saving Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "HEAD"
@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "6275e9c3ae1f92bd25234eb622c03f2742b5ba90",
+    "sha": "0dbe66173c65dbff0a4bd03ec22ca7087032461b",
     "branch": "1.0"
   },
   "build-an-atom": {
@@ -86,7 +86,7 @@
   },
   "shred": {
     "sha": "f2769b2c0117754c4e1da7b759c0d26ac53332b3",
-    "branch": "build-a-nucleus-1.0"
+    "branch": "HEAD"
   },
   "studio": {
     "sha": "8c16b15ba11c356f8f94b0ed98837f75a410aa7c",
