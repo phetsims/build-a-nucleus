@@ -6,18 +6,13 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
+import BANModel from '../../common/model/BANModel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayType from '../view/DecayType.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-
-// types
-export type DecayModelOptions = BANModelOptions;
 
 class DecayModel extends BANModel {
 
@@ -31,16 +26,10 @@ class DecayModel extends BANModel {
   public betaPlusDecayEnabledProperty: TReadOnlyProperty<boolean>;
   public alphaDecayEnabledProperty: TReadOnlyProperty<boolean>;
 
-  public constructor( providedOptions?: DecayModelOptions ) {
-
-    const options = optionize<DecayModelOptions, EmptySelfOptions, BANModelOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+  public constructor() {
 
     // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
-    super( BANConstants.MAX_NUMBER_OF_PROTONS, BANConstants.MAX_NUMBER_OF_NEUTRONS, options );
+    super( BANConstants.MAX_NUMBER_OF_PROTONS, BANConstants.MAX_NUMBER_OF_NEUTRONS );
 
     this.halfLifeNumberProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],

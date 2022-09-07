@@ -6,26 +6,15 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
-
-// types
-export type NuclideChartIntroModelOptions = BANModelOptions;
+import BANModel from '../../common/model/BANModel.js';
 
 class ChartIntroModel extends BANModel {
 
-  public constructor( providedOptions?: NuclideChartIntroModelOptions ) {
-
-    const options = optionize<NuclideChartIntroModelOptions, EmptySelfOptions, BANModelOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+  public constructor() {
 
     // empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons)
-    super( 10, 12, options );
+    super( 10, 12 );
 
   }
 

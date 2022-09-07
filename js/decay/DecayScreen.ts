@@ -12,30 +12,23 @@ import buildANucleus from '../buildANucleus.js';
 import BANColors from '../common/BANColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
 import buildANucleusStrings from '../buildANucleusStrings.js';
-
-// types
-export type DecayScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
 
 class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
-  public constructor( providedOptions?: DecayScreenOptions ) {
+  public constructor() {
 
-    const options = optionize<DecayScreenOptions, EmptySelfOptions, ScreenOptions>()( {
+    const options: ScreenOptions = {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       name: buildANucleusStrings.decay,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+      tandem: Tandem.OPT_OUT
+    };
 
     super(
-      () => new DecayModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ), preventFit: true } ),
+      () => new DecayModel(),
+      model => new DecayScreenView( model, { preventFit: true, tandem: Tandem.OPT_OUT } ),
       options
     );
   }

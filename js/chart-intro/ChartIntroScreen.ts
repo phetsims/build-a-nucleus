@@ -6,36 +6,31 @@
  * @author Luisa Vargas
  */
 
-import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
+import Screen from '../../../joist/js/Screen.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
 import BANColors from '../common/BANColors.js';
 import ChartIntroModel from '../chart-intro/model/ChartIntroModel.js';
 import ChartIntroScreenView from '../chart-intro/view/ChartIntroScreenView.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
 import buildANucleusStrings from '../buildANucleusStrings.js';
-
-// types
-export type NuclideChartIntroScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
 
 class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
-  public constructor( providedOptions?: NuclideChartIntroScreenOptions ) {
+  public constructor() {
 
-    const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
+    const options = {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       name: buildANucleusStrings.chartIntro,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 
       // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+      tandem: Tandem.OPT_OUT
+    };
 
     super(
-      () => new ChartIntroModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new ChartIntroScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      () => new ChartIntroModel(),
+      model => new ChartIntroScreenView( model, { tandem: Tandem.OPT_OUT } ),
       options
     );
   }

@@ -8,17 +8,14 @@
 
 import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import { Circle, Node, PressListenerEvent, ProfileColorProperty, RadialGradient, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -40,7 +37,7 @@ const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 const TOUCH_AREA_Y_DILATION = 3;
 
 // types
-export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
+export type BANScreenViewOptions = ScreenViewOptions;
 export type ParticleViewMap = Record<number, ParticleView>;
 
 // constants
@@ -73,13 +70,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
 
-  protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
-
-    const options = optionize<BANScreenViewOptions, EmptySelfOptions, ScreenViewOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+  protected constructor( model: M, options?: BANScreenViewOptions ) {
 
     super( options );
 
@@ -348,8 +339,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
         this.reset();
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
-      bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN,
-      tandem: options.tandem.createTandem( 'resetAllButton' )
+      bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
     } );
     this.addChild( this.resetAllButton );
 
