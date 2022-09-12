@@ -18,7 +18,7 @@ import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, RadialGr
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -44,7 +44,7 @@ const TOUCH_AREA_Y_DILATION = 3;
 const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
-export type BANScreenViewOptions = ScreenViewOptions & PickRequired<ScreenViewOptions, 'tandem'>;
+export type BANScreenViewOptions = WithRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = Record<number, ParticleView>;
 
 // constants
