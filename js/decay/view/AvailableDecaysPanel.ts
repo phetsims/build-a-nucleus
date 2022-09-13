@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import { HBox, Line, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import HSeparator from '../../../../sun/js/HSeparator.js';
+import HSeparatorDeprecated from '../../../../sun/js/HSeparatorDeprecated.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
@@ -298,7 +298,7 @@ class AvailableDecaysPanel extends Panel {
     contentNode.addChild( arrangedDecayButtonsAndIcons );
 
     // create and add the separator
-    const separator = new HSeparator( 280, { stroke: '#CACACA' } );
+    const separator = new HSeparatorDeprecated( 280, { stroke: '#CACACA' } );
     separator.centerY = arrangedDecayButtonsAndIcons.bottom + SPACING;
     separator.centerX = contentNode.centerX;
     contentNode.addChild( separator );
