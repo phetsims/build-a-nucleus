@@ -25,7 +25,7 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
     const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
-      name: BuildANucleusStrings.chartIntro,
+      name: BuildANucleusStrings.chartIntroStringProperty,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 
