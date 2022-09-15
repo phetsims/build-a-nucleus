@@ -528,24 +528,21 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particle.destinationProperty.value = destination;
 
       particle.animationEndedEmitter.addListener( () => {
-        this.removeParticleAndCheckCreatorNodeVisibility( particle );
+        this.removeParticleAndSetCreatorNodeVisibility( particle );
       } );
     }
     else {
-      this.removeParticleAndCheckCreatorNodeVisibility( particle );
+      this.removeParticleAndSetCreatorNodeVisibility( particle );
     }
-  }
-
-  protected removeParticleFromModel( particle: Particle ): void {
-    this.model.outgoingParticles.includes( particle ) && this.model.outgoingParticles.remove( particle );
-    this.model.removeParticle( particle );
   }
 
   /**
    * Remove the given particle from the model and check the particle type's creator node visibility.
    */
-  protected removeParticleAndCheckCreatorNodeVisibility( particle: Particle ): void {
-   this.removeParticleFromModel( particle );
+  protected removeParticleAndSetCreatorNodeVisibility( particle: Particle ): void {
+    this.model.outgoingParticles.includes( particle ) && this.model.outgoingParticles.remove( particle );
+    this.model.removeParticle( particle );
+
 
     // make the creator node visible when removing the last nucleon from the particle atom
     this.setCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
