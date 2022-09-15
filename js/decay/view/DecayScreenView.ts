@@ -37,6 +37,7 @@ import DecayType from './DecayType.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
+import BANQueryParameters from '../../common/BANQueryParameters.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
@@ -141,7 +142,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
       for ( let i = 0; i < Math.abs( nucleonCountDifference ); i++ ) {
         if ( nucleonCountDifference > 0 ) {
-          addNucleonImmediatelyToAtom( particleType );
+          this.addNucleonImmediatelyToAtom( particleType );
         }
         else if ( nucleonCountDifference < 0 ) {
           removeNucleonImmediatelyFromAtom( particleType );
@@ -153,18 +154,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const removeNucleonImmediatelyFromAtom = ( particleType: ParticleType ) => {
       const particleToRemove = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
       this.animateAndRemoveParticle( particleToRemove );
-    };
-
-    // create and add a nucleon of particleType immediately to the particleAtom
-    const addNucleonImmediatelyToAtom = ( particleType: ParticleType ) => {
-      const particle = new Particle( particleType.name.toLowerCase(), {
-        maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
-      } );
-
-      // place the particle the center of the particleAtom and add it to the model and particleAtom
-      particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
-      this.model.addParticle( particle );
-      this.model.particleAtom.addParticle( particle );
     };
 
     // show the undoDecayButton
@@ -283,6 +272,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( updateCloudSize );
 
+    // TODO: should be moved to BANScreenView bc repeated in Chart screen view
     // Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
     // based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
     // range and scale to provide values that are usable for our needs on the canvas.
@@ -335,6 +325,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
       this.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
+    } );
+
+    // TODO: should be moved to BANScreenView
+    // add initial neutrons and protons specified by the query parameters to the atom
+    _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
+      if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+      }
+      if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+      }
+      // TODO: need to detect if this forms a nuclide that shouldn't exist and then call QueryStringMachine.addWarning here and model.reset()
     } );
   }
 

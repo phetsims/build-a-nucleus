@@ -470,6 +470,20 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
   /**
+   * Create and add a nucleon of particleType immediately to the particleAtom.
+   */
+  public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
+    const particle = new Particle( particleType.name.toLowerCase(), {
+      maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+    } );
+
+    // place the particle the center of the particleAtom and add it to the model and particleAtom
+    particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
+    this.model.addParticle( particle );
+    this.model.particleAtom.addParticle( particle );
+  }
+
+  /**
    * Set the input enabled and visibility of a creator node.
    */
   protected setCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
