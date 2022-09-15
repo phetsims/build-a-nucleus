@@ -40,11 +40,11 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
+import BANQueryParameters from '../../common/BANQueryParameters.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 const NUCLEON_CAPTURE_RADIUS = 100;
-const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
 const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
@@ -52,8 +52,6 @@ const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView<DecayModel> {
-
-  public static NUMBER_OF_NUCLEON_LAYERS: number;
 
   private readonly stabilityIndicator: Text;
   private readonly atomNode: Node;
@@ -151,7 +149,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
       for ( let i = 0; i < Math.abs( nucleonCountDifference ); i++ ) {
         if ( nucleonCountDifference > 0 ) {
-          addNucleonImmediatelyToAtom( particleType );
+          this.addNucleonImmediatelyToAtom( particleType );
         }
         else if ( nucleonCountDifference < 0 ) {
           removeNucleonImmediatelyFromAtom( particleType );
@@ -163,18 +161,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const removeNucleonImmediatelyFromAtom = ( particleType: ParticleType ) => {
       const particleToRemove = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
       this.animateAndRemoveParticle( particleToRemove );
-    };
-
-    // create and add a nucleon of particleType immediately to the particleAtom
-    const addNucleonImmediatelyToAtom = ( particleType: ParticleType ) => {
-      const particle = new Particle( particleType.name.toLowerCase(), {
-        maxZLayer: DecayScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
-      } );
-
-      // place the particle the center of the particleAtom and add it to the model and particleAtom
-      particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
-      this.model.addParticle( particle );
-      this.model.particleAtom.addParticle( particle );
     };
 
     // show the undoDecayButton
@@ -293,6 +279,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( updateCloudSize );
 
+    // TODO: should be moved to BANScreenView bc repeated in Chart screen view
     // Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
     // based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
     // range and scale to provide values that are usable for our needs on the canvas.
@@ -372,7 +359,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // Add the nucleonLayers
     this.nucleonLayers = [];
-    _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
+    _.times( BANScreenView.NUMBER_OF_NUCLEON_LAYERS, () => {
       const nucleonLayer = new Node();
       this.nucleonLayers.push( nucleonLayer );
       this.particleViewLayerNode.addChild( nucleonLayer );
@@ -471,6 +458,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         assert && assert( particleView, 'Particle view not found during relayering' );
         this.nucleonLayers[ zLayer ].addChild( particleView! );
       }
+    } );
+
+    // TODO: should be moved to BANScreenView
+    // add initial neutrons and protons specified by the query parameters to the atom
+    _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
+      if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+      }
+      if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+      }
+      // TODO: need to detect if this forms a nuclide that shouldn't exist and then call QueryStringMachine.addWarning here and model.reset()
     } );
   }
 
@@ -669,9 +668,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.showElectronCloudBooleanProperty.reset();
   }
 }
-
-// export for usage when creating shred Particles
-DecayScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'DecayScreenView', DecayScreenView );
 export default DecayScreenView;
