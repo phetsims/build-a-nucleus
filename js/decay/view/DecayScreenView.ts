@@ -391,8 +391,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
     alphaParticle.moveAllParticlesToDestination();
-    this.setCreatorNodeVisibility( this.protonsCreatorNode, true );
-    this.setCreatorNodeVisibility( this.neutronsCreatorNode, true );
+    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
+    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
 
     alphaParticle.protons.forEach( proton => {
       this.findParticleView( proton ).inputEnabled = false;
@@ -416,10 +416,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       alphaParticle.neutrons.forEach( neutron => {
-        this.removeParticleAndSetCreatorNodeVisibility( neutron );
+        this.removeParticle( neutron );
       } );
       alphaParticle.protons.forEach( proton => {
-        this.removeParticleAndSetCreatorNodeVisibility( proton );
+        this.removeParticle( proton );
       } );
       alphaParticleNode.dispose();
       alphaParticle.dispose();
@@ -486,6 +486,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
       //if ( this.model.particles.includes( particleToEmit ) ) {
       this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
+      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
+      this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
+      this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
       //}
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );

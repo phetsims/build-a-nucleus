@@ -47,6 +47,13 @@ const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles
 export type BANScreenViewOptions = WithRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = Record<number, ParticleView>;
 
+type ParticleTypeInfo = {
+  maxCount: number;
+  creatorNode: Node;
+  numberOfNucleons: number;
+  outgoingNucleons: number;
+};
+
 // constants
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
@@ -383,18 +390,30 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       }
     };
 
+    // convert string particle type to a ParticleType
+    const getParticleTypeFromStringType = ( particleTypeString: string ) => {
+      const particleType = particleTypeString === ParticleType.PROTON.name.toLowerCase() ? ParticleType.PROTON :
+                           particleTypeString === ParticleType.NEUTRON.name.toLowerCase() ? ParticleType.NEUTRON :
+                           particleTypeString === ParticleType.ELECTRON.name.toLowerCase() ? ParticleType.ELECTRON :
+                           particleTypeString === ParticleType.POSITRON.name.toLowerCase() ? ParticleType.POSITRON :
+                           null;
+      assert && assert( particleType instanceof ParticleType, `Particle type ${particleTypeString} is not a valid particle type.` );
+      return particleType;
+    };
+
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
       const particleView = new ParticleView( particle, this.modelViewTransform );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle, particleView );
+      const particleType = getParticleTypeFromStringType( particle.type );
 
-      if ( particle.type === ParticleType.PROTON.name.toLowerCase() ||
-           particle.type === ParticleType.NEUTRON.name.toLowerCase() ) {
+      if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
 
         // called when a nucleon is finished being dragged
         particle.dragEndedEmitter.addListener( () => { this.dragEndedListener( particle, this.model.particleAtom ); } );
+        this.checkIfCreatorNodeShouldBeInvisible( particleType );
       }
 
       // TODO: unlink userControlledListener
@@ -412,23 +431,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
       particleView.dispose();
       particle.dispose();
-    } );
 
-    // hides the given creator node if the count for that nucleon type has reached its max
-    const checkIfCreatorNodeShouldBeInvisible = ( particleType: ParticleType, maxCount: number, creatorNode: Node ) => {
-      const numberOfNucleons = [ ...this.model.particles ]
-        .filter( particle => particle.type === particleType.name.toLowerCase() ).length;
+      const particleType = getParticleTypeFromStringType( particle.type );
 
-      if ( numberOfNucleons === maxCount ) {
-        this.setCreatorNodeVisibility( creatorNode, false );
+      if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
+        this.checkIfCreatorNodeShouldBeVisible( particleType );
       }
-    };
-
-    // check if each creator node should be hidden
-    this.model.particles.lengthProperty.link( numberOfParticles => {
-      checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON, this.model.protonCountRange.max, this.protonsCreatorNode );
-      checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON, this.model.neutronCountRange.max, this.neutronsCreatorNode );
     } );
+
 
     // create and add the dashed empty circle at the center
     const lineWidth = 1;
@@ -470,6 +480,47 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
   /**
+   * Get information for a specific particle type.
+   */
+  private getInfoForParticleType( particleType: ParticleType ): ParticleTypeInfo {
+    const maxCount = particleType === ParticleType.PROTON ? this.model.protonCountRange.max : this.model.neutronCountRange.max;
+    const creatorNode = particleType === ParticleType.PROTON ? this.protonsCreatorNode : this.neutronsCreatorNode;
+    const numberOfNucleons = [ ...this.model.particles ]
+      .filter( particle => particle.type === particleType.name.toLowerCase() ).length;
+    const outgoingNucleons = [ ...this.model.outgoingParticles ]
+      .filter( particle => particle.type === particleType.name.toLowerCase() ).length;
+
+    return {
+      maxCount: maxCount,
+      creatorNode: creatorNode,
+      numberOfNucleons: numberOfNucleons,
+      outgoingNucleons: outgoingNucleons
+    };
+  }
+
+  /**
+   * Hides the given creator node if the count for that nucleon type has reached its max.
+   */
+  public checkIfCreatorNodeShouldBeInvisible( particleType: ParticleType ): void {
+    const infoForParticleType = this.getInfoForParticleType( particleType );
+
+    if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) >= infoForParticleType.maxCount ) {
+      BANScreenView.setCreatorNodeVisibility( infoForParticleType.creatorNode, false );
+    }
+  }
+
+  /**
+   * Shows the given creator node if the count for that nucleon type is below its max.
+   */
+  public checkIfCreatorNodeShouldBeVisible( particleType: ParticleType ): void {
+    const infoForParticleType = this.getInfoForParticleType( particleType );
+
+    if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) < infoForParticleType.maxCount ) {
+      BANScreenView.setCreatorNodeVisibility( infoForParticleType.creatorNode, true );
+    }
+  }
+
+  /**
    * Create and add a nucleon of particleType immediately to the particleAtom.
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
@@ -486,7 +537,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   /**
    * Set the input enabled and visibility of a creator node.
    */
-  protected setCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
+  private static setCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
     if ( creatorNode.visible !== visible ) {
       creatorNode.visible = visible;
       creatorNode.inputEnabled = visible;
@@ -580,24 +631,20 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       particle.destinationProperty.value = destination;
 
       particle.animationEndedEmitter.addListener( () => {
-        this.removeParticleAndSetCreatorNodeVisibility( particle );
+        this.removeParticle( particle );
       } );
     }
     else {
-      this.removeParticleAndSetCreatorNodeVisibility( particle );
+      this.removeParticle( particle );
     }
   }
 
   /**
-   * Remove the given particle from the model and check the particle type's creator node visibility.
+   * Remove the given particle from the model.
    */
-  protected removeParticleAndSetCreatorNodeVisibility( particle: Particle ): void {
+  protected removeParticle( particle: Particle ): void {
     this.model.outgoingParticles.includes( particle ) && this.model.outgoingParticles.remove( particle );
     this.model.removeParticle( particle );
-
-    // make the creator node visible when removing the last nucleon from the particle atom
-    this.setCreatorNodeVisibility( particle.type === ParticleType.PROTON.name.toLowerCase() ?
-                                   this.protonsCreatorNode : this.neutronsCreatorNode, true );
   }
 
   /**
