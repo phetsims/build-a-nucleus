@@ -548,11 +548,11 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.model.particleAnimations.push( alphaParticleEmissionAnimation );
 
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
-      alphaParticle.neutrons.forEach( neutron => {
-        this.removeParticleAndSetCreatorNodeVisibility( neutron );
-      } );
       alphaParticle.protons.forEach( proton => {
-        this.removeParticleAndSetCreatorNodeVisibility( proton );
+        this.removeParticleFromModel( proton );
+      } );
+      alphaParticle.neutrons.forEach( neutron => {
+        this.removeParticleFromModel( neutron );
       } );
       alphaParticleNode.dispose();
       alphaParticle.dispose();
