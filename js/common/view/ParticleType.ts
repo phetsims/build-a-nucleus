@@ -26,13 +26,13 @@ class ParticleType extends EnumerationValue {
   public static enumeration = new Enumeration( ParticleType );
 
   public readonly label: string;
-  public readonly color: ProfileColorProperty;
+  public readonly colorProperty: ProfileColorProperty;
 
-  public constructor( label: string, color: ProfileColorProperty ) {
+  public constructor( label: string, colorProperty: ProfileColorProperty ) {
     super();
 
     this.label = label;
-    this.color = color;
+    this.colorProperty = colorProperty;
 
   }
 }
