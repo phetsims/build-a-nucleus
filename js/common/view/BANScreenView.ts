@@ -34,6 +34,7 @@ import Property from '../../../../axon/js/Property.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import BANQueryParameters from '../BANQueryParameters.js';
+import LinearFunction from '../../../../dot/js/LinearFunction.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -479,6 +480,57 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       }
       // TODO: need to detect if this forms a nuclide that shouldn't exist and then call QueryStringMachine.addWarning here and model.reset()
     } );
+  }
+
+  /**
+   * This method increases the value of the smaller radius values and decreases the value of the larger ones.
+   * This effectively reduces the range of radii values used.
+   * This is a very specialized function for the purposes of this class.
+   *
+   * minChangedRadius and maxChangedRadius define the way in which an input value is increased or decreased. These values
+   * can be adjusted as needed to make the cloud size appear as desired.
+   */
+  private static reduceRadiusRange( value: number, minShellRadius: number, maxShellRadius: number,
+                                    minChangedRadius: number, maxChangedRadius: number ): number {
+    const compressionFunction = new LinearFunction( minShellRadius, maxShellRadius, minChangedRadius, maxChangedRadius );
+    return compressionFunction.evaluate( value );
+  }
+
+  /**
+   * Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
+   * based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
+   * range and scale to provide values that are usable for our needs on the canvas.
+   */
+  private getElectronShellDiameter( numElectrons: number, minChangedRadius: number, maxChangedRadius: number ): number {
+    const maxElectrons = this.model.protonCountRange.max;
+    const atomicRadius = AtomIdentifier.getAtomicRadius( numElectrons );
+    if ( atomicRadius ) {
+      return BANScreenView.reduceRadiusRange( atomicRadius, this.model.protonCountRange.min + 1, maxElectrons,
+        minChangedRadius, maxChangedRadius );
+    }
+    else {
+      assert && assert( numElectrons <= maxElectrons, `Atom has more than supported number of electrons, ${numElectrons}` );
+      return 0;
+    }
+  }
+
+  /**
+   * Update size of electron cloud based on protonNumber since the nuclides created are neutral, meaning the number of
+   * electrons is the same as the number of protons.
+   */
+  protected updateCloudSize( protonCount: number, factor: number, minChangedRadius: number, maxChangedRadius: number ): void {
+    if ( protonCount === 0 ) {
+      this.electronCloud.radius = 1E-5; // arbitrary non-zero value
+      this.electronCloud.fill = 'transparent';
+    }
+    else {
+      const radius = this.modelViewTransform.modelToViewDeltaX(
+        this.getElectronShellDiameter( protonCount, minChangedRadius, maxChangedRadius ) / 2 );
+      this.electronCloud.radius = radius * factor;
+      this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
+        .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
+        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' );
+    }
   }
 
   /**
