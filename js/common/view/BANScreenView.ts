@@ -33,6 +33,7 @@ import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import Property from '../../../../axon/js/Property.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
+import BANQueryParameters from '../BANQueryParameters.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -467,6 +468,17 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
     this.protonArrowButtons = protonArrowButtons;
+
+    // add initial neutrons and protons specified by the query parameters to the atom
+    _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
+      if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+      }
+      if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+      }
+      // TODO: need to detect if this forms a nuclide that shouldn't exist and then call QueryStringMachine.addWarning here and model.reset()
+    } );
   }
 
   /**
