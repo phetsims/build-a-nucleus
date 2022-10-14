@@ -29,7 +29,6 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -253,54 +252,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // function that updates the size of the electron cloud based on the protonNumber since the nuclides created are neutral
-    // meaning the number of electrons is the same as the number of protons
-    const updateCloudSize = ( protonCount: number ) => {
-      if ( protonCount === 0 ) {
-        this.electronCloud.radius = 1E-5; // arbitrary non-zero value
-        this.electronCloud.fill = 'transparent';
-      }
-      else {
-        const radius = this.modelViewTransform.modelToViewDeltaX( getElectronShellDiameter( protonCount ) / 2 );
-        this.electronCloud.radius = radius * 2;
-        this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * 2 )
-          .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-          .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' );
-      }
-    };
-
     // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( updateCloudSize );
+    model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 2, 70, 95 ) );
 
-    // TODO: should be moved to BANScreenView bc repeated in Chart screen view
-    // Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
-    // based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
-    // range and scale to provide values that are usable for our needs on the canvas.
-    const getElectronShellDiameter = ( numElectrons: number ) => {
-      const maxElectrons = this.model.protonCountRange.max; // for uranium
-      const atomicRadius = AtomIdentifier.getAtomicRadius( numElectrons );
-      if ( atomicRadius ) {
-        return reduceRadiusRange( atomicRadius, this.model.protonCountRange.min + 1, maxElectrons );
-      }
-      else {
-        assert && assert( numElectrons <= maxElectrons, `Atom has more than supported number of electrons, ${numElectrons}` );
-        return 0;
-      }
-    };
-
-    // This method increases the value of the smaller radius values and decreases the value of the larger ones.
-    // This effectively reduces the range of radii values used.
-    // This is a very specialized function for the purposes of this class.
-    const reduceRadiusRange = ( value: number, minShellRadius: number, maxShellRadius: number ) => {
-      // The following two factors define the way in which an input value is increased or decreased.  These values
-      // can be adjusted as needed to make the cloud size appear as desired.
-      const minChangedRadius = 70;
-      const maxChangedRadius = 95;
-
-      const compressionFunction = new LinearFunction( minShellRadius, maxShellRadius, minChangedRadius, maxChangedRadius );
-      return compressionFunction.evaluate( value );
-    };
-
+    // TODO: move elementName to BANScreenView bc text node the same, just positioning different
     // Create the textual readout for the element name.
     const elementName = new Text( '', {
       font: LABEL_FONT,
