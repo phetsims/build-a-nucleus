@@ -23,7 +23,7 @@ const simOptions: SimOptions = {
     qualityAssurance: 'Clifford Hardin, Emily Miller, Nancy Salpepi, Kathryn Woessner',
     graphicArts: '',
     soundDesign: '',
-    thanks: ''
+    thanks: 'We gratefully acknowledge the support of ECO Canada for funding this sim.'
   }
 };
 
