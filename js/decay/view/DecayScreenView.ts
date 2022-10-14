@@ -36,7 +36,6 @@ import DecayType from './DecayType.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
-import BANQueryParameters from '../../common/BANQueryParameters.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
@@ -280,18 +279,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
       this.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
-    } );
-
-    // TODO: should be moved to BANScreenView
-    // add initial neutrons and protons specified by the query parameters to the atom
-    _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
-      if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
-      }
-      if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
-      }
-      // TODO: need to detect if this forms a nuclide that shouldn't exist and then call QueryStringMachine.addWarning here and model.reset()
     } );
   }
 
