@@ -93,6 +93,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
   protected readonly emptyAtomCircle: Node;
+  protected readonly elementName: Text;
 
   protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
 
@@ -123,6 +124,14 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       model.particleAtom.neutronCountProperty, model.neutronCountRange );
     this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.nucleonCountPanel );
+
+    // Create the textual readout for the element name.
+    this.elementName = new Text( '', {
+      font: BANConstants.REGULAR_FONT,
+      fill: Color.RED,
+      maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
+    } );
+    this.addChild( this.elementName );
 
     const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
     const arrowButtonOptions = {
@@ -488,7 +497,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
       if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
         this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
       }
-      // TODO: need to detect if this forms a nuclide that shouldn't exist and then call QueryStringMachine.addWarning here and model.reset()
     } );
   }
 

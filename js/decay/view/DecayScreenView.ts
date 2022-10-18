@@ -20,7 +20,6 @@ import { Circle, Color, HBox, ManualConstraint, Node, RadialGradient, Text } fro
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
@@ -38,7 +37,6 @@ import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 
 // constants
-const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 const NUCLEON_CAPTURE_RADIUS = 100;
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
 const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
@@ -85,7 +83,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
       titleNode: new Text( BuildANucleusStrings.symbol, {
-        font: LABEL_FONT,
+        font: BANConstants.REGULAR_FONT,
         maxWidth: 118
       } ),
       fill: BANColors.panelBackgroundColorProperty,
@@ -200,7 +198,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
       children: [
-        new Text( BuildANucleusStrings.electronCloud, { font: LABEL_FONT, maxWidth: 210 } ),
+        new Text( BuildANucleusStrings.electronCloud, { font: BANConstants.REGULAR_FONT, maxWidth: 210 } ),
 
         // electron cloud icon
         new Circle( {
@@ -218,7 +216,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add stability indicator
     this.stabilityIndicator = new Text( '', {
-      font: LABEL_FONT,
+      font: BANConstants.REGULAR_FONT,
       fill: 'black',
       visible: true,
       maxWidth: 225
@@ -255,22 +253,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 2, 70, 95 ) );
 
     // TODO: move elementName to BANScreenView bc text node the same, just positioning different
-    // Create the textual readout for the element name.
-    const elementName = new Text( '', {
-      font: LABEL_FONT,
-      fill: Color.RED,
-      maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
-    } );
-    elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
-    this.addChild( elementName );
+
+    this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+    this.nucleonCountPanel.left = availableDecaysPanel.left;
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        BANScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist, this.stabilityIndicator.centerX )
+        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist, this.stabilityIndicator.centerX )
     );
-
-    this.nucleonCountPanel.left = availableDecaysPanel.left;
 
     // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to shown it when there's
     // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the

@@ -9,6 +9,7 @@
 import buildANucleus from '../buildANucleus.js';
 import { Color } from '../../../scenery/js/imports.js';
 import ShredConstants from '../../../shred/js/ShredConstants.js';
+import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 
 const BANConstants = {
 
@@ -47,7 +48,7 @@ const BANConstants = {
   INFO_BUTTON_MAX_HEIGHT: 30,
 
   // font size throughout the first screen (stability strings, legend strings, accordion box titles, etc.)
-  REGULAR_FONT_SIZE: 20,
+  REGULAR_FONT: new PhetFont( 20 ),
 
   DEFAULT_INITIAL_PROTON_COUNT: 0,
   DEFAULT_INITIAL_NEUTRON_COUNT: 0

@@ -74,7 +74,7 @@ class AvailableDecaysPanel extends Panel {
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
       new RichText( BuildANucleusStrings.availableDecaysInfoPanelText, {
-        font: new PhetFont( BANConstants.REGULAR_FONT_SIZE ),
+        font: BANConstants.REGULAR_FONT,
         lineWrap: 400,
         maxWidth: 400
       } ),

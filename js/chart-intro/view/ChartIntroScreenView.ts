@@ -11,9 +11,6 @@ import buildANucleus from '../../buildANucleus.js';
 import ChartIntroModel from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
-import BANConstants from '../../common/BANConstants.js';
-import { Color, Text } from '../../../../scenery/js/imports.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
@@ -22,7 +19,6 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 
 // constants
-const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 const NUCLEON_CAPTURE_RADIUS = 100;
 
 // types
@@ -45,20 +41,13 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 0.65, 10, 20 ) );
 
-    // Create the textual readout for the element name.
-    const elementName = new Text( '', {
-      font: LABEL_FONT,
-      fill: Color.RED,
-      maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
-    } );
-    elementName.centerX = this.doubleArrowButtons.centerX;
-    elementName.top = this.nucleonCountPanel.top;
-    this.addChild( elementName );
+    this.elementName.centerX = this.doubleArrowButtons.centerX;
+    this.elementName.top = this.nucleonCountPanel.top;
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        BANScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
+        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist,
           this.doubleArrowButtons.centerX )
     );
 
@@ -81,6 +70,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Define a function that will decide where to put nucleons.
    */
   protected override dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
+    // TODO: change to the energy level positioning
     const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.name.toLowerCase() ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
