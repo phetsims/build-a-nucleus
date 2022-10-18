@@ -17,7 +17,7 @@ const BANQueryParameters = QueryStringMachine.getAll( {
   neutrons: {
     public: true,
     type: 'number',
-    defaultValue: 0,
+    defaultValue: BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT,
     isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.MAX_NUMBER_OF_NEUTRONS
   },
 
@@ -25,7 +25,7 @@ const BANQueryParameters = QueryStringMachine.getAll( {
   protons: {
     public: true,
     type: 'number',
-    defaultValue: 0,
+    defaultValue: BANConstants.DEFAULT_INITIAL_PROTON_COUNT,
     isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.MAX_NUMBER_OF_PROTONS
   }
 
