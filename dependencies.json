@@ -1,5 +1,5 @@
 {
-  "comment": "# build-a-nucleus 1.0.2-rc.1 Wed Oct 19 2022 14:55:39 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# build-a-nucleus 1.0.2-rc.2 Wed Oct 19 2022 17:14:14 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "c13a8c7741d95fbd8e37619c66ebcca8686dffe7",
     "branch": "HEAD"
@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "51b891992ebbe1cb5e6ecc883dfbec6fc730803b",
+    "sha": "9d88717740d6eeb23d654ff0abf8864a2ec15ea0",
     "branch": "1.0"
   },
   "build-an-atom": {
