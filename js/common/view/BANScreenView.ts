@@ -463,9 +463,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
     this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
 
-    // add the particleViewLayerNode
-    this.addChild( this.particleViewLayerNode );
-
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
     this.protonArrowButtons = protonArrowButtons;

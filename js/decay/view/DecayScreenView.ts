@@ -264,6 +264,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
     this.addChild( elementName );
 
+    // add the particleViewLayerNode
+    this.addChild( this.particleViewLayerNode );
+
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
