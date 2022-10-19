@@ -224,6 +224,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
     this.addChild( this.stabilityIndicator );
 
+    // add the particleViewLayerNode after everything else so particles are in the top layer
+    this.addChild( this.particleViewLayerNode );
+
     // Define the update function for the stability indicator.
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {

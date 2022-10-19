@@ -54,6 +54,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // create and add the periodic table and symbol
     const periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
     this.addChild( periodicTableAndIsotopeSymbol );
+
+    // add the particleViewLayerNode after everything else so particles are in the top layer
+    this.addChild( this.particleViewLayerNode );
+
     periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
     periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
 
