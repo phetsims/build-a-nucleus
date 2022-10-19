@@ -408,7 +408,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
                            particleTypeString === ParticleType.ELECTRON.name.toLowerCase() ? ParticleType.ELECTRON :
                            particleTypeString === ParticleType.POSITRON.name.toLowerCase() ? ParticleType.POSITRON :
                            null;
-      assert && assert( particleType instanceof ParticleType, `Particle type ${particleTypeString} is not a valid particle type.` );
+      assert && assert( particleType !== null, `Particle type ${particleTypeString} is not a valid particle type.` );
       return particleType;
     };
 
