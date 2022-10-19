@@ -35,7 +35,6 @@ import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 
 const TOUCH_AREA_Y_DILATION = 3;
-const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
 export type BANScreenViewOptions = ScreenViewOptions;
@@ -45,8 +44,6 @@ export type ParticleViewMap = Record<number, ParticleView>;
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
 abstract class BANScreenView<M extends BANModel> extends ScreenView {
-
-  public static NUMBER_OF_NUCLEON_LAYERS: number;
 
   protected model: M;
   private timeSinceCountdownStarted: number;
@@ -418,20 +415,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
   /**
-   * Create and add a nucleon of particleType immediately to the particleAtom.
-   */
-  public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
-    const particle = new Particle( particleType.name.toLowerCase(), {
-      maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
-    } );
-
-    // place the particle the center of the particleAtom and add it to the model and particleAtom
-    particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
-    this.model.addParticle( particle );
-    this.model.particleAtom.addParticle( particle );
-  }
-
-  /**
    * Set the input enabled and visibility of a creator node.
    */
   protected setCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {
@@ -627,9 +610,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // Please see subclass implementations
   }
 }
-
-// export for usage when creating shred Particles
-BANScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'BANScreenView', BANScreenView );
 export default BANScreenView;

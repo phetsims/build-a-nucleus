@@ -31,11 +31,14 @@ import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.REGULAR_FONT_SIZE );
 const NUCLEON_CAPTURE_RADIUS = 100;
+const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
 
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
+
+  public static NUMBER_OF_NUCLEON_LAYERS: number;
 
   private readonly atomNode: Node;
 
@@ -156,7 +159,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // Add the nucleonLayers
     this.nucleonLayers = [];
-    _.times( BANScreenView.NUMBER_OF_NUCLEON_LAYERS, () => {
+    _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
       const nucleonLayer = new Node();
       this.nucleonLayers.push( nucleonLayer );
       this.particleViewLayerNode.addChild( nucleonLayer );
@@ -281,6 +284,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     }
   }
 }
+
+// export for usage when creating shred Particles
+ChartIntroScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'ChartIntroScreenView', ChartIntroScreenView );
 export default ChartIntroScreenView;
