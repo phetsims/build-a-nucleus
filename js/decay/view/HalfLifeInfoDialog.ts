@@ -21,7 +21,7 @@ import BANConstants from '../../common/BANConstants.js';
 // constants
 const MAX_CONTENT_WIDTH = 600;
 const TITLE_FONT = new PhetFont( 32 );
-const LEGEND_FONT = new PhetFont( BANConstants.REGULAR_FONT );
+const LEGEND_FONT = BANConstants.REGULAR_FONT;
 
 class HalfLifeInfoDialog extends Dialog {
 
