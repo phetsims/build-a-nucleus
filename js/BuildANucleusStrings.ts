@@ -117,6 +117,8 @@ type StringsType = {
   'availableDecaysInfoPanelTextStringProperty': LinkableProperty<string>;
   'chartIntro': string;
   'chartIntroStringProperty': LinkableProperty<string>;
+  'energy': string;
+  'energyStringProperty': LinkableProperty<string>;
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

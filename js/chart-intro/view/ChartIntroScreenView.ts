@@ -15,6 +15,10 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import { RichText } from '../../../../scenery/js/imports.js';
+import BANConstants from '../../common/BANConstants.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -52,13 +56,25 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
     this.addChild( this.periodicTableAndIsotopeSymbol );
 
-    // add the particleViewLayerNode after everything else so particles are in the top layer
-    this.addChild( this.particleViewLayerNode );
+    // create and add the 'Energy' label
+    const energyText = new RichText( BuildANucleusStrings.energy, { font: BANConstants.REGULAR_FONT } );
+    energyText.rotate( -Math.PI / 2 );
+    this.addChild( energyText );
 
     this.periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
     this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
 
     this.nucleonCountPanel.left = this.layoutBounds.left + 20;
+    energyText.left = this.nucleonCountPanel.left;
+    energyText.centerY = this.layoutBounds.centerY;
+
+    const energyTextDistanceFromArrow = 10;
+    const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow, this.protonArrowButtons.top - 30,
+      energyText.right + energyTextDistanceFromArrow, this.periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
+    this.addChild( arrow );
+
+    // add the particleViewLayerNode after everything else so particles are in the top layer
+    this.addChild( this.particleViewLayerNode );
 
     // only show the emptyAtomCircle when there are zero nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],

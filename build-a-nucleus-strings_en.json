@@ -158,5 +158,8 @@
 
   "chartIntro": {
     "value": "Chart Intro"
+  },
+  "energy": {
+    "value": "Energy"
   }
 }
