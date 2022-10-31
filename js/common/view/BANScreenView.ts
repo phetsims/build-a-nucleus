@@ -92,6 +92,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
+  protected readonly neutronArrowButtons: Node;
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
 
@@ -485,6 +486,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
     this.protonArrowButtons = protonArrowButtons;
+    this.neutronArrowButtons = neutronArrowButtons;
 
     // add initial neutrons and protons specified by the query parameters to the atom
     _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
@@ -878,8 +880,32 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     }
   }
 
-  protected dragEndedListener( nucleon: Particle, particleAtom: ParticleAtom ): void {
+  /**
+   * Define a function that will decide where to put nucleons.
+   */
+  protected dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
+    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.name.toLowerCase() ?
+                                      this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
+
+    if ( this.isNucleonInCaptureArea( nucleon, atom ) ||
+
+         // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
+         ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
+           !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
+         )
+    ) {
+      atom.addParticle( nucleon );
+    }
+
+    // only animate the removal of a nucleon if it was dragged out of the creator node
+    else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
+      this.animateAndRemoveParticle( nucleon, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
+    }
+  }
+
+  protected isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
     // Please see subclass implementations
+    return false;
   }
 
 }

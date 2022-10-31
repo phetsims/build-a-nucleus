@@ -448,28 +448,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   }
 
   /**
-   * Define a function that will decide where to put nucleons.
+   * Returns whether the nucleon is within the circular capture radius around the atom.
    */
-  // TODO: generalize this into BANScreenView
-  protected override dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
-    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.name.toLowerCase() ?
-                                      this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
-
-    // TODO: pass in boolean here from subclass function
-    if ( nucleon.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS ||
-
-         // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
-         ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
-           !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
-         )
-    ) {
-      atom.addParticle( nucleon );
-    }
-
-    // only animate the removal of a nucleon if it was dragged out of the creator node
-    else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveParticle( nucleon, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
-    }
+  protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
+    return nucleon.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
   }
 
   public override reset(): void {
