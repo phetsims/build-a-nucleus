@@ -64,6 +64,10 @@ const BANColors = {
   // color of the lines, arrows, and 'plus' symbols in the Available Decays panel
   blueDecayIconSymbolsColorProperty: new ProfileColorProperty( buildANucleus, 'blueDecayIconSymbolsColor', {
     default: Color.BLUE
+  } ),
+
+  shellModelTextHighlightColorProperty: new ProfileColorProperty( buildANucleus, 'shellModelTextHighlightColor', {
+    default: new Color( 189, 255, 255 )
   } )
 };
 

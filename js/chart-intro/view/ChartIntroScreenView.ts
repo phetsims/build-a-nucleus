@@ -16,9 +16,10 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { RichText } from '../../../../scenery/js/imports.js';
+import { Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import BANColors from '../../common/BANColors.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -39,11 +40,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     this.model = model;
 
+    // create and add the periodic table and symbol
+    this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
+    this.periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
+    this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
+    this.addChild( this.periodicTableAndIsotopeSymbol );
+
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 0.65, 10, 20 ) );
 
     this.elementName.centerX = this.doubleArrowButtons.centerX;
     this.elementName.top = this.nucleonCountPanel.top;
+
+    this.nucleonCountPanel.left = this.layoutBounds.left + 20;
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
@@ -55,24 +64,25 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // create and add the 'Nuclear Shell Model' title
     const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModel, { font: BANConstants.REGULAR_FONT } );
     nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
-    this.addChild( nuclearShellModelText );
+    nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom;
 
-    // create and add the periodic table and symbol
-    this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
-    this.addChild( this.periodicTableAndIsotopeSymbol );
+    const nuclearShellModelTextHighlight = new Rectangle( nuclearShellModelText.bounds.dilateXY( 15, 5 ), {
+      fill: BANColors.shellModelTextHighlightColorProperty,
+      centerX: this.doubleArrowButtons.centerX,
+      centerY: this.periodicTableAndIsotopeSymbol.bottom,
+      cornerRadius: 10
+    } );
+
+    // place highlight behind the text
+    this.addChild( nuclearShellModelTextHighlight );
+    this.addChild( nuclearShellModelText );
 
     // create and add the 'Energy' label
     const energyText = new RichText( BuildANucleusStrings.energy, { font: BANConstants.REGULAR_FONT } );
     energyText.rotate( -Math.PI / 2 );
-    this.addChild( energyText );
-
-    this.periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
-    this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
-
-    this.nucleonCountPanel.left = this.layoutBounds.left + 20;
     energyText.left = this.nucleonCountPanel.left;
     energyText.centerY = this.layoutBounds.centerY;
-    nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom;
+    this.addChild( energyText );
 
     // create and add the 'Energy' arrow
     const energyTextDistanceFromArrow = 10;
