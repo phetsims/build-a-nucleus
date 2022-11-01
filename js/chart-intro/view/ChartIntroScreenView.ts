@@ -16,7 +16,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Color, Line, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -66,6 +66,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
     nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom;
 
+    // create the 'highlight' text behind 'Nuclear Shell Model' text
     const nuclearShellModelTextHighlight = new Rectangle( nuclearShellModelText.bounds.dilateXY( 15, 5 ), {
       fill: BANColors.shellModelTextHighlightColorProperty,
       centerX: this.doubleArrowButtons.centerX,
@@ -90,6 +91,17 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       energyText.right + energyTextDistanceFromArrow, this.periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
     this.addChild( arrow );
 
+    // create and add dashed 'zoom' lines
+    // TODO: position based on the small atom
+    const dashedLineOptions = { stroke: Color.BLACK, lineDash: [ 6, 3 ] };
+    const leftDashedLine = new Line( this.protonArrowButtons.left, arrow.top, this.doubleArrowButtons.left,
+      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
+    this.addChild( leftDashedLine );
+    const rightDashedLine = new Line( this.neutronArrowButtons.right, arrow.top, this.doubleArrowButtons.right,
+      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
+    this.addChild( rightDashedLine );
+
+
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleViewLayerNode );
 
@@ -104,7 +116,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Returns whether the nucleon is within a rectangular capture radius defined by the left edge of the proton arrow
    * buttons, the right edge of the neutron arrow buttons, below the periodic table, and above the arrow buttons.
    */
-  // TODO: Remove atom if not used
+  // TODO: create Energy 'play area' node that would define bounds of capture area
   protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
     const nucleonViewPosition = this.modelViewTransform.modelToViewPosition( nucleon.positionProperty.value );
     return nucleonViewPosition.y < ( this.doubleArrowButtons.top - 30 ) && // capture area is a bit above arrow buttons
