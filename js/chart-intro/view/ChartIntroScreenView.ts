@@ -52,6 +52,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
           this.doubleArrowButtons.centerX )
     );
 
+    // create and add the 'Nuclear Shell Model' title
+    const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModel, { font: BANConstants.REGULAR_FONT } );
+    nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
+    this.addChild( nuclearShellModelText );
+
     // create and add the periodic table and symbol
     this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
     this.addChild( this.periodicTableAndIsotopeSymbol );
@@ -67,7 +72,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.nucleonCountPanel.left = this.layoutBounds.left + 20;
     energyText.left = this.nucleonCountPanel.left;
     energyText.centerY = this.layoutBounds.centerY;
+    nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom;
 
+    // create and add the 'Energy' arrow
     const energyTextDistanceFromArrow = 10;
     const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow, this.protonArrowButtons.top - 30,
       energyText.right + energyTextDistanceFromArrow, this.periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );

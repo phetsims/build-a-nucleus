@@ -119,6 +119,8 @@ type StringsType = {
   'chartIntroStringProperty': LinkableProperty<string>;
   'energy': string;
   'energyStringProperty': LinkableProperty<string>;
+  'nuclearShellModel': string;
+  'nuclearShellModelStringProperty': LinkableProperty<string>;
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
