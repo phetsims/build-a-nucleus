@@ -8,10 +8,9 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
-import { HBox, Line, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, HSeparator, Line, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import HSeparatorDeprecated from '../../../../sun/js/HSeparatorDeprecated.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
@@ -64,12 +63,9 @@ class AvailableDecaysPanel extends Panel {
   public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
     // TODO: investigate why a rectangle is needed, why isn't the contentNode centered correctly with just a node?
-    const contentNode = new Rectangle( 0, 0, 0, 0 );
 
     // create and add the title
     const titleNode = new Text( BuildANucleusStrings.availableDecays, { font: TITLE_FONT, maxWidth: 285 } );
-    titleNode.centerX = contentNode.centerX;
-    contentNode.addChild( titleNode );
 
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
@@ -88,9 +84,6 @@ class AvailableDecaysPanel extends Panel {
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
       baseColor: 'rgb( 400, 400, 400 )'
     } );
-    decaysInfoButton.centerY = titleNode.centerY;
-    decaysInfoButton.left = titleNode.right + 15;
-    contentNode.addChild( decaysInfoButton );
 
     // function to return the correct enabled derived property for each type of decay
     const returnEnabledDecayButtonProperty = ( decayType: DecayType ): TReadOnlyProperty<boolean> => {
@@ -294,14 +287,10 @@ class AvailableDecaysPanel extends Panel {
 
     // add the decay buttons and icons
     arrangedDecayButtonsAndIcons.top = titleNode.bottom + SPACING;
-    arrangedDecayButtonsAndIcons.centerX = contentNode.centerX;
-    contentNode.addChild( arrangedDecayButtonsAndIcons );
 
     // create and add the separator
-    const separator = new HSeparatorDeprecated( 280, { stroke: '#CACACA' } );
+    const separator = new HSeparator( { stroke: '#CACACA' } );
     separator.centerY = arrangedDecayButtonsAndIcons.bottom + SPACING;
-    separator.centerX = contentNode.centerX;
-    contentNode.addChild( separator );
 
     // create and add the particle labels
     // a particle label is a particle node on the left with its corresponding particle name on the right
@@ -330,8 +319,16 @@ class AvailableDecaysPanel extends Panel {
       spacing: SPACING * 5
     } );
     particleLabelsLegend.top = separator.bottom + SPACING;
-    particleLabelsLegend.centerX = contentNode.centerX;
-    contentNode.addChild( particleLabelsLegend );
+
+    const contentNode = new VBox( {
+    children: [
+      new HBox( { children: [ titleNode, decaysInfoButton ], spacing: 15 } ),
+      arrangedDecayButtonsAndIcons,
+      separator,
+      particleLabelsLegend
+    ],
+      spacing: SPACING
+    } );
 
     super( contentNode, {
       xMargin: 15,
