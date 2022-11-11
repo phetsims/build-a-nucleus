@@ -131,6 +131,11 @@ class BANModel {
   public reset(): void {
     this.particleAtom.clear();
     this.particles.clear();
+    this.incomingProtons.clear();
+    this.incomingNeutrons.clear();
+    this.outgoingParticles.clear();
+    this.userControlledProtons.clear();
+    this.userControlledNeutrons.clear();
     this.particleAnimations.clear();
   }
 
