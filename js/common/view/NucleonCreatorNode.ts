@@ -21,7 +21,7 @@ class NucleonCreatorNode extends Node {
   public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel> ) {
     super();
 
-    const targetNode = new ParticleNode( particleType.name.toLowerCase(), 10 );
+    const targetNode = new ParticleNode( particleType.name.toLowerCase(), BANConstants.PARTICLE_RADIUS );
     this.addChild( targetNode );
     this.touchArea = this.localBounds.dilated( 10 );
 
