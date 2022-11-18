@@ -19,7 +19,7 @@ const ALLOWED_PARTICLE_POSITIONS = [
 
 class EnergyLevelModel {
 
-  private readonly particleShellPositions: ParticleShellPosition[][];
+  public readonly particleShellPositions: ParticleShellPosition[][];
   private particles: ObservableArray<Particle>;
 
   public constructor() {
@@ -32,7 +32,8 @@ class EnergyLevelModel {
     ];
     for ( let i = 0; i < ALLOWED_PARTICLE_POSITIONS.length; i++ ) {
       for ( let j = 0; j < ALLOWED_PARTICLE_POSITIONS[ i ].length; j++ ) {
-        this.particleShellPositions[ i ][ j ] = { particle: null, xPosition: j };
+        this.particleShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] =
+          { particle: null, xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ] };
       }
     }
 
@@ -76,12 +77,15 @@ class EnergyLevelModel {
   }
 
   /**
-   * test this this particle atom contains a particular particle
+   * test this the energy levels contains a particular particle
    */
   private containsParticle( particle: Particle ): boolean {
     return this.particles.includes( particle );
   }
 
+  /**
+   * add a particle to the energy levels
+   */
   public addParticle( particle: Particle ): void {
 
     if ( this.containsParticle( particle ) ) {
@@ -135,6 +139,24 @@ class EnergyLevelModel {
     else {
       throw new Error( 'Unexpected particle type.' );
     }
+  }
+
+  /**
+   * remove the specified particle from the energy levels
+   */
+  public removeParticle( particle: Particle ): void {
+
+    if ( this.particles.includes( particle ) ) {
+      this.particles.remove( particle );
+    }
+    else {
+      throw new Error( 'Attempt to remove particle that is not in this particle atom.' );
+    }
+    // assert && assert( typeof ( particle.particleAtomRemovalListener ) === 'function',
+    //   'No particle removal listener attached to particle.' );
+    // particle.userControlledProperty.unlink( particle.particleAtomRemovalListener );
+    //
+    // delete particle.particleAtomRemovalListener;
   }
 }
 

@@ -20,6 +20,8 @@ import { Color, Line, Rectangle, RichText } from '../../../../scenery/js/imports
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
+import EnergyLevelNode from './EnergyLevelNode.js';
+import EnergyLevelModel from '../model/EnergyLevelModel.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -100,6 +102,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const rightDashedLine = new Line( this.neutronArrowButtons.right, arrow.top, this.doubleArrowButtons.right,
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
+
+    // add energy level node
+    // TODO: pass in what particle it's tracking (ex. protonCountProperty)
+    const protonEnergyLevelModel = new EnergyLevelModel();
+    const protonEnergyLevelNode = new EnergyLevelNode( protonEnergyLevelModel, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
+    this.addChild( protonEnergyLevelNode );
 
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
