@@ -61,7 +61,7 @@ const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
 abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
-  public static NUMBER_OF_NUCLEON_LAYERS: number;
+  public static readonly NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
   protected model: M;
   private timeSinceCountdownStarted: number;
@@ -909,9 +909,6 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   }
 
 }
-
-// export for usage when creating shred Particles
-BANScreenView.NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
 buildANucleus.register( 'BANScreenView', BANScreenView );
 export default BANScreenView;
