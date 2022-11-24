@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "b487fc971101da8c5a2cea7a4b13fbdfd736c13f",
+    "sha": "930627f932da5d17920fbb660cce50bade865364",
     "branch": "1.0"
   },
   "build-an-atom": {
@@ -41,7 +41,7 @@
     "branch": "HEAD"
   },
   "perennial-alias": {
-    "sha": "9ed570727d0f61243ecd5cca269b0673be0cdf8d",
+    "sha": "62f88a29bac3fdfb30934ee57100946efdd1c748",
     "branch": "HEAD"
   },
   "phet-core": {
