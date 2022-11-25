@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "bd01184a51ca76f1e67c5f0adc71764d338d383e",
+    "sha": "f601642080e2c823ecdf796f81c13cd21f374e5a",
     "branch": "1.0"
   },
   "build-an-atom": {
@@ -33,7 +33,7 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "10baf354a310018bbe229c8e6f18cc0d2ea48c1f",
+    "sha": "feec44e87337ea4fdcf6a33770665bb126caa119",
     "branch": "HEAD"
   },
   "kite": {
