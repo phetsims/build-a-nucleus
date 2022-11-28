@@ -62,6 +62,7 @@ class AvailableDecaysPanel extends Panel {
 
   public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
+    // REVIEW: is this still needed?
     // TODO: investigate why a rectangle is needed, why isn't the contentNode centered correctly with just a node?
 
     // create and add the title
@@ -290,6 +291,8 @@ class AvailableDecaysPanel extends Panel {
 
     // create and add the separator
     const separator = new HSeparator( { stroke: '#CACACA' } );
+
+    // REVIEW: recommend changing this to separator.top so that it's consistent with how layout is being set among other components where top and bottom is mostly used.
     separator.centerY = arrangedDecayButtonsAndIcons.bottom + SPACING;
 
     // create and add the particle labels
