@@ -35,6 +35,7 @@ import DecayType from '../../common/view/DecayType.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -56,13 +57,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
+      Vector2.ZERO,
+      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), // the center of the atom node
+      1.0 );
+
     const options = optionize<DecayScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );
 
-    super( model, options );
+    super( model, modelViewTransform, options );
 
     this.model = model;
 

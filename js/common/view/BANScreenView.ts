@@ -11,7 +11,7 @@ import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.j
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, RadialGradient, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -46,7 +46,10 @@ const TOUCH_AREA_Y_DILATION = 3;
 const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
-export type BANScreenViewOptions = WithRequired<ScreenViewOptions, 'tandem'>;
+type SelfOptions = {
+  particleViewMVT?: ModelViewTransform2;
+};
+export type BANScreenViewOptions = SelfOptions & WithRequired<ScreenViewOptions, 'tandem'>;
 export type ParticleViewMap = Record<number, ParticleView>;
 
 type ParticleTypeInfo = {
@@ -96,9 +99,11 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
 
-  protected constructor( model: M, providedOptions?: BANScreenViewOptions ) {
+  protected constructor( model: M, modelViewTransform: ModelViewTransform2, providedOptions?: BANScreenViewOptions ) {
 
-    const options = optionize<BANScreenViewOptions, EmptySelfOptions, ScreenViewOptions>()( {
+    const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
+
+      particleViewMVT: modelViewTransform,
 
       // phet-io options
       tandem: Tandem.REQUIRED
@@ -111,10 +116,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.previousProtonCount = 0;
     this.previousNeutronCount = 0;
 
-    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
-      Vector2.ZERO,
-      new Vector2( 335, 339 ), // the center of the atom node
-      1.0 );
+    this.modelViewTransform = modelViewTransform;
 
     this.particleViewMap = {};
 
@@ -415,7 +417,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
-      const particleView = new ParticleView( particle, this.modelViewTransform );
+      const particleView = new ParticleView( particle, options.particleViewMVT );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle, particleView );

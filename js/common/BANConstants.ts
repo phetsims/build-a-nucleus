@@ -51,7 +51,11 @@ const BANConstants = {
   REGULAR_FONT: new PhetFont( 20 ),
 
   DEFAULT_INITIAL_PROTON_COUNT: 0,
-  DEFAULT_INITIAL_NEUTRON_COUNT: 0
+  DEFAULT_INITIAL_NEUTRON_COUNT: 0,
+
+  // center of the atom
+  SCREEN_VIEW_ATOM_CENTER_X: 335,
+  SCREEN_VIEW_ATOM_CENTER_Y: 339
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

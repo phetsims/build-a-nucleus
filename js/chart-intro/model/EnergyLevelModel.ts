@@ -1,9 +1,12 @@
 // Copyright 2022, University of Colorado Boulder
 
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../../common/BANConstants.js';
 
 type ParticleShellPosition = {
   particle: Particle | null;
@@ -21,8 +24,13 @@ class EnergyLevelModel {
 
   public readonly particleShellPositions: ParticleShellPosition[][];
   private particles: ObservableArray<Particle>;
+  public modelViewTransform: ModelViewTransform2;
 
   public constructor() {
+
+    const particleWidth = BANConstants.PARTICLE_RADIUS * 2;
+    this.modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
+      new Bounds2( 0, 0, particleWidth * 6, particleWidth * 8 ) );
 
     this.particles = createObservableArray();
 
@@ -120,7 +128,7 @@ class EnergyLevelModel {
 
       assert && assert( sortedOpenPositions.length > 0, 'No open positions found for protons' );
       sortedOpenPositions[ 0 ].particle = particle;
-      particle.destinationProperty.set( new Vector2( sortedOpenPositions[ 0 ].xPosition, yPosition ) );
+      particle.destinationProperty.set( this.modelViewTransform.modelToViewPosition( new Vector2( sortedOpenPositions[ 0 ].xPosition, yPosition ) ) );
 
       // Listen for removal of the proton and handle it.
       const particleRemovedListener = ( userControlled: boolean ) => {

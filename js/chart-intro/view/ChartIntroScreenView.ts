@@ -22,6 +22,8 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import EnergyLevelNode from './EnergyLevelNode.js';
 import EnergyLevelModel from '../model/EnergyLevelModel.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -32,13 +34,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
+      Vector2.ZERO,
+      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 420 ), // the bottom left corner of proton energy levels
+      1.0 );
+
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
+      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, new Vector2( 140, 420 ), 1.0 ),
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );
 
-    super( model, options );
+    super( model, modelViewTransform, options );
 
     this.model = model;
 
