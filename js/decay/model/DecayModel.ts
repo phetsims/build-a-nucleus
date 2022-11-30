@@ -13,7 +13,7 @@ import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DecayType from '../view/DecayType.js';
+import DecayType from '../../common/view/DecayType.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // types

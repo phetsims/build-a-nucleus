@@ -31,7 +31,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import DecayType from './DecayType.js';
+import DecayType from '../../common/view/DecayType.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';

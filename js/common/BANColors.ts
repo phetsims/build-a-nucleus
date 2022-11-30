@@ -31,6 +31,26 @@ const BANColors = {
     default: new Color( 53, 182, 74 )
   } ),
 
+  // decay colors
+  protonEmissionColorProperty: new ProfileColorProperty( buildANucleus, 'protonEmissionColor', {
+    default: new Color( 212, 20, 90 )
+  } ),
+  neutronEmissionColorProperty: new ProfileColorProperty( buildANucleus, 'neutronEmissionColor', {
+    default: Color.MAGENTA
+  } ),
+  betaPlusColorProperty: new ProfileColorProperty( buildANucleus, 'betaPlusColor', {
+    default: Color.BLUE
+  } ),
+  betaMinusColorProperty: new ProfileColorProperty( buildANucleus, 'betaMinusColor', {
+    default: Color.CYAN
+  } ),
+  alphaColorProperty: new ProfileColorProperty( buildANucleus, 'alphaColor', {
+    default: Color.GREEN
+  } ),
+  stableColorProperty: new ProfileColorProperty( buildANucleus, 'stableColor', {
+    default: new Color( 27, 20, 100 )
+  } ),
+
   // background color for panels in this sim
   panelBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'panelBackground', {
     default: new Color( 241, 250, 254 )
