@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "6c8a768595f34d56ed309f8ba78aab1d020bbde1",
+    "sha": "0d374a37d785e5dcd63b5eebdf1393806c3fe5d0",
     "branch": "1.0"
   },
   "build-an-atom": {
@@ -25,7 +25,7 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "e41c8ec94d09169a77338018f1e6d75018e61a69",
+    "sha": "e20b7a0d691c81f94c6cbaf9f987bbf03f577566",
     "branch": "HEAD"
   },
   "dot": {
