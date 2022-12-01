@@ -15,15 +15,15 @@ import BANColors from '../BANColors.js';
 
 class ParticleType extends EnumerationValue {
 
-  public static PROTON = new ParticleType( BuildANucleusStrings.proton, BANColors.protonColorProperty );
+  public static readonly PROTON = new ParticleType( BuildANucleusStrings.proton, BANColors.protonColorProperty );
 
-  public static NEUTRON = new ParticleType( BuildANucleusStrings.neutronUppercase, BANColors.neutronColorProperty );
+  public static readonly NEUTRON = new ParticleType( BuildANucleusStrings.neutronUppercase, BANColors.neutronColorProperty );
 
-  public static ELECTRON = new ParticleType( BuildANucleusStrings.electron, BANColors.electronColorProperty );
+  public static readonly ELECTRON = new ParticleType( BuildANucleusStrings.electron, BANColors.electronColorProperty );
 
-  public static POSITRON = new ParticleType( BuildANucleusStrings.positron, BANColors.positronColorProperty );
+  public static readonly POSITRON = new ParticleType( BuildANucleusStrings.positron, BANColors.positronColorProperty );
 
-  public static enumeration = new Enumeration( ParticleType );
+  public static readonly enumeration = new Enumeration( ParticleType );
 
   public readonly label: string;
   public readonly colorProperty: ProfileColorProperty;
