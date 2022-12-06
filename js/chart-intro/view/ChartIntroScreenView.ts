@@ -16,13 +16,15 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, Line, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Color, Line, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import EnergyLevelNode from './EnergyLevelNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import NuclideChartNode from './NuclideChartNode.js';
+import AccordionBox from '../../../../sun/js/AccordionBox.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -114,6 +116,27 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const protonEnergyLevelNode = new EnergyLevelNode( model.protonEnergyLevelModel, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
     this.addChild( protonEnergyLevelNode );
 
+    const nuclideChartNode = new NuclideChartNode();
+    const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartNode, {
+      titleNode: new Text( BuildANucleusStrings.partialNuclideChart, {
+        font: BANConstants.REGULAR_FONT,
+        maxWidth: 118
+      } ),
+      fill: BANColors.panelBackgroundColorProperty,
+      minWidth: 50,
+      contentAlign: 'center',
+      contentXMargin: 35,
+      contentYMargin: 16,
+      buttonXMargin: 10,
+      buttonYMargin: 10,
+      expandCollapseButtonOptions: {
+        sideLength: 18
+      },
+      titleAlignX: 'left',
+      stroke: BANConstants.PANEL_STROKE,
+      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
+    } );
+    this.addChild( nuclideChartNodeAccordionBox );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleViewLayerNode );

@@ -7,7 +7,7 @@
  */
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import { HBox, Node, NodeOptions, ProfileColorProperty, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { HBox, Node, NodeOptions, ProfileColorProperty, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
@@ -22,10 +22,11 @@ const LEGEND_KEY_BOX_SIZE = 30;
 
 class NuclideChartNode extends Node {
 
-  public constructor( providedOptions: NuclideChartNodeOptions ) {
+  public constructor( providedOptions?: NuclideChartNodeOptions ) {
 
     super( providedOptions );
 
+    // create and add the legend
     const createLegendItem = ( decayTypeText: string, decayTypeColor: ProfileColorProperty ): HBox => {
       return new HBox( {
         children: [
@@ -40,10 +41,32 @@ class NuclideChartNode extends Node {
     const decayHBoxes = [];
     const stableHBox = createLegendItem( BuildANucleusStrings.stable, BANColors.stableColorProperty );
     decayHBoxes.push( stableHBox );
-
     DecayType.enumeration.values.forEach( decayType => {
       decayHBoxes.push( createLegendItem( decayType.label, decayType.colorProperty ) );
     } );
+
+    const legendHBox = new HBox( {
+      children: [
+        new VBox( {
+          children: [
+            decayHBoxes[ 0 ],
+            decayHBoxes[ 1 ],
+            decayHBoxes[ 2 ]
+          ],
+          spacing: 10
+        } ),
+        new VBox( {
+          children: [
+            decayHBoxes[ 3 ],
+            decayHBoxes[ 4 ],
+            decayHBoxes[ 5 ]
+          ],
+          spacing: 10
+        } )
+      ],
+      spacing: 25
+    } );
+    this.addChild( legendHBox );
 
   }
 }
