@@ -88,6 +88,10 @@ const BANColors = {
 
   shellModelTextHighlightColorProperty: new ProfileColorProperty( buildANucleus, 'shellModelTextHighlightColor', {
     default: new Color( 189, 255, 255 )
+  } ),
+
+  nuclideChartBorderColorProperty: new ProfileColorProperty( buildANucleus, 'nuclideChartBorderColor', {
+    default: new Color( 197, 191, 197 )
   } )
 };
 

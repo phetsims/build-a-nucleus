@@ -122,7 +122,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         font: BANConstants.REGULAR_FONT,
         maxWidth: 118
       } ),
-      fill: BANColors.panelBackgroundColorProperty,
+      fill: Color.white,
       minWidth: 50,
       contentAlign: 'center',
       contentXMargin: 35,
@@ -136,6 +136,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       stroke: BANConstants.PANEL_STROKE,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
+    nuclideChartNodeAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + 5;
+    nuclideChartNodeAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartNodeAccordionBox );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
