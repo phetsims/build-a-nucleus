@@ -21,7 +21,6 @@ import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import EnergyLevelNode from './EnergyLevelNode.js';
-import EnergyLevelModel from '../model/EnergyLevelModel.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 
@@ -112,9 +111,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // add energy level node
-    // TODO: pass in what particle it's tracking (ex. protonCountProperty)
-    const protonEnergyLevelModel = new EnergyLevelModel();
-    const protonEnergyLevelNode = new EnergyLevelNode( protonEnergyLevelModel, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
+    const protonEnergyLevelNode = new EnergyLevelNode( model.protonEnergyLevelModel, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
     this.addChild( protonEnergyLevelNode );
 
 
