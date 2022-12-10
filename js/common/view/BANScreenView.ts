@@ -90,8 +90,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly protonsCreatorNode: Node;
   protected readonly neutronsCreatorNode: Node;
 
-  public static protonsCreatorNodeModelCenter: Vector2;
-  public static neutronsCreatorNodeModelCenter: Vector2;
+  public protonsCreatorNodeModelCenter: Vector2;
+  public neutronsCreatorNodeModelCenter: Vector2;
 
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
@@ -370,8 +370,8 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
-    BANScreenView.protonsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center );
-    BANScreenView.neutronsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
+    this.protonsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center );
+    this.neutronsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -628,7 +628,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     } );
     particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
     const origin = particleType === ParticleType.PROTON ?
-                   BANScreenView.protonsCreatorNodeModelCenter : BANScreenView.neutronsCreatorNodeModelCenter;
+                   this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );
 
     // send the particle the center of the particleAtom and add it to the model
@@ -669,7 +669,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
    */
   public returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
-                                BANScreenView.protonsCreatorNodeModelCenter : BANScreenView.neutronsCreatorNodeModelCenter;
+                                this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
     const particles = [ ...this.model.particles ];
 
     // array of all the particles that are of particleType and part of the particleAtom
