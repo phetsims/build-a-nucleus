@@ -37,12 +37,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       Vector2.ZERO,
-      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 420 ), // the bottom left corner of proton energy levels
+      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 420 ),
       1.0 );
 
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
-      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, new Vector2( 140, 420 ), 1.0 ),
+      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, new Vector2( 140, 420 ), 1.0 ), // bottom left corner of proton energy levels
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );
