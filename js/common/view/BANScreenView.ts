@@ -98,6 +98,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
   protected readonly neutronArrowButtons: Node;
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
+  private readonly particleViewMVT: ModelViewTransform2;
 
   protected constructor( model: M, modelViewTransform: ModelViewTransform2, providedOptions?: BANScreenViewOptions ) {
 
@@ -111,6 +112,7 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
 
     super( options );
 
+    this.particleViewMVT = options.particleViewMVT;
     this.model = model;
     this.timeSinceCountdownStarted = 0;
     this.previousProtonCount = 0;
@@ -359,13 +361,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.addChild( neutronsLabel );
 
     // create and add the NucleonCreatorNode for the protons
-    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, this );
+    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, this, options.particleViewMVT );
     this.protonsCreatorNode.top = doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
     // create and add the NucleonCreatorNode for the neutrons
-    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, this );
+    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, this, options.particleViewMVT );
     this.neutronsCreatorNode.top = doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
