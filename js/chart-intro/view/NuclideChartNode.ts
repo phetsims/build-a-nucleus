@@ -13,6 +13,8 @@ import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DecayType from '../../common/view/DecayType.js';
+import NucleonNumberLine from './NucleonNumberLine.js';
+import ParticleType from '../../common/view/ParticleType.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
@@ -26,7 +28,10 @@ class NuclideChartNode extends Node {
 
     super( providedOptions );
 
-    // create and add the legend
+    const neutronNumberLine = new NucleonNumberLine( ParticleType.NEUTRON );
+    this.addChild( neutronNumberLine );
+
+    // create a legend item which consists of a box with the legend color and the string of the decay type to its right
     const createLegendItem = ( decayTypeText: string, decayTypeColor: ProfileColorProperty ): HBox => {
       return new HBox( {
         children: [
@@ -42,13 +47,15 @@ class NuclideChartNode extends Node {
       } );
     };
 
+    // to store all legend items
     const decayHBoxes = [];
     const stableHBox = createLegendItem( BuildANucleusStrings.stable, BANColors.stableColorProperty );
     decayHBoxes.push( stableHBox );
+
+    // create the legend item for each decay type in a grid box
     DecayType.enumeration.values.forEach( decayType => {
       decayHBoxes.push( createLegendItem( decayType.label, decayType.colorProperty ) );
     } );
-
     const legendGridBox = new GridBox( {
       children: decayHBoxes,
       autoColumns: 2,
@@ -56,6 +63,7 @@ class NuclideChartNode extends Node {
       xSpacing: 20,
       xAlign: 'left'
     } );
+    legendGridBox.top = neutronNumberLine.bottom + 10;
     this.addChild( legendGridBox );
 
   }
