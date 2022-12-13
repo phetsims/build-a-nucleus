@@ -1,24 +1,25 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * Node that represents the nucleon shells, aka straight horizontal lines above the buckets, in the view.
+ *
+ * @author Luisa Vargas
+ */
+
 import { Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import ParticleNucleus from '../model/ParticleNucleus.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import ParticleNucleus from '../model/ParticleNucleus.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 type EnergyLevelNodeOptions = NodeOptions;
 
-class EnergyLevelNode extends Node {
-
-  private model: ParticleNucleus;
+class NucleonShellView extends Node {
   private modelViewTransform: ModelViewTransform2;
 
-  public constructor( model: ParticleNucleus, providedOptions: EnergyLevelNodeOptions ) {
-
+  public constructor( nucleus: ParticleNucleus, providedOptions: EnergyLevelNodeOptions ) {
     super( providedOptions );
-
-    this.model = model;
 
     const particleLength = BANConstants.PARTICLE_RADIUS * 2;
 
@@ -27,7 +28,7 @@ class EnergyLevelNode extends Node {
 
     // create and add the proton energy levels
     const energyLevels: Line[] = [];
-    model.protonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
+    nucleus.protonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
       energyLevels.push(
         new Line(
           this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
@@ -42,9 +43,8 @@ class EnergyLevelNode extends Node {
     } );
 
     energyLevels.forEach( energyLevel => this.addChild( energyLevel ) );
-
   }
 }
 
-buildANucleus.register( 'EnergyLevelNode', EnergyLevelNode );
-export default EnergyLevelNode;
+buildANucleus.register( 'NucleonShellView', NucleonShellView );
+export default NucleonShellView;

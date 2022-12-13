@@ -20,11 +20,11 @@ import { Color, Line, Rectangle, RichText, Text } from '../../../../scenery/js/i
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
-import EnergyLevelNode from './EnergyLevelNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import NuclideChartNode from './NuclideChartNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import NucleonShellView from './NucleonShellView.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -113,7 +113,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // add energy level node
-    const protonEnergyLevelNode = new EnergyLevelNode( model.particleNucleus, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
+    const protonEnergyLevelNode = new NucleonShellView( model.particleNucleus, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
     this.addChild( protonEnergyLevelNode );
 
     const nuclideChartNode = new NuclideChartNode();
