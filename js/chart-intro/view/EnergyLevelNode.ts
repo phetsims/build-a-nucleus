@@ -2,19 +2,19 @@
 
 import { Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import EnergyLevelModel from '../model/EnergyLevelModel.js';
 import BANConstants from '../../common/BANConstants.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import ParticleNucleus from '../model/ParticleNucleus.js';
 
 type EnergyLevelNodeOptions = NodeOptions;
 
 class EnergyLevelNode extends Node {
 
-  private model: EnergyLevelModel;
+  private model: ParticleNucleus;
   private modelViewTransform: ModelViewTransform2;
 
-  public constructor( model: EnergyLevelModel, providedOptions: EnergyLevelNodeOptions ) {
+  public constructor( model: ParticleNucleus, providedOptions: EnergyLevelNodeOptions ) {
 
     super( providedOptions );
 
@@ -25,9 +25,9 @@ class EnergyLevelNode extends Node {
     this.modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
       new Bounds2( 0, 0, ( particleLength * 6 ) + BANConstants.PARTICLE_RADIUS, 200 ) );
 
-    // create and add the energy levels
+    // create and add the proton energy levels
     const energyLevels: Line[] = [];
-    model.particleShellPositions.forEach( ( particleShellRow, energyLevel ) => {
+    model.protonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
       energyLevels.push(
         new Line(
           this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
