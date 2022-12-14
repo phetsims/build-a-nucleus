@@ -15,6 +15,8 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DecayType from '../../common/view/DecayType.js';
 import NucleonNumberLine from './NucleonNumberLine.js';
 import ParticleType from '../../common/view/ParticleType.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Orientation from '../../../../phet-core/js/Orientation.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
@@ -24,12 +26,17 @@ const LEGEND_KEY_BOX_SIZE = 20;
 
 class NuclideChartNode extends Node {
 
-  public constructor( providedOptions?: NuclideChartNodeOptions ) {
+  public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
+                      providedOptions?: NuclideChartNodeOptions ) {
 
     super( providedOptions );
 
-    const neutronNumberLine = new NucleonNumberLine( ParticleType.NEUTRON );
+    const neutronNumberLine = new NucleonNumberLine( ParticleType.NEUTRON, neutronCountProperty, Orientation.HORIZONTAL );
     this.addChild( neutronNumberLine );
+
+    const protonNumberLine = new NucleonNumberLine( ParticleType.PROTON, protonCountProperty, Orientation.VERTICAL );
+    protonNumberLine.right = neutronNumberLine.left;
+    this.addChild( protonNumberLine );
 
     // create a legend item which consists of a box with the legend color and the string of the decay type to its right
     const createLegendItem = ( decayTypeText: string, decayTypeColor: ProfileColorProperty ): HBox => {
