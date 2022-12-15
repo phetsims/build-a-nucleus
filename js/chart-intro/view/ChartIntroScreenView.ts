@@ -120,13 +120,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartNode, {
       titleNode: new Text( BuildANucleusStrings.partialNuclideChart, {
         font: BANConstants.REGULAR_FONT,
-        maxWidth: 118
+        maxWidth: 200
       } ),
       fill: Color.white,
-      minWidth: 50,
-      contentAlign: 'center',
-      contentXMargin: 35,
-      contentYMargin: 16,
+      minWidth: this.periodicTableAndIsotopeSymbol.width,
+      contentYSpacing: 0,
       buttonXMargin: 10,
       buttonYMargin: 10,
       expandCollapseButtonOptions: {

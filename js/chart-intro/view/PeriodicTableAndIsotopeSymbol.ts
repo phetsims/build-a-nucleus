@@ -37,14 +37,14 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
       strokeHighlightColor: 'black',
       labelTextHighlightFill: 'white',
       disabledCellColor: 'white',
-      selectedCellColor: BANColors.halfLifeColorProperty,
-      cellDimension: 22.5
+      selectedCellColor: BANColors.halfLifeColorProperty
     } );
+    periodicTable.scale( 0.75 );
     panelContents.addChild( periodicTable );
 
     // create and add the symbol node in an accordion box
     const symbolNode = new SymbolNode( particleAtom.protonCountProperty, particleAtom.massNumberProperty, {
-      scale: 0.17,
+      scale: 0.15,
       fill: BANColors.halfLifeColorProperty,
       symbolTextFill: 'white',
       protonCountDisplayFill: 'white',

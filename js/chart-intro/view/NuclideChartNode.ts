@@ -22,7 +22,7 @@ type NuclideChartNodeOptions = NodeOptions;
 
 // constants
 const LEGEND_FONT = new PhetFont( 12 );
-const LEGEND_KEY_BOX_SIZE = 20;
+const LEGEND_KEY_BOX_SIZE = 14;
 
 class NuclideChartNode extends Node {
 
@@ -31,12 +31,14 @@ class NuclideChartNode extends Node {
 
     super( providedOptions );
 
-    const neutronNumberLine = new NucleonNumberLine( ParticleType.NEUTRON, neutronCountProperty, Orientation.HORIZONTAL );
-    this.addChild( neutronNumberLine );
-
     const protonNumberLine = new NucleonNumberLine( ParticleType.PROTON, protonCountProperty, Orientation.VERTICAL );
-    protonNumberLine.right = neutronNumberLine.left;
+    //protonNumberLine.left = this.left;
     this.addChild( protonNumberLine );
+
+    const neutronNumberLine = new NucleonNumberLine( ParticleType.NEUTRON, neutronCountProperty, Orientation.HORIZONTAL );
+    neutronNumberLine.top = protonNumberLine.bottom;
+    neutronNumberLine.left = protonNumberLine.right;
+    this.addChild( neutronNumberLine );
 
     // create a legend item which consists of a box with the legend color and the string of the decay type to its right
     const createLegendItem = ( decayTypeText: string, decayTypeColor: ProfileColorProperty ): HBox => {
@@ -49,7 +51,7 @@ class NuclideChartNode extends Node {
           } ),
           new RichText( decayTypeText, { font: LEGEND_FONT } )
         ],
-        spacing: 10
+        spacing: 5
         // TODO: add maxWidth
       } );
     };
@@ -67,10 +69,11 @@ class NuclideChartNode extends Node {
       children: decayHBoxes,
       autoColumns: 2,
       ySpacing: 5,
-      xSpacing: 20,
+      xSpacing: 80,
       xAlign: 'left'
     } );
     legendGridBox.top = neutronNumberLine.bottom + 10;
+    legendGridBox.left = this.left;
     this.addChild( legendGridBox );
 
   }
