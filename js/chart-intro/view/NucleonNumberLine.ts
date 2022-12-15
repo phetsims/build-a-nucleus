@@ -34,7 +34,7 @@ class NucleonNumberLine extends Node {
     const modelXStartRange = particleType === ParticleType.PROTON ?
                              BANConstants.DEFAULT_INITIAL_PROTON_COUNT : BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT;
     const modelXEndRange = particleType === ParticleType.PROTON ? 10 : 12; // TODO: magic numbers or fine?
-    const viewWidth = particleType === ParticleType.PROTON ? 250 : 300;
+    const viewWidth = particleType === ParticleType.PROTON ? 200 : 250;
     const numberLineLength = new Range( modelXStartRange, modelXEndRange ).getLength();
     const tickMarkLength = viewWidth / numberLineLength;
 
@@ -53,7 +53,7 @@ class NucleonNumberLine extends Node {
     }
 
     const numberLineNode = new Node();
-    let chartTransform;
+    let chartTransform: ChartTransform;
     if ( orientation === Orientation.HORIZONTAL ) {
       chartTransform = new ChartTransform( {
         viewWidth: viewWidth,
@@ -100,9 +100,10 @@ class NucleonNumberLine extends Node {
     numberLineNode.addChild( tickLabelSet );
 
     // create and add the rectangle that would highlight the current particle count number on the number line
+    const rectWidth = 8;
     const numberHighlightRectangle = new Rectangle( {
       // TODO: base this height and width off of the legend text size
-      rectWidth: 8,
+      rectWidth: rectWidth,
       rectHeight: 12,
       fill: particleType === ParticleType.PROTON ? BANColors.protonColorProperty : BANColors.neutronColorProperty
     } );
@@ -111,20 +112,30 @@ class NucleonNumberLine extends Node {
 
       // 'highlight' the label with the current particleCount on the tickLabelSet
       particleCountProperty.link( particleCount => {
-        numberHighlightRectangle.x = tickLabelSet.left + ( particleCount * 25 );
+        numberHighlightRectangle.x = tickLabelSet.left + ( particleCount * modelViewTransform.modelToViewX( tickXSpacing ) );
 
         // for double digits double the width and adjust where the highlight starts
         if ( particleCount > 9 ) {
-          numberHighlightRectangle.rectWidth = 16;
+          numberHighlightRectangle.rectWidth = rectWidth * 2;
           numberHighlightRectangle.x -= 4;
         }
         else {
-          numberHighlightRectangle.rectWidth = 8;
+          numberHighlightRectangle.rectWidth = rectWidth;
         }
       } );
     }
     else {
-      numberHighlightRectangle.centerX = tickLabelSet.centerX;
+      particleCountProperty.link( particleCount => {
+        numberHighlightRectangle.bottom = tickLabelSet.bottom - ( particleCount * modelViewTransform.modelToViewX( tickXSpacing ) );
+
+        if ( particleCount > 9 ) {
+          numberHighlightRectangle.rectWidth = rectWidth * 2;
+        }
+        else {
+          numberHighlightRectangle.rectWidth = rectWidth;
+        }
+        numberHighlightRectangle.right = tickLabelSet.right;
+      } );
     }
     this.addChild( numberHighlightRectangle );
 
@@ -144,7 +155,7 @@ class NucleonNumberLine extends Node {
     // create and add the number line axis label
     const numberLineLabel = new Text( StringUtils.fillIn( BuildANucleusStrings.nucleonNumber, {
       nucleonType: particleType.label
-    } ), { fontSize: 14 } );
+    } ), { fontSize: 12 } );
     if ( orientation === Orientation.HORIZONTAL ) {
       numberLineLabel.top = numberLine.bottom + 15;
       numberLineLabel.centerX = numberLine.centerX;
