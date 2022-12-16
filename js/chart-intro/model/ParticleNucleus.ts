@@ -64,10 +64,12 @@ class ParticleNucleus extends ParticleAtom {
       const currentNucleonCount = particleArray.length;
       let nucleonIndex = 0;
       if ( currentNucleonCount !== oldNucleonCount ) {
-        particleShellPositions.forEach( nucleonShellPositions => {
+        particleShellPositions.forEach( ( nucleonShellPositions, yPosition ) => {
           nucleonShellPositions.forEach( nucleonShellPosition => {
             if ( nucleonIndex < currentNucleonCount ) {
               nucleonShellPosition.particle = particleArray[ nucleonIndex ];
+              nucleonShellPosition.particle.setPositionAndDestination(
+                this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition ) );
               nucleonIndex++;
             }
             else {
@@ -78,8 +80,26 @@ class ParticleNucleus extends ParticleAtom {
       }
     };
 
-    updateNucleonPositions( this.protons, 0, this.protonShellPositions );
-    updateNucleonPositions( this.neutrons, 0, this.neutronShellPositions );
+    // get old nucleon count
+    let oldProtonCount = 0;
+    this.protonShellPositions.forEach( particleShellRow => {
+      particleShellRow.forEach( particleShellPosition => {
+        if ( particleShellPosition.particle !== null ) {
+          oldProtonCount++;
+        }
+      } );
+    } );
+    let oldNeutronCount = 0;
+    this.neutronShellPositions.forEach( particleShellRow => {
+      particleShellRow.forEach( particleShellPosition => {
+        if ( particleShellPosition.particle !== null ) {
+          oldNeutronCount++;
+        }
+      } );
+    } );
+
+    updateNucleonPositions( this.protons, oldProtonCount, this.protonShellPositions );
+    updateNucleonPositions( this.neutrons, oldNeutronCount, this.neutronShellPositions );
   }
 }
 
