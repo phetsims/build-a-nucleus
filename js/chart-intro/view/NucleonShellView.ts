@@ -18,7 +18,7 @@ type EnergyLevelNodeOptions = NodeOptions;
 class NucleonShellView extends Node {
   private modelViewTransform: ModelViewTransform2;
 
-  public constructor( nucleus: ParticleNucleus, providedOptions: EnergyLevelNodeOptions ) {
+  public constructor( atom: ParticleNucleus, providedOptions: EnergyLevelNodeOptions ) {
     super( providedOptions );
 
     const particleLength = BANConstants.PARTICLE_RADIUS * 2;
@@ -28,7 +28,7 @@ class NucleonShellView extends Node {
 
     // create and add the proton energy levels
     const energyLevels: Line[] = [];
-    nucleus.protonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
+    atom.protonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
       energyLevels.push(
         new Line(
           this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),

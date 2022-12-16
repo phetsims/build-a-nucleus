@@ -15,11 +15,12 @@ import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DecayType from '../../common/view/DecayType.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 
 // types
 export type DecayModelOptions = BANModelOptions;
 
-class DecayModel extends BANModel {
+class DecayModel extends BANModel<ParticleAtom> {
 
   // the half-life number
   public halfLifeNumberProperty: TReadOnlyProperty<number>;
@@ -39,8 +40,10 @@ class DecayModel extends BANModel {
       tandem: Tandem.REQUIRED
     }, providedOptions );
 
+    const particleAtom = new ParticleAtom();
+
     // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
-    super( BANConstants.MAX_NUMBER_OF_PROTONS, BANConstants.MAX_NUMBER_OF_NEUTRONS, options );
+    super( BANConstants.MAX_NUMBER_OF_PROTONS, BANConstants.MAX_NUMBER_OF_NEUTRONS, particleAtom, options );
 
     this.halfLifeNumberProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],

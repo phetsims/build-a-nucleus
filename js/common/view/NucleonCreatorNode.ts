@@ -16,10 +16,11 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 
-class NucleonCreatorNode extends Node {
+class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
-  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel>, particleMVT: ModelViewTransform2 ) {
+  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleMVT: ModelViewTransform2 ) {
     super();
 
     const targetNode = new ParticleNode( particleType.name.toLowerCase(), BANConstants.PARTICLE_RADIUS );

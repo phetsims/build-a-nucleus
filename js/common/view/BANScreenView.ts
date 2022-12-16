@@ -38,6 +38,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import BANQueryParameters from '../BANQueryParameters.js';
+import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -62,7 +63,7 @@ type ParticleTypeInfo = {
 // constants
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
-abstract class BANScreenView<M extends BANModel> extends ScreenView {
+abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>> extends ScreenView {
 
   public static readonly NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
 
@@ -361,13 +362,13 @@ abstract class BANScreenView<M extends BANModel> extends ScreenView {
     this.addChild( neutronsLabel );
 
     // create and add the NucleonCreatorNode for the protons
-    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, this, options.particleViewMVT );
+    this.protonsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.PROTON, this, options.particleViewMVT );
     this.protonsCreatorNode.top = doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
     // create and add the NucleonCreatorNode for the neutrons
-    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, this, options.particleViewMVT );
+    this.neutronsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.NEUTRON, this, options.particleViewMVT );
     this.neutronsCreatorNode.top = doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );

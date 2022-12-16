@@ -15,7 +15,7 @@ import ParticleNucleus from './ParticleNucleus.js';
 // types
 export type NuclideChartIntroModelOptions = BANModelOptions;
 
-class ChartIntroModel extends BANModel {
+class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public particleNucleus: ParticleNucleus;
 
@@ -27,10 +27,12 @@ class ChartIntroModel extends BANModel {
       tandem: Tandem.REQUIRED
     }, providedOptions );
 
-    // empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons)
-    super( 10, 12, options );
+     const particleAtom = new ParticleNucleus(); // this is our ground truth 'atom'
 
-    this.particleNucleus = new ParticleNucleus();
+    // empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons)
+    super( 10, 12, particleAtom, options );
+
+    this.particleNucleus = particleAtom;
 
   }
 

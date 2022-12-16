@@ -26,7 +26,7 @@ import Animation from '../../../../twixt/js/Animation.js';
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 
-class BANModel {
+class BANModel<T extends ParticleAtom> {
 
   // the stability of the nuclide
   public readonly isStableBooleanProperty: TReadOnlyProperty<boolean>;
@@ -38,7 +38,7 @@ class BANModel {
   public readonly particles: ObservableArray<Particle>;
 
   // the atom that the user will build, modify, and generally play with.
-  public readonly particleAtom: ParticleAtom;
+  public readonly particleAtom: T;
 
   // the range of the number of protons allowed
   public readonly protonCountRange: Range;
@@ -62,7 +62,8 @@ class BANModel {
   // array of all emitted particles
   public readonly outgoingParticles: ObservableArray<Particle>;
 
-  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, providedOptions?: BANModelOptions ) {
+  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T,
+                         providedOptions?: BANModelOptions ) {
 
     const options = optionize<BANModelOptions, EmptySelfOptions>()( {
 
@@ -73,7 +74,7 @@ class BANModel {
     console.log( options.tandem );
 
     // Create the atom
-    this.particleAtom = new ParticleAtom();
+    this.particleAtom = particleAtom;
 
     this.particles = createObservableArray();
 
