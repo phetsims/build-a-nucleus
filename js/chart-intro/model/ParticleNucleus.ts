@@ -60,6 +60,7 @@ class ParticleNucleus extends ParticleAtom {
   public override reconfigureNucleus(): void {
 
     // fill all nucleons in open positions from bottom to top, left to right
+    // TODO: pass in xOffset for neutrons, use in MVT positioning, might need to do it after MVT
     const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, oldNucleonCount: number, particleShellPositions: ParticleShellPosition[][] ) => {
       const currentNucleonCount = particleArray.length;
       let nucleonIndex = 0;
