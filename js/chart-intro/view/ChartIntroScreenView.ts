@@ -113,9 +113,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // add energy level node
-    const protonEnergyLevelNode = new NucleonShellView( model.particleAtom, { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
+    const protonEnergyLevelNode = new NucleonShellView( model.particleAtom.protonShellPositions,
+      { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
     this.addChild( protonEnergyLevelNode );
-    const neutronEnergyLevelNode = new NucleonShellView( model.particleAtom, { x: this.doubleArrowButtons.right, y: arrow.top + 20 } );
+    const neutronEnergyLevelNode = new NucleonShellView( model.particleAtom.neutronShellPositions,
+      { x: this.protonArrowButtons.left + BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, y: arrow.top + 20 } );
     this.addChild( neutronEnergyLevelNode );
 
     const nuclideChartNode = new NuclideChartNode( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );

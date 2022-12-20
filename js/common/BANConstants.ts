@@ -55,7 +55,10 @@ const BANConstants = {
 
   // center of the atom
   SCREEN_VIEW_ATOM_CENTER_X: 335,
-  SCREEN_VIEW_ATOM_CENTER_Y: 339
+  SCREEN_VIEW_ATOM_CENTER_Y: 339,
+
+  // the x distance between the left side of the nucleon energy levels
+  X_DISTANCE_BETWEEN_ENERGY_LEVELS: 270
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

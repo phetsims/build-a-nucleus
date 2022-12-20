@@ -61,7 +61,8 @@ class ParticleNucleus extends ParticleAtom {
 
     // fill all nucleons in open positions from bottom to top, left to right
     // TODO: pass in xOffset for neutrons, use in MVT positioning, might need to do it after MVT
-    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, oldNucleonCount: number, particleShellPositions: ParticleShellPosition[][] ) => {
+    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, oldNucleonCount: number,
+                                     particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
       const currentNucleonCount = particleArray.length;
       let nucleonIndex = 0;
       if ( currentNucleonCount !== oldNucleonCount ) {
@@ -69,8 +70,9 @@ class ParticleNucleus extends ParticleAtom {
           nucleonShellPositions.forEach( nucleonShellPosition => {
             if ( nucleonIndex < currentNucleonCount ) {
               nucleonShellPosition.particle = particleArray[ nucleonIndex ];
-              nucleonShellPosition.particle.setPositionAndDestination(
-                this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition ) );
+              const viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+              viewDestination.addXY( xOffset, 0 );
+              nucleonShellPosition.particle.setPositionAndDestination( viewDestination );
               nucleonIndex++;
             }
             else {
@@ -99,8 +101,8 @@ class ParticleNucleus extends ParticleAtom {
       } );
     } );
 
-    updateNucleonPositions( this.protons, oldProtonCount, this.protonShellPositions );
-    updateNucleonPositions( this.neutrons, oldNeutronCount, this.neutronShellPositions );
+    updateNucleonPositions( this.protons, oldProtonCount, this.protonShellPositions, 0 );
+    updateNucleonPositions( this.neutrons, oldNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
   }
 }
 
