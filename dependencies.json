@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "9b363c0427096721506db548d2f031d8f39e86ae",
+    "sha": "c8a1b8cdbb1644bc92848af05770b58f6a53a73d",
     "branch": "1.0"
   },
   "build-an-atom": {
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "70f5a00b3dcdc6409a28fe6d4ea64f38504a6f61",
+    "sha": "a610ebeb840c54ed4aae45adfd5448ae5ceecac5",
     "branch": "HEAD"
   },
   "scenery-phet": {
