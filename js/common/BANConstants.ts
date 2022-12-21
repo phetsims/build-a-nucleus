@@ -10,6 +10,10 @@ import buildANucleus from '../buildANucleus.js';
 import { Color } from '../../../scenery/js/imports.js';
 import ShredConstants from '../../../shred/js/ShredConstants.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
+import Bounds2 from '../../../dot/js/Bounds2.js';
+
+const PARTICLE_RADIUS = ShredConstants.NUCLEON_RADIUS;
 
 const BANConstants = {
 
@@ -17,7 +21,7 @@ const BANConstants = {
   SCREEN_VIEW_Y_MARGIN: 15,
 
   // radius of the particle node used on the NucleonCountPanel and AvailableDecaysPanel
-  PARTICLE_RADIUS: ShredConstants.NUCLEON_RADIUS,
+  PARTICLE_RADIUS: PARTICLE_RADIUS,
 
   // CSS pixels per second
   PARTICLE_ANIMATION_SPEED: 300,
@@ -58,7 +62,11 @@ const BANConstants = {
   SCREEN_VIEW_ATOM_CENTER_Y: 339,
 
   // the x distance between the left side of the nucleon energy levels
-  X_DISTANCE_BETWEEN_ENERGY_LEVELS: 270
+  X_DISTANCE_BETWEEN_ENERGY_LEVELS: 270,
+
+  // the MVT that places nucleons in their individual array positions
+  NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
+    new Bounds2( 0, 0, ( PARTICLE_RADIUS * 2 ) * 6, ( PARTICLE_RADIUS * 2 ) * 10 ) )
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

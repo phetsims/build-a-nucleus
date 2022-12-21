@@ -9,7 +9,6 @@
 import { Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 
@@ -25,10 +24,7 @@ class NucleonShellView extends Node {
   public constructor( nucleonShellPositions: ParticleShellPosition[][], providedOptions: EnergyLevelNodeOptions ) {
     super( providedOptions );
 
-    const particleLength = BANConstants.PARTICLE_RADIUS * 2;
-
-    this.modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
-      new Bounds2( 0, 0, ( particleLength * 6 ) + BANConstants.PARTICLE_RADIUS, 200 ) );
+    this.modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
     // create and add the nucleon energy levels
     const energyLevels: Line[] = [];

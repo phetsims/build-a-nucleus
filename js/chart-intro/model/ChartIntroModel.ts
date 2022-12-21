@@ -11,6 +11,8 @@ import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import ParticleNucleus from './ParticleNucleus.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import ParticleType from '../../common/view/ParticleType.js';
 
 // types
 export type NuclideChartIntroModelOptions = BANModelOptions;
@@ -34,6 +36,10 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     this.particleNucleus = particleAtom;
 
+  }
+
+  public override getParticleDestination( particleType: ParticleType ): Vector2 {
+    return this.particleNucleus.getParticleDestination( particleType );
   }
 
   public override reset(): void {

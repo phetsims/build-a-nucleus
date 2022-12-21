@@ -1,12 +1,13 @@
 // Copyright 2022, University of Colorado Boulder
 
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
+import ParticleType from '../../common/view/ParticleType.js';
 
 /**
  * A model element that represents a nucleus that is made up of protons and neutrons. This model element
@@ -37,9 +38,7 @@ class ParticleNucleus extends ParticleAtom {
   public constructor() {
     super();
 
-    const particleWidth = BANConstants.PARTICLE_RADIUS * 2;
-    this.modelViewTransform = ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
-      new Bounds2( 0, 0, particleWidth * 6, particleWidth * 8 ) );
+    this.modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
     // Initialize the positions where a nucleon can be placed.
     this.protonShellPositions = [
@@ -57,10 +56,39 @@ class ParticleNucleus extends ParticleAtom {
     }
   }
 
+  /**
+   * Return the view destination of the next open position for the given particleType shell positions.
+   */
+  public getParticleDestination( particleType: ParticleType ): Vector2 {
+    const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
+    let yPosition = 0;
+
+    const openNucleonShellPositions = nucleonShellPositions.map( particleShellRow => {
+
+      // remove any empty particleShellPosition's from particleShellRow
+      const noEmptyPositions = particleShellRow.filter( particleShellPosition => particleShellPosition !== undefined );
+
+      // get the first open shell position in this particleShellRow
+      return noEmptyPositions.find( particleShellPosition => particleShellPosition.particle === null );
+    } );
+
+    // get the first open shell position available from all rows
+    const openParticleShellPosition = openNucleonShellPositions.find( ( particleShellPosition, index ) => {
+      yPosition = index;
+      return particleShellPosition !== undefined;
+    } );
+
+    assert && assert( openParticleShellPosition !== undefined, 'To add a particle there must be an empty particleShellPosition.' );
+
+    // @ts-expect-error openParticleShellPosition should never be undefined
+    const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition.xPosition, yPosition );
+    viewDestination.addXY( particleType === ParticleType.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
+    return viewDestination;
+  }
+
   public override reconfigureNucleus(): void {
 
     // fill all nucleons in open positions from bottom to top, left to right
-    // TODO: pass in xOffset for neutrons, use in MVT positioning, might need to do it after MVT
     const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, oldNucleonCount: number,
                                      particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
       const currentNucleonCount = particleArray.length;

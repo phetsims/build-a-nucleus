@@ -373,8 +373,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
-    this.protonsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.protonsCreatorNode.center );
-    this.neutronsCreatorNodeModelCenter = this.modelViewTransform.viewToModelPosition( this.neutronsCreatorNode.center );
+    this.protonsCreatorNodeModelCenter = options.particleViewMVT.viewToModelPosition( this.protonsCreatorNode.center );
+    this.neutronsCreatorNodeModelCenter = options.particleViewMVT.viewToModelPosition( this.neutronsCreatorNode.center );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -635,7 +635,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particle.setPositionAndDestination( origin );
 
     // send the particle the center of the particleAtom and add it to the model
-    particle.destinationProperty.value = this.model.particleAtom.positionProperty.value;
+    particle.destinationProperty.value = this.model.getParticleDestination( particleType );
     this.model.addParticle( particle );
 
     // don't let the particle be clicked until it reaches the particleAtom

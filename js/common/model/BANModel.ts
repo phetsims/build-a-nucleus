@@ -22,6 +22,7 @@ import Range from '../../../../dot/js/Range.js';
 import ParticleType from '../view/ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // types
 export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -109,6 +110,13 @@ class BANModel<T extends ParticleAtom> {
 
     // reconfigure the nucleus when the massNumber changes
     this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
+  }
+
+  /**
+   * Return the destination of a particle when it's added to the particle atom
+   */
+  public getParticleDestination( particleType: ParticleType ): Vector2 {
+    return this.particleAtom.positionProperty.value;
   }
 
   /**
