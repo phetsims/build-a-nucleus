@@ -99,7 +99,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly neutronArrowButtons: Node;
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
-  private readonly particleViewMVT: ModelViewTransform2;
+  protected readonly particleViewMVT: ModelViewTransform2;
 
   protected constructor( model: M, modelViewTransform: ModelViewTransform2, providedOptions?: BANScreenViewOptions ) {
 
@@ -904,7 +904,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // only animate the removal of a nucleon if it was dragged out of the creator node
     else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveParticle( nucleon, this.modelViewTransform.viewToModelPosition( particleCreatorNodeCenter ) );
+      this.animateAndRemoveParticle( nucleon, this.particleViewMVT.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 

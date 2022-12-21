@@ -32,6 +32,8 @@ export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   private readonly periodicTableAndIsotopeSymbol: PeriodicTableAndIsotopeSymbol;
+  private readonly protonEnergyLevelNode: NucleonShellView;
+  private readonly neutronEnergyLevelNode: NucleonShellView;
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
@@ -113,12 +115,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // add energy level node
-    const protonEnergyLevelNode = new NucleonShellView( model.particleAtom.protonShellPositions,
+    this.protonEnergyLevelNode = new NucleonShellView( model.particleAtom.protonShellPositions,
       { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
-    this.addChild( protonEnergyLevelNode );
-    const neutronEnergyLevelNode = new NucleonShellView( model.particleAtom.neutronShellPositions,
+    this.addChild( this.protonEnergyLevelNode );
+    this.neutronEnergyLevelNode = new NucleonShellView( model.particleAtom.neutronShellPositions,
       { x: this.protonArrowButtons.left + BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, y: arrow.top + 20 } );
-    this.addChild( neutronEnergyLevelNode );
+    this.addChild( this.neutronEnergyLevelNode );
 
     const nuclideChartNode = new NuclideChartNode( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );
     const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartNode, {
@@ -156,13 +158,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Returns whether the nucleon is within a rectangular capture radius defined by the left edge of the proton arrow
    * buttons, the right edge of the neutron arrow buttons, below the periodic table, and above the arrow buttons.
    */
-  // TODO: create Energy 'play area' node that would define bounds of capture area
   protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
-    const nucleonViewPosition = this.modelViewTransform.modelToViewPosition( nucleon.positionProperty.value );
-    return nucleonViewPosition.y < ( this.doubleArrowButtons.top - 30 ) && // capture area is a bit above arrow buttons
-           nucleonViewPosition.y > this.periodicTableAndIsotopeSymbol.bottom &&
-           nucleonViewPosition.x > this.protonArrowButtons.left &&
-           nucleonViewPosition.x < this.neutronArrowButtons.right;
+    const nucleonViewPosition = this.particleViewMVT.modelToViewPosition( nucleon.positionProperty.value );
+    return this.protonEnergyLevelNode.boundsProperty.value.containsPoint( nucleonViewPosition ) ||
+           this.neutronEnergyLevelNode.boundsProperty.value.containsPoint( nucleonViewPosition );
   }
 }
 
