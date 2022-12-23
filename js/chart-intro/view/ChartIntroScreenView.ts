@@ -37,14 +37,18 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
+    // mini-atom center
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       Vector2.ZERO,
-      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 388 ),
+      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ),
       1.0 );
 
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
-      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, new Vector2( 140, 388 ), 1.0 ), // bottom left corner of proton energy levels
+      // centers particle atoms on energy levels
+      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO,
+        new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ), 1.0 ), // top left corner of proton energy levels
+
       // phet-io options
       tandem: Tandem.REQUIRED
     }, providedOptions );
@@ -160,8 +164,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    */
   protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
     const nucleonViewPosition = this.particleViewMVT.modelToViewPosition( nucleon.positionProperty.value );
-    return this.protonEnergyLevelNode.boundsProperty.value.containsPoint( nucleonViewPosition ) ||
-           this.neutronEnergyLevelNode.boundsProperty.value.containsPoint( nucleonViewPosition );
+    return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition ) ||
+           this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition );
   }
 }
 
