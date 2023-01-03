@@ -108,6 +108,7 @@ class BANModel<T extends ParticleAtom> {
       ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount )
     );
 
+    // TODO: this might be causing bugs since it's being called twice
     // reconfigure the nucleus when the massNumber changes
     this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
   }
