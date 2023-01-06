@@ -41,6 +41,8 @@ class ParticleNucleus extends ParticleAtom {
   public readonly neutronShellPositions: ParticleShellPosition[][];
 
   public modelViewTransform: ModelViewTransform2;
+  public incomingProtonsNumber: number;
+  public incomingNeutronsNumber: number;
 
   public constructor() {
     super();
@@ -63,12 +65,15 @@ class ParticleNucleus extends ParticleAtom {
         this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = neutronShellPosition;
       }
     }
+
+    this.incomingProtonsNumber = 0;
+    this.incomingNeutronsNumber = 0;
   }
 
   /**
    * Return the view destination of the next open position for the given particleType shell positions.
    */
-  public getParticleDestination( particleType: ParticleType ): Vector2 {
+  public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
     let yPosition = 0;
 
@@ -89,6 +94,7 @@ class ParticleNucleus extends ParticleAtom {
 
     assert && assert( openParticleShellPosition !== undefined, 'To add a particle there must be an empty particleShellPosition.' );
 
+    openParticleShellPosition!.particle = particle;
     // @ts-expect-error openParticleShellPosition should never be undefined
     const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition.xPosition, yPosition );
     viewDestination.addXY( particleType === ParticleType.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
@@ -98,9 +104,9 @@ class ParticleNucleus extends ParticleAtom {
   public override reconfigureNucleus(): void {
 
     // fill all nucleons in open positions from bottom to top, left to right
-    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, oldNucleonCount: number,
+    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, incomingNucleonsNumber: number, oldNucleonCount: number,
                                      particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
-      const currentNucleonCount = particleArray.length;
+      const currentNucleonCount = particleArray.length;// + incomingNucleonsNumber
       let nucleonIndex = 0;
       if ( currentNucleonCount !== oldNucleonCount ) {
         particleShellPositions.forEach( ( nucleonShellPositions, yPosition ) => {
@@ -138,10 +144,8 @@ class ParticleNucleus extends ParticleAtom {
       } );
     } );
 
-    updateNucleonPositions( this.protons, oldProtonCount, this.protonShellPositions, 0 );
-    //debugger;
-    updateNucleonPositions( this.neutrons, oldNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
-   // debugger;
+    updateNucleonPositions( this.protons, this.incomingProtonsNumber, oldProtonCount, this.protonShellPositions, 0 );
+    updateNucleonPositions( this.neutrons, this.incomingNeutronsNumber, oldNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
   }
 }
 

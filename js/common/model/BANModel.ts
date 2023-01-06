@@ -110,13 +110,13 @@ class BANModel<T extends ParticleAtom> {
 
     // TODO: this might be causing bugs since it's being called twice
     // reconfigure the nucleus when the massNumber changes
-    this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
+    this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus( ) );
   }
 
   /**
    * Return the destination of a particle when it's added to the particle atom
    */
-  public getParticleDestination( particleType: ParticleType ): Vector2 {
+  public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     return this.particleAtom.positionProperty.value;
   }
 

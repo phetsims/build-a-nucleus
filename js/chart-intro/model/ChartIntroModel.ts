@@ -13,6 +13,7 @@ import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
 import ParticleNucleus from './ParticleNucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ParticleType from '../../common/view/ParticleType.js';
+import Particle from '../../../../shred/js/model/Particle.js';
 
 // types
 export type NuclideChartIntroModelOptions = BANModelOptions;
@@ -36,10 +37,13 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     this.particleNucleus = particleAtom;
 
+    this.incomingProtons.lengthProperty.link( incomingProtonsNumber => { this.particleNucleus.incomingProtonsNumber = incomingProtonsNumber; } );
+    this.incomingNeutrons.lengthProperty.link( incomingNeutronsNumber => { this.particleNucleus.incomingNeutronsNumber = incomingNeutronsNumber; } );
+
   }
 
-  public override getParticleDestination( particleType: ParticleType ): Vector2 {
-    return this.particleNucleus.getParticleDestination( particleType );
+  public override getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
+    return this.particleNucleus.getParticleDestination( particleType, particle );
   }
 
   public override reset(): void {

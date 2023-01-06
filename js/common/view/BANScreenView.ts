@@ -635,7 +635,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particle.setPositionAndDestination( origin );
 
     // send the particle the center of the particleAtom and add it to the model
-    particle.destinationProperty.value = this.model.getParticleDestination( particleType );
+    particle.destinationProperty.value = this.model.getParticleDestination( particleType, particle );
     this.model.addParticle( particle );
 
     // don't let the particle be clicked until it reaches the particleAtom
