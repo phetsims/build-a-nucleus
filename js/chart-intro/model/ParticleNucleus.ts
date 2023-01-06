@@ -24,6 +24,8 @@ type ParticleShellPosition = {
 };
 
 // constants
+
+// row is yPosition, number is xPosition
 const ALLOWED_PARTICLE_POSITIONS = [
   [ 2, 3 ],
   [ 0, 1, 2, 3, 4, 5 ],
@@ -32,8 +34,12 @@ const ALLOWED_PARTICLE_POSITIONS = [
 
 class ParticleNucleus extends ParticleAtom {
 
+  // allowed proton positions
   public readonly protonShellPositions: ParticleShellPosition[][];
+
+  // allowed neutron positions
   public readonly neutronShellPositions: ParticleShellPosition[][];
+
   public modelViewTransform: ModelViewTransform2;
 
   public constructor() {
@@ -133,7 +139,9 @@ class ParticleNucleus extends ParticleAtom {
     } );
 
     updateNucleonPositions( this.protons, oldProtonCount, this.protonShellPositions, 0 );
+    //debugger;
     updateNucleonPositions( this.neutrons, oldNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
+   // debugger;
   }
 }
 
