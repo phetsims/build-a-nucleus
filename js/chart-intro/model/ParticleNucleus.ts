@@ -20,6 +20,7 @@ import ParticleType from '../../common/view/ParticleType.js';
 type ParticleShellPosition = {
   particle: Particle | null;
   xPosition: number; // 0 - 5
+  type: ParticleType;
 };
 
 // constants
@@ -50,8 +51,10 @@ class ParticleNucleus extends ParticleAtom {
     for ( let i = 0; i < ALLOWED_PARTICLE_POSITIONS.length; i++ ) {
       for ( let j = 0; j < ALLOWED_PARTICLE_POSITIONS[ i ].length; j++ ) {
         const shellPosition = { particle: null, xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ] };
-        this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = shellPosition;
-        this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = shellPosition;
+        const protonShellPosition = { ...shellPosition, type: ParticleType.PROTON };
+        const neutronShellPosition = { ...shellPosition, type: ParticleType.NEUTRON };
+        this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = protonShellPosition;
+        this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = neutronShellPosition;
       }
     }
   }
