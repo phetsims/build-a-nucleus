@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
