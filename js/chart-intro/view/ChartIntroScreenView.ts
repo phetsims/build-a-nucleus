@@ -6,7 +6,6 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import ChartIntroModel from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -47,10 +46,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
       // centers particle atoms on energy levels
       particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO,
-        new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ), 1.0 ), // top left corner of proton energy levels
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
+        new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ), 1.0 ) // top left corner of proton energy levels
     }, providedOptions );
 
     super( model, modelViewTransform, options );

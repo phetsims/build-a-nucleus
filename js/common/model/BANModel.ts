@@ -6,7 +6,6 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -66,11 +65,7 @@ class BANModel<T extends ParticleAtom> {
   protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T,
                          providedOptions?: BANModelOptions ) {
 
-    const options = optionize<BANModelOptions, EmptySelfOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+    const options = optionize<BANModelOptions, EmptySelfOptions>()( {}, providedOptions );
 
     console.log( options.tandem );
 
@@ -110,7 +105,7 @@ class BANModel<T extends ParticleAtom> {
 
     // TODO: this might be causing bugs since it's being called twice
     // reconfigure the nucleus when the massNumber changes
-    this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus( ) );
+    this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
   }
 
   /**

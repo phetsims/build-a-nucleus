@@ -6,7 +6,6 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
@@ -34,11 +33,7 @@ class DecayModel extends BANModel<ParticleAtom> {
 
   public constructor( providedOptions?: DecayModelOptions ) {
 
-    const options = optionize<DecayModelOptions, EmptySelfOptions, BANModelOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+    const options = optionize<DecayModelOptions, EmptySelfOptions, BANModelOptions>()( {}, providedOptions );
 
     const particleAtom = new ParticleAtom();
 

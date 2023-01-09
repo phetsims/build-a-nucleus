@@ -6,7 +6,6 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -62,11 +61,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), // the center of the atom node
       1.0 );
 
-    const options = optionize<DecayScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+    const options = optionize<DecayScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {}, providedOptions );
 
     super( model, modelViewTransform, options );
 

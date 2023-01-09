@@ -6,7 +6,6 @@
  * @author Luisa Vargas
  */
 
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
@@ -24,11 +23,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public constructor( providedOptions?: NuclideChartIntroModelOptions ) {
 
-    const options = optionize<NuclideChartIntroModelOptions, EmptySelfOptions, BANModelOptions>()( {
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
-    }, providedOptions );
+    const options = optionize<NuclideChartIntroModelOptions, EmptySelfOptions, BANModelOptions>()( {}, providedOptions );
 
      const particleAtom = new ParticleNucleus(); // this is our ground truth 'atom'
 

@@ -8,7 +8,6 @@
 
 import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
@@ -105,10 +104,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      particleViewMVT: modelViewTransform,
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
+      particleViewMVT: modelViewTransform
     }, providedOptions );
 
     super( options );

@@ -7,7 +7,6 @@
  */
 
 import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
 import BANColors from '../common/BANColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
@@ -27,10 +26,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       name: BuildANucleusStrings.decayStringProperty,
 
-      backgroundColorProperty: BANColors.screenBackgroundColorProperty,
-
-      // phet-io options
-      tandem: Tandem.REQUIRED
+      backgroundColorProperty: BANColors.screenBackgroundColorProperty
     }, providedOptions );
 
     super(
