@@ -106,7 +106,7 @@ class ParticleNucleus extends ParticleAtom {
     // fill all nucleons in open positions from bottom to top, left to right
     const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, incomingNucleonsNumber: number, oldNucleonCount: number,
                                      particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
-      const currentNucleonCount = particleArray.length;// + incomingNucleonsNumber
+      const currentNucleonCount = particleArray.length + incomingNucleonsNumber;// +
       let nucleonIndex = 0;
       if ( currentNucleonCount !== oldNucleonCount ) {
         particleShellPositions.forEach( ( nucleonShellPositions, yPosition ) => {

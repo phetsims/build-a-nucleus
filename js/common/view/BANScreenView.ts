@@ -646,9 +646,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // add the particle to the particleAtom once it reaches the center of the particleAtom and allow it to be clicked
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
-        this.model.particleAtom.addParticle( particle );
-        particleView.inputEnabled = true;
 
+        // must remove incoming particles before adding it to particleAtom so incoming count is accurate
         if ( particleType === ParticleType.PROTON ) {
           arrayRemove( this.model.incomingProtons, particle );
         }
@@ -656,6 +655,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
           arrayRemove( this.model.incomingNeutrons, particle );
         }
 
+        this.model.particleAtom.addParticle( particle );
+        particleView.inputEnabled = true;
         particle.animationEndedEmitter.removeAllListeners();
       }
     } );
