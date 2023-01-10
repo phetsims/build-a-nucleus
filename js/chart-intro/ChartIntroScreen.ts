@@ -12,11 +12,10 @@ import BANColors from '../common/BANColors.js';
 import ChartIntroModel from '../chart-intro/model/ChartIntroModel.js';
 import ChartIntroScreenView from '../chart-intro/view/ChartIntroScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
 
 // types
-export type NuclideChartIntroScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
+export type NuclideChartIntroScreenOptions = ScreenOptions;
 
 class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
@@ -30,8 +29,8 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
     }, providedOptions );
 
     super(
-      () => new ChartIntroModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new ChartIntroScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      () => new ChartIntroModel(),
+      model => new ChartIntroScreenView( model ),
       options
     );
   }

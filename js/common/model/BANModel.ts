@@ -7,10 +7,7 @@
  */
 
 import buildANucleus from '../../buildANucleus.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
@@ -22,9 +19,6 @@ import ParticleType from '../view/ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-
-// types
-export type BANModelOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 
 class BANModel<T extends ParticleAtom> {
 
@@ -62,12 +56,7 @@ class BANModel<T extends ParticleAtom> {
   // array of all emitted particles
   public readonly outgoingParticles: ObservableArray<Particle>;
 
-  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T,
-                         providedOptions?: BANModelOptions ) {
-
-    const options = optionize<BANModelOptions, EmptySelfOptions>()( {}, providedOptions );
-
-    console.log( options.tandem );
+  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T ) {
 
     // Create the atom
     this.particleAtom = particleAtom;

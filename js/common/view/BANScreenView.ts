@@ -17,7 +17,6 @@ import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, RadialGr
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -49,7 +48,7 @@ const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles
 type SelfOptions = {
   particleViewMVT?: ModelViewTransform2;
 };
-export type BANScreenViewOptions = SelfOptions & WithRequired<ScreenViewOptions, 'tandem'>;
+export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
 export type ParticleViewMap = Record<number, ParticleView>;
 
 type ParticleTypeInfo = {
@@ -379,8 +378,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.reset();
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
-      bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN,
-      tandem: options.tandem.createTandem( 'resetAllButton' )
+      bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
     } );
     this.addChild( this.resetAllButton );
 

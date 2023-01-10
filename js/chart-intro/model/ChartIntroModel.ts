@@ -7,28 +7,22 @@
  */
 
 import buildANucleus from '../../buildANucleus.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANModel, { BANModelOptions } from '../../common/model/BANModel.js';
+import BANModel from '../../common/model/BANModel.js';
 import ParticleNucleus from './ParticleNucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 
-// types
-export type NuclideChartIntroModelOptions = BANModelOptions;
-
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public particleNucleus: ParticleNucleus;
 
-  public constructor( providedOptions?: NuclideChartIntroModelOptions ) {
+  public constructor() {
 
-    const options = optionize<NuclideChartIntroModelOptions, EmptySelfOptions, BANModelOptions>()( {}, providedOptions );
-
-     const particleAtom = new ParticleNucleus(); // this is our ground truth 'atom'
+    const particleAtom = new ParticleNucleus(); // this is our ground truth 'atom'
 
     // empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons)
-    super( 10, 12, particleAtom, options );
+    super( 10, 12, particleAtom );
 
     this.particleNucleus = particleAtom;
 

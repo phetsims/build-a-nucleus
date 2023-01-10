@@ -12,11 +12,11 @@ import BANColors from '../common/BANColors.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 
 // types
-export type DecayScreenOptions = ScreenOptions & PickRequired<ScreenOptions, 'tandem'>;
+export type DecayScreenOptions = ScreenOptions;
 
 class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
@@ -30,8 +30,8 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
     }, providedOptions );
 
     super(
-      () => new DecayModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new DecayScreenView( model, { tandem: options.tandem.createTandem( 'view' ), preventFit: true } ),
+      () => new DecayModel(),
+      model => new DecayScreenView( model, { preventFit: true, tandem: Tandem.OPT_OUT } ),
       options
     );
   }
