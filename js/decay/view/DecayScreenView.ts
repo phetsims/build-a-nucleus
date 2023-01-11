@@ -267,7 +267,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist, this.stabilityIndicator.centerX )
     );
 
-    // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to shown it when there's
+    // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to show it when there's
     // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the
     // atomNode center. However, if the electronCloud is showing, then only show the emptyAtomCircle when there are zero
     // nucleons
