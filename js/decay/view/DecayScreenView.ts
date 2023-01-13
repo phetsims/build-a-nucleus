@@ -309,7 +309,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the alpha particle node
     const alphaParticle = new ParticleAtom();
-    const alphaParticleNode = new AtomNode( alphaParticle, this.modelViewTransform, {
+
+    // pass in empty model view transform because none of the MVT functionality in AtomNode is used
+    const alphaParticleNode = new AtomNode( alphaParticle, ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, Vector2.ZERO, 1 ), {
       showCenterX: false,
       showElementNameProperty: new BooleanProperty( false ),
       showNeutralOrIonProperty: new BooleanProperty( false ),
