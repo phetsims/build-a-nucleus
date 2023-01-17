@@ -24,6 +24,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import NuclideChartNode from './NuclideChartNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import NucleonShellView from './NucleonShellView.js';
+import ParticleType from '../../common/view/ParticleType.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -115,11 +116,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // add energy level node
-    this.protonEnergyLevelNode = new NucleonShellView( model.particleAtom.protonShellPositions,
-      { x: this.protonArrowButtons.left, y: arrow.top + 20 } );
+    this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
+      model.particleAtom.protonCountProperty,
+      { x: this.protonArrowButtons.left, y: arrow.top + 20 }
+    );
     this.addChild( this.protonEnergyLevelNode );
-    this.neutronEnergyLevelNode = new NucleonShellView( model.particleAtom.neutronShellPositions,
-      { x: this.protonArrowButtons.left + BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, y: arrow.top + 20 } );
+    this.neutronEnergyLevelNode = new NucleonShellView( ParticleType.NEUTRON, model.particleAtom.neutronShellPositions,
+      model.particleAtom.neutronCountProperty,
+      { x: this.protonArrowButtons.left + BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, y: arrow.top + 20 }
+    );
     this.addChild( this.neutronEnergyLevelNode );
 
     const nuclideChartNode = new NuclideChartNode( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );
