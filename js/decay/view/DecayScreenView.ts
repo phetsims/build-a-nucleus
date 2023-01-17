@@ -447,7 +447,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         dotRandom.nextDoubleBetween( destinationBounds.minY, destinationBounds.maxY ) );
     }
 
-    return this.modelViewTransform.viewToModelPosition( randomVector );
+    return randomVector.minus( new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ) );
   }
 
   /**
