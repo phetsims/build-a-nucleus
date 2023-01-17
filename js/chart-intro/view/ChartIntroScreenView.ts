@@ -37,12 +37,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
-    // mini-atom center
-    const modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
-      Vector2.ZERO,
-      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ),
-      1.0 );
-
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
       // centers particle atoms on energy levels
@@ -50,7 +44,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ), 1.0 ) // top left corner of proton energy levels
     }, providedOptions );
 
-    super( model, modelViewTransform, options );
+    super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options );
 
     this.model = model;
 

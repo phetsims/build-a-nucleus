@@ -69,7 +69,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   private timeSinceCountdownStarted: number;
   private previousProtonCount: number;
   private previousNeutronCount: number;
-  public modelViewTransform: ModelViewTransform2;
   public readonly resetAllButton: Node;
   public readonly nucleonCountPanel: Node;
   protected readonly electronCloud: Circle;
@@ -98,12 +97,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
   protected readonly particleViewMVT: ModelViewTransform2;
+  private atomCenter: Vector2;
 
-  protected constructor( model: M, modelViewTransform: ModelViewTransform2, providedOptions?: BANScreenViewOptions ) {
+  protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
 
     const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      particleViewMVT: modelViewTransform
+      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, atomCenter, 1 )
     }, providedOptions );
 
     super( options );
@@ -114,7 +114,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.previousProtonCount = 0;
     this.previousNeutronCount = 0;
 
-    this.modelViewTransform = modelViewTransform;
+    this.atomCenter = atomCenter;
 
     this.particleViewMap = {};
 
@@ -269,7 +269,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       spacing: arrowButtonSpacing
     } );
     doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    doubleArrowButtons.centerX = this.modelViewTransform.modelToViewX( model.particleAtom.positionProperty.value.x );
+    doubleArrowButtons.centerX = this.atomCenter.x;
     this.addChild( doubleArrowButtons );
 
     // functions to create the listeners that create or remove a particle
@@ -340,7 +340,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
         .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
     } );
-    this.electronCloud.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
+    this.electronCloud.center = this.atomCenter;
     this.addChild( this.electronCloud );
 
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
@@ -459,11 +459,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       lineDash: [ 2, 2 ],
       lineWidth: lineWidth
     } );
-    this.emptyAtomCircle.center = this.modelViewTransform.modelToViewPosition( model.particleAtom.positionProperty.value );
+    this.emptyAtomCircle.center = this.atomCenter;
     this.addChild( this.emptyAtomCircle );
 
     // create and add the AtomNode
-    this.atomNode = new AtomNode( model.particleAtom, this.modelViewTransform, {
+    this.atomNode = new AtomNode( model.particleAtom, ModelViewTransform2.createIdentity(), {
       showCenterX: false,
       showElementNameProperty: new Property( false ),
       showNeutralOrIonProperty: new Property( false ),
@@ -540,8 +540,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.electronCloud.fill = 'transparent';
     }
     else {
-      const radius = this.modelViewTransform.modelToViewDeltaX(
-        this.getElectronShellDiameter( protonCount, minChangedRadius, maxChangedRadius ) / 2 );
+      const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonCount, minChangedRadius, maxChangedRadius ) / 2 );
       this.electronCloud.radius = radius * factor;
       this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
         .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )

@@ -56,14 +56,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
-    const modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
-      Vector2.ZERO,
-      new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), // the center of the atom node
-      1.0 );
-
     const options = optionize<DecayScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {}, providedOptions );
 
-    super( model, modelViewTransform, options );
+    super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), options );
 
     this.model = model;
 
