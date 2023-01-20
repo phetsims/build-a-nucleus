@@ -115,7 +115,9 @@ class ParticleNucleus extends ParticleAtom {
               nucleonShellPosition.particle = particleArray[ nucleonIndex ];
               const viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
               viewDestination.addXY( xOffset, 0 );
-              nucleonShellPosition.particle.setPositionAndDestination( viewDestination );
+              if ( nucleonShellPosition.particle ) {
+                nucleonShellPosition.particle.setPositionAndDestination( viewDestination );
+              }
               nucleonIndex++;
             }
             else {
