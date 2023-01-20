@@ -15,12 +15,12 @@ import ParticleType from './ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
-  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleMVT: ModelViewTransform2 ) {
+  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleViewPositionVector: Vector2 ) {
     super();
 
     const targetNode = new ParticleNode( particleType.name.toLowerCase(), BANConstants.PARTICLE_RADIUS );
@@ -38,7 +38,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
       particle.setPositionAndDestination(
-        particleMVT.viewToModelPosition( viewPosition ).minus( particle.positionProperty.value )
+        viewPosition.minus( particleViewPositionVector ).minus( particle.positionProperty.value )
       );
 
       // Create and start dragging the new particle

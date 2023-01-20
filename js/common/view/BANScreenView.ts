@@ -46,7 +46,7 @@ const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles
 
 // types
 type SelfOptions = {
-  particleViewMVT?: ModelViewTransform2;
+  particleViewPositionVector?: Vector2;
 };
 export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
 export type ParticleViewMap = Record<number, ParticleView>;
@@ -96,19 +96,19 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly neutronArrowButtons: Node;
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
-  protected readonly particleViewMVT: ModelViewTransform2;
-  private atomCenter: Vector2;
+  private readonly atomCenter: Vector2;
+  private particleViewPositionVector: Vector2;
 
   protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
 
     const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, atomCenter, 1 )
+      particleViewPositionVector: atomCenter
     }, providedOptions );
 
     super( options );
 
-    this.particleViewMVT = options.particleViewMVT;
+    this.particleViewPositionVector = options.particleViewPositionVector;
     this.model = model;
     this.timeSinceCountdownStarted = 0;
     this.previousProtonCount = 0;
@@ -357,19 +357,19 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.addChild( neutronsLabel );
 
     // create and add the NucleonCreatorNode for the protons
-    this.protonsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.PROTON, this, options.particleViewMVT );
+    this.protonsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.PROTON, this, options.particleViewPositionVector );
     this.protonsCreatorNode.top = doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
     // create and add the NucleonCreatorNode for the neutrons
-    this.neutronsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.NEUTRON, this, options.particleViewMVT );
+    this.neutronsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.NEUTRON, this, options.particleViewPositionVector );
     this.neutronsCreatorNode.top = doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
-    this.protonsCreatorNodeModelCenter = options.particleViewMVT.viewToModelPosition( this.protonsCreatorNode.center );
-    this.neutronsCreatorNodeModelCenter = options.particleViewMVT.viewToModelPosition( this.neutronsCreatorNode.center );
+    this.protonsCreatorNodeModelCenter = this.protonsCreatorNode.center.minus( options.particleViewPositionVector );
+    this.neutronsCreatorNodeModelCenter = this.neutronsCreatorNode.center.minus( options.particleViewPositionVector );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -414,7 +414,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
-      const particleView = new ParticleView( particle, options.particleViewMVT );
+      const particleView = new ParticleView( particle,
+        ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 ) );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle, particleView );
@@ -898,7 +899,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // only animate the removal of a nucleon if it was dragged out of the creator node
     else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveParticle( nucleon, this.particleViewMVT.viewToModelPosition( particleCreatorNodeCenter ) );
+      this.animateAndRemoveParticle( nucleon, particleCreatorNodeCenter.minus( this.particleViewPositionVector ) );
     }
   }
 

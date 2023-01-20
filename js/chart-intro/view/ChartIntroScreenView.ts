@@ -19,7 +19,6 @@ import { Color, Line, Rectangle, RichText, Text } from '../../../../scenery/js/i
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import NuclideChartNode from './NuclideChartNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
@@ -40,8 +39,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
       // centers particle atoms on energy levels
-      particleViewMVT: ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO,
-        new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ), 1.0 ) // top left corner of proton energy levels
+      particleViewPositionVector: new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
+
     }, providedOptions );
 
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options );
@@ -158,7 +157,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * buttons, the right edge of the neutron arrow buttons, below the periodic table, and above the arrow buttons.
    */
   protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
-    const nucleonViewPosition = this.particleViewMVT.modelToViewPosition( nucleon.positionProperty.value );
+    const nucleonViewPosition = nucleon.positionProperty.value.plus(
+      new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
+    );
     return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition ) ||
            this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition );
   }
