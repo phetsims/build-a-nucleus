@@ -77,7 +77,9 @@ class NucleonShellView extends Node {
     } );
     energyLevels.forEach( energyLevel => this.addChild( energyLevel ) );
 
-    // update the stroke color of the respective energy levels as the nucleon count increases
+    // update the stroke color and width of the respective energy levels as the nucleon count changes
+    const boldEnergyLevelWidth = 1.5;
+    const defaultEnergyLevelWidth = 1;
     const nucleonCountToColorLowerLevel = particleType === ParticleType.PROTON ? protonNumberToColorLowerLevel :
                                           neutronNumberToColorLowerLevel;
     const nucleonCountToColorUpperLevel = particleType === ParticleType.PROTON ? protonNumberToColorUpperLevel :
@@ -85,6 +87,9 @@ class NucleonShellView extends Node {
     nucleonCountProperty.link( nucleonCount => {
       if ( nucleonCount <= 2 ) {
         energyLevels[ 0 ].stroke = nucleonCountToColorLowerLevel[ nucleonCount ];
+
+        // if the energy level is full (2 particles on the lower energy level), double the lineWidth
+        energyLevels[ 0 ].lineWidth = nucleonCount === 2 ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
       else {
         let energyLevelNumber = 1;
@@ -94,6 +99,9 @@ class NucleonShellView extends Node {
         }
         nucleonCount -= 2;
         energyLevels[ energyLevelNumber ].stroke = nucleonCountToColorUpperLevel[ nucleonCount ];
+
+        // if the energy level is full (6 particles on the upper and middle energy levels), double the lineWidth
+        energyLevels[ energyLevelNumber ].lineWidth = nucleonCount === 6 ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
     } );
   }
