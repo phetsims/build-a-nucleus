@@ -97,6 +97,8 @@ class ParticleNucleus extends ParticleAtom {
     openParticleShellPosition!.particle = particle;
     // @ts-expect-error openParticleShellPosition should never be undefined
     const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition.xPosition, yPosition );
+
+    // add x offset for neutron particle to be aligned with its energy level position
     viewDestination.addXY( particleType === ParticleType.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
     return viewDestination;
   }
@@ -106,7 +108,7 @@ class ParticleNucleus extends ParticleAtom {
     // fill all nucleons in open positions from bottom to top, left to right
     const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, incomingNucleonsNumber: number, oldNucleonCount: number,
                                      particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
-      const currentNucleonCount = particleArray.length + incomingNucleonsNumber;// +
+      const currentNucleonCount = particleArray.length + incomingNucleonsNumber;
       let nucleonIndex = 0;
       if ( currentNucleonCount !== oldNucleonCount ) {
         particleShellPositions.forEach( ( nucleonShellPositions, yPosition ) => {
@@ -114,9 +116,11 @@ class ParticleNucleus extends ParticleAtom {
             if ( nucleonIndex < currentNucleonCount ) {
               nucleonShellPosition.particle = particleArray[ nucleonIndex ];
               const viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+
+              // add x offset so neutron particles are aligned with their energy levels
               viewDestination.addXY( xOffset, 0 );
               if ( nucleonShellPosition.particle ) {
-                nucleonShellPosition.particle.setPositionAndDestination( viewDestination );
+                nucleonShellPosition.particle.destinationProperty.set( viewDestination );
               }
               nucleonIndex++;
             }
