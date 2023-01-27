@@ -35,7 +35,7 @@ class NucleonNumberLine extends Node {
       viewWidth: 250,
       modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, 12 ),
       viewHeight: 200,
-      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, 10 ),
+      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, 10 )
     } );
 
     // create and add the tick marks
