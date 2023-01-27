@@ -17,11 +17,10 @@ import Range from '../../../../dot/js/Range.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import BANColors from '../../common/BANColors.js';
+import AxisArrowNode from '../../../../bamboo/js/AxisArrowNode.js';
 
 class NucleonNumberLine extends Node {
 
@@ -31,42 +30,13 @@ class NucleonNumberLine extends Node {
     assert && assert( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON,
       'The particleType should be of type PROTON or NEUTRON. particleType = ' + particleType.name );
 
-    const modelXStartRange = particleType === ParticleType.PROTON ?
-                             BANConstants.DEFAULT_INITIAL_PROTON_COUNT : BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT;
-    const modelXEndRange = particleType === ParticleType.PROTON ? 10 : 12; // TODO: magic numbers or fine?
-    const viewWidth = particleType === ParticleType.PROTON ? 200 : 250;
-    const numberLineLength = new Range( modelXStartRange, modelXEndRange ).getLength();
-    const tickMarkLength = viewWidth / numberLineLength;
-
-    let modelViewTransform: ModelViewTransform2;
-    if ( orientation === Orientation.HORIZONTAL ) {
-      modelViewTransform = ModelViewTransform2.createRectangleMapping(
-        new Bounds2( modelXStartRange, 0, modelXEndRange, 1 ),
-        new Bounds2( 0, 0, viewWidth, tickMarkLength )
-      );
-    }
-    else {
-      modelViewTransform = ModelViewTransform2.createRectangleMapping(
-        new Bounds2( 0, modelXStartRange, 1, modelXEndRange ),
-        new Bounds2( 0, 0, tickMarkLength, viewWidth )
-      );
-    }
-
     const numberLineNode = new Node();
-    let chartTransform: ChartTransform;
-    if ( orientation === Orientation.HORIZONTAL ) {
-      chartTransform = new ChartTransform( {
-        viewWidth: viewWidth,
-        modelXRange: new Range( modelXStartRange, modelXEndRange )
-      } );
-    }
-    else {
-      chartTransform = new ChartTransform( {
-        viewHeight: -viewWidth,
-        modelYRange: new Range( modelXStartRange, modelXEndRange ),
-        modelYRangeInverted: true
-      } );
-    }
+    const chartTransform = new ChartTransform( {
+      viewWidth: 250,
+      modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, 12 ),
+      viewHeight: 200,
+      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, 10 ),
+    } );
 
     // create and add the tick marks
     const tickXSpacing = 1;
@@ -87,12 +57,12 @@ class NucleonNumberLine extends Node {
         if ( axisOrientation === Orientation.HORIZONTAL ) {
 
           // ticks flow horizontally, so tick labels should be below
-          label.centerTop = tickBounds.centerBottom.plusXY( modelViewTransform.modelToViewX( -0.5 ), 1 );
+          label.centerTop = tickBounds.centerBottom.plusXY( chartTransform.modelToViewDeltaX( -0.5 ), 0 );
         }
         else {
 
           // ticks flow vertically, so tick labels should be to the left
-          label.rightCenter = tickBounds.leftCenter.plusXY( -1, modelViewTransform.modelToViewY( 0.5 ) );
+          label.rightCenter = tickBounds.leftCenter.plusXY( 0, chartTransform.modelToViewDeltaY( -0.5 ) );
         }
         return label;
       }
@@ -112,7 +82,7 @@ class NucleonNumberLine extends Node {
 
       // 'highlight' the label with the current particleCount on the tickLabelSet
       particleCountProperty.link( particleCount => {
-        numberHighlightRectangle.x = tickLabelSet.left + ( particleCount * modelViewTransform.modelToViewX( tickXSpacing ) );
+        numberHighlightRectangle.x = tickLabelSet.left + ( particleCount * chartTransform.modelToViewX( tickXSpacing ) );
 
         // for double digits double the width and adjust where the highlight starts
         if ( particleCount > 9 ) {
@@ -126,7 +96,7 @@ class NucleonNumberLine extends Node {
     }
     else {
       particleCountProperty.link( particleCount => {
-        numberHighlightRectangle.bottom = tickLabelSet.bottom - ( particleCount * modelViewTransform.modelToViewX( tickXSpacing ) );
+        numberHighlightRectangle.bottom = tickLabelSet.bottom - ( particleCount * chartTransform.modelToViewX( tickXSpacing ) );
 
         if ( particleCount > 9 ) {
           numberHighlightRectangle.rectWidth = rectWidth * 2;
@@ -140,14 +110,10 @@ class NucleonNumberLine extends Node {
     this.addChild( numberHighlightRectangle );
 
     // create and add the arrow to the number line
-    const tailX = particleType === ParticleType.NEUTRON ? modelViewTransform.modelToViewX( modelXStartRange - 1 ) : tickMarkSet.centerX;
-    const tailY = particleType === ParticleType.NEUTRON ? tickMarkSet.centerY : modelViewTransform.modelToViewY( modelXStartRange + 1 );
-    const tipX = particleType === ParticleType.NEUTRON ? modelViewTransform.modelToViewX( modelXEndRange + 1 ) : tickMarkSet.centerX;
-    const tipY = particleType === ParticleType.NEUTRON ? tickMarkSet.centerY : modelViewTransform.modelToViewY( -( modelXEndRange + 1 ) );
-    const numberLine = new ArrowNode( tailX, tailY, tipX, tipY, {
-      stroke: Color.BLACK,
-      tailWidth: 0.5,
-      headWidth: 5
+    const numberLine = new AxisArrowNode( chartTransform, orientation, {
+      doubleHead: false,
+      tailWidth: 1,
+      headWidth: 7
     } );
     numberLineNode.addChild( numberLine );
     this.addChild( numberLineNode );
