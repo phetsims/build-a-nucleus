@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * Node that represents a number line for nucleons. The current nucleon count is highlighted on the number line.
