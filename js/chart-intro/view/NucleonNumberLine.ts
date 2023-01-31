@@ -6,7 +6,7 @@
  * @author Luisa Vargas
  */
 
-import { Color, Node, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { Color, Node, Text } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
@@ -21,6 +21,8 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import BANColors from '../../common/BANColors.js';
 import AxisArrowNode from '../../../../bamboo/js/AxisArrowNode.js';
+import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 class NucleonNumberLine extends Node {
 
@@ -47,12 +49,25 @@ class NucleonNumberLine extends Node {
     numberLineNode.addChild( tickMarkSet );
 
     // create and add the tick labels
+    const backgroundFillColorProperty = particleType === ParticleType.PROTON ? BANColors.protonColorProperty : BANColors.neutronColorProperty;
     const tickLabelSet = new TickLabelSet( chartTransform, orientation, tickXSpacing, {
       extent: 5,
-      createLabel: ( value: number ) => new Text( value, {
-        fontSize: 12,
-        fill: Color.BLACK
-      } ),
+      createLabel: ( value: number ) => new BackgroundNode( new Text( value, {
+          fontSize: 12,
+          fill: new DerivedProperty( [ particleCountProperty ],
+            particleCount => {
+              return particleCount === value ? Color.WHITE : Color.BLACK;
+            } )
+        } ),
+        {
+          rectangleOptions: {
+            fill: new DerivedProperty( [ particleCountProperty ],
+              particleCount => {
+                return particleCount === value ? backgroundFillColorProperty.value : null;
+              } ),
+            opacity: 1
+          }
+        } ),
       positionLabel: ( label: Node, tickBounds: Bounds2, axisOrientation: Orientation ) => {
         if ( axisOrientation === Orientation.HORIZONTAL ) {
 
@@ -68,46 +83,6 @@ class NucleonNumberLine extends Node {
       }
     } );
     numberLineNode.addChild( tickLabelSet );
-
-    // create and add the rectangle that would highlight the current particle count number on the number line
-    const rectWidth = 8;
-    const numberHighlightRectangle = new Rectangle( {
-      // TODO: base this height and width off of the legend text size
-      rectWidth: rectWidth,
-      rectHeight: 12,
-      fill: particleType === ParticleType.PROTON ? BANColors.protonColorProperty : BANColors.neutronColorProperty
-    } );
-    if ( orientation === Orientation.HORIZONTAL ) {
-      numberHighlightRectangle.centerY = tickLabelSet.centerY;
-
-      // 'highlight' the label with the current particleCount on the tickLabelSet
-      particleCountProperty.link( particleCount => {
-        numberHighlightRectangle.x = tickLabelSet.left + ( particleCount * chartTransform.modelToViewX( tickXSpacing ) );
-
-        // for double digits double the width and adjust where the highlight starts
-        if ( particleCount > 9 ) {
-          numberHighlightRectangle.rectWidth = rectWidth * 2;
-          numberHighlightRectangle.x -= 4;
-        }
-        else {
-          numberHighlightRectangle.rectWidth = rectWidth;
-        }
-      } );
-    }
-    else {
-      particleCountProperty.link( particleCount => {
-        numberHighlightRectangle.bottom = tickLabelSet.bottom - ( particleCount * chartTransform.modelToViewX( tickXSpacing ) );
-
-        if ( particleCount > 9 ) {
-          numberHighlightRectangle.rectWidth = rectWidth * 2;
-        }
-        else {
-          numberHighlightRectangle.rectWidth = rectWidth;
-        }
-        numberHighlightRectangle.right = tickLabelSet.right;
-      } );
-    }
-    this.addChild( numberHighlightRectangle );
 
     // create and add the arrow to the number line
     const numberLine = new AxisArrowNode( chartTransform, orientation, {
