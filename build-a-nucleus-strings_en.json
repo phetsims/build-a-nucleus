@@ -168,7 +168,10 @@
   "partialNuclideChart": {
     "value": "Partial Nuclide Chart"
   },
-  "nucleonNumber": {
-    "value": "{{nucleonType}} Number"
+  "axis.protonNumber": {
+    "value": "Proton Number"
+  },
+  "axis.neutronNumber": {
+    "value": "Neutron Number"
   }
 }

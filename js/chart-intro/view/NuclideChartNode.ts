@@ -14,7 +14,6 @@ import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DecayType from '../../common/view/DecayType.js';
 import NucleonNumberLine from './NucleonNumberLine.js';
-import ParticleType from '../../common/view/ParticleType.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 
@@ -31,11 +30,16 @@ class NuclideChartNode extends Node {
 
     super( providedOptions );
 
-    const protonNumberLine = new NucleonNumberLine( ParticleType.PROTON, protonCountProperty, Orientation.VERTICAL );
-    //protonNumberLine.left = this.left;
+    const protonNumberLine = new NucleonNumberLine( protonCountProperty, Orientation.VERTICAL, {
+      labelHighlightColorProperty: BANColors.protonColorProperty,
+      axisLabel: BuildANucleusStrings.axis.protonNumber
+    } );
     this.addChild( protonNumberLine );
 
-    const neutronNumberLine = new NucleonNumberLine( ParticleType.NEUTRON, neutronCountProperty, Orientation.HORIZONTAL );
+    const neutronNumberLine = new NucleonNumberLine( neutronCountProperty, Orientation.HORIZONTAL, {
+      labelHighlightColorProperty: BANColors.neutronColorProperty,
+      axisLabel: BuildANucleusStrings.axis.neutronNumber
+    } );
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;
     this.addChild( neutronNumberLine );

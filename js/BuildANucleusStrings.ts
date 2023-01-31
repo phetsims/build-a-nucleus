@@ -123,8 +123,12 @@ type StringsType = {
   'nuclearShellModelStringProperty': LinkableProperty<string>;
   'partialNuclideChart': string;
   'partialNuclideChartStringProperty': LinkableProperty<string>;
-  'nucleonNumber': string;
-  'nucleonNumberStringProperty': LinkableProperty<string>;
+  'axis': {
+    'protonNumber': string;
+    'protonNumberStringProperty': LinkableProperty<string>;
+    'neutronNumber': string;
+    'neutronNumberStringProperty': LinkableProperty<string>;
+  }
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

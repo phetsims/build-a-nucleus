@@ -6,11 +6,8 @@
  * @author Luisa Vargas
  */
 
-import { Color, Node, Text } from '../../../../scenery/js/imports.js';
+import { Color, ColorProperty, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import ParticleType from '../../common/view/ParticleType.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import BANConstants from '../../common/BANConstants.js';
 import Range from '../../../../dot/js/Range.js';
@@ -19,18 +16,29 @@ import Orientation from '../../../../phet-core/js/Orientation.js';
 import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import BANColors from '../../common/BANColors.js';
 import AxisArrowNode from '../../../../bamboo/js/AxisArrowNode.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+type SelfOptions = {
+  labelHighlightColorProperty: ColorProperty;
+  axisLabel: string;
+  tickSpacing?: number;
+};
+type NucleonNumberLineOptions = SelfOptions & StrictOmit<NodeOptions, 'children'>;
 
 class NucleonNumberLine extends Node {
 
-  public constructor( particleType: ParticleType, particleCountProperty: TReadOnlyProperty<number>, orientation: Orientation ) {
-    super();
+  public constructor( particleCountProperty: TReadOnlyProperty<number>,
+                      orientation: Orientation, providedOptions: NucleonNumberLineOptions ) {
 
-    assert && assert( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON,
-      'The particleType should be of type PROTON or NEUTRON. particleType = ' + particleType.name );
+    const options = optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
+      tickSpacing: 1
+    }, providedOptions );
+
+    super( options );
 
     const numberLineNode = new Node();
     const chartTransform = new ChartTransform( {
@@ -41,16 +49,14 @@ class NucleonNumberLine extends Node {
     } );
 
     // create and add the tick marks
-    const tickXSpacing = 1;
-    const tickMarkSet = new TickMarkSet( chartTransform, orientation, tickXSpacing, {
+    const tickMarkSet = new TickMarkSet( chartTransform, orientation, options.tickSpacing, {
       stroke: Color.BLACK,
       lineWidth: 2
     } );
     numberLineNode.addChild( tickMarkSet );
 
     // create and add the tick labels
-    const backgroundFillColorProperty = particleType === ParticleType.PROTON ? BANColors.protonColorProperty : BANColors.neutronColorProperty;
-    const tickLabelSet = new TickLabelSet( chartTransform, orientation, tickXSpacing, {
+    const tickLabelSet = new TickLabelSet( chartTransform, orientation, options.tickSpacing, {
       extent: 5,
       createLabel: ( value: number ) => new BackgroundNode( new Text( value, {
           fontSize: 12,
@@ -63,7 +69,7 @@ class NucleonNumberLine extends Node {
           rectangleOptions: {
             fill: new DerivedProperty( [ particleCountProperty ],
               particleCount => {
-                return particleCount === value ? backgroundFillColorProperty.value : null;
+                return particleCount === value ? options.labelHighlightColorProperty.value : null;
               } ),
             opacity: 1
           }
@@ -72,12 +78,12 @@ class NucleonNumberLine extends Node {
         if ( axisOrientation === Orientation.HORIZONTAL ) {
 
           // ticks flow horizontally, so tick labels should be below
-          label.centerTop = tickBounds.centerBottom.plusXY( chartTransform.modelToViewDeltaX( -0.5 ), 0 );
+          label.centerTop = tickBounds.centerBottom.plusXY( chartTransform.modelToViewDeltaX( -options.tickSpacing / 2 ), 0 );
         }
         else {
 
           // ticks flow vertically, so tick labels should be to the left
-          label.rightCenter = tickBounds.leftCenter.plusXY( 0, chartTransform.modelToViewDeltaY( -0.5 ) );
+          label.rightCenter = tickBounds.leftCenter.plusXY( 0, chartTransform.modelToViewDeltaY( -options.tickSpacing / 2 ) );
         }
         return label;
       }
@@ -94,9 +100,7 @@ class NucleonNumberLine extends Node {
     this.addChild( numberLineNode );
 
     // create and add the number line axis label
-    const numberLineLabel = new Text( StringUtils.fillIn( BuildANucleusStrings.nucleonNumber, {
-      nucleonType: particleType.label
-    } ), { fontSize: 12 } );
+    const numberLineLabel = new Text( options.axisLabel, { fontSize: 12 } );
     if ( orientation === Orientation.HORIZONTAL ) {
       numberLineLabel.top = numberLine.bottom + 15;
       numberLineLabel.centerX = numberLine.centerX;
