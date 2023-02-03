@@ -42,7 +42,7 @@ class NucleonNumberLine extends Node {
 
     const numberLineNode = new Node();
     const chartTransform = new ChartTransform( {
-      viewWidth: 250,
+      viewWidth: 240,
       modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, 12 ),
       viewHeight: 200,
       modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, 10 )

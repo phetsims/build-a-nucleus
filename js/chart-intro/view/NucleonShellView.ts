@@ -78,7 +78,7 @@ class NucleonShellView extends Node {
     energyLevels.forEach( energyLevel => this.addChild( energyLevel ) );
 
     // update the stroke color and width of the respective energy levels as the nucleon count changes
-    const boldEnergyLevelWidth = 2;
+    const boldEnergyLevelWidth = 4;
     const defaultEnergyLevelWidth = 1;
     const nucleonCountToColorLowerLevel = particleType === ParticleType.PROTON ? protonNumberToColorLowerLevel :
                                           neutronNumberToColorLowerLevel;
