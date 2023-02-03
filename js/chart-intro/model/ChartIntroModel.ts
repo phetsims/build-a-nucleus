@@ -12,6 +12,7 @@ import ParticleNucleus from './ParticleNucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
+import BANConstants from '../../common/BANConstants.js';
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
@@ -22,7 +23,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     const particleAtom = new ParticleNucleus(); // this is our ground truth 'atom'
 
     // empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons)
-    super( 10, 12, particleAtom );
+    super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.particleNucleus = particleAtom;
 

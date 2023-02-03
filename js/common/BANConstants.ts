@@ -35,11 +35,11 @@ const BANConstants = {
   // half-life number line ending exponent
   HALF_LIFE_NUMBER_LINE_END_EXPONENT: 24,
 
-  // the maximum number of protons
-  MAX_NUMBER_OF_PROTONS: 92,
-
-  // the maximum number of neutrons,
-  MAX_NUMBER_OF_NEUTRONS: 146,
+  // the maximum number of protons and neutrons for each screen
+  DECAY_MAX_NUMBER_OF_PROTONS: 92,
+  DECAY_MAX_NUMBER_OF_NEUTRONS: 146,
+  CHART_MAX_NUMBER_OF_PROTONS: 10,
+  CHART_MAX_NUMBER_OF_NEUTRONS: 12,
 
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
   TIME_TO_SHOW_DOES_NOT_EXIST: 1,

@@ -18,7 +18,7 @@ const BANQueryParameters = QueryStringMachine.getAll( {
     public: true,
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT,
-    isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.MAX_NUMBER_OF_NEUTRONS
+    isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS
   },
 
   // the number of protons in the atom that the sim starts up with
@@ -26,7 +26,7 @@ const BANQueryParameters = QueryStringMachine.getAll( {
     public: true,
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_PROTON_COUNT,
-    isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.MAX_NUMBER_OF_PROTONS
+    isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.DECAY_MAX_NUMBER_OF_PROTONS
   }
 
 } );

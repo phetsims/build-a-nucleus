@@ -16,6 +16,9 @@ import DecayType from '../../common/view/DecayType.js';
 import NucleonNumberLine from './NucleonNumberLine.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
+import BANConstants from '../../common/BANConstants.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import Range from '../../../../dot/js/Range.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
@@ -30,13 +33,21 @@ class NuclideChartNode extends Node {
 
     super( providedOptions );
 
-    const protonNumberLine = new NucleonNumberLine( protonCountProperty, Orientation.VERTICAL, {
+    const scaleFactor = 20;
+    const chartTransform = new ChartTransform( {
+      viewWidth: BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS * scaleFactor,
+      modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ),
+      viewHeight: BANConstants.CHART_MAX_NUMBER_OF_PROTONS * scaleFactor,
+      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
+    } );
+
+    const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,
       axisLabel: BuildANucleusStrings.axis.protonNumber
     } );
     this.addChild( protonNumberLine );
 
-    const neutronNumberLine = new NucleonNumberLine( neutronCountProperty, Orientation.HORIZONTAL, {
+    const neutronNumberLine = new NucleonNumberLine( chartTransform, neutronCountProperty, Orientation.HORIZONTAL, {
       labelHighlightColorProperty: BANColors.neutronColorProperty,
       axisLabel: BuildANucleusStrings.axis.neutronNumber
     } );

@@ -9,8 +9,6 @@
 import { Color, ColorProperty, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import BANConstants from '../../common/BANConstants.js';
-import Range from '../../../../dot/js/Range.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
@@ -31,7 +29,7 @@ type NucleonNumberLineOptions = SelfOptions & StrictOmit<NodeOptions, 'children'
 
 class NucleonNumberLine extends Node {
 
-  public constructor( particleCountProperty: TReadOnlyProperty<number>,
+  public constructor( chartTransform: ChartTransform, particleCountProperty: TReadOnlyProperty<number>,
                       orientation: Orientation, providedOptions: NucleonNumberLineOptions ) {
 
     const options = optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
@@ -41,17 +39,11 @@ class NucleonNumberLine extends Node {
     super( options );
 
     const numberLineNode = new Node();
-    const chartTransform = new ChartTransform( {
-      viewWidth: 240,
-      modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, 12 ),
-      viewHeight: 200,
-      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, 10 )
-    } );
 
     // create and add the tick marks
     const tickMarkSet = new TickMarkSet( chartTransform, orientation, options.tickSpacing, {
       stroke: Color.BLACK,
-      lineWidth: 2
+      lineWidth: 1
     } );
     numberLineNode.addChild( tickMarkSet );
 
@@ -72,7 +64,8 @@ class NucleonNumberLine extends Node {
                 return particleCount === value ? options.labelHighlightColorProperty.value : null;
               } ),
             opacity: 1
-          }
+          },
+          yMargin: 1.5
         } ),
       positionLabel: ( label: Node, tickBounds: Bounds2, axisOrientation: Orientation ) => {
         if ( axisOrientation === Orientation.HORIZONTAL ) {
@@ -107,7 +100,7 @@ class NucleonNumberLine extends Node {
     }
     else {
       numberLineLabel.setRotation( 3 * Math.PI / 2 );
-      numberLineLabel.centerX = numberLine.centerX - 20;
+      numberLineLabel.centerX = numberLine.centerX - 25;
       numberLineLabel.centerY = numberLine.centerY;
     }
     this.addChild( numberLineLabel );
