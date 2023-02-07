@@ -70,6 +70,20 @@ class ParticleNucleus extends ParticleAtom {
     this.incomingNeutronsNumber = 0;
   }
 
+  public getLastParticleInShell( particleType: ParticleType ): Particle | null {
+    const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
+    for ( let i = nucleonShellPositions.length - 1; i >= 0; i-- ) {
+      const nucleonShellRow = nucleonShellPositions[ i ];
+      for ( let j = nucleonShellRow.length - 1; j >= 0; j-- ) {
+        if ( nucleonShellRow[ j ].particle !== null ) {
+          return nucleonShellRow[ j ].particle!;
+        }
+      }
+    }
+
+    return null;
+  }
+
   /**
    * Return the view destination of the next open position for the given particleType shell positions.
    */

@@ -67,7 +67,7 @@ class NucleonShellView extends Node {
         new Line(
           this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
           this.modelViewTransform.modelToViewY( energyLevel ),
-          this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition + 1 ),
+          this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition + 0.5 ),
           this.modelViewTransform.modelToViewY( energyLevel ),
           {
             stroke: 'black'

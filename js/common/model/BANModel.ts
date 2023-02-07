@@ -98,6 +98,31 @@ class BANModel<T extends ParticleAtom> {
   }
 
   /**
+   * Select the particle closest to its creator node.
+   */
+  public getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
+    const sortedParticles = _.sortBy( this.getParticlesByType( particleType ), particle => {
+      return particle.positionProperty.value.distance( creatorNodePosition );
+    } );
+
+    // We know that sortedParticles is not empty, and does not contain null.
+    return sortedParticles.shift()!;
+  }
+
+  /**
+   * Return array of all the particles that are of particleType and part of the particleAtom
+   */
+  public getParticlesByType( particleType: ParticleType ): Particle[] {
+    const filteredParticles = _.filter( this.particles, particle => {
+      return this.particleAtom.containsParticle( particle ) && particle.type === particleType.name.toLowerCase();
+    } );
+
+    assert && assert( filteredParticles.length !== 0, 'No particles of particleType ' + particleType.name + ' are in the particleAtom.' );
+
+    return filteredParticles;
+  }
+
+  /**
    * Return the destination of a particle when it's added to the particle atom
    */
   public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {

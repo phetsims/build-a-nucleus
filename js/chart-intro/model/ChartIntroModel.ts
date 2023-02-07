@@ -32,6 +32,17 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   }
 
+  /**
+   * Select the particle closest to its creator node.
+   */
+  public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
+    const particleToReturn = this.particleNucleus.getLastParticleInShell( particleType );
+    assert && assert( particleToReturn, 'No particle of type ' + particleType.name + ' exists in the particleAtom.' );
+
+    // We know that sortedParticles is not empty, and does not contain null.
+    return particleToReturn!;
+  }
+
   public override getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     return this.particleNucleus.getParticleDestination( particleType, particle );
   }

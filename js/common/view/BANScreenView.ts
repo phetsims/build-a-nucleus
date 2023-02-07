@@ -668,27 +668,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
                                 this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
-    const particles = [ ...this.model.particles ];
 
-    // array of all the particles that are of particleType and part of the particleAtom
-    _.remove( particles, particle => {
-      return !this.model.particleAtom.containsParticle( particle ) || particle.type !== particleType.name.toLowerCase();
-    } );
+    const particleToReturn = this.model.getParticleToReturn( particleType, creatorNodePosition );
 
-    // select the particle closest to its creator node
-    const sortedParticles = _.sortBy( particles, particle => {
-      return particle.positionProperty.value.distance( creatorNodePosition );
-    } );
-    const particleToReturn = sortedParticles.shift();
-
-    if ( particleToReturn ) {
-
-      // remove the particle from the particleAtom and send it back to its creator node position
-      assert && assert( this.model.particleAtom.containsParticle( particleToReturn ),
-        'There is no particle of type in the atom.' );
-      this.model.particleAtom.removeParticle( particleToReturn );
-      this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
-    }
+    // remove the particle from the particleAtom and send it back to its creator node position
+    this.model.particleAtom.removeParticle( particleToReturn );
+    this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
   }
 
   /**
