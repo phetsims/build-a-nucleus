@@ -63,11 +63,14 @@ class NucleonShellView extends Node {
     // create and add the nucleon energy levels
     const energyLevels: Line[] = [];
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
+      const particleLength = 2 * BANConstants.PARTICLE_RADIUS;
       energyLevels.push(
         new Line(
           this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
           this.modelViewTransform.modelToViewY( energyLevel ),
-          this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition + 0.5 ),
+
+          // extend the energyLevel to the outer edge of the last particle
+          this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + particleLength,
           this.modelViewTransform.modelToViewY( energyLevel ),
           {
             stroke: 'black'

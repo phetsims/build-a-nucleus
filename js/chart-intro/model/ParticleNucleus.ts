@@ -43,6 +43,10 @@ class ParticleNucleus extends ParticleAtom {
   public modelViewTransform: ModelViewTransform2;
   public incomingProtonsNumber: number;
   public incomingNeutronsNumber: number;
+  private currentProtonCount: number;
+  private currentNeutronCount: number;
+  private oldProtonCount: number;
+  private oldNeutronCount: number;
 
   public constructor() {
     super();
@@ -68,6 +72,19 @@ class ParticleNucleus extends ParticleAtom {
 
     this.incomingProtonsNumber = 0;
     this.incomingNeutronsNumber = 0;
+
+    this.currentProtonCount = this.protonCountProperty.value;
+    this.oldProtonCount = this.protonCountProperty.value;
+    this.protonCountProperty.lazyLink( ( protonCount, oldProtonCount ) => {
+      this.currentProtonCount = protonCount;
+      this.oldProtonCount = oldProtonCount;
+    } );
+    this.currentNeutronCount = this.neutronCountProperty.value;
+    this.oldNeutronCount = this.neutronCountProperty.value;
+    this.neutronCountProperty.lazyLink( ( neutronCount, oldNeutronCount ) => {
+      this.currentNeutronCount = neutronCount;
+      this.oldNeutronCount = oldNeutronCount;
+    } );
   }
 
   public getLastParticleInShell( particleType: ParticleType ): Particle | null {
@@ -121,15 +138,23 @@ class ParticleNucleus extends ParticleAtom {
 
     // fill all nucleons in open positions from bottom to top, left to right
     const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, incomingNucleonsNumber: number, oldNucleonCount: number,
-                                     particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
-      const currentNucleonCount = particleArray.length + incomingNucleonsNumber;
+                                     currentNucleonCount: number, particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
+      const currentParticleCount = currentNucleonCount + incomingNucleonsNumber;
       let nucleonIndex = 0;
-      if ( currentNucleonCount !== oldNucleonCount ) {
+      if ( currentParticleCount !== oldNucleonCount ) {
         particleShellPositions.forEach( ( nucleonShellPositions, yPosition ) => {
           nucleonShellPositions.forEach( nucleonShellPosition => {
-            if ( nucleonIndex < currentNucleonCount ) {
+            if ( nucleonIndex < currentParticleCount ) {
               nucleonShellPosition.particle = particleArray[ nucleonIndex ];
-              const viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+
+              let viewDestination;
+              if ( currentParticleCount >= 3 && yPosition === 0 ) {
+                viewDestination = BANConstants.BOUND_NUCLEON_ENERGY_LEVEL_ARRAY_MVT.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+              }
+              else {
+                viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+              }
+
 
               // add x offset so neutron particles are aligned with their energy levels
               viewDestination.addXY( xOffset, 0 );
@@ -146,26 +171,9 @@ class ParticleNucleus extends ParticleAtom {
       }
     };
 
-    // get old nucleon count
-    let oldProtonCount = 0;
-    this.protonShellPositions.forEach( particleShellRow => {
-      particleShellRow.forEach( particleShellPosition => {
-        if ( particleShellPosition.particle !== null ) {
-          oldProtonCount++;
-        }
-      } );
-    } );
-    let oldNeutronCount = 0;
-    this.neutronShellPositions.forEach( particleShellRow => {
-      particleShellRow.forEach( particleShellPosition => {
-        if ( particleShellPosition.particle !== null ) {
-          oldNeutronCount++;
-        }
-      } );
-    } );
 
-    updateNucleonPositions( this.protons, this.incomingProtonsNumber, oldProtonCount, this.protonShellPositions, 0 );
-    updateNucleonPositions( this.neutrons, this.incomingNeutronsNumber, oldNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
+    updateNucleonPositions( this.protons, this.incomingProtonsNumber, this.oldProtonCount, this.currentProtonCount, this.protonShellPositions, 0 );
+    updateNucleonPositions( this.neutrons, this.incomingNeutronsNumber, this.oldNeutronCount, this.currentNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
   }
 }
 
