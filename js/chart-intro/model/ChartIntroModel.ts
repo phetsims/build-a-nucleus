@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
-  public particleNucleus: ParticleNucleus;
+  public readonly particleNucleus: ParticleNucleus;
 
   public constructor() {
 

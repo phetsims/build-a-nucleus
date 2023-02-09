@@ -40,7 +40,7 @@ class ParticleNucleus extends ParticleAtom {
   // allowed neutron positions
   public readonly neutronShellPositions: ParticleShellPosition[][];
 
-  public modelViewTransform: ModelViewTransform2;
+  public readonly modelViewTransform: ModelViewTransform2;
   public incomingProtonsNumber: number;
   public incomingNeutronsNumber: number;
   private currentProtonCount: number;
