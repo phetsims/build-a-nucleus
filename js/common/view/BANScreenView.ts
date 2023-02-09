@@ -97,7 +97,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
   private readonly atomCenter: Vector2;
-  private particleViewPositionVector: Vector2;
+  private readonly particleViewPositionVector: Vector2;
 
   protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
 
