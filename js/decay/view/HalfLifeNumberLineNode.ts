@@ -16,8 +16,6 @@ import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -64,7 +62,7 @@ const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT
 class HalfLifeNumberLineNode extends Node {
 
   private readonly numberLineLabelFont: PhetFont | undefined;
-  private modelViewTransform: ModelViewTransform2;
+  private readonly chartTransform: ChartTransform;
   private readonly tickMarkSet: Path;
   private readonly halfLifeArrowRotationProperty: TProperty<number>;
   private arrowXPositionAnimation: null | Animation;
@@ -94,16 +92,6 @@ class HalfLifeNumberLineNode extends Node {
 
     this.numberLineLabelFont = options.numberLineLabelFont;
 
-    const viewWidth = options.numberLineWidth;
-    const numberLineLength = new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT ).getLength();
-    const tickMarkLength = viewWidth / numberLineLength;
-
-    // TODO: Fix the view Y's
-    this.modelViewTransform = ModelViewTransform2.createRectangleMapping(
-      new Bounds2( NUMBER_LINE_START_EXPONENT, 0, NUMBER_LINE_END_EXPONENT, 1 ),
-      new Bounds2( 0, 0, viewWidth, tickMarkLength )
-    );
-
     const createExponentialLabel = ( value: number ): Node => {
       const numberValue = value === 0 ? 1 : `10<sup>${value}</sup>`;
       return new RichText( numberValue, {
@@ -115,27 +103,29 @@ class HalfLifeNumberLineNode extends Node {
 
     // create and add numberLineNode
     const numberLineNode = new Node();
-    const chartTransform = new ChartTransform( {
-      viewWidth: viewWidth,
+
+    this.chartTransform = new ChartTransform( {
+      viewWidth: options.numberLineWidth,
       modelXRange: new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT )
     } );
+
     const tickXSpacing = 3;
-    this.tickMarkSet = new TickMarkSet( chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
+    this.tickMarkSet = new TickMarkSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       stroke: Color.BLACK,
       extent: options.tickMarkExtent,
       lineWidth: 2
     } );
     this.tickMarkSet.centerY = 0;
     numberLineNode.addChild( this.tickMarkSet );
-    const tickLabelSet = new TickLabelSet( chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
+    const tickLabelSet = new TickLabelSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       extent: 0,
       createLabel: ( value: number ) => createExponentialLabel( value )
     } );
     tickLabelSet.top = this.tickMarkSet.bottom;
     numberLineNode.addChild( tickLabelSet );
     const numberLine = new Line( {
-      x1: this.modelViewTransform.modelToViewX( NUMBER_LINE_START_EXPONENT ), y1: this.tickMarkSet.centerY,
-      x2: this.modelViewTransform.modelToViewX( NUMBER_LINE_END_EXPONENT ), y2: this.tickMarkSet.centerY,
+      x1: this.chartTransform.modelToViewX( NUMBER_LINE_START_EXPONENT ), y1: this.tickMarkSet.centerY,
+      x2: this.chartTransform.modelToViewX( NUMBER_LINE_END_EXPONENT ), y2: this.tickMarkSet.centerY,
       stroke: Color.BLACK
     } );
     numberLineNode.addChild( numberLine );
@@ -154,7 +144,7 @@ class HalfLifeNumberLineNode extends Node {
 
     this.arrowXPositionProperty = new NumberProperty( 0 );
     this.arrowXPositionProperty.link( xPosition => {
-      halfLifeArrow.translation = new Vector2( this.modelViewTransform.modelToViewX( xPosition ),
+      halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         this.tickMarkSet.centerY - options.halfLifeArrowLength );
     } );
     this.arrowXPositionAnimation = null;
@@ -234,11 +224,11 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeTextXPositionProperty.link( xPosition => {
 
         this.halfLifeDisplayNode.translation =
-          new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - this.halfLifeDisplayNode.width / 2,
+          new Vector2( this.chartTransform.modelToViewX( xPosition ) - this.halfLifeDisplayNode.width / 2,
             halfLifeArrow.top - distanceBetweenHalfLifeTextAndArrow );
 
         elementName.translation =
-          new Vector2( this.modelViewTransform.modelToViewX( xPosition ) - elementName.width / 2,
+          new Vector2( this.chartTransform.modelToViewX( xPosition ) - elementName.width / 2,
             halfLifeArrow.top - this.halfLifeDisplayNode.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
 
@@ -427,8 +417,8 @@ class HalfLifeNumberLineNode extends Node {
    */
   public addArrowAndLabel( label: string, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
-    const arrow = new ArrowNode( this.modelViewTransform.modelToViewX( xPosition ), -17.5,
-      this.modelViewTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
+    const arrow = new ArrowNode( this.chartTransform.modelToViewX( xPosition ), -17.5,
+      this.chartTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
         fill: BANColors.legendArrowColorProperty,
         stroke: null,
         tailWidth: 1.5,
