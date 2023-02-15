@@ -41,12 +41,6 @@ class ParticleNucleus extends ParticleAtom {
   public readonly neutronShellPositions: ParticleShellPosition[][];
 
   public readonly modelViewTransform: ModelViewTransform2;
-  public incomingProtonsNumber: number;
-  public incomingNeutronsNumber: number;
-  private currentProtonCount: number;
-  private currentNeutronCount: number;
-  private oldProtonCount: number;
-  private oldNeutronCount: number;
 
   public constructor() {
     super();
@@ -70,21 +64,6 @@ class ParticleNucleus extends ParticleAtom {
       }
     }
 
-    this.incomingProtonsNumber = 0;
-    this.incomingNeutronsNumber = 0;
-
-    this.currentProtonCount = this.protonCountProperty.value;
-    this.oldProtonCount = this.protonCountProperty.value;
-    this.protonCountProperty.lazyLink( ( protonCount, oldProtonCount ) => {
-      this.currentProtonCount = protonCount;
-      this.oldProtonCount = oldProtonCount;
-    } );
-    this.currentNeutronCount = this.neutronCountProperty.value;
-    this.oldNeutronCount = this.neutronCountProperty.value;
-    this.neutronCountProperty.lazyLink( ( neutronCount, oldNeutronCount ) => {
-      this.currentNeutronCount = neutronCount;
-      this.oldNeutronCount = oldNeutronCount;
-    } );
   }
 
   public getLastParticleInShell( particleType: ParticleType ): Particle | undefined {
@@ -137,43 +116,50 @@ class ParticleNucleus extends ParticleAtom {
   public override reconfigureNucleus(): void {
 
     // fill all nucleons in open positions from bottom to top, left to right
-    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, incomingNucleonsNumber: number, oldNucleonCount: number,
-                                     currentNucleonCount: number, particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
-      const currentParticleCount = currentNucleonCount + incomingNucleonsNumber;
-      let nucleonIndex = 0;
-      if ( currentParticleCount !== oldNucleonCount ) {
-        particleShellPositions.forEach( ( nucleonShellPositions, yPosition ) => {
-          nucleonShellPositions.forEach( nucleonShellPosition => {
-            if ( nucleonIndex < currentParticleCount ) {
-              nucleonShellPosition.particle = particleArray[ nucleonIndex ];
+    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>,
+                                     particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
+      let yPosition = 0;
+      particleArray.forEach( ( particle, index ) => {
+        yPosition = index < 2 ? 0 : index < 8 ? 1 : 2;
 
-              let viewDestination;
-              if ( currentParticleCount >= 3 && yPosition === 0 ) {
-                viewDestination = BANConstants.BOUND_NUCLEON_ENERGY_LEVEL_ARRAY_MVT.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
-              }
-              else {
-                viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
-              }
+        let xPosition;
+        if ( yPosition === 0 ) {
+          xPosition = index + 2;
+        }
+        else if ( yPosition === 1 ) {
+          xPosition = index - 2;
+        }
+        else {
+          xPosition = index - 8;
+        }
 
+        const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
+        nucleonShellPosition.particle = particle;
 
-              // add x offset so neutron particles are aligned with their energy levels
-              viewDestination.addXY( xOffset, 0 );
-              if ( nucleonShellPosition.particle ) {
-                nucleonShellPosition.particle.destinationProperty.set( viewDestination );
-              }
-              nucleonIndex++;
-            }
-            else {
-              nucleonShellPosition.particle = undefined;
-            }
-          } );
-        } );
-      }
+        const viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+
+        // add x offset so neutron particles are aligned with their energy levels
+        viewDestination.addXY( xOffset, 0 );
+        particle.destinationProperty.set( viewDestination );
+      } );
+
     };
 
 
-    updateNucleonPositions( this.protons, this.incomingProtonsNumber, this.oldProtonCount, this.currentProtonCount, this.protonShellPositions, 0 );
-    updateNucleonPositions( this.neutrons, this.incomingNeutronsNumber, this.oldNeutronCount, this.currentNeutronCount, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
+    updateNucleonPositions( this.protons, this.protonShellPositions, 0 );
+    updateNucleonPositions( this.neutrons, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
+  }
+
+  public override removeParticle( particle: Particle ): void {
+    super.removeParticle( particle );
+    const nucleonShellPositions = particle.type === ParticleType.PROTON.label ? this.protonShellPositions : this.neutronShellPositions;
+    nucleonShellPositions.forEach( nucleonShellRow => {
+      nucleonShellRow.forEach( nucleonShellPosition => {
+        if ( nucleonShellPosition.particle === particle ) {
+          nucleonShellPosition.particle = undefined;
+        }
+      } );
+    } );
   }
 }
 
