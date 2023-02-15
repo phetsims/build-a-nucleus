@@ -17,7 +17,7 @@ import ParticleType from '../../common/view/ParticleType.js';
 
 type EnergyLevelNodeOptions = NodeOptions;
 type ParticleShellPosition = {
-  particle: Particle | null;
+  particle: Particle | undefined;
   xPosition: number; // 0 - 5
 };
 

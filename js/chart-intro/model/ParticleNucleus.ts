@@ -18,7 +18,7 @@ import ParticleType from '../../common/view/ParticleType.js';
  */
 
 type ParticleShellPosition = {
-  particle: Particle | null;
+  particle: Particle | undefined;
   xPosition: number; // 0 - 5
   type: ParticleType;
 };
@@ -62,7 +62,7 @@ class ParticleNucleus extends ParticleAtom {
     ];
     for ( let i = 0; i < ALLOWED_PARTICLE_POSITIONS.length; i++ ) {
       for ( let j = 0; j < ALLOWED_PARTICLE_POSITIONS[ i ].length; j++ ) {
-        const shellPosition = { particle: null, xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ] };
+        const shellPosition = { particle: undefined, xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ] };
         const protonShellPosition = { ...shellPosition, type: ParticleType.PROTON };
         const neutronShellPosition = { ...shellPosition, type: ParticleType.NEUTRON };
         this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = protonShellPosition;
@@ -87,18 +87,18 @@ class ParticleNucleus extends ParticleAtom {
     } );
   }
 
-  public getLastParticleInShell( particleType: ParticleType ): Particle | null {
+  public getLastParticleInShell( particleType: ParticleType ): Particle | undefined {
     const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
     for ( let i = nucleonShellPositions.length - 1; i >= 0; i-- ) {
       const nucleonShellRow = nucleonShellPositions[ i ];
       for ( let j = nucleonShellRow.length - 1; j >= 0; j-- ) {
-        if ( nucleonShellRow[ j ].particle !== null ) {
+        if ( nucleonShellRow[ j ].particle !== undefined ) {
           return nucleonShellRow[ j ].particle!;
         }
       }
     }
 
-    return null;
+    return undefined;
   }
 
   /**
@@ -114,7 +114,7 @@ class ParticleNucleus extends ParticleAtom {
       const noEmptyPositions = particleShellRow.filter( particleShellPosition => particleShellPosition !== undefined );
 
       // get the first open shell position in this particleShellRow
-      return noEmptyPositions.find( particleShellPosition => particleShellPosition.particle === null );
+      return noEmptyPositions.find( particleShellPosition => particleShellPosition.particle === undefined );
     } );
 
     // get the first open shell position available from all rows
@@ -164,7 +164,7 @@ class ParticleNucleus extends ParticleAtom {
               nucleonIndex++;
             }
             else {
-              nucleonShellPosition.particle = null;
+              nucleonShellPosition.particle = undefined;
             }
           } );
         } );
