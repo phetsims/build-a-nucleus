@@ -15,6 +15,8 @@ import BANColors from '../BANColors.js';
 
 class ParticleType extends EnumerationValue {
 
+  // TODO: Using the BaN strings file is introducing directional codes that makes it difficult to use these ParticleTypes in code.
+  // TODO: Can we replace these with regular strings?
   public static readonly PROTON = new ParticleType( BuildANucleusStrings.proton, BANColors.protonColorProperty );
 
   public static readonly NEUTRON = new ParticleType( BuildANucleusStrings.neutronUppercase, BANColors.neutronColorProperty );
