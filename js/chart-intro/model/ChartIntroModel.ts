@@ -26,11 +26,6 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.particleNucleus = particleAtom;
-
-    // TODO: Evaluate this code, see https://github.com/phetsims/build-a-nucleus/issues/75
-    // this.incomingProtons.lengthProperty.link( incomingProtonsNumber => { this.particleNucleus.incomingProtonsNumber = incomingProtonsNumber; } );
-    // this.incomingNeutrons.lengthProperty.link( incomingNeutronsNumber => { this.particleNucleus.incomingNeutronsNumber = incomingNeutronsNumber; } );
-
   }
 
   /**
