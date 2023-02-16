@@ -27,8 +27,9 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     this.particleNucleus = particleAtom;
 
-    this.incomingProtons.lengthProperty.link( incomingProtonsNumber => { this.particleNucleus.incomingProtonsNumber = incomingProtonsNumber; } );
-    this.incomingNeutrons.lengthProperty.link( incomingNeutronsNumber => { this.particleNucleus.incomingNeutronsNumber = incomingNeutronsNumber; } );
+    // TODO: Evaluate this code, see https://github.com/phetsims/build-a-nucleus/issues/75
+    // this.incomingProtons.lengthProperty.link( incomingProtonsNumber => { this.particleNucleus.incomingProtonsNumber = incomingProtonsNumber; } );
+    // this.incomingNeutrons.lengthProperty.link( incomingNeutronsNumber => { this.particleNucleus.incomingNeutronsNumber = incomingNeutronsNumber; } );
 
   }
 
