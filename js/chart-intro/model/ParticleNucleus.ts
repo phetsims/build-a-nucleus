@@ -151,7 +151,7 @@ class ParticleNucleus extends ParticleAtom {
   }
 
   public override removeParticle( particle: Particle ): void {
-    const nucleonShellPositions = particle.type === ParticleType.PROTON.label.toLowerCase().replace( /[\u202A\u202B\u202C]/g, '' ) ? this.protonShellPositions : this.neutronShellPositions;
+    const nucleonShellPositions = particle.type === ParticleType.PROTON.name.toLowerCase() ? this.protonShellPositions : this.neutronShellPositions;
     nucleonShellPositions.forEach( nucleonShellRow => {
       nucleonShellRow.forEach( nucleonShellPosition => {
         if ( nucleonShellPosition.particle === particle ) {
