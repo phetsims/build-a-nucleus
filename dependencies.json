@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "202cd68a8df95ce90ba58124718ab311a175d391",
+    "sha": "b944646e5d7c14b950b8d23cabdede86df644464",
     "branch": "1.0"
   },
   "build-an-atom": {
@@ -61,7 +61,7 @@
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "9947c668c45b6c53c5b660851ac014fe6bf61998",
+    "sha": "ed6bc4163479533f73f82bb00f0f5891f4de226c",
     "branch": "HEAD"
   },
   "phetmarks": {
