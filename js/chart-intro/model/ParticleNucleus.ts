@@ -1,6 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
@@ -8,6 +9,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleType from '../../common/view/ParticleType.js';
+import EnergyLevelType from './EnergyLevelType.js';
 
 /**
  * A model element that represents a nucleus that is made up of protons and neutrons. This model element
@@ -41,6 +43,8 @@ class ParticleNucleus extends ParticleAtom {
   public readonly neutronShellPositions: ParticleShellPosition[][];
 
   public readonly modelViewTransform: ModelViewTransform2;
+  private protonsLevelProperty: EnumerationProperty<EnergyLevelType>;
+  private neutronsLevelProperty: EnumerationProperty<EnergyLevelType>;
 
   public constructor() {
     super();
@@ -63,6 +67,67 @@ class ParticleNucleus extends ParticleAtom {
         this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = neutronShellPosition;
       }
     }
+
+    this.protonsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
+    this.neutronsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
+
+    this.protonCountProperty.link( protonCount => {
+      if ( protonCount >= 9 ) {
+        this.protonsLevelProperty.value = EnergyLevelType.SECOND;
+      }
+      else if ( protonCount >= 3 ) {
+        this.protonsLevelProperty.value = EnergyLevelType.FIRST;
+      }
+      else {
+        this.protonsLevelProperty.value = EnergyLevelType.NONE;
+      }
+    } );
+
+    this.neutronCountProperty.link( neutronCount => {
+      if ( neutronCount >= 9 ) {
+        this.neutronsLevelProperty.value = EnergyLevelType.SECOND;
+      }
+      else if ( neutronCount >= 3 ) {
+        this.neutronsLevelProperty.value = EnergyLevelType.FIRST;
+      }
+      else {
+        this.neutronsLevelProperty.value = EnergyLevelType.NONE;
+      }
+    } );
+
+    this.neutronsLevelProperty.lazyLink( () => {
+      for ( let y = 0; y < this.neutronsLevelProperty.value.yPosition; y++ ) {
+        this.neutronShellPositions[ y ].forEach( ( particleShellPosition, nucleonIndex ) => {
+
+          // each particle on the level has one 'particle radius' space except for one.
+          // there are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
+          const numberOfRadiusSpaces = y === 0 ? 2 - 1 : 6 - 1;
+
+          if ( particleShellPosition.particle ) {
+            const endXPosition = particleShellPosition.particle.positionProperty.value.x * ( nucleonIndex / 6 ) +
+                                 ( BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2 ) + BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS;
+            particleShellPosition.particle.positionProperty.value.x = endXPosition;
+          }
+        } );
+      }
+    } );
+
+    this.protonsLevelProperty.lazyLink( () => {
+      for ( let y = 0; y < this.protonsLevelProperty.value.yPosition; y++ ) {
+        this.protonShellPositions[ y ].forEach( ( particleShellPosition, nucleonIndex ) => {
+
+          // each particle on the level has one 'particle radius' space except for one.
+          // there are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
+          const numberOfRadiusSpaces = y === 0 ? 2 - 1 : 6 - 1;
+
+          if ( particleShellPosition.particle ) {
+            const endXPosition = particleShellPosition.particle.positionProperty.value.x * ( nucleonIndex / 6 ) +
+                                 ( BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2 );
+            particleShellPosition.particle.positionProperty.value.x = endXPosition;
+          }
+        } );
+      }
+    } );
 
   }
 
@@ -118,20 +183,9 @@ class ParticleNucleus extends ParticleAtom {
     // fill all nucleons in open positions from bottom to top, left to right
     const updateNucleonPositions = ( particleArray: ObservableArray<Particle>,
                                      particleShellPositions: ParticleShellPosition[][], xOffset: number ) => {
-      let yPosition = 0;
       particleArray.forEach( ( particle, index ) => {
-        yPosition = index < 2 ? 0 : index < 8 ? 1 : 2;
-
-        let xPosition;
-        if ( yPosition === 0 ) {
-          xPosition = index + 2;
-        }
-        else if ( yPosition === 1 ) {
-          xPosition = index - 2;
-        }
-        else {
-          xPosition = index - 8;
-        }
+        const yPosition = index < 2 ? 0 : index < 8 ? 1 : 2;
+        const xPosition = yPosition === 0 ? index + 2 : yPosition === 1 ? index - 2 : index - 8;
 
         const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
         nucleonShellPosition.particle = particle;
@@ -144,7 +198,6 @@ class ParticleNucleus extends ParticleAtom {
       } );
 
     };
-
 
     updateNucleonPositions( this.protons, this.protonShellPositions, 0 );
     updateNucleonPositions( this.neutrons, this.neutronShellPositions, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );

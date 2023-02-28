@@ -66,11 +66,7 @@ const BANConstants = {
 
   // the MVT that places nucleons in their individual spaced apart array positions
   NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
-    new Bounds2( 0, 0, ( PARTICLE_RADIUS * 3 ) * 5, ( PARTICLE_RADIUS * 2 ) * 10 ) ),
-
-  // the MVT that places nucleons in their individual close together array positions
-  BOUND_NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
-    new Bounds2( 0, 0, ( PARTICLE_RADIUS * 2 ) * 5, ( PARTICLE_RADIUS * 2 ) * 10 ) )
+    new Bounds2( 0, 0, ( PARTICLE_RADIUS * 3 ) * 5, ( PARTICLE_RADIUS * 2 ) * 10 ) )
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );
