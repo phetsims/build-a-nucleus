@@ -20,7 +20,7 @@ import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import NuclideChartNode from './NuclideChartNode.js';
+import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import NucleonShellView from './NucleonShellView.js';
 import ParticleType from '../../common/view/ParticleType.js';
@@ -120,8 +120,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     );
     this.addChild( this.neutronEnergyLevelNode );
 
-    const nuclideChartNode = new NuclideChartNode( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );
-    const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartNode, {
+    const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );
+    const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartAndNumberLines, {
       titleNode: new Text( BuildANucleusStrings.partialNuclideChart, {
         font: BANConstants.REGULAR_FONT,
         maxWidth: 200

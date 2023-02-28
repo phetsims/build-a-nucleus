@@ -20,7 +20,7 @@ import NuclideChartLegendNode from './NuclideChartLegendNode.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
-class NuclideChartNode extends Node {
+class NuclideChartAndNumberLines extends Node {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       providedOptions?: NuclideChartNodeOptions ) {
@@ -55,5 +55,5 @@ class NuclideChartNode extends Node {
   }
 }
 
-buildANucleus.register( 'NuclideChartNode', NuclideChartNode );
-export default NuclideChartNode;
+buildANucleus.register( 'NuclideChartAndNumberLines', NuclideChartAndNumberLines );
+export default NuclideChartAndNumberLines;
