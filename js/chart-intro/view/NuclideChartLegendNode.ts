@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2023, University of Colorado Boulder
 
 import { GridBox, HBox, Node, ProfileColorProperty, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
