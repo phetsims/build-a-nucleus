@@ -1,7 +1,8 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Node that represents the initial part of the Nuclide chart, up to 10 protons and 12 neutrons.
+ * Node that contains all the content in the 'Nuclide Chart', including the proton and neutron NucleonNumberLine's, the
+ * NuclideChartLegendNode, and the NuclideChartNode.
  *
  * @author Luisa Vargas
  */
@@ -17,6 +18,7 @@ import BANConstants from '../../common/BANConstants.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Range from '../../../../dot/js/Range.js';
 import NuclideChartLegendNode from './NuclideChartLegendNode.js';
+import NuclideChartNode from './NuclideChartNode.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
@@ -26,6 +28,10 @@ class NuclideChartAndNumberLines extends Node {
                       providedOptions?: NuclideChartNodeOptions ) {
 
     super( providedOptions );
+
+    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty );
+    nuclideChartNode.scale( 0.8 );
+    this.addChild( nuclideChartNode );
 
     const scaleFactor = 20;
     const chartTransform = new ChartTransform( {
