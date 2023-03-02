@@ -858,7 +858,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     else {
       name += ' - ' + massNumber.toString();
     }
-    elementNameText.string = name;
+    elementNameText.text = name;
     elementNameText.centerX = centerX;
     if ( centerY ) {
       elementNameText.centerY = centerY;
