@@ -227,14 +227,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {
         if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
-          this.stabilityIndicator.text = BuildANucleusStrings.stable;
+          this.stabilityIndicator.string = BuildANucleusStrings.stable;
         }
         else {
-          this.stabilityIndicator.text = BuildANucleusStrings.unstable;
+          this.stabilityIndicator.string = BuildANucleusStrings.unstable;
         }
       }
       else {
-        this.stabilityIndicator.text = '';
+        this.stabilityIndicator.string = '';
       }
       this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
     };
