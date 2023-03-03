@@ -54,7 +54,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( this.periodicTableAndIsotopeSymbol );
 
     // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 0.65, 10, 20 ) );
+    model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 0.27, 10, 20 ) );
 
     this.elementName.centerX = this.doubleArrowButtons.centerX;
     this.elementName.top = this.nucleonCountPanel.top;
@@ -89,7 +89,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const energyText = new RichText( BuildANucleusStrings.energy, { font: BANConstants.REGULAR_FONT } );
     energyText.rotate( -Math.PI / 2 );
     energyText.left = this.nucleonCountPanel.left;
-    energyText.centerY = this.layoutBounds.centerY;
+    energyText.centerY = this.layoutBounds.centerY + 20;
     this.addChild( energyText );
 
     // create and add the 'Energy' arrow
@@ -97,16 +97,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow, this.protonArrowButtons.top - 30,
       energyText.right + energyTextDistanceFromArrow, this.periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
     this.addChild( arrow );
-
-    // create and add dashed 'zoom' lines
-    // TODO: position based on the small atom
-    const dashedLineOptions = { stroke: Color.BLACK, lineDash: [ 6, 3 ] };
-    const leftDashedLine = new Line( this.protonArrowButtons.left, arrow.top, this.doubleArrowButtons.left,
-      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
-    this.addChild( leftDashedLine );
-    const rightDashedLine = new Line( this.neutronArrowButtons.right, arrow.top, this.doubleArrowButtons.right,
-      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
-    this.addChild( rightDashedLine );
 
     // add energy level node
     this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
@@ -119,6 +109,16 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       { x: this.protonArrowButtons.left + BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, y: arrow.top + 20 }
     );
     this.addChild( this.neutronEnergyLevelNode );
+
+    // create and add dashed 'zoom' lines
+    // TODO: position based on the small atom
+    const dashedLineOptions = { stroke: Color.BLACK, lineDash: [ 6, 3 ] };
+    const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, this.doubleArrowButtons.left,
+      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
+    this.addChild( leftDashedLine );
+    const rightDashedLine = new Line( this.neutronEnergyLevelNode.right, arrow.top, this.doubleArrowButtons.right,
+      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
+    this.addChild( rightDashedLine );
 
     const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );
     const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartAndNumberLines, {

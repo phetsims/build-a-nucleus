@@ -62,7 +62,7 @@ const BANConstants = {
   SCREEN_VIEW_ATOM_CENTER_Y: 339,
 
   // the x distance between the left side of the nucleon energy levels
-  X_DISTANCE_BETWEEN_ENERGY_LEVELS: 270,
+  X_DISTANCE_BETWEEN_ENERGY_LEVELS: 255,
 
   // the MVT that places nucleons in their individual spaced apart array positions
   NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),

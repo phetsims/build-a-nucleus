@@ -53,6 +53,7 @@ class NuclideChartAndNumberLines extends Node {
     } );
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;
+    nuclideChartNode.left = neutronNumberLine.left;
     this.addChild( neutronNumberLine );
 
     const nuclideChartLegendNode = new NuclideChartLegendNode();
