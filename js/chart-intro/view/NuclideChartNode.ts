@@ -37,14 +37,11 @@ const POPULATED_CELLS = [
 
 class NuclideChartNode extends Node {
 
-  // the cells of the table
-  private readonly cells: NuclideChartCell[][];
-
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number> ) {
     super();
 
     const cellDimension = 25;
-    this.cells = []; // TODO: do I need to dispose the cells? otherwise doesn't need to be class property
+    const cells: ( NuclideChartCell | null )[][] = [];
     for ( let p = 0; p < POPULATED_CELLS.length; p++ ) {
       const populatedCellsInRow = POPULATED_CELLS[ p ];
       const currentProtonLoopCount = POPULATED_CELLS.length - p - 1; // the current proton count in the loop
@@ -64,7 +61,7 @@ class NuclideChartNode extends Node {
         this.addChild( cell );
         rowCells.push( cell );
       }
-      this.cells.push( rowCells );
+      cells.push( rowCells );
     }
 
     // Highlight the cell that corresponds to the nuclide.
@@ -78,8 +75,8 @@ class NuclideChartNode extends Node {
       if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
         const protonRowIndex = POPULATED_CELLS.length - protonCount - 1;
         const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
-        highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
-        highlightedCell.setHighlighted( true );
+        highlightedCell = cells[ protonRowIndex ][ neutronRowIndex ];
+        highlightedCell!.setHighlighted( true );
       }
     } );
   }
