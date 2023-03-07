@@ -95,6 +95,13 @@ class ParticleNucleus extends ParticleAtom {
         this.neutronsLevelProperty.value = EnergyLevelType.NONE;
       }
     } );
+
+    // update nucleon positions when the level state changes
+    this.protonsLevelProperty.link( () =>
+      this.updateNucleonPositions( this.protons, this.protonShellPositions, this.protonsLevelProperty, 0 ) );
+    this.neutronsLevelProperty.link( () =>
+      this.updateNucleonPositions( this.neutrons, this.neutronShellPositions, this.neutronsLevelProperty,
+        BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS ) );
   }
 
   public getLastParticleInShell( particleType: ParticleType ): Particle | undefined {
@@ -144,60 +151,9 @@ class ParticleNucleus extends ParticleAtom {
   }
 
   public override reconfigureNucleus(): void {
-
-    // fill all nucleons in open positions from bottom to top, left to right
-    const updateNucleonPositions = ( particleArray: ObservableArray<Particle>, particleShellPositions: ParticleShellPosition[][],
-                                     levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ) => {
-      const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 5 ] ) -
-                         this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
-      particleArray.forEach( ( particle, index ) => {
-        const yPosition = index < 2 ? 0 : index < 8 ? 1 : 2;
-        const xPosition = yPosition === 0 ? index + 2 : yPosition === 1 ? index - 2 : index - 8;
-
-        // last level (yPosition === 2) never bound so don't need levelIndex condition for it
-        const levelIndex = yPosition === 0 ? index : index - 2;
-        const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
-        const unBoundXPosition = this.modelViewTransform.modelToViewX( nucleonShellPosition.xPosition ) + xOffset;
-
-        nucleonShellPosition.particle = particle;
-
-        let viewDestination;
-        let inputEnabled;
-
-        // if the yPosition of the levelFillProperty is higher than the current yPosition level, 'bind' the particles in
-        // this level by removing the spaces between them
-        if ( yPosition < levelFillProperty.value.yPosition ) {
-
-          // each particle on the level has one 'particle radius' space except for one.
-          // there are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
-          const numberOfRadiusSpaces = yPosition === 0 ? 2 - 1 : 6 - 1;
-
-          // amount each particle moves so the space between it and the particle on its left is removed
-          const boundOffset = levelWidth * ( levelIndex / ( 3 * 5 ) ); // 3 radius spaces / particle * 5 particle spaces
-
-          // amount each particle has to move for all particles to be centered in middle of energy level
-          const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;
-
-          const destinationX = unBoundXPosition - boundOffset + centerOffset;
-
-          viewDestination = new Vector2( destinationX, this.modelViewTransform.modelToViewY( yPosition ) );
-          inputEnabled = false;
-        }
-        else {
-          viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
-          viewDestination.addXY( xOffset, 0 );
-          inputEnabled = true;
-        }
-
-        // add x offset so neutron particles are aligned with their energy levels
-        particle.destinationProperty.set( viewDestination );
-        particle.inputEnabledProperty.value = inputEnabled;
-      } );
-
-    };
-
-    updateNucleonPositions( this.protons, this.protonShellPositions, this.protonsLevelProperty, 0 );
-    updateNucleonPositions( this.neutrons, this.neutronShellPositions, this.neutronsLevelProperty, BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
+    this.updateNucleonPositions( this.protons, this.protonShellPositions, this.protonsLevelProperty, 0 );
+    this.updateNucleonPositions( this.neutrons, this.neutronShellPositions, this.neutronsLevelProperty,
+      BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
   }
 
   public override removeParticle( particle: Particle ): void {
@@ -211,6 +167,58 @@ class ParticleNucleus extends ParticleAtom {
     } );
 
     super.removeParticle( particle );
+  }
+
+  /**
+   * Fill all nucleons in open positions from bottom to top, left to right
+   */
+  private updateNucleonPositions( particleArray: ObservableArray<Particle>, particleShellPositions: ParticleShellPosition[][],
+                                   levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
+    const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 5 ] ) -
+                       this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
+    particleArray.forEach( ( particle, index ) => {
+      const yPosition = index < 2 ? 0 : index < 8 ? 1 : 2;
+      const xPosition = yPosition === 0 ? index + 2 : yPosition === 1 ? index - 2 : index - 8;
+
+      // last level (yPosition === 2) never bound so don't need levelIndex condition for it
+      const levelIndex = yPosition === 0 ? index : index - 2;
+      const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
+      const unBoundXPosition = this.modelViewTransform.modelToViewX( nucleonShellPosition.xPosition ) + xOffset;
+
+      nucleonShellPosition.particle = particle;
+
+      let viewDestination;
+      let inputEnabled;
+
+      // if the yPosition of the levelFillProperty is higher than the current yPosition level, 'bind' the particles in
+      // this level by removing the spaces between them
+      if ( yPosition < levelFillProperty.value.yPosition ) {
+
+        // each particle on the level has one 'particle radius' space except for one.
+        // there are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
+        const numberOfRadiusSpaces = yPosition === 0 ? 2 - 1 : 6 - 1;
+
+        // amount each particle moves so the space between it and the particle on its left is removed
+        const boundOffset = levelWidth * ( levelIndex / ( 3 * 5 ) ); // 3 radius spaces / particle * 5 particle spaces
+
+        // amount each particle has to move for all particles to be centered in middle of energy level
+        const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;
+
+        const destinationX = unBoundXPosition - boundOffset + centerOffset;
+
+        viewDestination = new Vector2( destinationX, this.modelViewTransform.modelToViewY( yPosition ) );
+        inputEnabled = false;
+      }
+      else {
+        viewDestination = this.modelViewTransform.modelToViewXY( nucleonShellPosition.xPosition, yPosition );
+        viewDestination.addXY( xOffset, 0 );
+        inputEnabled = true;
+      }
+
+      // add x offset so neutron particles are aligned with their energy levels
+      particle.destinationProperty.set( viewDestination );
+      particle.inputEnabledProperty.value = inputEnabled;
+    } );
   }
 }
 
