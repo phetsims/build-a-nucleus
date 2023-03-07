@@ -14,8 +14,13 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import BANColors from '../../common/BANColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/view/ParticleType.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
-type EnergyLevelNodeOptions = NodeOptions;
+type SelfOptions = {
+  xOffset?: number;
+};
+type EnergyLevelNodeOptions = SelfOptions & NodeOptions;
 type ParticleShellPosition = {
   particle: Particle | undefined;
   xPosition: number; // 0 - 5
@@ -55,8 +60,16 @@ class NucleonShellView extends Node {
   private modelViewTransform: ModelViewTransform2;
 
   public constructor( particleType: ParticleType, nucleonShellPositions: ParticleShellPosition[][],
-                      nucleonCountProperty: TReadOnlyProperty<number>, providedOptions: EnergyLevelNodeOptions ) {
-    super( providedOptions );
+                      nucleonCountProperty: TReadOnlyProperty<number>, particleViewPositionVector: Vector2,
+                      providedOptions?: EnergyLevelNodeOptions ) {
+
+    const options = optionize<EnergyLevelNodeOptions, SelfOptions, NodeOptions>()( {
+      xOffset: 0
+    }, providedOptions );
+    super( options );
+
+    this.y = particleViewPositionVector.y + BANConstants.PARTICLE_RADIUS;
+    this.x = particleViewPositionVector.x + options.xOffset - BANConstants.PARTICLE_RADIUS;
 
     this.modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
