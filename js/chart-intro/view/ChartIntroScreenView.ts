@@ -71,15 +71,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // create and add the 'Nuclear Shell Model' title
     const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModel, { font: BANConstants.REGULAR_FONT } );
     nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
-    nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom;
+    nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
 
     // create the 'highlight' text behind 'Nuclear Shell Model' text
     const nuclearShellModelTextHighlight = new Rectangle( nuclearShellModelText.bounds.dilateXY( 15, 5 ), {
       fill: BANColors.shellModelTextHighlightColorProperty,
-      centerX: this.doubleArrowButtons.centerX,
-      centerY: this.periodicTableAndIsotopeSymbol.bottom,
       cornerRadius: 10
     } );
+    nuclearShellModelTextHighlight.centerX = nuclearShellModelText.centerX;
+    nuclearShellModelTextHighlight.centerY = nuclearShellModelText.centerY;
 
     // place highlight behind the text
     this.addChild( nuclearShellModelTextHighlight );
