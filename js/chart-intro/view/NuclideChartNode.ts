@@ -15,56 +15,60 @@ import BANColors from '../../common/BANColors.js';
 import DecayType from '../../common/view/DecayType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import Orientation from '../../../../phet-core/js/Orientation.js';
 
 // constants
 // 2D array that defines the table structure.
-// The rows are the proton number, in reverse. For example, the last row is protonNumber = 0, while the first row is
-// protonNumber = POPULATED_CELLS.length - 1 = 10
-// The numbers in the rows are the neutronNumber.
+// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
 const POPULATED_CELLS = [
-  [ 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-  [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+  [ 1, 4, 6 ],
   [ 0, 1, 2, 3, 4, 5, 6 ],
-  [ 1, 4, 6 ]
+  [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+  [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 5, 6, 7, 8, 9, 10, 11, 12 ]
 ];
 
 class NuclideChartNode extends Node {
 
-  public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number> ) {
+  public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
+                      chartTransform: ChartTransform ) {
     super();
 
-    const cellDimension = 25;
+    // keep track of the cells of the chart
     const cells: ( NuclideChartCell | null )[][] = [];
-    for ( let p = 0; p < POPULATED_CELLS.length; p++ ) {
-      const populatedCellsInRow = POPULATED_CELLS[ p ];
-      const currentProtonLoopCount = POPULATED_CELLS.length - p - 1; // the current proton count in the loop
-      const rowCells = [];
-      for ( let n = 0; n < populatedCellsInRow.length; n++ ) {
+
+    // create and add the chart cells to the chart. row is proton number and column is neutron number.
+    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
+      const populatedCellsInRow = POPULATED_CELLS[ row ];
+      const rowCells: ( NuclideChartCell | null )[] = [];
+      populatedCellsInRow.forEach( column => {
 
         // get first decay in available decays to color the cell according to that decay type
-        const decayType = AtomIdentifier.getAvailableDecays( currentProtonLoopCount, populatedCellsInRow[ n ] )[ 0 ];
+        const decayType = AtomIdentifier.getAvailableDecays( row, column )[ 0 ];
 
-        const color = AtomIdentifier.isStable( currentProtonLoopCount, populatedCellsInRow[ n ] ) ? BANColors.stableColorProperty.value :
-                      decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
-                      DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
+        const color = AtomIdentifier.isStable( row, column ) ? BANColors.stableColorProperty.value :
+                          decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
+                          DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
 
-        const elementSymbol = AtomIdentifier.getSymbol( currentProtonLoopCount );
-        const cell = new NuclideChartCell( color, elementSymbol );
-        cell.translation = new Vector2( populatedCellsInRow[ n ] * cellDimension, p * cellDimension );
+        const elementSymbol = AtomIdentifier.getSymbol( row );
+
+        // create and add the NuclideChartCell
+        const cell = new NuclideChartCell( color, chartTransform.modelToViewDeltaX( 1 ), elementSymbol );
+        cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
         this.addChild( cell );
         rowCells.push( cell );
-      }
+      } );
       cells.push( rowCells );
-    }
+    } );
 
-    // Highlight the cell that corresponds to the nuclide.
+    // highlight the cell that corresponds to the nuclide.
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount: number, neutronCount: number ) => {
       if ( highlightedCell !== null ) {
@@ -73,7 +77,7 @@ class NuclideChartNode extends Node {
 
       // highlight the cell if it exists
       if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
-        const protonRowIndex = POPULATED_CELLS.length - protonCount - 1;
+        const protonRowIndex = protonCount;
         const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
         highlightedCell = cells[ protonRowIndex ][ neutronRowIndex ];
         highlightedCell!.setHighlighted( true );

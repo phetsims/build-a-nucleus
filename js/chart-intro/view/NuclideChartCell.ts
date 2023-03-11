@@ -11,17 +11,14 @@ import { Text, Color, Rectangle } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import DecayType from '../../common/view/DecayType.js';
 
-// constants
-const CELL_LENGTH = 25;
-
 class NuclideChartCell extends Rectangle {
 
   private readonly labelText: Text;
 
-  public constructor( normalFill: Color, elementSymbol: string ) {
+  public constructor( normalFill: Color, cellLength: number, elementSymbol: string ) {
 
-    super( 0, 0, CELL_LENGTH, CELL_LENGTH, 0, 0, {
-      stroke: 'black',
+    super( 0, 0, cellLength, cellLength, 0, 0, {
+      stroke: Color.GRAY,
       lineWidth: 1,
       fill: normalFill
     } );
@@ -33,7 +30,7 @@ class NuclideChartCell extends Rectangle {
       fill: normalFill === DecayType.ALPHA_DECAY.colorProperty.value ||
             normalFill === DecayType.BETA_MINUS_DECAY.colorProperty.value ?
             Color.BLACK : Color.WHITE,
-      maxWidth: CELL_LENGTH - 5
+      maxWidth: cellLength - 5
     } );
     this.labelText.visible = false;
     this.addChild( this.labelText );

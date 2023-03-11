@@ -29,10 +29,6 @@ class NuclideChartAndNumberLines extends Node {
 
     super( providedOptions );
 
-    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty );
-    nuclideChartNode.scale( 0.8 );
-    this.addChild( nuclideChartNode );
-
     const scaleFactor = 20;
     const chartTransform = new ChartTransform( {
       viewWidth: BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS * scaleFactor,
@@ -40,6 +36,9 @@ class NuclideChartAndNumberLines extends Node {
       viewHeight: BANConstants.CHART_MAX_NUMBER_OF_PROTONS * scaleFactor,
       modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
     } );
+
+    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform );
+    this.addChild( nuclideChartNode );
 
     const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,
