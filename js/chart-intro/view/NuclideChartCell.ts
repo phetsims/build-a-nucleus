@@ -19,7 +19,7 @@ class NuclideChartCell extends Rectangle {
 
     super( 0, 0, cellLength, cellLength, 0, 0, {
       stroke: Color.GRAY,
-      lineWidth: 1,
+      lineWidth: 0.5,
       fill: normalFill
     } );
 
