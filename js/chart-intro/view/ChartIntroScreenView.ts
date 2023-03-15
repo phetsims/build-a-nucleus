@@ -24,6 +24,11 @@ import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import NucleonShellView from './NucleonShellView.js';
 import ParticleType from '../../common/view/ParticleType.js';
+import AtomNode from '../../../../shred/js/view/AtomNode.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
+import ParticleView from '../../../../shred/js/view/ParticleView.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -46,6 +51,67 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options );
 
     this.model = model;
+
+    const miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.emptyAtomCircle.center, 1 );
+    const miniAtomNode = new AtomNode( model.miniParticleAtom, miniAtomMVT, {
+      showCenterX: false,
+      showElementNameProperty: new BooleanProperty( false ),
+      showNeutralOrIonProperty: new BooleanProperty( false ),
+      showStableOrUnstableProperty: new BooleanProperty( false ),
+      electronShellDepictionProperty: new StringProperty( 'cloud' )
+    } );
+    miniAtomNode.center = this.emptyAtomCircle.center;
+    this.addChild( miniAtomNode );
+
+    // update protons in mini-particle as the particleAtom's protonCountProperty changes
+    model.particleAtom.protonCountProperty.link( protonCount => {
+      const protonDelta = model.miniParticleAtom.protonCountProperty.value - protonCount;
+      if ( protonDelta < 0 ) {
+        _.times( protonDelta * -1, () => {
+          const miniParticle = model.createMiniParticleModel( ParticleType.PROTON );
+          const miniParticleView = new ParticleView( miniParticle, miniAtomMVT );
+          this.particleViewMap[ miniParticle.id ] = miniParticleView;
+          this.addParticleView( miniParticle, miniParticleView );
+          model.miniParticleAtom.reconfigureNucleus();
+        } );
+      }
+      else if ( protonDelta > 0 ) {
+        _.times( protonDelta, () => {
+          const protonParticle = model.miniParticleAtom.extractParticle( ParticleType.PROTON.name.toLowerCase() );
+          const protonParticleView = this.findParticleView( protonParticle );
+          delete this.particleViewMap[ protonParticleView.particle.id ];
+
+          protonParticleView.dispose();
+          protonParticle.dispose();
+          model.miniParticleAtom.reconfigureNucleus();
+        } );
+      }
+    } );
+
+    // update neutrons in mini-particle as the particleAtom's neutronCountProperty changes
+    model.particleAtom.neutronCountProperty.link( neutronCount => {
+      const neutronDelta = model.miniParticleAtom.neutronCountProperty.value - neutronCount;
+      if ( neutronDelta < 0 ) {
+        _.times( neutronDelta * -1, () => {
+          const miniParticle = model.createMiniParticleModel( ParticleType.NEUTRON );
+          const miniParticleView = new ParticleView( miniParticle, miniAtomMVT );
+          this.particleViewMap[ miniParticle.id ] = miniParticleView;
+          this.addParticleView( miniParticle, miniParticleView );
+          model.miniParticleAtom.reconfigureNucleus();
+        } );
+      }
+      else if ( neutronDelta > 0 ) {
+        _.times( neutronDelta, () => {
+          const neutronParticle = model.miniParticleAtom.extractParticle( ParticleType.NEUTRON.name.toLowerCase() );
+          const neutronParticleView = this.findParticleView( neutronParticle );
+          delete this.particleViewMap[ neutronParticleView.particle.id ];
+
+          neutronParticleView.dispose();
+          neutronParticle.dispose();
+          model.miniParticleAtom.reconfigureNucleus();
+        } );
+      }
+    } );
 
     // create and add the periodic table and symbol
     this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );

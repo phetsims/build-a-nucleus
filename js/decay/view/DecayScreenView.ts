@@ -53,6 +53,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   // show or hide the electron cloud
   private readonly showElectronCloudBooleanProperty: Property<boolean>;
+  private readonly atomNode: AtomNode;
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -61,6 +62,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), options );
 
     this.model = model;
+
+    // create and add the atomNode
+    this.atomNode = new AtomNode( model.particleAtom, ModelViewTransform2.createIdentity(), { showCenterX: false,
+      showElementNameProperty: new Property( false ),
+      showNeutralOrIonProperty: new Property( false ),
+      showStableOrUnstableProperty: new Property( false ),
+      electronShellDepictionProperty: new Property( 'cloud' ) } );
+    this.atomNode.center = this.emptyAtomCircle.center;
+    this.addChild( this.atomNode );
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
@@ -268,6 +278,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
+
+      // TODO: Why should there be two cases? Could remove the latter case?
       this.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
   }

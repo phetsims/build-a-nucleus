@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Model class for the 'Decay' screen.
+ * Model class for the 'Chart Intro' screen.
  *
  * @author Luisa Vargas
  */
@@ -13,10 +13,12 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import BANConstants from '../../common/BANConstants.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public readonly particleNucleus: ParticleNucleus;
+  public readonly miniParticleAtom: ParticleAtom;
 
   public constructor() {
 
@@ -26,6 +28,17 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.particleNucleus = particleAtom;
+
+    this.miniParticleAtom = new ParticleAtom(); // this is the mini-nucleus that updates based on the particleAtom
+  }
+
+  /**
+   * Create model for particle in mini-nucleus.
+   */
+  public createMiniParticleModel( particleType: ParticleType ): Particle {
+    const particle = new Particle( particleType.name.toLowerCase() );
+    this.miniParticleAtom.addParticle( particle );
+    return particle;
   }
 
   /**

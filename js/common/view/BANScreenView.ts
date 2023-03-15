@@ -30,8 +30,6 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import AtomNode from '../../../../shred/js/view/AtomNode.js';
-import Property from '../../../../axon/js/Property.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
@@ -73,13 +71,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public readonly nucleonCountPanel: Node;
   protected readonly electronCloud: Circle;
 
-  protected readonly atomNode: Node;
-
   // layers where nucleons exist
   protected readonly nucleonLayers: Node[];
 
-  // ParticleView.id => {ParticleView} - lookup map for efficiency
-  private readonly particleViewMap: ParticleViewMap;
+  // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
+  protected readonly particleViewMap: ParticleViewMap;
 
   // where the ParticleView's are
   protected readonly particleViewLayerNode: Node;
@@ -462,17 +458,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
     this.emptyAtomCircle.center = this.atomCenter;
     this.addChild( this.emptyAtomCircle );
-
-    // create and add the AtomNode
-    this.atomNode = new AtomNode( model.particleAtom, ModelViewTransform2.createIdentity(), {
-      showCenterX: false,
-      showElementNameProperty: new Property( false ),
-      showNeutralOrIonProperty: new Property( false ),
-      showStableOrUnstableProperty: new Property( false ),
-      electronShellDepictionProperty: new Property( 'cloud' )
-    } );
-    this.atomNode.center = this.emptyAtomCircle.center;
-    this.addChild( this.atomNode );
 
     // Add the nucleonLayers
     this.nucleonLayers = [];
