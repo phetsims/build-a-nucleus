@@ -29,14 +29,16 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     this.particleNucleus = particleAtom;
 
-    this.miniParticleAtom = new ParticleAtom(); // this is the mini-nucleus that updates based on the particleAtom
+    // this is the mini-nucleus that updates based on the particleAtom
+    this.miniParticleAtom = new ParticleAtom( { nucleonRadius: BANConstants.MINI_PARTICLE_RADIUS } );
   }
 
   /**
    * Create model for particle in mini-nucleus.
    */
   public createMiniParticleModel( particleType: ParticleType ): Particle {
-    const particle = new Particle( particleType.name.toLowerCase() );
+    const particle = new Particle( particleType.name.toLowerCase(),
+      { inputEnabled: false, nucleonRadius: BANConstants.MINI_PARTICLE_RADIUS } );
     this.miniParticleAtom.addParticle( particle );
     return particle;
   }
@@ -65,6 +67,12 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    */
   public override step( dt: number ): void {
     super.step( dt );
+    this.miniParticleAtom.protons.forEach( particle => {
+      particle.step( dt );
+    } );
+    this.miniParticleAtom.neutrons.forEach( particle => {
+      particle.step( dt );
+    } );
   }
 }
 

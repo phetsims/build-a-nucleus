@@ -63,55 +63,40 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     miniAtomNode.center = this.emptyAtomCircle.center;
     this.addChild( miniAtomNode );
 
-    // update protons in mini-particle as the particleAtom's protonCountProperty changes
-    model.particleAtom.protonCountProperty.link( protonCount => {
-      const protonDelta = model.miniParticleAtom.protonCountProperty.value - protonCount;
-      if ( protonDelta < 0 ) {
-        _.times( protonDelta * -1, () => {
-          const miniParticle = model.createMiniParticleModel( ParticleType.PROTON );
+    // update nucleons in mini-particle as the particleAtom's nucleon count properties change
+    const nucleonCountListener = ( nucleonCount: number, particleType: ParticleType ) => {
+      const currentMiniAtomNucleonCount = particleType === ParticleType.PROTON ?
+                                          model.miniParticleAtom.protonCountProperty.value :
+                                          model.miniParticleAtom.neutronCountProperty.value;
+
+      // difference between particleAtom's nucleon count and miniAtom's nucleon count
+      const nucleonDelta = currentMiniAtomNucleonCount - nucleonCount;
+
+      // add nucleons to miniAtom
+      if ( nucleonDelta < 0 ) {
+        _.times( nucleonDelta * -1, () => {
+          const miniParticle = model.createMiniParticleModel( particleType );
           const miniParticleView = new ParticleView( miniParticle, miniAtomMVT );
           this.particleViewMap[ miniParticle.id ] = miniParticleView;
           this.addParticleView( miniParticle, miniParticleView );
-          model.miniParticleAtom.reconfigureNucleus();
         } );
       }
-      else if ( protonDelta > 0 ) {
-        _.times( protonDelta, () => {
-          const protonParticle = model.miniParticleAtom.extractParticle( ParticleType.PROTON.name.toLowerCase() );
-          const protonParticleView = this.findParticleView( protonParticle );
-          delete this.particleViewMap[ protonParticleView.particle.id ];
 
-          protonParticleView.dispose();
-          protonParticle.dispose();
-          model.miniParticleAtom.reconfigureNucleus();
-        } );
-      }
-    } );
+      // remove nucleons from miniAtom
+      else if ( nucleonDelta > 0 ) {
+        _.times( nucleonDelta, () => {
+          const particle = model.miniParticleAtom.extractParticle( particleType.name.toLowerCase() );
+          const particleView = this.findParticleView( particle );
+          delete this.particleViewMap[ particleView.particle.id ];
 
-    // update neutrons in mini-particle as the particleAtom's neutronCountProperty changes
-    model.particleAtom.neutronCountProperty.link( neutronCount => {
-      const neutronDelta = model.miniParticleAtom.neutronCountProperty.value - neutronCount;
-      if ( neutronDelta < 0 ) {
-        _.times( neutronDelta * -1, () => {
-          const miniParticle = model.createMiniParticleModel( ParticleType.NEUTRON );
-          const miniParticleView = new ParticleView( miniParticle, miniAtomMVT );
-          this.particleViewMap[ miniParticle.id ] = miniParticleView;
-          this.addParticleView( miniParticle, miniParticleView );
+          particleView.dispose();
+          particle.dispose();
           model.miniParticleAtom.reconfigureNucleus();
         } );
       }
-      else if ( neutronDelta > 0 ) {
-        _.times( neutronDelta, () => {
-          const neutronParticle = model.miniParticleAtom.extractParticle( ParticleType.NEUTRON.name.toLowerCase() );
-          const neutronParticleView = this.findParticleView( neutronParticle );
-          delete this.particleViewMap[ neutronParticleView.particle.id ];
-
-          neutronParticleView.dispose();
-          neutronParticle.dispose();
-          model.miniParticleAtom.reconfigureNucleus();
-        } );
-      }
-    } );
+    };
+    model.particleAtom.protonCountProperty.link( protonCount => nucleonCountListener( protonCount, ParticleType.PROTON ) );
+    model.particleAtom.neutronCountProperty.link( neutronCount => nucleonCountListener( neutronCount, ParticleType.NEUTRON ) );
 
     // create and add the periodic table and symbol
     this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );

@@ -23,6 +23,9 @@ const BANConstants = {
   // radius of the particle node used on the NucleonCountPanel and AvailableDecaysPanel
   PARTICLE_RADIUS: PARTICLE_RADIUS,
 
+  // radius of the particle node used in the miniAtom
+  MINI_PARTICLE_RADIUS: PARTICLE_RADIUS * 0.85,
+
   // CSS pixels per second
   PARTICLE_ANIMATION_SPEED: 300,
 
