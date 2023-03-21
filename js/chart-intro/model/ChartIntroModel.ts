@@ -10,7 +10,7 @@ import buildANucleus from '../../buildANucleus.js';
 import BANModel from '../../common/model/BANModel.js';
 import ParticleNucleus from './ParticleNucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import ParticleType from '../../common/view/ParticleType.js';
+import ParticleType from '../../common/view/ParticleType.js'; // TODO: move ParticelType into model folder, see: https://github.com/phetsims/chipper/issues/1385
 import Particle from '../../../../shred/js/model/Particle.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
