@@ -32,7 +32,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
       const particle = new Particle( particleType.name.toLowerCase(), {
-        maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+        maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
       } );
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 

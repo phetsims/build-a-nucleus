@@ -199,7 +199,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // show the electron cloud by default
     this.showElectronCloudBooleanProperty = new BooleanProperty( true );
-    this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.electronCloud.visible = showElectronCloud; } );
+    this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.particleAtomNode.electronCloud.visible = showElectronCloud; } );
 
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
@@ -231,7 +231,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.stabilityIndicator );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
-    this.addChild( this.particleViewLayerNode );
+    this.addChild( this.particleAtomNode );
 
     // Define the update function for the stability indicator.
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
@@ -257,9 +257,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.stabilityIndicator.visible = visible;
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
-
-    // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 2, 70, 95 ) );
 
     // TODO: move elementName to BANScreenView bc text node the same, just positioning different
 

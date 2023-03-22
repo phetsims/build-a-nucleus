@@ -32,6 +32,9 @@ const BANConstants = {
   // font size of the content labels in the NucleonCountPanel and AvailableDecaysPanel
   BUTTONS_AND_LEGEND_FONT_SIZE: 18,
 
+  // This is based on max number of particles, may need adjustment if that changes.
+  NUMBER_OF_NUCLEON_LAYERS: 22,
+
   // half-life number line starting exponent
   HALF_LIFE_NUMBER_LINE_START_EXPONENT: -24,
 

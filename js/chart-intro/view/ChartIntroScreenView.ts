@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, Line, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -38,6 +38,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   private readonly periodicTableAndIsotopeSymbol: PeriodicTableAndIsotopeSymbol;
   private readonly protonEnergyLevelNode: NucleonShellView;
   private readonly neutronEnergyLevelNode: NucleonShellView;
+  private readonly energyLevelLayer: Node;
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
@@ -51,6 +52,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options );
 
     this.model = model;
+    this.energyLevelLayer = new Node();
 
     const miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.emptyAtomCircle.center, 1 );
     const miniAtomNode = new AtomNode( model.miniParticleAtom, miniAtomMVT, {
@@ -76,9 +78,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       if ( nucleonDelta < 0 ) {
         _.times( nucleonDelta * -1, () => {
           const miniParticle = model.createMiniParticleModel( particleType );
-          const miniParticleView = new ParticleView( miniParticle, miniAtomMVT );
-          this.particleViewMap[ miniParticle.id ] = miniParticleView;
-          this.addParticleView( miniParticle, miniParticleView );
+          this.particleViewMap[ miniParticle.id ] = new ParticleView( miniParticle, miniAtomMVT );
+          this.particleAtomNode.addParticleView( miniParticle );
         } );
       }
 
@@ -103,9 +104,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
     this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
     this.addChild( this.periodicTableAndIsotopeSymbol );
-
-    // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( protonCount => this.updateCloudSize( protonCount, 0.27, 10, 20 ) );
 
     this.elementName.centerX = this.doubleArrowButtons.centerX;
     this.elementName.top = this.nucleonCountPanel.top;
@@ -192,7 +190,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( nuclideChartNodeAccordionBox );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
-    this.addChild( this.particleViewLayerNode );
+    this.addChild( this.particleAtomNode );
+    this.addChild( this.energyLevelLayer );
 
     // only show the emptyAtomCircle when there are zero nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],
@@ -211,6 +210,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     );
     return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition ) ||
            this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition );
+  }
+
+  protected override addParticleView( particle: Particle ): void {
+    this.energyLevelLayer.addChild( this.findParticleView( particle ) );
   }
 }
 

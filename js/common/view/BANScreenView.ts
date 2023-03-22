@@ -13,7 +13,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, RadialGradient, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
@@ -32,15 +32,11 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ShredConstants from '../../../../shred/js/ShredConstants.js';
-import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
-
-// empirically determined, from the ElectronCloudView radius
-const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
+import ParticleAtomNode from '../../chart-intro/view/ParticleAtomNode.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
-const NUMBER_OF_NUCLEON_LAYERS = 22; // This is based on max number of particles, may need adjustment if that changes.
 
 // types
 type SelfOptions = {
@@ -61,24 +57,15 @@ const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
 abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>> extends ScreenView {
 
-  public static readonly NUMBER_OF_NUCLEON_LAYERS = NUMBER_OF_NUCLEON_LAYERS;
-
   protected model: M;
   private timeSinceCountdownStarted: number;
   private previousProtonCount: number;
   private previousNeutronCount: number;
   public readonly resetAllButton: Node;
   public readonly nucleonCountPanel: Node;
-  protected readonly electronCloud: Circle;
-
-  // layers where nucleons exist
-  protected readonly nucleonLayers: Node[];
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
   protected readonly particleViewMap: ParticleViewMap;
-
-  // where the ParticleView's are
-  protected readonly particleViewLayerNode: Node;
 
   // the NucleonCreatorNode for the protons and neutrons
   protected readonly protonsCreatorNode: Node;
@@ -94,6 +81,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly elementName: Text;
   private readonly atomCenter: Vector2;
   private readonly particleViewPositionVector: Vector2;
+  protected particleAtomNode: ParticleAtomNode;
 
   protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
 
@@ -113,9 +101,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.atomCenter = atomCenter;
 
     this.particleViewMap = {};
-
-    // this is added at the end of subclasses for the correct z order
-    this.particleViewLayerNode = new Node();
 
     this.nucleonCountPanel = new NucleonCountPanel( model.particleAtom.protonCountProperty, model.protonCountRange,
       model.particleAtom.neutronCountProperty, model.neutronCountRange );
@@ -329,16 +314,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     createSingleOrDoubleArrowButtonClickedListener( false, protonArrowButtons );
     createSingleOrDoubleArrowButtonClickedListener( false, neutronArrowButtons );
 
-    // create and add the electron cloud
-    this.electronCloud = new Circle( {
-      radius: MIN_ELECTRON_CLOUD_RADIUS,
-      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_ELECTRON_CLOUD_RADIUS )
-        .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
-    } );
-    this.electronCloud.center = this.atomCenter;
-    this.addChild( this.electronCloud );
-
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
 
     // create and add the Protons and Neutrons label
@@ -414,7 +389,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 ) );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
-      this.addParticleView( particle, particleView );
+      this.addParticleView( particle );
       const particleType = getParticleTypeFromStringType( particle.type );
 
       if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
@@ -459,14 +434,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.emptyAtomCircle.center = this.atomCenter;
     this.addChild( this.emptyAtomCircle );
 
-    // Add the nucleonLayers
-    this.nucleonLayers = [];
-    _.times( NUMBER_OF_NUCLEON_LAYERS, () => {
-      const nucleonLayer = new Node();
-      this.nucleonLayers.push( nucleonLayer );
-      this.particleViewLayerNode.addChild( nucleonLayer );
-    } );
-    this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
+    this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, this.atomCenter, this.model.protonCountRange );
 
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
@@ -482,56 +450,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
       }
     } );
-  }
 
-  /**
-   * This method increases the value of the smaller radius values and decreases the value of the larger ones.
-   * This effectively reduces the range of radii values used.
-   * This is a very specialized function for the purposes of this class.
-   *
-   * minChangedRadius and maxChangedRadius define the way in which an input value is increased or decreased. These values
-   * can be adjusted as needed to make the cloud size appear as desired.
-   */
-  private static reduceRadiusRange( value: number, minShellRadius: number, maxShellRadius: number,
-                                    minChangedRadius: number, maxChangedRadius: number ): number {
-    const compressionFunction = new LinearFunction( minShellRadius, maxShellRadius, minChangedRadius, maxChangedRadius );
-    return compressionFunction.evaluate( value );
-  }
-
-  /**
-   * Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
-   * based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
-   * range and scale to provide values that are usable for our needs on the canvas.
-   */
-  private getElectronShellDiameter( numElectrons: number, minChangedRadius: number, maxChangedRadius: number ): number {
-    const maxElectrons = this.model.protonCountRange.max;
-    const atomicRadius = AtomIdentifier.getAtomicRadius( numElectrons );
-    if ( atomicRadius ) {
-      return BANScreenView.reduceRadiusRange( atomicRadius, this.model.protonCountRange.min + 1, maxElectrons,
-        minChangedRadius, maxChangedRadius );
-    }
-    else {
-      assert && assert( numElectrons <= maxElectrons, `Atom has more than supported number of electrons, ${numElectrons}` );
-      return 0;
-    }
-  }
-
-  /**
-   * Update size of electron cloud based on protonNumber since the nuclides created are neutral, meaning the number of
-   * electrons is the same as the number of protons.
-   */
-  protected updateCloudSize( protonCount: number, factor: number, minChangedRadius: number, maxChangedRadius: number ): void {
-    if ( protonCount === 0 ) {
-      this.electronCloud.radius = 1E-5; // arbitrary non-zero value
-      this.electronCloud.fill = 'transparent';
-    }
-    else {
-      const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonCount, minChangedRadius, maxChangedRadius ) / 2 );
-      this.electronCloud.radius = radius * factor;
-      this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
-        .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' );
-    }
+    // update the cloud size as the massNumber changes
+    model.particleAtom.protonCountProperty.link( protonCount => this.particleAtomNode.updateCloudSize( protonCount, 2, 70, 95 ) );
   }
 
   /**
@@ -580,7 +501,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
     const particle = new Particle( particleType.name.toLowerCase(), {
-      maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
 
     // place the particle the center of the particleAtom and add it to the model and particleAtom
@@ -606,7 +527,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // create a particle at the center of its creator node
     const particle = new Particle( particleType.name.toLowerCase(), {
-      maxZLayer: BANScreenView.NUMBER_OF_NUCLEON_LAYERS - 1
+      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
     particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
     const origin = particleType === ParticleType.PROTON ?
@@ -756,50 +677,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Add ParticleView to the correct nucleonLayer.
-   */
-  protected addParticleView( particle: Particle, particleView: ParticleView ): void {
-    this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
-
-    // Add a listener that adjusts a nucleon's z-order layering.
-    particle.zLayerProperty.link( zLayer => {
-      assert && assert(
-        this.nucleonLayers.length > zLayer,
-        'zLayer for nucleon exceeds number of layers, max number may need increasing.'
-      );
-
-      // Determine whether nucleon view is on the correct layer.
-      let onCorrectLayer = false;
-      const nucleonLayersChildren = this.nucleonLayers[ zLayer ].getChildren() as ParticleView[];
-      nucleonLayersChildren.forEach( particleView => {
-        if ( particleView.particle === particle ) {
-          onCorrectLayer = true;
-        }
-      } );
-
-      if ( !onCorrectLayer ) {
-
-        // Remove particle view from its current layer.
-        let particleView = null;
-        for ( let layerIndex = 0; layerIndex < this.nucleonLayers.length && particleView === null; layerIndex++ ) {
-          for ( let childIndex = 0; childIndex < this.nucleonLayers[ layerIndex ].children.length; childIndex++ ) {
-            const nucleonLayersChildren = this.nucleonLayers[ layerIndex ].getChildren() as ParticleView[];
-            if ( nucleonLayersChildren[ childIndex ].particle === particle ) {
-              particleView = nucleonLayersChildren[ childIndex ];
-              this.nucleonLayers[ layerIndex ].removeChildAt( childIndex );
-              break;
-            }
-          }
-        }
-
-        // Add the particle view to its new layer.
-        assert && assert( particleView, 'Particle view not found during relayering' );
-        this.nucleonLayers[ zLayer ].addChild( particleView! );
-      }
-    } );
-  }
-
-  /**
    * Define the update function for the element name.
    */
   public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number,
@@ -878,6 +755,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     return false;
   }
 
+  protected addParticleView( particle: Particle ): void {
+    this.particleAtomNode.addParticleView( particle );
+  }
 }
 
 buildANucleus.register( 'BANScreenView', BANScreenView );
