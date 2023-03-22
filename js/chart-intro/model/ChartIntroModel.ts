@@ -30,7 +30,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     this.particleNucleus = particleAtom;
 
     // this is the mini-nucleus that updates based on the particleAtom
-    this.miniParticleAtom = new ParticleAtom( { nucleonRadius: BANConstants.MINI_PARTICLE_RADIUS } );
+    this.miniParticleAtom = new ParticleAtom();
   }
 
   /**
@@ -38,7 +38,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    */
   public createMiniParticleModel( particleType: ParticleType ): Particle {
     const particle = new Particle( particleType.name.toLowerCase(),
-      { inputEnabled: false, nucleonRadius: BANConstants.MINI_PARTICLE_RADIUS } );
+      { inputEnabled: false } );
     this.miniParticleAtom.addParticle( particle );
     return particle;
   }

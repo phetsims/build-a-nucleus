@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 import buildANucleus from '../../buildANucleus.js';
-import { Circle, Node, RadialGradient } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node, RadialGradient } from '../../../../scenery/js/imports.js';
 import { ParticleViewMap } from '../../common/view/BANScreenView.js';
 import BANConstants from '../../common/BANConstants.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
@@ -28,6 +28,7 @@ class ParticleAtomNode extends Node {
   private readonly atomCenter: Vector2;
   private protonCountRange: Range;
   private readonly particleViewMap: ParticleViewMap;
+  public readonly emptyAtomCircle: Circle;
   
   public constructor( particleViewMap: ParticleViewMap, atomCenter: Vector2, protonCountRange: Range ) {
 
@@ -47,7 +48,17 @@ class ParticleAtomNode extends Node {
     } );
     electronCloud.center = atomCenter;
 
-    super( { children: [ electronCloud, ...nucleonLayers ] } );
+    // create and add the dashed empty circle at the center
+    const lineWidth = 1;
+    const emptyAtomCircle = new Circle( {
+      radius: BANConstants.PARTICLE_RADIUS - lineWidth,
+      stroke: Color.GRAY,
+      lineDash: [ 2, 2 ],
+      lineWidth: lineWidth
+    } );
+    emptyAtomCircle.center = atomCenter;
+
+    super( { children: [ emptyAtomCircle, electronCloud, ...nucleonLayers ] } );
 
     this.nucleonLayers = nucleonLayers;
     this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
@@ -56,6 +67,7 @@ class ParticleAtomNode extends Node {
     this.atomCenter = atomCenter;
     this.protonCountRange = protonCountRange;
     this.electronCloud = electronCloud;
+    this.emptyAtomCircle = emptyAtomCircle;
   }
 
 

@@ -69,7 +69,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       showNeutralOrIonProperty: new Property( false ),
       showStableOrUnstableProperty: new Property( false ),
       electronShellDepictionProperty: new Property( 'cloud' ) } );
-    this.atomNode.center = this.emptyAtomCircle.center;
+    this.atomNode.center = this.particleAtomNode.emptyAtomCircle.center;
     this.addChild( this.atomNode );
 
     // create and add the half-life information node at the top half of the decay screen
@@ -277,7 +277,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
 
       // TODO: Why should there be two cases? Could remove the latter case?
-      this.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
+      this.particleAtomNode.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
   }
 

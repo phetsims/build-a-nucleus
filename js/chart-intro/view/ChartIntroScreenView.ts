@@ -54,7 +54,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model = model;
     this.energyLevelLayer = new Node();
 
-    const miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.emptyAtomCircle.center, 1 );
+    const miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
     const miniAtomNode = new AtomNode( model.miniParticleAtom, miniAtomMVT, {
       showCenterX: false,
       showElementNameProperty: new BooleanProperty( false ),
@@ -62,7 +62,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       showStableOrUnstableProperty: new BooleanProperty( false ),
       electronShellDepictionProperty: new StringProperty( 'cloud' )
     } );
-    miniAtomNode.center = this.emptyAtomCircle.center;
+    miniAtomNode.center = this.particleAtomNode.emptyAtomCircle.center;
     this.addChild( miniAtomNode );
 
     // update nucleons in mini-particle as the particleAtom's nucleon count properties change
@@ -98,6 +98,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     };
     model.particleAtom.protonCountProperty.link( protonCount => nucleonCountListener( protonCount, ParticleType.PROTON ) );
     model.particleAtom.neutronCountProperty.link( neutronCount => nucleonCountListener( neutronCount, ParticleType.NEUTRON ) );
+    const particleAtomNodeCenter = this.particleAtomNode.center;
+    this.particleAtomNode.scale( 0.85 );
+    this.particleAtomNode.center = particleAtomNodeCenter;
 
     // create and add the periodic table and symbol
     this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
@@ -196,7 +199,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // only show the emptyAtomCircle when there are zero nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => {
-        this.emptyAtomCircle.visible = ( protonCount + neutronCount ) === 0;
+        this.particleAtomNode.emptyAtomCircle.visible = ( protonCount + neutronCount ) === 0;
       } );
   }
 

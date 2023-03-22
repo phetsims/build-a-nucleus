@@ -13,7 +13,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { Circle, Color, Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonCountPanel from './NucleonCountPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
@@ -31,7 +31,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import ShredConstants from '../../../../shred/js/ShredConstants.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from '../../chart-intro/view/ParticleAtomNode.js';
@@ -77,7 +76,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
   protected readonly neutronArrowButtons: Node;
-  protected readonly emptyAtomCircle: Node;
   protected readonly elementName: Text;
   private readonly atomCenter: Vector2;
   private readonly particleViewPositionVector: Vector2;
@@ -422,18 +420,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       }
     } );
 
-
-    // create and add the dashed empty circle at the center
-    const lineWidth = 1;
-    this.emptyAtomCircle = new Circle( {
-      radius: ShredConstants.NUCLEON_RADIUS - lineWidth,
-      stroke: Color.GRAY,
-      lineDash: [ 2, 2 ],
-      lineWidth: lineWidth
-    } );
-    this.emptyAtomCircle.center = this.atomCenter;
-    this.addChild( this.emptyAtomCircle );
-
     this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, this.atomCenter, this.model.protonCountRange );
 
     // for use in positioning
@@ -452,7 +438,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
 
     // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( protonCount => this.particleAtomNode.updateCloudSize( protonCount, 2, 70, 95 ) );
+    model.particleAtom.protonCountProperty.link( protonCount => this.particleAtomNode.updateCloudSize( protonCount, 0.27, 10, 20 ) );
   }
 
   /**
