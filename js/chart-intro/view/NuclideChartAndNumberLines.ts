@@ -1,8 +1,8 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Node that contains all the content in the 'Nuclide Chart', including the proton and neutron NucleonNumberLine's, the
- * NuclideChartLegendNode, and the NuclideChartNode.
+ * Node that contains some content in the 'Nuclide Chart', including the proton and neutron NucleonNumberLine's,
+ * and the NuclideChartNode.
  *
  * @author Luisa Vargas
  */
@@ -17,14 +17,15 @@ import Orientation from '../../../../phet-core/js/Orientation.js';
 import BANConstants from '../../common/BANConstants.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Range from '../../../../dot/js/Range.js';
-import NuclideChartLegendNode from './NuclideChartLegendNode.js';
 import NuclideChartNode from './NuclideChartNode.js';
+import { SelectedChartType } from '../model/ChartIntroModel.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
 class NuclideChartAndNumberLines extends Node {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
+                      selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
                       providedOptions?: NuclideChartNodeOptions ) {
 
     super( providedOptions );
@@ -55,9 +56,11 @@ class NuclideChartAndNumberLines extends Node {
     nuclideChartNode.left = neutronNumberLine.left;
     this.addChild( neutronNumberLine );
 
-    const nuclideChartLegendNode = new NuclideChartLegendNode();
-    nuclideChartLegendNode.top = neutronNumberLine.bottom + 10;
-    this.addChild( nuclideChartLegendNode );
+    selectedNuclideChartProperty.link( selectedNuclideChart => {
+      console.log( selectedNuclideChart );
+      protonNumberLine.visible = selectedNuclideChart === 'partial';
+      neutronNumberLine.visible = selectedNuclideChart === 'partial';
+    } );
   }
 }
 

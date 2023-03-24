@@ -14,11 +14,16 @@ import ParticleType from '../../common/view/ParticleType.js'; // TODO: move Part
 import Particle from '../../../../shred/js/model/Particle.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Property from '../../../../axon/js/Property.js';
+
+// types
+export type SelectedChartType = 'partial' | 'zoom';
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public readonly particleNucleus: ParticleNucleus;
   public readonly miniParticleAtom: ParticleAtom;
+  public readonly selectedNuclideChartProperty: Property<SelectedChartType>;
 
   public constructor() {
 
@@ -31,6 +36,8 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     // this is the mini-nucleus that updates based on the particleAtom
     this.miniParticleAtom = new ParticleAtom();
+
+    this.selectedNuclideChartProperty = new Property<SelectedChartType>( 'partial' );
   }
 
   /**

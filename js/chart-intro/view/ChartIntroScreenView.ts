@@ -15,13 +15,11 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
-import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import NucleonShellView from './NucleonShellView.js';
 import ParticleType from '../../common/view/ParticleType.js';
 import AtomNode from '../../../../shred/js/view/AtomNode.js';
@@ -29,6 +27,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
+import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -170,27 +169,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
-    const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty );
-    const nuclideChartNodeAccordionBox = new AccordionBox( nuclideChartAndNumberLines, {
-      titleNode: new Text( BuildANucleusStrings.partialNuclideChart, {
-        font: BANConstants.REGULAR_FONT,
-        maxWidth: 200
-      } ),
-      fill: Color.white,
-      minWidth: this.periodicTableAndIsotopeSymbol.width,
-      contentYSpacing: 0,
-      buttonXMargin: 10,
-      buttonYMargin: 10,
-      expandCollapseButtonOptions: {
-        sideLength: 18
-      },
-      titleAlignX: 'left',
-      stroke: BANConstants.PANEL_STROKE,
-      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
-    } );
-    nuclideChartNodeAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + 5;
-    nuclideChartNodeAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
-    this.addChild( nuclideChartNodeAccordionBox );
+    const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
+      this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
+      this.model.selectedNuclideChartProperty );
+    nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + 5;
+    nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
+    this.addChild( nuclideChartAccordionBox );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );
