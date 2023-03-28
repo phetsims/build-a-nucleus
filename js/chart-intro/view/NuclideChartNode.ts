@@ -36,13 +36,14 @@ const POPULATED_CELLS = [
 ];
 
 class NuclideChartNode extends Node {
+  private cells: ( NuclideChartCell | null )[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform ) {
     super();
 
     // keep track of the cells of the chart
-    const cells: ( NuclideChartCell | null )[][] = [];
+    this.cells = [];
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
     chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
@@ -65,7 +66,7 @@ class NuclideChartNode extends Node {
         this.addChild( cell );
         rowCells.push( cell );
       } );
-      cells.push( rowCells );
+      this.cells.push( rowCells );
     } );
 
     // highlight the cell that corresponds to the nuclide.
@@ -79,10 +80,14 @@ class NuclideChartNode extends Node {
       if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
         const protonRowIndex = protonCount;
         const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
-        highlightedCell = cells[ protonRowIndex ][ neutronRowIndex ];
+        highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
         highlightedCell!.setHighlighted( true );
       }
     } );
+  }
+
+  public getCurrentCellNeutronIndex( protonCount: number, neutronCount: number ): number {
+    return POPULATED_CELLS[ protonCount ].indexOf( neutronCount );
   }
 }
 

@@ -7,7 +7,7 @@
  * @author Luisa Vargas
  */
 
-import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { Color, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
@@ -19,6 +19,8 @@ import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Range from '../../../../dot/js/Range.js';
 import NuclideChartNode from './NuclideChartNode.js';
 import { SelectedChartType } from '../model/ChartIntroModel.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
@@ -40,6 +42,20 @@ class NuclideChartAndNumberLines extends Node {
 
     const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform );
     this.addChild( nuclideChartNode );
+
+    const squareLength = chartTransform.modelToViewDeltaX( 5 );
+    const highlightRectangle = new Rectangle( 0, 0,
+      squareLength, squareLength, { stroke: Color.BLACK, lineWidth: 3 } );
+    this.addChild( highlightRectangle );
+
+    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
+      const cellX = neutronCount;
+      const cellY = protonCount;
+      if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
+        highlightRectangle.centerX = chartTransform.modelToViewX( cellX + 0.75 );
+        highlightRectangle.centerY = chartTransform.modelToViewY( cellY - 0.5 );
+      }
+    } );
 
     const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,
