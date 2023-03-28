@@ -59,7 +59,7 @@ class NuclideChartAndNumberLines extends Node {
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       protonNumberLine.visible = selectedNuclideChart === 'partial';
       neutronNumberLine.visible = selectedNuclideChart === 'partial';
-      nuclideChartNode.scale( selectedNuclideChart === 'partial' ? 1 : 0.4 );
+      nuclideChartNode.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : 0.4 );
     } );
   }
 }

@@ -7,7 +7,7 @@
  */
 
 import buildANucleus from '../../buildANucleus.js';
-import ChartIntroModel from '../model/ChartIntroModel.js';
+import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, Line, Node, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -28,6 +28,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -176,6 +177,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + 5;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
+
+    const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>( this.model.selectedNuclideChartProperty,
+      [ { value: 'partial', createNode: () => new Text( 'partial' ) }, { value: 'zoom', createNode: () => new Text( 'zoom' ) } ],
+      { leftTop: nuclideChartAccordionBox.leftBottom, orientation: 'horizontal' } );
+    this.addChild( partialChartRadioButton );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );
