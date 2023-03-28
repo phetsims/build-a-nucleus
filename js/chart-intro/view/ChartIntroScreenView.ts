@@ -169,6 +169,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
+    // TODO: use align group to match width's of accordion box and periodic table
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
       this.model.selectedNuclideChartProperty );

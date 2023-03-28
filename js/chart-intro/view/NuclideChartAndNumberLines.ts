@@ -28,7 +28,7 @@ class NuclideChartAndNumberLines extends Node {
                       selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
                       providedOptions?: NuclideChartNodeOptions ) {
 
-    super( providedOptions );
+    super( { ...providedOptions, excludeInvisibleChildrenFromBounds: true } );
 
     const scaleFactor = 20;
     const chartTransform = new ChartTransform( {
@@ -57,9 +57,9 @@ class NuclideChartAndNumberLines extends Node {
     this.addChild( neutronNumberLine );
 
     selectedNuclideChartProperty.link( selectedNuclideChart => {
-      console.log( selectedNuclideChart );
       protonNumberLine.visible = selectedNuclideChart === 'partial';
       neutronNumberLine.visible = selectedNuclideChart === 'partial';
+      nuclideChartNode.scale( selectedNuclideChart === 'partial' ? 1 : 0.4 );
     } );
   }
 }

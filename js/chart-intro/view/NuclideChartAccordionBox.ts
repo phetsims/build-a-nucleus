@@ -6,7 +6,7 @@ import buildANucleus from '../../buildANucleus.js';
 import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../../common/BANConstants.js';
-import { Color, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import NuclideChartLegendNode from './NuclideChartLegendNode.js';
 import { SelectedChartType } from '../model/ChartIntroModel.js';
 
@@ -26,12 +26,30 @@ class NuclideChartAccordionBox extends AccordionBox {
       selectedNuclideChartProperty );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
+    const zoomInChart = new Rectangle( 0, 0, 100, 100, {
+      stroke: Color.BLACK
+    } );
+    selectedNuclideChartProperty.link( selectedNuclideChart => {
+      zoomInChart.visible = selectedNuclideChart === 'zoom';
+    } );
+
+    const chartsHBox = new HBox( {
+      children: [
+        zoomInChart,
+        nuclideChartAndNumberLines
+      ],
+      spacing: 10,
+      align: 'top',
+      excludeInvisibleChildrenFromBounds: true,
+      minContentHeight: 270
+    } );
     const contentVBox = new VBox( {
       children: [
-        nuclideChartAndNumberLines,
+        chartsHBox,
         nuclideChartLegendNode
       ],
-      spacing: 10
+      spacing: 10,
+      excludeInvisibleChildrenFromBounds: true
     } );
 
     super( contentVBox, {
@@ -53,7 +71,6 @@ class NuclideChartAccordionBox extends AccordionBox {
     } );
   }
 }
-
 
 buildANucleus.register( 'NuclideChartAccordionBox', NuclideChartAccordionBox );
 export default NuclideChartAccordionBox;
