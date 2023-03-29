@@ -40,7 +40,8 @@ class NuclideChartAndNumberLines extends Node {
       modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
     } );
 
-    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform );
+    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, selectedNuclideChartProperty,
+      chartTransform );
     this.addChild( nuclideChartNode );
 
     const squareLength = chartTransform.modelToViewDeltaX( 5 );

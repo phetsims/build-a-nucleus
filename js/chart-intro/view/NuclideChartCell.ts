@@ -14,8 +14,10 @@ import DecayType from '../../common/view/DecayType.js';
 class NuclideChartCell extends Rectangle {
 
   private readonly labelText: Text;
+  public readonly protonNumber: number;
+  public readonly neutronNumber: number;
 
-  public constructor( normalFill: Color, cellLength: number, elementSymbol: string ) {
+  public constructor( normalFill: Color, cellLength: number, elementSymbol: string, protonNumber: number, neutronNumber: number ) {
 
     super( 0, 0, cellLength, cellLength, 0, 0, {
       stroke: Color.GRAY,
@@ -35,11 +37,18 @@ class NuclideChartCell extends Rectangle {
     this.labelText.visible = false;
     this.addChild( this.labelText );
 
+    this.protonNumber = protonNumber;
+    this.neutronNumber = neutronNumber;
   }
 
   // show the label text when highlighting the cell
   public setHighlighted( highlighted: boolean ): void {
     this.labelText.visible = highlighted;
+  }
+
+  // make cell more opaque to de-emphasize the cell
+  public makeOpaque( protonDelta: number, neutronDelta: number ): void {
+    this.opacity = protonDelta > 2 || neutronDelta > 2 ? 0.65 : 1;
   }
 }
 

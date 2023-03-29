@@ -36,10 +36,10 @@ const POPULATED_CELLS = [
 ];
 
 class NuclideChartNode extends Node {
-  private cells: ( NuclideChartCell | null )[][];
+  private readonly cells: ( NuclideChartCell | null )[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform ) {
+                      selectedNuclideChartProperty: TReadOnlyProperty<string>, chartTransform: ChartTransform ) {
     super();
 
     // keep track of the cells of the chart
@@ -61,7 +61,7 @@ class NuclideChartNode extends Node {
         const elementSymbol = AtomIdentifier.getSymbol( row );
 
         // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( color, chartTransform.modelToViewDeltaX( 1 ), elementSymbol );
+        const cell = new NuclideChartCell( color, chartTransform.modelToViewDeltaX( 1 ), elementSymbol, row, column );
         cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
         this.addChild( cell );
         rowCells.push( cell );
@@ -83,11 +83,19 @@ class NuclideChartNode extends Node {
         highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
         highlightedCell!.setHighlighted( true );
       }
-    } );
-  }
 
-  public getCurrentCellNeutronIndex( protonCount: number, neutronCount: number ): number {
-    return POPULATED_CELLS[ protonCount ].indexOf( neutronCount );
+      if ( selectedNuclideChartProperty.value === 'zoom' ) {
+        this.cells.forEach( nuclideChartCellRow => {
+          nuclideChartCellRow.forEach( nuclideChartCell => {
+            if ( nuclideChartCell ) {
+              const protonDelta = Math.abs( nuclideChartCell?.protonNumber - protonCount );
+              const neutronDelta = Math.abs( nuclideChartCell?.neutronNumber - protonCount );
+              nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
+            }
+          } );
+        } );
+      }
+    } );
   }
 }
 
