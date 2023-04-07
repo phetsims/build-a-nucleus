@@ -68,8 +68,8 @@ class NuclideChartAndNumberLines extends Node {
         // constrain the bounds of the highlightRectangle
         const constrainedCenter = squareBounds.getConstrainedPoint( new Vector2( cellX, cellY ) );
         modelHighlightRectangleCenterProperty.value = new Vector2( constrainedCenter.x, constrainedCenter.y );
-        highlightRectangle.center = chartTransform.modelToViewXY( modelHighlightRectangleCenterProperty.value.x + 0.75,
-          modelHighlightRectangleCenterProperty.value.y - 0.5 );
+        highlightRectangle.center = chartTransform.modelToViewXY( ( modelHighlightRectangleCenterProperty.value.x + 0.75 ) * 0.4,
+          ( modelHighlightRectangleCenterProperty.value.y - 0.5 ) * 0.4 );
       }
     } );
 
@@ -91,7 +91,9 @@ class NuclideChartAndNumberLines extends Node {
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       protonNumberLine.visible = selectedNuclideChart === 'partial';
       neutronNumberLine.visible = selectedNuclideChart === 'partial';
+      highlightRectangle.visible = selectedNuclideChart === 'zoom';
       nuclideChartNode.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : 0.4 );
+      highlightRectangle.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : 0.4 );
     } );
   }
 }
