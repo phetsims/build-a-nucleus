@@ -40,7 +40,8 @@ class NuclideChartNode extends Node {
   private readonly cells: ( NuclideChartCell | null )[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      selectedNuclideChartProperty: TReadOnlyProperty<string>, chartTransform: ChartTransform ) {
+                      selectedNuclideChartProperty: TReadOnlyProperty<string>, chartTransform: ChartTransform,
+                      modelHighlightRectangleCenterProperty: TReadOnlyProperty<Vector2> ) {
     super();
 
     // keep track of the cells of the chart
@@ -83,7 +84,8 @@ class NuclideChartNode extends Node {
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount: number, neutronCount: number ) => {
+    Multilink.multilink( [ protonCountProperty, neutronCountProperty, modelHighlightRectangleCenterProperty ],
+      ( protonCount: number, neutronCount: number, modelHighlightRectangleCenter: Vector2 ) => {
       if ( highlightedCell !== null ) {
         highlightedCell.setHighlighted( false );
       }
@@ -112,13 +114,13 @@ class NuclideChartNode extends Node {
         }
       }
 
-      // make opaque any cells too far away from the current nuclide cell
+      // make opaque any cells too far away from the center of the highlight rectangle
       if ( selectedNuclideChartProperty.value === 'partial' ) {
         this.cells.forEach( nuclideChartCellRow => {
           nuclideChartCellRow.forEach( nuclideChartCell => {
             if ( nuclideChartCell ) {
-              const protonDelta = Math.abs( nuclideChartCell?.protonNumber - protonCount );
-              const neutronDelta = Math.abs( nuclideChartCell?.neutronNumber - neutronCount );
+              const protonDelta = Math.abs( modelHighlightRectangleCenterProperty.value.y - nuclideChartCell?.protonNumber );
+              const neutronDelta = Math.abs( modelHighlightRectangleCenterProperty.value.x - nuclideChartCell?.neutronNumber );
               nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
             }
           } );

@@ -21,6 +21,9 @@ import NuclideChartNode from './NuclideChartNode.js';
 import { SelectedChartType } from '../model/ChartIntroModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Property from '../../../../axon/js/Property.js';
 
 type NuclideChartNodeOptions = NodeOptions;
 
@@ -40,8 +43,12 @@ class NuclideChartAndNumberLines extends Node {
       modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
     } );
 
+    // keep track of the current center of the highlight rectangle
+    const modelHighlightRectangleCenterProperty = new Property( Vector2.ZERO );
+
+    // create and add the nuclideChartNode
     const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, selectedNuclideChartProperty,
-      chartTransform );
+      chartTransform, modelHighlightRectangleCenterProperty );
     this.addChild( nuclideChartNode );
 
     // create and add a box around current nuclide
@@ -50,13 +57,19 @@ class NuclideChartAndNumberLines extends Node {
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: 3 } );
     this.addChild( highlightRectangle );
 
+    const squareBounds = new Bounds2( 1, 1, 11, 9 );
+
     // update the box position to current nuclide
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
       const cellX = neutronCount;
       const cellY = protonCount;
       if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
-        highlightRectangle.centerX = chartTransform.modelToViewX( cellX + 0.75 );
-        highlightRectangle.centerY = chartTransform.modelToViewY( cellY - 0.5 );
+
+        // constrain the bounds of the highlightRectangle
+        const constrainedCenter = squareBounds.getConstrainedPoint( new Vector2( cellX, cellY ) );
+        modelHighlightRectangleCenterProperty.value = new Vector2( constrainedCenter.x, constrainedCenter.y );
+        highlightRectangle.center = chartTransform.modelToViewXY( modelHighlightRectangleCenterProperty.value.x + 0.75,
+          modelHighlightRectangleCenterProperty.value.y - 0.5 );
       }
     } );
 
