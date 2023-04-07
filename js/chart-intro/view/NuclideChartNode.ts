@@ -7,7 +7,7 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import { Color, Node } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
@@ -17,6 +17,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 
 // constants
 // 2D array that defines the table structure.
@@ -44,6 +45,7 @@ class NuclideChartNode extends Node {
 
     // keep track of the cells of the chart
     this.cells = [];
+    const cellLength = chartTransform.modelToViewDeltaX( 1 );
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
     chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
@@ -61,7 +63,7 @@ class NuclideChartNode extends Node {
         const elementSymbol = AtomIdentifier.getSymbol( row );
 
         // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( color, chartTransform.modelToViewDeltaX( 1 ), elementSymbol, row, column );
+        const cell = new NuclideChartCell( color, cellLength, elementSymbol, row, column, decayType );
         cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
         this.addChild( cell );
         rowCells.push( cell );
@@ -69,7 +71,17 @@ class NuclideChartNode extends Node {
       this.cells.push( rowCells );
     } );
 
-    // highlight the cell that corresponds to the nuclide.
+    const arrowNode = new ArrowNode( 0, 0, 100, 100, {
+      headWidth: 5,
+      headHeight: 5,
+      tailWidth: 2.5,
+      fill: Color.WHITE,
+      stroke: null,
+      visible: false
+    } );
+    this.addChild( arrowNode );
+
+    // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount: number, neutronCount: number ) => {
       if ( highlightedCell !== null ) {
@@ -82,14 +94,31 @@ class NuclideChartNode extends Node {
         const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
         highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
         highlightedCell!.setHighlighted( true );
+
+        const decayType = highlightedCell!.decayType;
+        if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
+          const direction = decayType === DecayType.NEUTRON_EMISSION.name ? new Vector2( -0.7, 0 ) :
+                            decayType === DecayType.PROTON_EMISSION.name ? new Vector2( 0, -0.7 ) :
+                            decayType === DecayType.BETA_PLUS_DECAY.name ? new Vector2( 1, -1 ).normalized() :
+                            decayType === DecayType.BETA_MINUS_DECAY.name ? new Vector2( -1, 1 ).normalized() :
+                            new Vector2( -2, -2 );
+          const viewDirection = chartTransform.modelToViewDeltaXY( direction.x, direction.y );
+          arrowNode.setTip( viewDirection.x, viewDirection.y );
+          arrowNode.center = highlightedCell!.center.plusXY( viewDirection.withMagnitude( cellLength / 2 ).x, viewDirection.normalized().y );
+          arrowNode.visible = true;
+        }
+        else {
+          arrowNode.visible = false;
+        }
       }
 
-      if ( selectedNuclideChartProperty.value === 'zoom' ) {
+      // make opaque any cells too far away from the current nuclide cell
+      if ( selectedNuclideChartProperty.value === 'partial' ) {
         this.cells.forEach( nuclideChartCellRow => {
           nuclideChartCellRow.forEach( nuclideChartCell => {
             if ( nuclideChartCell ) {
               const protonDelta = Math.abs( nuclideChartCell?.protonNumber - protonCount );
-              const neutronDelta = Math.abs( nuclideChartCell?.neutronNumber - protonCount );
+              const neutronDelta = Math.abs( nuclideChartCell?.neutronNumber - neutronCount );
               nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
             }
           } );

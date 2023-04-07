@@ -44,11 +44,13 @@ class NuclideChartAndNumberLines extends Node {
       chartTransform );
     this.addChild( nuclideChartNode );
 
+    // create and add a box around current nuclide
     const squareLength = chartTransform.modelToViewDeltaX( 5 );
     const highlightRectangle = new Rectangle( 0, 0,
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: 3 } );
     this.addChild( highlightRectangle );
 
+    // update the box position to current nuclide
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
       const cellX = neutronCount;
       const cellY = protonCount;

@@ -16,8 +16,10 @@ class NuclideChartCell extends Rectangle {
   private readonly labelText: Text;
   public readonly protonNumber: number;
   public readonly neutronNumber: number;
+  public readonly decayType: string;
 
-  public constructor( normalFill: Color, cellLength: number, elementSymbol: string, protonNumber: number, neutronNumber: number ) {
+  public constructor( normalFill: Color, cellLength: number, elementSymbol: string, protonNumber: number, neutronNumber: number,
+                      decayType: string ) {
 
     super( 0, 0, cellLength, cellLength, 0, 0, {
       stroke: Color.GRAY,
@@ -39,6 +41,7 @@ class NuclideChartCell extends Rectangle {
 
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
+    this.decayType = decayType;
   }
 
   // show the label text when highlighting the cell
