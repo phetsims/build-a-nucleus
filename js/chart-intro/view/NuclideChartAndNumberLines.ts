@@ -25,6 +25,8 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
 
+const ZOOM_IN_CHART_SCALE_FACTOR = 0.4;
+
 type NuclideChartNodeOptions = NodeOptions;
 
 class NuclideChartAndNumberLines extends Node {
@@ -68,8 +70,9 @@ class NuclideChartAndNumberLines extends Node {
         // constrain the bounds of the highlightRectangle
         const constrainedCenter = squareBounds.getConstrainedPoint( new Vector2( cellX, cellY ) );
         modelHighlightRectangleCenterProperty.value = new Vector2( constrainedCenter.x, constrainedCenter.y );
-        highlightRectangle.center = chartTransform.modelToViewXY( ( modelHighlightRectangleCenterProperty.value.x + 0.75 ) * 0.4,
-          ( modelHighlightRectangleCenterProperty.value.y - 0.5 ) * 0.4 );
+        highlightRectangle.center = chartTransform.modelToViewXY(
+          ( modelHighlightRectangleCenterProperty.value.x + 0.75 ) * ZOOM_IN_CHART_SCALE_FACTOR,
+          ( modelHighlightRectangleCenterProperty.value.y - 0.5 ) * ZOOM_IN_CHART_SCALE_FACTOR );
       }
     } );
 
@@ -92,8 +95,8 @@ class NuclideChartAndNumberLines extends Node {
       protonNumberLine.visible = selectedNuclideChart === 'partial';
       neutronNumberLine.visible = selectedNuclideChart === 'partial';
       highlightRectangle.visible = selectedNuclideChart === 'zoom';
-      nuclideChartNode.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : 0.4 );
-      highlightRectangle.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : 0.4 );
+      nuclideChartNode.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : ZOOM_IN_CHART_SCALE_FACTOR );
+      highlightRectangle.setScaleMagnitude( selectedNuclideChart === 'partial' ? 1 : ZOOM_IN_CHART_SCALE_FACTOR );
     } );
   }
 }

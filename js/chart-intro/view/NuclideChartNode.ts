@@ -84,8 +84,9 @@ class NuclideChartNode extends Node {
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty, modelHighlightRectangleCenterProperty ],
-      ( protonCount: number, neutronCount: number, modelHighlightRectangleCenter: Vector2 ) => {
+    Multilink.multilink( [ protonCountProperty, neutronCountProperty, modelHighlightRectangleCenterProperty,
+        selectedNuclideChartProperty ],
+      ( protonCount: number, neutronCount: number, modelHighlightRectangleCenter: Vector2, selectedNuclideChart: string ) => {
       if ( highlightedCell !== null ) {
         highlightedCell.setHighlighted( false );
       }
@@ -115,13 +116,22 @@ class NuclideChartNode extends Node {
       }
 
       // make opaque any cells too far away from the center of the highlight rectangle
-      if ( selectedNuclideChartProperty.value === 'partial' ) {
+      if ( selectedNuclideChart === 'zoom' ) {
         this.cells.forEach( nuclideChartCellRow => {
           nuclideChartCellRow.forEach( nuclideChartCell => {
             if ( nuclideChartCell ) {
-              const protonDelta = Math.abs( modelHighlightRectangleCenterProperty.value.y - nuclideChartCell?.protonNumber );
-              const neutronDelta = Math.abs( modelHighlightRectangleCenterProperty.value.x - nuclideChartCell?.neutronNumber );
+              const protonDelta = Math.abs( modelHighlightRectangleCenter.y - nuclideChartCell?.protonNumber );
+              const neutronDelta = Math.abs( modelHighlightRectangleCenter.x - nuclideChartCell?.neutronNumber );
               nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
+            }
+          } );
+        } );
+      }
+      else {
+        this.cells.forEach( nuclideChartCellRow => {
+          nuclideChartCellRow.forEach( nuclideChartCell => {
+            if ( nuclideChartCell ) {
+              nuclideChartCell.opacity = 1;
             }
           } );
         } );
