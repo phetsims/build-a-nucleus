@@ -18,6 +18,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import BANConstants from '../../common/BANConstants.js';
 
 // constants
 // 2D array that defines the table structure.
@@ -41,7 +42,7 @@ class NuclideChartNode extends Node {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       selectedNuclideChartProperty: TReadOnlyProperty<string>, chartTransform: ChartTransform,
-                      modelHighlightRectangleCenterProperty: TReadOnlyProperty<Vector2> ) {
+                      viewHighlightRectangleCenterProperty: TReadOnlyProperty<Vector2> ) {
     super();
 
     // keep track of the cells of the chart
@@ -84,9 +85,9 @@ class NuclideChartNode extends Node {
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty, modelHighlightRectangleCenterProperty,
+    Multilink.multilink( [ protonCountProperty, neutronCountProperty, viewHighlightRectangleCenterProperty,
         selectedNuclideChartProperty ],
-      ( protonCount: number, neutronCount: number, modelHighlightRectangleCenter: Vector2, selectedNuclideChart: string ) => {
+      ( protonCount: number, neutronCount: number, viewHighlightRectangleCenter: Vector2, selectedNuclideChart: string ) => {
       if ( highlightedCell !== null ) {
         highlightedCell.setHighlighted( false );
       }
@@ -120,8 +121,10 @@ class NuclideChartNode extends Node {
         this.cells.forEach( nuclideChartCellRow => {
           nuclideChartCellRow.forEach( nuclideChartCell => {
             if ( nuclideChartCell ) {
-              const protonDelta = Math.abs( modelHighlightRectangleCenter.y - nuclideChartCell?.protonNumber );
-              const neutronDelta = Math.abs( modelHighlightRectangleCenter.x - nuclideChartCell?.neutronNumber );
+              const protonDelta = Math.abs( chartTransform.viewToModelY( viewHighlightRectangleCenter.y )
+                                            - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.protonNumber );
+              const neutronDelta = Math.abs( chartTransform.viewToModelX( viewHighlightRectangleCenter.x )
+                                             - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.neutronNumber );
               nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
             }
           } );
