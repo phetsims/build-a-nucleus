@@ -59,7 +59,9 @@ class NuclideChartAndNumberLines extends Node {
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: 3 } );
     this.addChild( highlightRectangle );
 
-    //const squareBounds = nuclideChartNode.bounds.eroded( chartTransform.modelToViewDeltaX( 1 ) );
+    const squareBounds = nuclideChartNode.bounds.erodedXY(
+      Math.abs( chartTransform.modelToViewDeltaX( 2 - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE ) ),
+      Math.abs( chartTransform.modelToViewDeltaY( 1 - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE ) ) );
 
     // update the box position to current nuclide
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
@@ -68,8 +70,9 @@ class NuclideChartAndNumberLines extends Node {
       if ( ( protonCount !== 0 || neutronCount !== 0 ) && AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
 
         // constrain the bounds of the highlightRectangle
-        const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-          cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+        const constrainedCenter = squareBounds.getConstrainedPoint(
+          chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+          cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE ) );
         viewHighlightRectangleCenterProperty.value = new Vector2( constrainedCenter.x, constrainedCenter.y );
       }
     } );
