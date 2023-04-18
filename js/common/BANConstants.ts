@@ -72,7 +72,7 @@ const BANConstants = {
     new Bounds2( 0, 0, ( PARTICLE_RADIUS * 3 ) * 5, ( PARTICLE_RADIUS * 2 ) * 10 ) ),
 
   // shift highlight rectangle to be aligned on the chart
-  X_SHIFT_HIGHLIGHT_RECTANGLE: 1.25,
+  X_SHIFT_HIGHLIGHT_RECTANGLE: 0.5,
   Y_SHIFT_HIGHLIGHT_RECTANGLE: -0.5
 };
 

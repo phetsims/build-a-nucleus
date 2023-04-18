@@ -5,10 +5,13 @@ import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import BANConstants from '../../common/BANConstants.js';
 import { Color, HBox, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import NuclideChartLegendNode from './NuclideChartLegendNode.js';
 import { SelectedChartType } from '../model/ChartIntroModel.js';
+import BANConstants from '../../common/BANConstants.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import Range from '../../../../dot/js/Range.js';
+import FocusedNuclideChartNode from './FocusedNuclideChartNode.js';
 
 /**
  * Node that holds Nuclide Chart and Zoom-in nuclide chart view.
@@ -22,8 +25,21 @@ class NuclideChartAccordionBox extends AccordionBox {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType> ) {
 
+    const getChartTransform = ( scaleFactor: number ) => new ChartTransform( {
+      viewWidth: BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS * scaleFactor,
+      modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ),
+      viewHeight: BANConstants.CHART_MAX_NUMBER_OF_PROTONS * scaleFactor,
+      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
+    } );
+
+    const partialChartTransform = getChartTransform( 20 );
+    const focusedChartTransform = getChartTransform( 10 );
+
     const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( protonCountProperty, neutronCountProperty,
-      selectedNuclideChartProperty );
+      partialChartTransform );
+
+    const focusedNuclideChartNode = new FocusedNuclideChartNode( protonCountProperty, neutronCountProperty,
+      focusedChartTransform );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
     const zoomInChart = new Rectangle( 0, 0, 100, 100, {
@@ -31,12 +47,15 @@ class NuclideChartAccordionBox extends AccordionBox {
     } );
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       zoomInChart.visible = selectedNuclideChart === 'zoom';
+      focusedNuclideChartNode.visible = selectedNuclideChart === 'zoom';
+      nuclideChartAndNumberLines.visible = selectedNuclideChart === 'partial';
     } );
 
     const chartsHBox = new HBox( {
       children: [
         zoomInChart,
-        nuclideChartAndNumberLines
+        nuclideChartAndNumberLines,
+        focusedNuclideChartNode
       ],
       spacing: 10,
       align: 'top',
