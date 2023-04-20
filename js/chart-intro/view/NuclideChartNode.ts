@@ -57,8 +57,8 @@ class NuclideChartNode extends Node {
         const decayType = AtomIdentifier.getAvailableDecays( row, column )[ 0 ];
 
         const color = AtomIdentifier.isStable( row, column ) ? BANColors.stableColorProperty.value :
-                          decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
-                          DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
+                      decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
+                      DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
 
         const elementSymbol = AtomIdentifier.getSymbol( row );
 
@@ -85,34 +85,37 @@ class NuclideChartNode extends Node {
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => {
-      if ( highlightedCell !== null ) {
-        highlightedCell.setHighlighted( false );
-      }
+        if ( highlightedCell !== null ) {
+          highlightedCell.setHighlighted( false );
+        }
 
-      // highlight the cell if it exists
-      if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
-        const protonRowIndex = protonCount;
-        const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
-        highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
-        highlightedCell!.setHighlighted( true );
+        // highlight the cell if it exists
+        if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
+          const protonRowIndex = protonCount;
+          const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
+          highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
+          highlightedCell!.setHighlighted( true );
 
-        const decayType = highlightedCell!.decayType;
-        if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
-          const direction = decayType === DecayType.NEUTRON_EMISSION.name ? new Vector2( -0.7, 0 ) :
-                            decayType === DecayType.PROTON_EMISSION.name ? new Vector2( 0, -0.7 ) :
-                            decayType === DecayType.BETA_PLUS_DECAY.name ? new Vector2( 1, -1 ).normalized() :
-                            decayType === DecayType.BETA_MINUS_DECAY.name ? new Vector2( -1, 1 ).normalized() :
-                            new Vector2( -2, -2 );
-          const viewDirection = chartTransform.modelToViewDeltaXY( direction.x, direction.y );
-          arrowNode.setTip( viewDirection.x, viewDirection.y );
-          arrowNode.center = highlightedCell!.center.plusXY( viewDirection.withMagnitude( cellLength / 2 ).x, viewDirection.normalized().y );
-          arrowNode.visible = true;
+          const decayType = highlightedCell!.decayType;
+          if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
+            const direction = decayType === DecayType.NEUTRON_EMISSION.name ? new Vector2( -0.7, 0 ) :
+                              decayType === DecayType.PROTON_EMISSION.name ? new Vector2( 0, -0.7 ) :
+                              decayType === DecayType.BETA_PLUS_DECAY.name ? new Vector2( 1, -1 ).normalized() :
+                              decayType === DecayType.BETA_MINUS_DECAY.name ? new Vector2( -1, 1 ).normalized() :
+                              new Vector2( -2, -2 );
+            const viewDirection = chartTransform.modelToViewDeltaXY( direction.x, direction.y );
+            arrowNode.setTip( viewDirection.x, viewDirection.y );
+            arrowNode.center = highlightedCell!.center.plusXY( viewDirection.withMagnitude( cellLength / 2 ).x, viewDirection.normalized().y );
+            arrowNode.visible = true;
+          }
+          else {
+            arrowNode.visible = false;
+          }
         }
         else {
           arrowNode.visible = false;
         }
-      }
-    } );
+      } );
   }
 }
 

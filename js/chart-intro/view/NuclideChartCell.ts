@@ -34,7 +34,8 @@ class NuclideChartCell extends Rectangle {
       fill: normalFill === DecayType.ALPHA_DECAY.colorProperty.value ||
             normalFill === DecayType.BETA_MINUS_DECAY.colorProperty.value ?
             Color.BLACK : Color.WHITE,
-      maxWidth: cellLength * 0.75
+      maxWidth: cellLength * 0.75,
+      maxHeight: cellLength * 0.9
     } );
     this.labelText.visible = false;
     this.addChild( this.labelText );
