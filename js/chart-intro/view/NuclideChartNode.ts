@@ -7,7 +7,7 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { Color, Node } from '../../../../scenery/js/imports.js';
+import { Color, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
@@ -18,8 +18,14 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 
-// constants
+type SelfOptions = {
+  cellTextFontSize: number;
+};
+
+type NuclideChartNodeOptions = SelfOptions & NodeOptions;
+
 // 2D array that defines the table structure.
 // The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
 const POPULATED_CELLS = [
@@ -40,8 +46,10 @@ class NuclideChartNode extends Node {
   protected readonly cells: ( NuclideChartCell | null )[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform ) {
-    super();
+                      chartTransform: ChartTransform, providedOptions: NuclideChartNodeOptions ) {
+
+    const options = optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
+    super( options );
 
     // keep track of the cells of the chart
     this.cells = [];
@@ -63,7 +71,10 @@ class NuclideChartNode extends Node {
         const elementSymbol = AtomIdentifier.getSymbol( row );
 
         // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( color, cellLength, elementSymbol, row, column, decayType );
+        const cell = new NuclideChartCell( cellLength, elementSymbol, row, column, decayType, {
+          fill: color,
+          cellTextFontSize: options.cellTextFontSize
+        } );
         cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
         this.addChild( cell );
         rowCells.push( cell );

@@ -25,7 +25,9 @@ class NuclideChartAndNumberLines extends Node {
                       chartTransform: ChartTransform, providedOptions?: NuclideChartNodeOptions ) {
 
     // create and add the nuclideChartNode
-    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform );
+    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform, {
+      cellTextFontSize: 14
+    } );
 
     const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,

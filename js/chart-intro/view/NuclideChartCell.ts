@@ -6,10 +6,16 @@
  * @author Luisa Vargas
  */
 
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Text, Color, Rectangle } from '../../../../scenery/js/imports.js';
+import { Text, Color, Rectangle, RectangleOptions } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import DecayType from '../../common/view/DecayType.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+type SelfOptions = {
+  cellTextFontSize: number;
+};
+
+type NuclideChartCellOptions = SelfOptions & RectangleOptions;
 
 class NuclideChartCell extends Rectangle {
 
@@ -18,24 +24,25 @@ class NuclideChartCell extends Rectangle {
   public readonly neutronNumber: number;
   public readonly decayType: string;
 
-  public constructor( normalFill: Color, cellLength: number, elementSymbol: string, protonNumber: number, neutronNumber: number,
-                      decayType: string ) {
+  public constructor( cellLength: number, elementSymbol: string, protonNumber: number, neutronNumber: number,
+                      decayType: string, providedOptions: NuclideChartCellOptions ) {
 
-    super( 0, 0, cellLength, cellLength, 0, 0, {
+    const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
       stroke: Color.GRAY,
       lineWidth: 0.5,
-      fill: normalFill
-    } );
+      fill: Color.GRAY
+    }, providedOptions );
+
+    super( 0, 0, cellLength, cellLength, 0, 0, options );
 
     // labels the cell with the elementSymbol
     this.labelText = new Text( elementSymbol, {
-      font: new PhetFont( 14 ),
+      fontSize: options.cellTextFontSize,
       center: this.center,
-      fill: normalFill === DecayType.ALPHA_DECAY.colorProperty.value ||
-            normalFill === DecayType.BETA_MINUS_DECAY.colorProperty.value ?
+      fill: options.fill === DecayType.ALPHA_DECAY.colorProperty.value ||
+            options.fill === DecayType.BETA_MINUS_DECAY.colorProperty.value ?
             Color.BLACK : Color.WHITE,
-      maxWidth: cellLength * 0.75,
-      maxHeight: cellLength * 0.9
+      maxWidth: cellLength * 0.75
     } );
     this.labelText.visible = false;
     this.addChild( this.labelText );
