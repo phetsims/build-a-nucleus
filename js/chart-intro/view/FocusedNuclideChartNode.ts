@@ -24,7 +24,7 @@ class FocusedNuclideChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform ) {
-    super( protonCountProperty, neutronCountProperty, chartTransform, { cellTextFontSize: 6 } );
+    super( protonCountProperty, neutronCountProperty, chartTransform, { cellTextFontSize: 6, arrowSymbol: false } );
 
     // keep track of the current center of the highlight rectangle
     const viewHighlightRectangleCenterProperty = new Property(
@@ -58,7 +58,10 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         highlightRectangle.left = nuclideChartBounds.left;
       }
       if ( highlightRectangle.right > nuclideChartBounds.right ) {
-        highlightRectangle.right = nuclideChartBounds.right;
+
+        // Adding the highlight rectangle line width and NuclideChartCell lineWidth since the bounds does not account for
+        // stroke and line width TODO: why do this only on the right side and not the top?
+        highlightRectangle.right = nuclideChartBounds.right + ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - 0.5 ) / 2;
       }
       if ( highlightRectangle.top < nuclideChartBounds.top ) {
         highlightRectangle.top = nuclideChartBounds.top;
@@ -66,25 +69,23 @@ class FocusedNuclideChartNode extends NuclideChartNode {
       if ( highlightRectangle.bottom > nuclideChartBounds.bottom ) {
         highlightRectangle.bottom = nuclideChartBounds.bottom;
       }
-    };
 
-    // update the center of the highLightRectangle
-    viewHighlightRectangleCenterProperty.link( updateHighlightRectangleCenter );
-
-    // make opaque any cells too far away from the center of the highlight rectangle
-    viewHighlightRectangleCenterProperty.link( viewHighlightRectangleCenter => {
+      // make opaque any cells too far away from the center of the highlight rectangle
       this.cells.forEach( nuclideChartCellRow => {
         nuclideChartCellRow.forEach( nuclideChartCell => {
           if ( nuclideChartCell ) {
-            const protonDelta = Math.abs( chartTransform.viewToModelY( viewHighlightRectangleCenter.y )
+            const protonDelta = Math.abs( chartTransform.viewToModelY( highlightRectangle.center.y )
                                           - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.protonNumber );
-            const neutronDelta = Math.abs( chartTransform.viewToModelX( viewHighlightRectangleCenter.x )
+            const neutronDelta = Math.abs( chartTransform.viewToModelX( highlightRectangle.center.x )
                                            - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.neutronNumber );
             nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
           }
         } );
       } );
-    } );
+    };
+
+    // update the center of the highLightRectangle
+    viewHighlightRectangleCenterProperty.link( updateHighlightRectangleCenter );
   }
 }
 

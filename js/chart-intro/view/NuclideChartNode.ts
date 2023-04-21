@@ -22,6 +22,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
+  arrowSymbol: boolean;
 };
 
 type NuclideChartNodeOptions = SelfOptions & NodeOptions;
@@ -90,7 +91,9 @@ class NuclideChartNode extends Node {
       stroke: null,
       visible: false
     } );
-    this.addChild( arrowNode );
+    if ( options.arrowSymbol ) {
+      this.addChild( arrowNode );
+    }
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
