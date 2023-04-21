@@ -43,7 +43,10 @@ class NuclideChartAccordionBox extends AccordionBox {
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
     const zoomInChart = new Rectangle( 0, 0, 100, 100, {
-      stroke: Color.BLACK
+      stroke: Color.BLACK,
+      layoutOptions: {
+        topMargin: 3
+      }
     } );
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       zoomInChart.visible = selectedNuclideChart === 'zoom';

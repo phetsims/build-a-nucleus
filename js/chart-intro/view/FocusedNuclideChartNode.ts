@@ -25,7 +25,6 @@ class FocusedNuclideChartNode extends NuclideChartNode {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform ) {
     super( protonCountProperty, neutronCountProperty, chartTransform, { cellTextFontSize: 6 } );
-    this.bounds.dilate( HIGHLIGHT_RECTANGLE_LINE_WIDTH );
 
     // keep track of the current center of the highlight rectangle
     const viewHighlightRectangleCenterProperty = new Property(
@@ -51,6 +50,8 @@ class FocusedNuclideChartNode extends NuclideChartNode {
     } );
 
     const nuclideChartBounds = this.bounds.copy();
+    const backgroundRectangle = new Rectangle( this.bounds.dilated( 2 ), { stroke: 'white' } );
+    this.addChild( backgroundRectangle );
     const updateHighlightRectangleCenter = () => {
       highlightRectangle.center = viewHighlightRectangleCenterProperty.value;
       if ( highlightRectangle.left < nuclideChartBounds.left ) {
