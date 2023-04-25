@@ -10,6 +10,7 @@ import { Text, Color, Rectangle, RectangleOptions } from '../../../../scenery/js
 import buildANucleus from '../../buildANucleus.js';
 import DecayType from '../../common/view/DecayType.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import BANConstants from '../../common/BANConstants.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -29,7 +30,7 @@ class NuclideChartCell extends Rectangle {
 
     const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
       stroke: Color.GRAY,
-      lineWidth: 0.5,
+      lineWidth: BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH,
       fill: Color.GRAY
     }, providedOptions );
 

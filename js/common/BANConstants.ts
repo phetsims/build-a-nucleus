@@ -73,7 +73,9 @@ const BANConstants = {
 
   // shift highlight rectangle to be aligned on the chart
   X_SHIFT_HIGHLIGHT_RECTANGLE: 0.5,
-  Y_SHIFT_HIGHLIGHT_RECTANGLE: -0.5
+  Y_SHIFT_HIGHLIGHT_RECTANGLE: -0.5,
+
+  NUCLIDE_CHART_CELL_LINE_WIDTH: 0.5
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

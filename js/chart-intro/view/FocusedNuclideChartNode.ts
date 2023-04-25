@@ -29,6 +29,8 @@ class FocusedNuclideChartNode extends NuclideChartNode {
     // keep track of the current center of the highlight rectangle
     const viewHighlightRectangleCenterProperty = new Property(
       chartTransform.modelToViewXY( 1 + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE, 1 + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE ) );
+    const nuclideChartBounds = this.bounds.copy();
+    const backgroundRectangle = new Rectangle( this.bounds.dilated( 2 ), { stroke: 'white' } );
 
     // create and add a box around current nuclide
     const squareLength = chartTransform.modelToViewDeltaX( 5 );
@@ -49,25 +51,21 @@ class FocusedNuclideChartNode extends NuclideChartNode {
       }
     } );
 
-    const nuclideChartBounds = this.bounds.copy();
-    const backgroundRectangle = new Rectangle( this.bounds.dilated( 2 ), { stroke: 'white' } );
     this.addChild( backgroundRectangle );
     const updateHighlightRectangleCenter = () => {
       highlightRectangle.center = viewHighlightRectangleCenterProperty.value;
       if ( highlightRectangle.left < nuclideChartBounds.left ) {
-        highlightRectangle.left = nuclideChartBounds.left;
+        highlightRectangle.left = nuclideChartBounds.left - ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
       }
       if ( highlightRectangle.right > nuclideChartBounds.right ) {
 
-        // Adding the highlight rectangle line width and NuclideChartCell lineWidth since the bounds does not account for
-        // stroke and line width TODO: why do this only on the right side and not the top?
-        highlightRectangle.right = nuclideChartBounds.right + ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - 0.5 ) / 2;
+        highlightRectangle.right = nuclideChartBounds.right + ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
       }
       if ( highlightRectangle.top < nuclideChartBounds.top ) {
-        highlightRectangle.top = nuclideChartBounds.top;
+        highlightRectangle.top = nuclideChartBounds.top - ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
       }
       if ( highlightRectangle.bottom > nuclideChartBounds.bottom ) {
-        highlightRectangle.bottom = nuclideChartBounds.bottom;
+        highlightRectangle.bottom = nuclideChartBounds.bottom + ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
       }
 
       // make opaque any cells too far away from the center of the highlight rectangle
