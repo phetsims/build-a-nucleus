@@ -14,6 +14,7 @@ import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import { Color, Path } from '../../../../scenery/js/imports.js';
 
 class ZoomInChartNode extends NuclideChartNode {
 
@@ -23,14 +24,20 @@ class ZoomInChartNode extends NuclideChartNode {
 
     const squareLength = chartTransform.modelToViewDeltaX( 5 );
 
+    let borderPath: Path | null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
       const cellX = neutronCount;
       const cellY = protonCount;
+      if ( borderPath ) {
+        this.removeChild( borderPath );
+      }
       if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
 
         // clip chart to 2 cellLength's around current cell
         const clipArea = Shape.rectangle( chartTransform.modelToViewX( cellX - 2 ), chartTransform.modelToViewY( cellY + 2 ),
           squareLength, squareLength );
+        borderPath = new Path( clipArea, { stroke: Color.BLACK, lineWidth: 3 } );
+        this.addChild( borderPath );
         this.clipArea = clipArea;
       }
     } );
