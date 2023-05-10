@@ -23,7 +23,11 @@
       "phet",
       "adapted-from-phet"
     ],
-    "supportsOutputJS": true
+    "supportsOutputJS": true,
+    "screenNameKeys": [
+      "BUILD_A_NUCLEUS/decay",
+      "BUILD_A_NUCLEUS/chartIntro"
+    ]
   },
   "eslintConfig": {
     "extends": "../chipper/eslint/sim_eslintrc.js",
