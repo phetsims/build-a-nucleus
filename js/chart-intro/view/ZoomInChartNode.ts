@@ -21,7 +21,7 @@ class ZoomInChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform ) {
-    super( protonCountProperty, neutronCountProperty, chartTransform, { cellTextFontSize: 18, arrowSymbol: false } );
+    super( protonCountProperty, neutronCountProperty, chartTransform, { cellTextFontSize: 18, arrowSymbol: true } );
 
     const squareLength = chartTransform.modelToViewDeltaX( 5 );
 

@@ -19,6 +19,7 @@ import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import BANConstants from '../../common/BANConstants.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -83,11 +84,11 @@ class NuclideChartNode extends Node {
       this.cells.push( rowCells );
     } );
 
-    const arrowNode = new ArrowNode( 0, 0, 100, 100, {
+    const arrowNode = new ArrowNode( 0, 0, 0, 0, {
       headWidth: 5,
       headHeight: 5,
       tailWidth: 2.5,
-      fill: Color.WHITE,
+      fill: Color.YELLOW,
       stroke: null,
       visible: false
     } );
@@ -108,18 +109,21 @@ class NuclideChartNode extends Node {
           const protonRowIndex = protonCount;
           const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
           highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
+          assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
+                                             ' neutronRowIndex = ' + neutronRowIndex );
           highlightedCell!.setHighlighted( true );
 
           const decayType = highlightedCell!.decayType;
           if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
-            const direction = decayType === DecayType.NEUTRON_EMISSION.name ? new Vector2( -0.7, 0 ) :
-                              decayType === DecayType.PROTON_EMISSION.name ? new Vector2( 0, -0.7 ) :
-                              decayType === DecayType.BETA_PLUS_DECAY.name ? new Vector2( 1, -1 ).normalized() :
-                              decayType === DecayType.BETA_MINUS_DECAY.name ? new Vector2( -1, 1 ).normalized() :
-                              new Vector2( -2, -2 );
-            const viewDirection = chartTransform.modelToViewDeltaXY( direction.x, direction.y );
-            arrowNode.setTip( viewDirection.x, viewDirection.y );
-            arrowNode.center = highlightedCell!.center.plusXY( viewDirection.withMagnitude( cellLength / 2 ).x, viewDirection.normalized().y );
+            const direction = decayType === DecayType.NEUTRON_EMISSION.name ? new Vector2( neutronCount - 1, protonCount ) :
+                              decayType === DecayType.PROTON_EMISSION.name ? new Vector2( neutronCount, protonCount - 1 ) :
+                              decayType === DecayType.BETA_PLUS_DECAY.name ? new Vector2( neutronCount + 1, protonCount - 1 ) :
+                              decayType === DecayType.BETA_MINUS_DECAY.name ? new Vector2( neutronCount - 1, protonCount + 1 ) :
+                              new Vector2( neutronCount - 2, protonCount - 2 );
+            const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+              direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+            const arrowTail = chartTransform.modelToViewXY( neutronCount, protonCount );
+            arrowNode.setTailAndTip( arrowTail.x, arrowTail.y, arrowTip.x, arrowTip.y );
             arrowNode.visible = true;
           }
           else {
