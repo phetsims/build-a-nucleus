@@ -85,11 +85,10 @@ class NuclideChartNode extends Node {
     } );
 
     const arrowNode = new ArrowNode( 0, 0, 0, 0, {
-      headWidth: 5,
-      headHeight: 5,
-      tailWidth: 2.5,
-      fill: Color.YELLOW,
-      stroke: null,
+      tailWidth: 3,
+      fill: Color.WHITE,
+      stroke: Color.BLACK,
+      lineWidth: 0.5,
       visible: false
     } );
     if ( options.arrowSymbol ) {
@@ -122,7 +121,8 @@ class NuclideChartNode extends Node {
                               new Vector2( neutronCount - 2, protonCount - 2 );
             const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
               direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
-            const arrowTail = chartTransform.modelToViewXY( neutronCount, protonCount );
+            const arrowTail = chartTransform.modelToViewXY( neutronCount + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+              protonCount + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
             arrowNode.setTailAndTip( arrowTail.x, arrowTail.y, arrowTip.x, arrowTip.y );
             arrowNode.visible = true;
           }
