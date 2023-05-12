@@ -15,6 +15,7 @@ import { Shape } from '../../../../kite/js/imports.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import { Color, Path } from '../../../../scenery/js/imports.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 class ZoomInChartNode extends NuclideChartNode {
 
@@ -24,20 +25,21 @@ class ZoomInChartNode extends NuclideChartNode {
 
     const squareLength = chartTransform.modelToViewDeltaX( 5 );
 
-    let borderPath: Path | null;
+    const borderPath = new Path( null, { stroke: Color.BLACK, lineWidth: 3 } );
+    this.addChild( borderPath );
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
       const cellX = neutronCount;
       const cellY = protonCount;
-      if ( borderPath ) {
-        this.removeChild( borderPath );
-      }
       if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
 
+        // limit the bounds of the ZoomInChartNode to avoid showing white space
+        const clampedCellX = Utils.clamp( cellX, 2, 10 );
+        const clampedCellY = Utils.clamp( cellY, 2, 8 );
+
         // clip chart to 2 cellLength's around current cell
-        const clipArea = Shape.rectangle( chartTransform.modelToViewX( cellX - 2 ), chartTransform.modelToViewY( cellY + 2 ),
+        const clipArea = Shape.rectangle( chartTransform.modelToViewX( clampedCellX - 2 ), chartTransform.modelToViewY( clampedCellY + 2 ),
           squareLength, squareLength );
-        borderPath = new Path( clipArea, { stroke: Color.BLACK, lineWidth: 3 } );
-        this.addChild( borderPath );
+        borderPath.shape = clipArea;
         this.clipArea = clipArea;
       }
     } );
