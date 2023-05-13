@@ -7,7 +7,7 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { Color, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { Color, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
@@ -70,10 +70,8 @@ class NuclideChartNode extends Node {
                       decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
                       DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
 
-        const elementSymbol = AtomIdentifier.getSymbol( row );
-
         // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( cellLength, elementSymbol, row, column, decayType, {
+        const cell = new NuclideChartCell( cellLength, row, column, decayType, {
           fill: color,
           cellTextFontSize: options.cellTextFontSize
         } );
@@ -95,13 +93,24 @@ class NuclideChartNode extends Node {
       this.addChild( arrowNode );
     }
 
+    // labels the cell with the elementSymbol
+    const labelDimension = cellLength * 0.75;
+    const labelTextBackground = new Rectangle( 0, 0, labelDimension, labelDimension );
+    const labelText = new Text( '', {
+      fontSize: options.cellTextFontSize,
+      maxWidth: labelDimension,
+      center: labelTextBackground.center
+    } );
+    labelTextBackground.addChild( labelText );
+    this.addChild( labelTextBackground );
+
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ],
       ( protonCount: number, neutronCount: number ) => {
-        if ( highlightedCell !== null ) {
-          highlightedCell.setHighlighted( false );
-        }
+
+        const currentCellCenter = chartTransform.modelToViewXY( neutronCount + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+          protonCount + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
 
         // highlight the cell if it exists
         if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
@@ -110,7 +119,6 @@ class NuclideChartNode extends Node {
           highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
           assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
                                              ' neutronRowIndex = ' + neutronRowIndex );
-          highlightedCell!.setHighlighted( true );
 
           const decayType = highlightedCell!.decayType;
           if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
@@ -121,17 +129,26 @@ class NuclideChartNode extends Node {
                               new Vector2( neutronCount - 2, protonCount - 2 );
             const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
               direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
-            const arrowTail = chartTransform.modelToViewXY( neutronCount + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-              protonCount + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
-            arrowNode.setTailAndTip( arrowTail.x, arrowTail.y, arrowTip.x, arrowTip.y );
+            arrowNode.setTailAndTip( currentCellCenter.x, currentCellCenter.y, arrowTip.x, arrowTip.y );
             arrowNode.visible = true;
           }
           else {
             arrowNode.visible = false;
           }
+
+          labelTextBackground.visible = true;
+          labelText.string = AtomIdentifier.getSymbol( protonCount );
+          const globalBounds = highlightedCell!.globalBounds;
+          labelTextBackground.center = labelTextBackground.globalToParentBounds( globalBounds ).center;
+          labelText.center = new Vector2( labelDimension / 2, labelDimension / 2 );
+          labelText.fill = highlightedCell?.decayType === DecayType.ALPHA_DECAY.name ||
+                           highlightedCell?.decayType === DecayType.BETA_MINUS_DECAY.name ?
+                           Color.BLACK : Color.WHITE;
+          labelTextBackground.fill = highlightedCell!.decayBackgroundColor;
         }
         else {
           arrowNode.visible = false;
+          labelTextBackground.visible = false;
         }
       } );
   }

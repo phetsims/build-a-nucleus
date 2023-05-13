@@ -1,14 +1,13 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Node that represents a single cell in the nuclide chart.
+ * Node that represents the background of a single cell in the nuclide chart.
  *
  * @author Luisa Vargas
  */
 
-import { Text, Color, Rectangle, RectangleOptions } from '../../../../scenery/js/imports.js';
+import { Color, Rectangle, RectangleOptions, TPaint } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import DecayType from '../../common/view/DecayType.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 
@@ -20,12 +19,12 @@ type NuclideChartCellOptions = SelfOptions & RectangleOptions;
 
 class NuclideChartCell extends Rectangle {
 
-  private readonly labelText: Text;
   public readonly protonNumber: number;
   public readonly neutronNumber: number;
   public readonly decayType: string;
+  public readonly decayBackgroundColor: TPaint;
 
-  public constructor( cellLength: number, elementSymbol: string, protonNumber: number, neutronNumber: number,
+  public constructor( cellLength: number, protonNumber: number, neutronNumber: number,
                       decayType: string, providedOptions: NuclideChartCellOptions ) {
 
     const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
@@ -36,26 +35,12 @@ class NuclideChartCell extends Rectangle {
 
     super( 0, 0, cellLength, cellLength, 0, 0, options );
 
-    // labels the cell with the elementSymbol
-    this.labelText = new Text( elementSymbol, {
-      fontSize: options.cellTextFontSize,
-      center: this.center,
-      fill: options.fill === DecayType.ALPHA_DECAY.colorProperty.value ||
-            options.fill === DecayType.BETA_MINUS_DECAY.colorProperty.value ?
-            Color.BLACK : Color.WHITE,
-      maxWidth: cellLength * 0.75
-    } );
-    this.labelText.visible = false;
-    this.addChild( this.labelText );
-
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
-    this.decayType = decayType;
-  }
+    this.decayBackgroundColor = options.fill;
 
-  // show the label text when highlighting the cell
-  public setHighlighted( highlighted: boolean ): void {
-    this.labelText.visible = highlighted;
+    // TODO: why not store the decayType as the enumeration and not the string?
+    this.decayType = decayType;
   }
 
   // make cell more opaque to de-emphasize the cell
