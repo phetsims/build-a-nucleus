@@ -7,7 +7,7 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { Color, GridBox, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { Color, GridBox, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
@@ -20,6 +20,7 @@ import Orientation from '../../../../phet-core/js/Orientation.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
+import { Shape } from '../../../../kite/js/imports.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -95,15 +96,23 @@ class NuclideChartNode extends Node {
 
     // labels the cell with the elementSymbol
     const labelDimension = cellLength * 0.75;
-    const labelTextBackground = new Rectangle( 0, 0, labelDimension, labelDimension );
-    const labelText = new Text( '.', {
+
+    // make the labelTextBackground an octagon shape
+    const vertices = _.times( 8, side => {
+      return new Vector2( Math.cos( ( 2 * side * Math.PI ) / 8 ), Math.sin( ( 2 * side * Math.PI ) / 8 ) ).times( labelDimension / 2 );
+    } );
+    const octagonShape = Shape.polygon( vertices );
+    const labelTextBackground = new Path( octagonShape );
+    labelTextBackground.rotate( Math.PI / 8 );
+    const labelText = new Text( '', {
       fontSize: options.cellTextFontSize,
       maxWidth: labelDimension
     } );
-    const hBox = new GridBox( { rows: [ [ labelText ] ], xAlign: 'center', yAlign: 'center', stretch: true, grow: 1,
+    const gridBox = new GridBox( { rows: [ [ labelText ] ], xAlign: 'center', yAlign: 'center', stretch: true, grow: 1,
       preferredHeight: labelDimension, preferredWidth: labelDimension } );
-    labelTextBackground.addChild( hBox );
-    this.addChild( labelTextBackground );
+    const container = new Node( { children: [ labelTextBackground, gridBox ], maxWidth: cellLength, maxHeight: cellLength } );
+    labelTextBackground.center = gridBox.center;
+    this.addChild( container );
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
@@ -137,9 +146,9 @@ class NuclideChartNode extends Node {
             arrowNode.visible = false;
           }
 
-          labelTextBackground.visible = true;
+          container.visible = true;
           labelText.string = AtomIdentifier.getSymbol( protonCount );
-          labelTextBackground.center = currentCellCenter;
+          container.center = currentCellCenter;
           labelText.fill = highlightedCell?.decayType === DecayType.ALPHA_DECAY.name ||
                            highlightedCell?.decayType === DecayType.BETA_MINUS_DECAY.name ?
                            Color.BLACK : Color.WHITE;
@@ -147,7 +156,7 @@ class NuclideChartNode extends Node {
         }
         else {
           arrowNode.visible = false;
-          labelTextBackground.visible = false;
+          container.visible = false;
         }
       } );
   }
