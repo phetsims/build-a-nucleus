@@ -51,7 +51,9 @@ class NuclideChartNode extends Node {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform, providedOptions: NuclideChartNodeOptions ) {
 
-    const options = optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
+    const options = optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {
+      excludeInvisibleChildrenFromBounds: true
+    }, providedOptions );
     super( options );
 
     // keep track of the cells of the chart
@@ -99,20 +101,19 @@ class NuclideChartNode extends Node {
 
     // make the labelTextBackground an octagon shape
     const vertices = _.times( 8, side => {
-      return new Vector2( Math.cos( ( 2 * side * Math.PI ) / 8 ), Math.sin( ( 2 * side * Math.PI ) / 8 ) ).times( labelDimension / 2 );
+      return new Vector2( Math.cos( ( 2 * side * Math.PI ) / 8 ), Math.sin( ( 2 * side * Math.PI ) / 8 ) ).times( labelDimension * 0.6 );
     } );
     const octagonShape = Shape.polygon( vertices );
-    const labelTextBackground = new Path( octagonShape );
-    labelTextBackground.rotate( Math.PI / 8 );
+    const labelTextBackground = new Path( octagonShape, { rotation: Math.PI / 8 } );
     const labelText = new Text( '', {
       fontSize: options.cellTextFontSize,
       maxWidth: labelDimension
     } );
     const gridBox = new GridBox( { rows: [ [ labelText ] ], xAlign: 'center', yAlign: 'center', stretch: true, grow: 1,
       preferredHeight: labelDimension, preferredWidth: labelDimension } );
-    const container = new Node( { children: [ labelTextBackground, gridBox ], maxWidth: cellLength, maxHeight: cellLength } );
+    const labelContainer = new Node( { children: [ labelTextBackground, gridBox ] } );
     labelTextBackground.center = gridBox.center;
-    this.addChild( container );
+    this.addChild( labelContainer );
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
@@ -146,9 +147,9 @@ class NuclideChartNode extends Node {
             arrowNode.visible = false;
           }
 
-          container.visible = true;
+          labelContainer.visible = true;
           labelText.string = AtomIdentifier.getSymbol( protonCount );
-          container.center = currentCellCenter;
+          labelContainer.center = currentCellCenter;
           labelText.fill = highlightedCell?.decayType === DecayType.ALPHA_DECAY.name ||
                            highlightedCell?.decayType === DecayType.BETA_MINUS_DECAY.name ?
                            Color.BLACK : Color.WHITE;
@@ -156,7 +157,7 @@ class NuclideChartNode extends Node {
         }
         else {
           arrowNode.visible = false;
-          container.visible = false;
+          labelContainer.visible = false;
         }
       } );
   }
