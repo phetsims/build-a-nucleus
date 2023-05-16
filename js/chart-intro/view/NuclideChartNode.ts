@@ -7,7 +7,7 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { Color, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { Color, GridBox, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
@@ -96,12 +96,13 @@ class NuclideChartNode extends Node {
     // labels the cell with the elementSymbol
     const labelDimension = cellLength * 0.75;
     const labelTextBackground = new Rectangle( 0, 0, labelDimension, labelDimension );
-    const labelText = new Text( '', {
+    const labelText = new Text( '.', {
       fontSize: options.cellTextFontSize,
-      maxWidth: labelDimension,
-      center: labelTextBackground.center
+      maxWidth: labelDimension
     } );
-    labelTextBackground.addChild( labelText );
+    const hBox = new GridBox( { rows: [ [ labelText ] ], xAlign: 'center', yAlign: 'center', stretch: true, grow: 1,
+      preferredHeight: labelDimension, preferredWidth: labelDimension } );
+    labelTextBackground.addChild( hBox );
     this.addChild( labelTextBackground );
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
@@ -138,9 +139,7 @@ class NuclideChartNode extends Node {
 
           labelTextBackground.visible = true;
           labelText.string = AtomIdentifier.getSymbol( protonCount );
-          const globalBounds = highlightedCell!.globalBounds;
-          labelTextBackground.center = labelTextBackground.globalToParentBounds( globalBounds ).center;
-          labelText.center = new Vector2( labelDimension / 2, labelDimension / 2 );
+          labelTextBackground.center = currentCellCenter;
           labelText.fill = highlightedCell?.decayType === DecayType.ALPHA_DECAY.name ||
                            highlightedCell?.decayType === DecayType.BETA_MINUS_DECAY.name ?
                            Color.BLACK : Color.WHITE;
