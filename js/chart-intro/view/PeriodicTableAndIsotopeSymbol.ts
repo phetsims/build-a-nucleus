@@ -33,28 +33,16 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
     // Create and add the periodic table.
     const periodicTable = new PeriodicTableNode( particleAtom, {
       interactiveMax: 0,
-      strokeHighlightWidth: 1,
-      strokeHighlightColor: 'black',
-      labelTextHighlightFill: 'white',
-      disabledCellColor: 'white',
-      selectedCellColor: BANColors.halfLifeColorProperty
+      disabledCellColor: 'white'
     } );
     periodicTable.scale( 0.75 );
     panelContents.addChild( periodicTable );
 
     // create and add the symbol node in an accordion box
     const symbolNode = new SymbolNode( particleAtom.protonCountProperty, particleAtom.massNumberProperty, {
-      scale: 0.15,
-      fill: BANColors.halfLifeColorProperty,
-      symbolTextFill: 'white',
-      protonCountDisplayFill: 'white',
-      massNumberDisplayFill: 'white'
+      scale: 0.15
     } );
     panelContents.addChild( symbolNode );
-    particleAtom.massNumberProperty.link( massNumber => {
-      massNumber === 0 ? symbolNode.setFillColor( 'white' ) : symbolNode.setFillColor( BANColors.halfLifeColorProperty );
-      massNumber === 0 ? symbolNode.setSymbolTextColor( 'black' ) : symbolNode.setSymbolTextColor( 'white' );
-    } );
 
     // Do the layout.  This positions the symbol to fit into the top portion
     // of the table.  The periodic table is 18 cells wide, and this needs
