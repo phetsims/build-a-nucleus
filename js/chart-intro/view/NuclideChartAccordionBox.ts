@@ -20,6 +20,7 @@ import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Range from '../../../../dot/js/Range.js';
 import FocusedNuclideChartNode from './FocusedNuclideChartNode.js';
 import ZoomInChartNode from './ZoomInChartNode.js';
+import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 
 class NuclideChartAccordionBox extends AccordionBox {
 
@@ -46,9 +47,18 @@ class NuclideChartAccordionBox extends AccordionBox {
       zoomInChartTransform );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
+    const chartAndButtonVBox = new VBox( {
+      children: [
+        new TextPushButton( BuildANucleusStrings.decayStringProperty ),
+        focusedNuclideChartNode
+      ],
+      spacing: 10,
+      align: 'center'
+    } );
+
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       zoomInNuclideChartNode.visible = selectedNuclideChart === 'zoom';
-      focusedNuclideChartNode.visible = selectedNuclideChart === 'zoom';
+      chartAndButtonVBox.visible = selectedNuclideChart === 'zoom';
       nuclideChartAndNumberLines.visible = selectedNuclideChart === 'partial';
     } );
 
@@ -56,12 +66,11 @@ class NuclideChartAccordionBox extends AccordionBox {
       children: [
         zoomInNuclideChartNode,
         nuclideChartAndNumberLines,
-        focusedNuclideChartNode
+        chartAndButtonVBox
       ],
       spacing: 10,
       align: 'top',
-      excludeInvisibleChildrenFromBounds: true,
-      minContentHeight: 270
+      excludeInvisibleChildrenFromBounds: true
     } );
     const contentVBox = new VBox( {
       children: [

@@ -54,18 +54,20 @@ class FocusedNuclideChartNode extends NuclideChartNode {
     this.addChild( backgroundRectangle );
     const updateHighlightRectangleCenter = () => {
       highlightRectangle.center = viewHighlightRectangleCenterProperty.value;
+      const shift = ( HIGHLIGHT_RECTANGLE_LINE_WIDTH -
+                      chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) ) / 2;
       if ( highlightRectangle.left < nuclideChartBounds.left ) {
-        highlightRectangle.left = nuclideChartBounds.left - ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
+        highlightRectangle.left = nuclideChartBounds.left - shift;
       }
       if ( highlightRectangle.right > nuclideChartBounds.right ) {
 
-        highlightRectangle.right = nuclideChartBounds.right + ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
+        highlightRectangle.right = nuclideChartBounds.right + shift;
       }
       if ( highlightRectangle.top < nuclideChartBounds.top ) {
-        highlightRectangle.top = nuclideChartBounds.top - ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
+        highlightRectangle.top = nuclideChartBounds.top - shift;
       }
       if ( highlightRectangle.bottom > nuclideChartBounds.bottom ) {
-        highlightRectangle.bottom = nuclideChartBounds.bottom + ( HIGHLIGHT_RECTANGLE_LINE_WIDTH - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) / 2;
+        highlightRectangle.bottom = nuclideChartBounds.bottom + shift;
       }
 
       // make opaque any cells too far away from the center of the highlight rectangle
