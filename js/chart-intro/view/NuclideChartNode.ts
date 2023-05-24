@@ -76,7 +76,8 @@ class NuclideChartNode extends Node {
         // create and add the NuclideChartCell
         const cell = new NuclideChartCell( cellLength, row, column, decayType, {
           fill: color,
-          cellTextFontSize: options.cellTextFontSize
+          cellTextFontSize: options.cellTextFontSize,
+          lineWidth: chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH )
         } );
         cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
         this.addChild( cell );
