@@ -95,6 +95,10 @@ const BANColors = {
 
   nuclideChartBorderColorProperty: new ProfileColorProperty( buildANucleus, 'nuclideChartBorderColor', {
     default: new Color( 197, 191, 197 )
+  } ),
+
+  chartRadioButtonsBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'chartRadioButtonsBackgroundColor', {
+    default: new Color( 241, 250, 254 )
   } )
 };
 

@@ -29,9 +29,12 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import CompleteNuclideChartIconNode from './CompleteNuclideChartIconNode.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
+
+const CHART_VERTICAL_MARGINS = 10;
 
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
@@ -174,13 +177,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
       this.model.selectedNuclideChartProperty );
-    nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + 5;
+    nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
 
     const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>( this.model.selectedNuclideChartProperty,
-      [ { value: 'partial', createNode: () => new Text( 'partial' ) }, { value: 'zoom', createNode: () => new Text( 'zoom' ) } ],
-      { leftTop: nuclideChartAccordionBox.leftBottom, orientation: 'horizontal' } );
+      [ { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() }, { value: 'zoom', createNode: () => new Text( 'zoom' ) } ],
+      { left: nuclideChartAccordionBox.left, top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS, orientation: 'horizontal',
+        radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty } } );
     this.addChild( partialChartRadioButton );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer

@@ -27,7 +27,7 @@ class NuclideChartAccordionBox extends AccordionBox {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType> ) {
 
-    const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 20 );
+    const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
     const zoomInChartTransform = NuclideChartAccordionBox.getChartTransform( 30 );
 
