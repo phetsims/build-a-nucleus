@@ -8,11 +8,9 @@
 
 import { Color, Rectangle, RectangleOptions, TPaint } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
-type SelfOptions = {
-  cellTextFontSize: number;
-};
+type SelfOptions = EmptySelfOptions;
 
 type NuclideChartCellOptions = SelfOptions & RectangleOptions;
 

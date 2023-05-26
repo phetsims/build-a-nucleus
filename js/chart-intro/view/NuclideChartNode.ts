@@ -56,35 +56,13 @@ class NuclideChartNode extends Node {
     }, providedOptions );
     super( options );
 
-    // keep track of the cells of the chart
-    this.cells = [];
     const cellLength = chartTransform.modelToViewDeltaX( 1 );
+    const cellLayerNode = new Node();
 
-    // create and add the chart cells to the chart. row is proton number and column is neutron number.
-    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
-      const populatedCellsInRow = POPULATED_CELLS[ row ];
-      const rowCells: ( NuclideChartCell | null )[] = [];
-      populatedCellsInRow.forEach( column => {
+    // keep track of the cells of the chart
+    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength );
 
-        // get first decay in available decays to color the cell according to that decay type
-        const decayType = AtomIdentifier.getAvailableDecays( row, column )[ 0 ];
-
-        const color = AtomIdentifier.isStable( row, column ) ? BANColors.stableColorProperty.value :
-                      decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
-                      DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
-
-        // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( cellLength, row, column, decayType, {
-          fill: color,
-          cellTextFontSize: options.cellTextFontSize,
-          lineWidth: chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH )
-        } );
-        cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
-        this.addChild( cell );
-        rowCells.push( cell );
-      } );
-      this.cells.push( rowCells );
-    } );
+    this.addChild( cellLayerNode );
 
     const arrowNode = new ArrowNode( 0, 0, 0, 0, {
       tailWidth: 3,
@@ -162,6 +140,38 @@ class NuclideChartNode extends Node {
         }
       } );
   }
+
+  public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number ): ( NuclideChartCell | null )[][] {
+    const cells: ( NuclideChartCell | null )[][] = [];
+
+    // create and add the chart cells to the chart. row is proton number and column is neutron number.
+    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
+      const populatedCellsInRow = POPULATED_CELLS[ row ];
+      const rowCells: ( NuclideChartCell | null )[] = [];
+      populatedCellsInRow.forEach( column => {
+
+        // get first decay in available decays to color the cell according to that decay type
+        const decayType = AtomIdentifier.getAvailableDecays( row, column )[ 0 ];
+
+        const color = AtomIdentifier.isStable( row, column ) ? BANColors.stableColorProperty.value :
+                      decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
+                      DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
+
+        // create and add the NuclideChartCell
+        const cell = new NuclideChartCell( cellLength, row, column, decayType, {
+          fill: color,
+          lineWidth: chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH )
+        } );
+        cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
+        cellLayerNode.addChild( cell );
+        rowCells.push( cell );
+      } );
+      cells.push( rowCells );
+    } );
+
+    return cells;
+  }
+
 }
 
 buildANucleus.register( 'NuclideChartNode', NuclideChartNode );

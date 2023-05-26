@@ -1,0 +1,28 @@
+// Copyright 2023, University of Colorado Boulder
+
+/**
+ * Icon node for NuclideChart.
+ *
+ * @author Luisa Vargas
+ * @author Marla Schulz (PhET Interactive Simulations)
+ */
+
+import buildANucleus from '../../buildANucleus.js';
+import NuclideChartNode from './NuclideChartNode.js';
+import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
+import { Node } from '../../../../scenery/js/imports.js';
+
+class CompleteNuclideChartIconNode extends Node {
+
+  public constructor() {
+
+    const cellLayerNode = new Node();
+    const smallChartTransform = NuclideChartAccordionBox.getChartTransform( 5 );
+    NuclideChartNode.createNuclideChart( cellLayerNode, smallChartTransform, smallChartTransform.modelToViewDeltaX( 1 ) );
+
+    super( { children: [ cellLayerNode ] } );
+  }
+}
+
+buildANucleus.register( 'CompleteNuclideChartIconNode', CompleteNuclideChartIconNode );
+export default CompleteNuclideChartIconNode;

@@ -27,16 +27,9 @@ class NuclideChartAccordionBox extends AccordionBox {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType> ) {
 
-    const getChartTransform = ( scaleFactor: number ) => new ChartTransform( {
-      viewWidth: BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS * scaleFactor,
-      modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ),
-      viewHeight: BANConstants.CHART_MAX_NUMBER_OF_PROTONS * scaleFactor,
-      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
-    } );
-
-    const partialChartTransform = getChartTransform( 20 );
-    const focusedChartTransform = getChartTransform( 10 );
-    const zoomInChartTransform = getChartTransform( 30 );
+    const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 20 );
+    const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
+    const zoomInChartTransform = NuclideChartAccordionBox.getChartTransform( 30 );
 
     const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( protonCountProperty, neutronCountProperty,
       partialChartTransform );
@@ -97,6 +90,15 @@ class NuclideChartAccordionBox extends AccordionBox {
       titleAlignX: 'left',
       stroke: BANConstants.PANEL_STROKE,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
+    } );
+  }
+
+  public static getChartTransform( scaleFactor: number ): ChartTransform {
+    return new ChartTransform( {
+      viewWidth: BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS * scaleFactor,
+      modelXRange: new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ),
+      viewHeight: BANConstants.CHART_MAX_NUMBER_OF_PROTONS * scaleFactor,
+      modelYRange: new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
     } );
   }
 }
