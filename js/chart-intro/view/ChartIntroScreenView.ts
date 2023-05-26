@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -30,6 +30,7 @@ import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import CompleteNuclideChartIconNode from './CompleteNuclideChartIconNode.js';
+import ZoomInNuclideChartIconNode from './ZoomInNuclideChartIconNode.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -182,7 +183,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( nuclideChartAccordionBox );
 
     const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>( this.model.selectedNuclideChartProperty,
-      [ { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() }, { value: 'zoom', createNode: () => new Text( 'zoom' ) } ],
+      [ { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() }, { value: 'zoom', createNode: () => new ZoomInNuclideChartIconNode() } ],
       { left: nuclideChartAccordionBox.left, top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS, orientation: 'horizontal',
         radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty } } );
     this.addChild( partialChartRadioButton );

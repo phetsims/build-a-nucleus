@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Icon node for NuclideChart.
+ * Icon node for complete NuclideChart.
  *
  * @author Luisa Vargas
  * @author Marla Schulz (PhET Interactive Simulations)
