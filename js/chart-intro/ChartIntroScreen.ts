@@ -13,6 +13,9 @@ import ChartIntroModel from '../chart-intro/model/ChartIntroModel.js';
 import ChartIntroScreenView from '../chart-intro/view/ChartIntroScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import CompleteNuclideChartIconNode from './view/CompleteNuclideChartIconNode.js';
+import { FlowBox } from '../../../scenery/js/imports.js';
 
 // types
 export type NuclideChartIntroScreenOptions = ScreenOptions;
@@ -25,7 +28,9 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       name: BuildANucleusStrings.chartIntroStringProperty,
 
-      backgroundColorProperty: BANColors.screenBackgroundColorProperty
+      backgroundColorProperty: BANColors.screenBackgroundColorProperty,
+
+      homeScreenIcon: createScreenIcon()
     }, providedOptions );
 
     super(
@@ -34,6 +39,17 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
       options
     );
   }
+}
+
+/**
+ * Creates the icon for this screen.
+ */
+function createScreenIcon(): ScreenIcon {
+  const iconNode = new FlowBox( { children: [ new CompleteNuclideChartIconNode() ], margin: 3 } );
+  return new ScreenIcon( iconNode, {
+    maxIconWidthProportion: 1,
+    maxIconHeightProportion: 1
+  } );
 }
 
 buildANucleus.register( 'ChartIntroScreen', ChartIntroScreen );
