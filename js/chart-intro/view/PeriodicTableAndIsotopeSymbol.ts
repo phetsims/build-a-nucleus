@@ -34,8 +34,9 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
     const periodicTable = new PeriodicTableNode( particleAtom, {
       interactiveMax: 0,
       disabledCellColor: 'white',
-      selectedCellColor: 'white',
-      strokeHighlightColor: 'black'
+      selectedCellColor: 'black',
+      strokeHighlightColor: 'black',
+      labelTextHighlightFill: 'white'
     } );
     periodicTable.scale( 0.75 );
     panelContents.addChild( periodicTable );
