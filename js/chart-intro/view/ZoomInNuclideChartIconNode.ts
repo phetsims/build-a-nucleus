@@ -23,7 +23,7 @@ class ZoomInNuclideChartIconNode extends Node {
     NuclideChartNode.createNuclideChart( cellLayerNode, smallChartTransform, smallChartTransform.modelToViewDeltaX( 1 ) );
 
     const squareLength = smallChartTransform.modelToViewDeltaX( 5 + ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
-    const zoomInShape = Shape.rectangle( smallChartTransform.modelToViewX( 1 - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
+    const zoomInShape = Shape.rectangle( smallChartTransform.modelToViewX( 0 - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
       smallChartTransform.modelToViewY( 4 + BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
       squareLength, squareLength );
     cellLayerNode.clipArea = zoomInShape;
