@@ -41,7 +41,9 @@ class NuclideChartAndNumberLines extends Node {
     } );
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;
-    nuclideChartNode.left = neutronNumberLine.left;
+
+    // TODO: We don't fully understand this magic number
+    nuclideChartNode.left = chartTransform.modelToViewX( 0.4 );
 
     super( { ...providedOptions, excludeInvisibleChildrenFromBounds: true, children:
         [ nuclideChartNode, protonNumberLine, neutronNumberLine ] } );
