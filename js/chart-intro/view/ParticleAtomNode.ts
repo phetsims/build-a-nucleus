@@ -22,14 +22,14 @@ import Range from '../../../../dot/js/Range.js';
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 
 class ParticleAtomNode extends Node {
-  
+
   private nucleonLayers: Node[];
   public readonly electronCloud: Circle;
   private readonly atomCenter: Vector2;
   private protonCountRange: Range;
   private readonly particleViewMap: ParticleViewMap;
   public readonly emptyAtomCircle: Circle;
-  
+
   public constructor( particleViewMap: ParticleViewMap, atomCenter: Vector2, protonCountRange: Range ) {
 
     // Add the nucleonLayers
@@ -97,7 +97,7 @@ class ParticleAtomNode extends Node {
       if ( !onCorrectLayer ) {
 
         // Remove particle view from its current layer.
-        let particleView = null;
+        let particleView: ParticleView | null = null;
         for ( let layerIndex = 0; layerIndex < this.nucleonLayers.length && particleView === null; layerIndex++ ) {
           for ( let childIndex = 0; childIndex < this.nucleonLayers[ layerIndex ].children.length; childIndex++ ) {
             const nucleonLayersChildren = this.nucleonLayers[ layerIndex ].getChildren() as ParticleView[];
