@@ -20,7 +20,7 @@ import EnergyLevelType from './EnergyLevelType.js';
  */
 
 type ParticleShellPosition = {
-  particle: Particle | undefined;
+  particle?: Particle;
   xPosition: number; // 0 - 5
   type: ParticleType;
 };
@@ -60,11 +60,14 @@ class ParticleNucleus extends ParticleAtom {
     ];
     for ( let i = 0; i < ALLOWED_PARTICLE_POSITIONS.length; i++ ) {
       for ( let j = 0; j < ALLOWED_PARTICLE_POSITIONS[ i ].length; j++ ) {
-        const shellPosition = { particle: undefined, xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ] };
-        const protonShellPosition = { ...shellPosition, type: ParticleType.PROTON };
-        const neutronShellPosition = { ...shellPosition, type: ParticleType.NEUTRON };
-        this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = protonShellPosition;
-        this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = neutronShellPosition;
+        this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = {
+          xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ],
+          type: ParticleType.PROTON
+        };
+        this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = {
+          xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ],
+          type: ParticleType.NEUTRON
+        };
       }
     }
 
@@ -173,7 +176,7 @@ class ParticleNucleus extends ParticleAtom {
    * Fill all nucleons in open positions from bottom to top, left to right
    */
   private updateNucleonPositions( particleArray: ObservableArray<Particle>, particleShellPositions: ParticleShellPosition[][],
-                                   levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
+                                  levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
     const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 5 ] ) -
                        this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
     particleArray.forEach( ( particle, index ) => {

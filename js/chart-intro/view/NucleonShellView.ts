@@ -21,8 +21,10 @@ type SelfOptions = {
   xOffset?: number;
 };
 type EnergyLevelNodeOptions = SelfOptions & NodeOptions;
+
+// TODO: type is repeated in ParticleNucleus
 type ParticleShellPosition = {
-  particle: Particle | undefined;
+  particle?: Particle;
   xPosition: number; // 0 - 5
 };
 
