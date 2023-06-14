@@ -14,6 +14,10 @@ import DecayScreenView from '../decay/view/DecayScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import Tandem from '../../../tandem/js/Tandem.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import IconFactory from './view/IconFactory.js';
+import DecayType from '../common/view/DecayType.js';
+import { FlowBox } from '../../../scenery/js/imports.js';
 
 // types
 export type DecayScreenOptions = ScreenOptions;
@@ -26,7 +30,8 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
       //TODO if you include homeScreenIcon or navigationBarIcon, use JOIST/ScreenIcon
       name: BuildANucleusStrings.decayStringProperty,
 
-      backgroundColorProperty: BANColors.screenBackgroundColorProperty
+      backgroundColorProperty: BANColors.screenBackgroundColorProperty,
+      homeScreenIcon: createScreenIcon()
     }, providedOptions );
 
     super(
@@ -35,6 +40,17 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
       options
     );
   }
+}
+
+/**
+ * Creates the icon for this screen.
+ */
+function createScreenIcon(): ScreenIcon {
+  const iconNode = new FlowBox( { children: [ IconFactory.createDecayIcon( DecayType.ALPHA_DECAY )! ], margin: 3 } );
+  return new ScreenIcon( iconNode, {
+    maxIconWidthProportion: 1,
+    maxIconHeightProportion: 1
+  } );
 }
 
 buildANucleus.register( 'DecayScreen', DecayScreen );
