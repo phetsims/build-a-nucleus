@@ -31,11 +31,13 @@ class NuclideChartCell extends Rectangle {
 
     super( 0, 0, cellLength, cellLength, 0, 0, options );
 
+    // TODO: move protonNumber, neutronNumber, and decayType into cellModel.
+    // TODO: decayEquationModel would have property currentCell (that's a cellModel) which updates the resulting decay equation.
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
     this.decayBackgroundColor = options.fill;
 
-    // TODO: why not store the decayType as the enumeration and not the string?
+    // TODO: why not store the decayType as the enumeration and not the string? - FIRST STEP
     this.decayType = decayType;
   }
 
