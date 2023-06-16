@@ -11,7 +11,6 @@ import { Color, GridBox, Node, NodeOptions, Path, Text } from '../../../../scene
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
-import BANColors from '../../common/BANColors.js';
 import DecayType from '../../common/view/DecayType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Multilink from '../../../../axon/js/Multilink.js';
@@ -21,6 +20,7 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import ChartIntroModel from '../model/ChartIntroModel.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -46,7 +46,7 @@ const POPULATED_CELLS = [
 ];
 
 class NuclideChartNode extends Node {
-  protected readonly cells: ( NuclideChartCell | null )[][];
+  protected readonly cells: NuclideChartCell[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform, providedOptions: NuclideChartNodeOptions ) {
@@ -110,12 +110,12 @@ class NuclideChartNode extends Node {
           assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
                                              ' neutronRowIndex = ' + neutronRowIndex );
 
-          const decayType = highlightedCell!.decayType;
+          const decayType = highlightedCell.cellModel.decayType;
           if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
-            const direction = decayType === DecayType.NEUTRON_EMISSION.name ? new Vector2( neutronCount - 1, protonCount ) :
-                              decayType === DecayType.PROTON_EMISSION.name ? new Vector2( neutronCount, protonCount - 1 ) :
-                              decayType === DecayType.BETA_PLUS_DECAY.name ? new Vector2( neutronCount + 1, protonCount - 1 ) :
-                              decayType === DecayType.BETA_MINUS_DECAY.name ? new Vector2( neutronCount - 1, protonCount + 1 ) :
+            const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronCount - 1, protonCount ) :
+                              decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronCount, protonCount - 1 ) :
+                              decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronCount + 1, protonCount - 1 ) :
+                              decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronCount - 1, protonCount + 1 ) :
                               new Vector2( neutronCount - 2, protonCount - 2 );
             const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
               direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
@@ -129,10 +129,10 @@ class NuclideChartNode extends Node {
           labelContainer.visible = true;
           labelText.string = AtomIdentifier.getSymbol( protonCount );
           labelContainer.center = currentCellCenter;
-          labelText.fill = highlightedCell?.decayType === DecayType.ALPHA_DECAY.name ||
-                           highlightedCell?.decayType === DecayType.BETA_MINUS_DECAY.name ?
+          labelText.fill = highlightedCell?.cellModel.decayType === DecayType.ALPHA_DECAY ||
+                           highlightedCell?.cellModel.decayType === DecayType.BETA_MINUS_DECAY ?
                            Color.BLACK : Color.WHITE;
-          labelTextBackground.fill = highlightedCell!.decayBackgroundColor;
+          labelTextBackground.fill = highlightedCell.decayBackgroundColor;
         }
         else {
           arrowNode.visible = false;
@@ -141,25 +141,17 @@ class NuclideChartNode extends Node {
       } );
   }
 
-  public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number ): ( NuclideChartCell | null )[][] {
-    const cells: ( NuclideChartCell | null )[][] = [];
+  public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number ): NuclideChartCell[][] {
+    const cells: NuclideChartCell[][] = [];
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
     chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
       const populatedCellsInRow = POPULATED_CELLS[ row ];
-      const rowCells: ( NuclideChartCell | null )[] = [];
-      populatedCellsInRow.forEach( column => {
-
-        // get first decay in available decays to color the cell according to that decay type
-        const decayType = AtomIdentifier.getAvailableDecays( row, column )[ 0 ];
-
-        const color = AtomIdentifier.isStable( row, column ) ? BANColors.stableColorProperty.value :
-                      decayType === undefined ? BANColors.unknownColorProperty.value : // no available decays, unknown decay type
-                      DecayType.enumeration.getValue( decayType.toString() ).colorProperty.value;
+      const rowCells: NuclideChartCell[] = [];
+      populatedCellsInRow.forEach( ( column, columnIndex ) => {
 
         // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( cellLength, row, column, decayType, {
-          fill: color,
+        const cell = new NuclideChartCell( cellLength, ChartIntroModel.cellModelArray[ row ][ columnIndex ], {
           lineWidth: chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH )
         } );
         cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );

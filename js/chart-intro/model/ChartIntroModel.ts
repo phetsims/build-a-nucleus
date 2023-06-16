@@ -10,20 +10,38 @@ import buildANucleus from '../../buildANucleus.js';
 import BANModel from '../../common/model/BANModel.js';
 import ParticleNucleus from './ParticleNucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import ParticleType from '../../common/view/ParticleType.js'; // TODO: move ParticelType into model folder, see: https://github.com/phetsims/chipper/issues/1385
+import ParticleType from '../../common/view/ParticleType.js'; // TODO: move ParticleType into model folder, see: https://github.com/phetsims/chipper/issues/1385
 import Particle from '../../../../shred/js/model/Particle.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Property from '../../../../axon/js/Property.js';
+import NuclideChartCellModel from './NuclideChartCellModel.js';
 
 // types
 export type SelectedChartType = 'partial' | 'zoom';
+
+// 2D array that defines the table structure.
+// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
+const POPULATED_CELLS = [
+  [ 1, 4, 6 ],
+  [ 0, 1, 2, 3, 4, 5, 6 ],
+  [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+  [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+  [ 5, 6, 7, 8, 9, 10, 11, 12 ]
+];
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public readonly particleNucleus: ParticleNucleus;
   public readonly miniParticleAtom: ParticleAtom;
   public readonly selectedNuclideChartProperty: Property<SelectedChartType>;
+  public static cellModelArray = POPULATED_CELLS.map( ( row, rowIndex ) => row.map( column => new NuclideChartCellModel( rowIndex, column ) ) );
 
   public constructor() {
 

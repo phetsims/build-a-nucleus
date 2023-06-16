@@ -9,6 +9,7 @@
 import { Color, Rectangle, RectangleOptions, TPaint } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -16,29 +17,20 @@ type NuclideChartCellOptions = SelfOptions & RectangleOptions;
 
 class NuclideChartCell extends Rectangle {
 
-  public readonly protonNumber: number;
-  public readonly neutronNumber: number;
-  public readonly decayType: string;
   public readonly decayBackgroundColor: TPaint;
+  public readonly cellModel: NuclideChartCellModel;
 
-  public constructor( cellLength: number, protonNumber: number, neutronNumber: number,
-                      decayType: string, providedOptions: NuclideChartCellOptions ) {
+  public constructor( cellLength: number, cellModel: NuclideChartCellModel, providedOptions: NuclideChartCellOptions ) {
 
     const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
       stroke: Color.GRAY,
-      fill: Color.GRAY
+      fill: cellModel.colorProperty.value
     }, providedOptions );
 
     super( 0, 0, cellLength, cellLength, 0, 0, options );
 
-    // TODO: move protonNumber, neutronNumber, and decayType into cellModel.
-    // TODO: decayEquationModel would have property currentCell (that's a cellModel) which updates the resulting decay equation.
-    this.protonNumber = protonNumber;
-    this.neutronNumber = neutronNumber;
     this.decayBackgroundColor = options.fill;
-
-    // TODO: why not store the decayType as the enumeration and not the string? - FIRST STEP
-    this.decayType = decayType;
+    this.cellModel = cellModel;
   }
 
   // make cell more opaque to de-emphasize the cell

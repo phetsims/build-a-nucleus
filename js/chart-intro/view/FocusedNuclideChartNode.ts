@@ -75,9 +75,9 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         nuclideChartCellRow.forEach( nuclideChartCell => {
           if ( nuclideChartCell ) {
             const protonDelta = Math.abs( chartTransform.viewToModelY( highlightRectangle.center.y )
-                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.protonNumber );
+                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.protonNumber );
             const neutronDelta = Math.abs( chartTransform.viewToModelX( highlightRectangle.center.x )
-                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.neutronNumber );
+                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.neutronNumber );
             nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
           }
         } );
