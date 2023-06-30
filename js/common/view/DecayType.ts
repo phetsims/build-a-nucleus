@@ -21,7 +21,7 @@ class DecayType extends EnumerationValue {
 
   public static readonly BETA_PLUS_DECAY = new DecayType( BuildANucleusStrings.betaPlusDecay, BANColors.betaPlusColorProperty, 0, 1, 'β' );
 
-  public static readonly PROTON_EMISSION = new DecayType( BuildANucleusStrings.protonEmission, BANColors.protonEmissionColorProperty, 0, 1, 'e' );
+  public static readonly PROTON_EMISSION = new DecayType( BuildANucleusStrings.protonEmission, BANColors.protonEmissionColorProperty, 1, 1, 'p' );
 
   public static readonly NEUTRON_EMISSION = new DecayType( BuildANucleusStrings.neutronEmission, BANColors.neutronEmissionColorProperty, 1, 0, 'n' );
 

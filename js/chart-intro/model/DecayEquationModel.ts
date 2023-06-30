@@ -13,66 +13,63 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import DecayType from '../../common/view/DecayType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 
 class DecayEquationModel {
   private readonly initialProtonNumberProperty: TReadOnlyProperty<number>;
   private readonly initialMassNumberProperty: TReadOnlyProperty<number>;
   private readonly finalProtonNumberProperty: Property<number>;
   private readonly finalMassNumberProperty: Property<number>;
+  private readonly decayTypeEnumerationProperty: Property<EnumerationValue | null>;
 
   public constructor( cellModelArray: NuclideChartCellModel[][], protonCountProperty: TReadOnlyProperty<number>, massNumberProperty: TReadOnlyProperty<number> ) {
 
     this.initialProtonNumberProperty = protonCountProperty;
     this.initialMassNumberProperty = massNumberProperty;
 
-    // TODO: if at 0 protons and 0 neutrons, or if decay type is unknown, don't show the decay equation
     this.finalProtonNumberProperty = new NumberProperty( -1 );
     this.finalMassNumberProperty = new NumberProperty( -1 );
 
+    this.decayTypeEnumerationProperty = new Property<EnumerationValue | null>( null );
+
     this.initialMassNumberProperty.link( () => {
       const currentCell = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
-      console.log( cellModelArray );
       if ( !currentCell || !currentCell.decayType ) {
-        // TODO: for stable decay types set this, is it alright?
         this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value;
         this.finalMassNumberProperty.value = this.initialMassNumberProperty.value;
+        this.decayTypeEnumerationProperty.value = null;
         return;
       }
-      console.log( currentCell.decayType );
       switch( currentCell.decayType ) {
         case DecayType.NEUTRON_EMISSION:
-          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value;
-          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - 1;
+          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - DecayType.NEUTRON_EMISSION.protonNumber;
+          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - DecayType.NEUTRON_EMISSION.massNumber;
+          this.decayTypeEnumerationProperty.value = DecayType.NEUTRON_EMISSION;
           break;
         case DecayType.PROTON_EMISSION:
-          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - 1;
-          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - 1;
+          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - DecayType.PROTON_EMISSION.protonNumber;
+          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - DecayType.PROTON_EMISSION.massNumber;
+          this.decayTypeEnumerationProperty.value = DecayType.PROTON_EMISSION;
           break;
         case DecayType.BETA_PLUS_DECAY:
-          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - 1;
-          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value;
+          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - DecayType.BETA_PLUS_DECAY.protonNumber;
+          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - DecayType.BETA_PLUS_DECAY.massNumber;
+          this.decayTypeEnumerationProperty.value = DecayType.BETA_PLUS_DECAY;
           break;
         case DecayType.BETA_MINUS_DECAY:
-          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value + 1;
-          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value;
+          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - DecayType.BETA_MINUS_DECAY.protonNumber;
+          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - DecayType.BETA_MINUS_DECAY.massNumber;
+          this.decayTypeEnumerationProperty.value = DecayType.BETA_MINUS_DECAY;
           break;
         case DecayType.ALPHA_DECAY:
-          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - 2;
-          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - 4;
+          this.finalProtonNumberProperty.value = this.initialProtonNumberProperty.value - DecayType.ALPHA_DECAY.protonNumber;
+          this.finalMassNumberProperty.value = this.initialMassNumberProperty.value - DecayType.ALPHA_DECAY.massNumber;
+          this.decayTypeEnumerationProperty.value = DecayType.ALPHA_DECAY;
           break;
         default:
           assert && assert( false, 'No valid decay type found: ' + currentCell.decayType );
       }
-
     } );
-
-    this.initialMassNumberProperty.link( initialMassNumber => {
-      console.log( 'initialMassNumber = ' + initialMassNumber );
-      console.log( 'initialProtonNumber = ' + this.initialProtonNumberProperty.value );
-      console.log( 'finalMassNumber = ' + this.finalMassNumberProperty.value );
-      console.log( 'finalProtonNumber = ' + this.finalProtonNumberProperty.value );
-    } );
-
   }
 
   /**
