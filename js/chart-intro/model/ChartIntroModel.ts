@@ -16,6 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Property from '../../../../axon/js/Property.js';
 import NuclideChartCellModel from './NuclideChartCellModel.js';
+import DecayEquationModel from './DecayEquationModel.js';
 
 // types
 export type SelectedChartType = 'partial' | 'zoom';
@@ -41,7 +42,10 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   public readonly particleNucleus: ParticleNucleus;
   public readonly miniParticleAtom: ParticleAtom;
   public readonly selectedNuclideChartProperty: Property<SelectedChartType>;
-  public static cellModelArray = POPULATED_CELLS.map( ( row, rowIndex ) => row.map( column => new NuclideChartCellModel( rowIndex, column ) ) );
+
+  // There's not an entry for all the neutron values, see POPULATED_CELLS
+  public static cellModelArray = POPULATED_CELLS.map( ( neutronCountList, protonCount ) => neutronCountList.map( neutronCount => new NuclideChartCellModel( protonCount, neutronCount ) ) );
+  public readonly decayEquationModel: DecayEquationModel;
 
   public constructor() {
 
@@ -56,6 +60,8 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     this.miniParticleAtom = new ParticleAtom();
 
     this.selectedNuclideChartProperty = new Property<SelectedChartType>( 'partial' );
+
+    this.decayEquationModel = new DecayEquationModel( ChartIntroModel.cellModelArray, this.particleNucleus.protonCountProperty, this.particleNucleus.massNumberProperty );
   }
 
   /**

@@ -15,26 +15,32 @@ import BANColors from '../BANColors.js';
 
 class DecayType extends EnumerationValue {
 
-  public static readonly ALPHA_DECAY = new DecayType( BuildANucleusStrings.alphaDecay, BANColors.alphaColorProperty );
+  public static readonly ALPHA_DECAY = new DecayType( BuildANucleusStrings.alphaDecay, BANColors.alphaColorProperty, 4, 2, 'α' );
 
-  public static readonly BETA_MINUS_DECAY = new DecayType( BuildANucleusStrings.betaMinusDecay, BANColors.betaMinusColorProperty );
+  public static readonly BETA_MINUS_DECAY = new DecayType( BuildANucleusStrings.betaMinusDecay, BANColors.betaMinusColorProperty, 0, -1, 'β' );
 
-  public static readonly BETA_PLUS_DECAY = new DecayType( BuildANucleusStrings.betaPlusDecay, BANColors.betaPlusColorProperty );
+  public static readonly BETA_PLUS_DECAY = new DecayType( BuildANucleusStrings.betaPlusDecay, BANColors.betaPlusColorProperty, 0, 1, 'β' );
 
-  public static readonly PROTON_EMISSION = new DecayType( BuildANucleusStrings.protonEmission, BANColors.protonEmissionColorProperty );
+  public static readonly PROTON_EMISSION = new DecayType( BuildANucleusStrings.protonEmission, BANColors.protonEmissionColorProperty, 0, 1, 'e' );
 
-  public static readonly NEUTRON_EMISSION = new DecayType( BuildANucleusStrings.neutronEmission, BANColors.neutronEmissionColorProperty );
+  public static readonly NEUTRON_EMISSION = new DecayType( BuildANucleusStrings.neutronEmission, BANColors.neutronEmissionColorProperty, 1, 0, 'n' );
 
   public static readonly enumeration = new Enumeration( DecayType );
 
   public readonly label: string;
   public readonly colorProperty: ProfileColorProperty;
+  public readonly massNumber: number;
+  public readonly protonNumber: number;
+  public readonly decaySymbol: string;
 
-  public constructor( label: string, colorProperty: ProfileColorProperty ) {
+  public constructor( label: string, colorProperty: ProfileColorProperty, massNumber: number, protonNumber: number, decaySymbol: string ) {
     super();
 
     this.label = label;
     this.colorProperty = colorProperty;
+    this.massNumber = massNumber;
+    this.protonNumber = protonNumber;
+    this.decaySymbol = decaySymbol;
 
   }
 }
