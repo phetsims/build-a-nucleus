@@ -17,19 +17,23 @@ class NuclideChartCellModel {
 
   public readonly protonNumber: number;
   public readonly neutronNumber: number;
-  public readonly decayType: DecayType | null;
+  public readonly decayType: DecayType | undefined;
   public readonly colorProperty: ColorProperty;
+  public readonly decayTypeLikelihoodPercent: number | null;
 
   public constructor( protonNumber: number, neutronNumber: number ) {
 
     // get first decay in available decays to color the cell according to that decay type
-    const decayType = AtomIdentifier.getAvailableDecays( protonNumber, neutronNumber )[ 0 ];
+    // @ts-expect-error webstorm doesn't know that this is an object of { string: number }, it thinks it's { string: undefined }
+    const decayTypeAndPercent: { string: number } = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber )[ 0 ];
 
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
-    this.decayType = DecayType.enumeration.getValue( decayType );
+    this.decayType = decayTypeAndPercent !== undefined ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ 0 ] ) : undefined;
+    // @ts-expect-error webstorm doesn't know that decayTypeAndPercent[ this.decayType.name ] is a number and not 'any'
+    this.decayTypeLikelihoodPercent = this.decayType === undefined ? null : decayTypeAndPercent[ this.decayType.name ];
     this.colorProperty = AtomIdentifier.isStable( protonNumber, neutronNumber ) ? BANColors.stableColorProperty :
-                  decayType === undefined ? BANColors.unknownColorProperty : // no available decays, unknown decay type
+                  this.decayType === undefined ? BANColors.unknownColorProperty : // no available decays, unknown decay type
                   this.decayType.colorProperty;
   }
 }

@@ -173,5 +173,8 @@
   },
   "axis.neutronNumber": {
     "value": "Neutron Number"
+  },
+  "mostLikelyDecayPattern": {
+    "value": "Most likely decay ({{decayLikelihoodPercent}}%)"
   }
 }

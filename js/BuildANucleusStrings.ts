@@ -128,7 +128,9 @@ type StringsType = {
     'protonNumberStringProperty': LocalizedStringProperty;
     'neutronNumber': string;
     'neutronNumberStringProperty': LocalizedStringProperty;
-  }
+  };
+  'mostLikelyDecayPattern': string;
+  'mostLikelyDecayPatternStringProperty': LocalizedStringProperty;
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
