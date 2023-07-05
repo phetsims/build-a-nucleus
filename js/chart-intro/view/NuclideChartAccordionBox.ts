@@ -21,11 +21,14 @@ import Range from '../../../../dot/js/Range.js';
 import FocusedNuclideChartNode from './FocusedNuclideChartNode.js';
 import ZoomInChartNode from './ZoomInChartNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import DecayEquationNode from './DecayEquationNode.js';
+import DecayEquationModel from '../model/DecayEquationModel.js';
 
 class NuclideChartAccordionBox extends AccordionBox {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType> ) {
+                      minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
+                      decayEquationModel: DecayEquationModel ) {
 
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
@@ -40,6 +43,8 @@ class NuclideChartAccordionBox extends AccordionBox {
       zoomInChartTransform );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
+    const decayEquationVBox = new DecayEquationNode( decayEquationModel );
+
     const chartAndButtonVBox = new VBox( {
       children: [
         new TextPushButton( BuildANucleusStrings.decayStringProperty ),
@@ -52,6 +57,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       zoomInNuclideChartNode.visible = selectedNuclideChart === 'zoom';
       chartAndButtonVBox.visible = selectedNuclideChart === 'zoom';
+      decayEquationVBox.visible = selectedNuclideChart === 'zoom';
       nuclideChartAndNumberLines.visible = selectedNuclideChart === 'partial';
     } );
 
@@ -67,6 +73,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     } );
     const contentVBox = new VBox( {
       children: [
+        decayEquationVBox,
         chartsHBox,
         nuclideChartLegendNode
       ],

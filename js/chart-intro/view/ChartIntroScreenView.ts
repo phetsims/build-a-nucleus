@@ -177,7 +177,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // TODO: use align group to match width's of accordion box and periodic table
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
-      this.model.selectedNuclideChartProperty );
+      this.model.selectedNuclideChartProperty, this.model.decayEquationModel );
     nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
