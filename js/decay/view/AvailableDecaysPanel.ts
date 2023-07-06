@@ -206,12 +206,12 @@ class AvailableDecaysPanel extends Panel {
     particleLabelsLegend.top = separator.bottom + SPACING;
 
     const contentNode = new VBox( {
-    children: [
-      new HBox( { children: [ titleNode, decaysInfoButton ], spacing: 15 } ),
-      arrangedDecayButtonsAndIcons,
-      separator,
-      particleLabelsLegend
-    ],
+      children: [
+        new HBox( { children: [ titleNode, decaysInfoButton ], spacing: 15 } ),
+        arrangedDecayButtonsAndIcons,
+        separator,
+        particleLabelsLegend
+      ],
       spacing: SPACING
     } );
 
