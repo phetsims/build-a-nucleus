@@ -382,10 +382,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       return particleType;
     };
 
+    const particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 );
+
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
-      const particleView = new ParticleView( particle,
-        ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 ) );
+      const particleView = new ParticleView( particle, particleTransform );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle );
