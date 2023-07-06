@@ -34,6 +34,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from '../../chart-intro/view/ParticleAtomNode.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -427,18 +428,21 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.protonArrowButtons = protonArrowButtons;
     this.neutronArrowButtons = neutronArrowButtons;
 
-    // add initial neutrons and protons specified by the query parameters to the atom
-    _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
-      if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
-      }
-      if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
-      }
-    } );
-
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( protonCount => this.particleAtomNode.updateCloudSize( protonCount, 0.27, 10, 20 ) );
+
+    // TODO: a timeout is likely NOT the right solution here, https://github.com/phetsims/build-a-nucleus/issues/84
+    stepTimer.setTimeout( () => {
+      // add initial neutrons and protons specified by the query parameters to the atom
+      _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
+        if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
+          this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+        }
+        if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
+          this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+        }
+      } );
+    }, 0 );
   }
 
   /**
