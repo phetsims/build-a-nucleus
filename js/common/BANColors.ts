@@ -130,21 +130,7 @@ const BANColors = {
   // colors of the energy level bars
   zeroNucleonsEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'zeroNucleonsEnergyLevelColor', {
     default: Color.BLACK
-  } ),
-
-  // color of the lower proton energy levels
-  oneProtonLowerEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'oneProtonLowerEnergyLevelColor', {
-    default: new Color( 128, 43, 0 )
-  } ),
-
-  // colors of the upper proton energy levels
-
-  // color of the lower neutron energy levels
-  oneNeutronLowerEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'oneNeutronLowerEnergyLevelColor', {
-    default: new Color( 64, 64, 64 )
   } )
-
-  // colors of the upper neutron energy levels
 };
 
 buildANucleus.register( 'BANColors', BANColors );

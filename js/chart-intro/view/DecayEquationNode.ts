@@ -18,6 +18,8 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DecaySymbolNode from './DecaySymbolNode.js';
+import BANColors from '../../common/BANColors.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 
 class DecayEquationNode extends VBox {
 
@@ -30,22 +32,35 @@ class DecayEquationNode extends VBox {
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       if ( currentCellModel ) {
 
-        const decayArrow = new ArrowNode( 0, 0, 20, 0 );
+        const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
         const mostLikelyDecayString = new Text( StringUtils.fillIn( BuildANucleusStrings.mostLikelyDecayPattern, {
-          decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || 'unknown' // TODO: i18n, https://github.com/phetsims/build-a-nucleus/issues/80
-        } ) );
+            decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || 'unknown' // TODO: i18n, https://github.com/phetsims/build-a-nucleus/issues/80
+          } ),
+          {
+            fontSize: 13
+          } );
 
         const currentNuclideSymbol = new SymbolNode( new TinyProperty( currentCellModel.protonNumber ), new TinyProperty( currentCellModel.protonNumber + currentCellModel.neutronNumber ), {
-          scale: 0.15
+          scale: 0.15,
+          boundingBoxStroke: null
         } );
 
-        const decayEquationArrow = new ArrowNode( 0, 0, 10, 0 );
+        const decayEquationArrow = new ArrowNode( 0, 0, 20, 0, {
+          fill: BANColors.blueDecayIconSymbolsColorProperty,
+          stroke: null,
+          tailWidth: 1,
+          headWidth: 7.5
+        } );
 
         const newNuclideSymbol = new SymbolNode( decayEquationModel.finalProtonNumberProperty, decayEquationModel.finalMassNumberProperty, {
-          scale: 0.15
+          scale: 0.15,
+          boundingBoxStroke: null
         } );
 
-        const plusNode = new PlusNode();
+        const plusNode = new PlusNode( {
+          fill: BANColors.blueDecayIconSymbolsColorProperty,
+          size: new Dimension2( 9, 2 )
+        } );
 
         let decaySymbol: Node;
         if ( currentCellModel.decayType ) {
@@ -54,7 +69,8 @@ class DecayEquationNode extends VBox {
             currentCellModel.decayType.decaySymbol,
             new NumberProperty( currentCellModel.decayType.protonNumber ),
             new NumberProperty( currentCellModel.decayType.massNumber ), {
-              scale: 0.15
+              scale: 0.15,
+              boundingBoxStroke: null
             } );
         }
         else {
@@ -63,7 +79,8 @@ class DecayEquationNode extends VBox {
             '!!',
             new NumberProperty( 0 ),
             new NumberProperty( 0 ), {
-              scale: 0.15
+              scale: 0.15,
+              boundingBoxStroke: null
             } );
         }
 

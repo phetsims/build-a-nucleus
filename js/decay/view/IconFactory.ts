@@ -75,6 +75,18 @@ class IconFactory {
   }
 
   /**
+   * Function to create a right-pointing arrow.
+   */
+  public static createDecayArrowNode(): Node {
+    return new ArrowNode( 0, 0, 20, 0, {
+      fill: BANColors.blueDecayIconSymbolsColorProperty,
+      stroke: null,
+      tailWidth: 1,
+      headWidth: 7.5
+    } );
+  }
+
+  /**
    * Function to create the icon for a beta decay ( left to right contents: a nucleon particle node, a right-pointing
    * arrow, a different nucleon particle node than the first one, a mathematical 'plus' symbol, motion lines, and an
    * electron or positron )
@@ -83,12 +95,7 @@ class IconFactory {
     return new HBox( {
       children: [
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.NEUTRON ) : IconFactory.createParticleNode( ParticleType.PROTON ),
-        new ArrowNode( 0, 0, 20, 0, {
-          fill: BANColors.blueDecayIconSymbolsColorProperty,
-          stroke: null,
-          tailWidth: 1,
-          headWidth: 7.5
-        } ),
+        IconFactory.createDecayArrowNode(),
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.PROTON ) : IconFactory.createParticleNode( ParticleType.NEUTRON ),
         new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
         IconFactory.createMotionLines( 3.5, true ),

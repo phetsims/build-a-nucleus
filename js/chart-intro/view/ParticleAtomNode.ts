@@ -161,8 +161,9 @@ class ParticleAtomNode extends Node {
       const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonCount, minChangedRadius, maxChangedRadius ) / 2 );
       this.electronCloud.radius = radius * factor;
       this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
+        // TODO: use color.interpolateRGBA() to use the same color property in both https://github.com/phetsims/build-a-nucleus/issues/85
         .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' );
+        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' ); // Color.withAlpha()
     }
   }
 

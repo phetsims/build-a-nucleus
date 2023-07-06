@@ -53,19 +53,16 @@ class NucleonNumberLine extends Node {
       extent: 5,
       createLabel: ( value: number ) => new BackgroundNode( new Text( value, {
           fontSize: 12,
-          fill: new DerivedProperty( [ particleCountProperty ],
-            particleCount => {
-              // TODO: color profile - can't use ColorProperty here?
-              return particleCount === value ? BANColors.highLightedTickLabelColorProperty.value :
-                     BANColors.nucleonNumberLineAndTextFontColorProperty.value;
+          fill: new DerivedProperty( [ particleCountProperty, BANColors.highLightedTickLabelColorProperty, BANColors.nucleonNumberLineAndTextFontColorProperty ],
+            ( particleCount, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
+              return particleCount === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
             } )
         } ),
         {
           rectangleOptions: {
-            fill: new DerivedProperty( [ particleCountProperty ],
-              particleCount => {
-              // TODO: color profile - can't use ColorProperty here?
-                return particleCount === value ? options.labelHighlightColorProperty.value : null;
+            fill: new DerivedProperty( [ particleCountProperty, options.labelHighlightColorProperty ],
+              ( particleCount, labelHighlightColor ) => {
+                return particleCount === value ? labelHighlightColor : null;
               } ),
             opacity: 1
           },

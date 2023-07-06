@@ -28,10 +28,11 @@ type ParticleShellPosition = {
   xPosition: number; // 0 - 5
 };
 
+// TODO: Remove color arrays, instead https://github.com/phetsims/build-a-nucleus/issues/85.
 // nucleon number to energy level stroke color
 const neutronNumberToColorLowerLevel = [
   BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
-  BANColors.oneNeutronLowerEnergyLevelColorProperty, // 1
+  Color.interpolateRGBA( BANColors.zeroNucleonsEnergyLevelColorProperty.value, BANColors.neutronColorProperty.value, 0.5 ), // 1
   BANColors.neutronColorProperty // 2
 ];
 const neutronNumberToColorUpperLevel = [
@@ -45,7 +46,7 @@ const neutronNumberToColorUpperLevel = [
 ];
 const protonNumberToColorLowerLevel = [
   BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
-  BANColors.oneProtonLowerEnergyLevelColorProperty, // 1
+  Color.interpolateRGBA( BANColors.zeroNucleonsEnergyLevelColorProperty.value, BANColors.neutronColorProperty.value, 0.5 ), // 1
   BANColors.protonColorProperty // 2
 ];
 const protonNumberToColorUpperLevel = [
