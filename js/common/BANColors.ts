@@ -89,17 +89,62 @@ const BANColors = {
     default: Color.BLUE
   } ),
 
+  // stroke color of the dashed lines below that mini-nucleus
+  zoomInDashedLineStrokeColorProperty: new ProfileColorProperty( buildANucleus, 'zoomInDashedLineStrokeColor', {
+    default: Color.BLACK
+  } ),
+
+  panelStrokeColorProperty: new ProfileColorProperty( buildANucleus, 'panelStrokeColor', {
+    default: Color.GRAY
+  } ),
+
+  availableDecaysPanelBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'availableDecaysPanelBackground', {
+    default: '#F2F2F2'
+  } ),
+
+  chartAccordionBoxBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'chartAccordionBoxBackgroundColor', {
+    default: Color.WHITE
+  } ),
+
   shellModelTextHighlightColorProperty: new ProfileColorProperty( buildANucleus, 'shellModelTextHighlightColor', {
     default: new Color( 189, 255, 255 )
   } ),
 
   nuclideChartBorderColorProperty: new ProfileColorProperty( buildANucleus, 'nuclideChartBorderColor', {
-    default: new Color( 197, 191, 197 )
+    default: new Color( 143, 143, 143 )
   } ),
 
   chartRadioButtonsBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'chartRadioButtonsBackgroundColor', {
     default: new Color( 241, 250, 254 )
+  } ),
+
+  nucleonNumberLineAndTextFontColorProperty: new ProfileColorProperty( buildANucleus, 'nucleonNumberLineAndTextFontColor', {
+    default: Color.BLACK
+  } ),
+
+  // color of a highlighted tick label on the nucleon number line
+  highLightedTickLabelColorProperty: new ProfileColorProperty( buildANucleus, 'highLightedTickLabelColor', {
+    default: Color.WHITE
+  } ),
+
+  // colors of the energy level bars
+  zeroNucleonsEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'zeroNucleonsEnergyLevelColor', {
+    default: Color.BLACK
+  } ),
+
+  // color of the lower proton energy levels
+  oneProtonLowerEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'oneProtonLowerEnergyLevelColor', {
+    default: new Color( 128, 43, 0 )
+  } ),
+
+  // colors of the upper proton energy levels
+
+  // color of the lower neutron energy levels
+  oneNeutronLowerEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'oneNeutronLowerEnergyLevelColor', {
+    default: new Color( 64, 64, 64 )
   } )
+
+  // colors of the upper neutron energy levels
 };
 
 buildANucleus.register( 'BANColors', BANColors );

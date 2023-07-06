@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, Line, Node, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Line, Node, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -166,7 +166,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // create and add dashed 'zoom' lines
     // TODO: position based on the small atom
-    const dashedLineOptions = { stroke: Color.BLACK, lineDash: [ 6, 3 ] };
+    const dashedLineOptions = { stroke: BANColors.zoomInDashedLineStrokeColorProperty, lineDash: [ 6, 3 ] };
     const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, this.doubleArrowButtons.left,
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( leftDashedLine );

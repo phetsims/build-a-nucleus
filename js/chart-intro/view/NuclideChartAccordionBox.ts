@@ -12,7 +12,7 @@ import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Color, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import NuclideChartLegendNode from './NuclideChartLegendNode.js';
 import { SelectedChartType } from '../model/ChartIntroModel.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -23,6 +23,7 @@ import ZoomInChartNode from './ZoomInChartNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import DecayEquationNode from './DecayEquationNode.js';
 import DecayEquationModel from '../model/DecayEquationModel.js';
+import BANColors from '../../common/BANColors.js';
 
 class NuclideChartAccordionBox extends AccordionBox {
 
@@ -47,7 +48,7 @@ class NuclideChartAccordionBox extends AccordionBox {
 
     const chartAndButtonVBox = new VBox( {
       children: [
-        new TextPushButton( BuildANucleusStrings.decayStringProperty ),
+        new TextPushButton( BuildANucleusStrings.decayStringProperty, { baseColor: BANColors.decayButtonColorProperty } ),
         focusedNuclideChartNode
       ],
       spacing: 10,
@@ -86,7 +87,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         font: BANConstants.REGULAR_FONT,
         maxWidth: 200
       } ),
-      fill: Color.white,
+      fill: BANColors.chartAccordionBoxBackgroundColorProperty,
       minWidth: minWidth,
       contentYSpacing: 0,
       buttonXMargin: 10,
@@ -95,7 +96,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         sideLength: 18
       },
       titleAlignX: 'left',
-      stroke: BANConstants.PANEL_STROKE,
+      stroke: BANColors.panelStrokeColorProperty,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
   }

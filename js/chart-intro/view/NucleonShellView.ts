@@ -30,32 +30,32 @@ type ParticleShellPosition = {
 
 // nucleon number to energy level stroke color
 const neutronNumberToColorLowerLevel = [
-  Color.BLACK, // 0
-  new Color( 64, 64, 64 ), // 1
-  BANColors.neutronColorProperty.value // 2
+  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
+  BANColors.oneNeutronLowerEnergyLevelColorProperty, // 1
+  BANColors.neutronColorProperty // 2
 ];
 const neutronNumberToColorUpperLevel = [
-  Color.BLACK, // 0
+  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
   new Color( 21, 21, 21 ), // 1
   new Color( 43, 43, 43 ), // 2
   new Color( 64, 64, 64 ), // 3
   new Color( 85, 85, 85 ), // 4
   new Color( 107, 107, 107 ), // 5
-  BANColors.neutronColorProperty.value // 6
+  BANColors.neutronColorProperty // 6
 ];
 const protonNumberToColorLowerLevel = [
-  Color.BLACK, // 0
-  new Color( 128, 43, 0 ), // 1
-  BANColors.protonColorProperty.value // 2
+  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
+  BANColors.oneProtonLowerEnergyLevelColorProperty, // 1
+  BANColors.protonColorProperty // 2
 ];
 const protonNumberToColorUpperLevel = [
-  Color.BLACK, // 0
+  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
   new Color( 43, 14, 0 ), // 1
   new Color( 85, 28, 0 ), // 2
   new Color( 128, 43, 0 ), // 3
   new Color( 170, 57, 0 ), // 4
   new Color( 213, 71, 0 ), // 5
-  BANColors.protonColorProperty.value // 6
+  BANColors.protonColorProperty // 6
 ];
 
 class NucleonShellView extends Node {

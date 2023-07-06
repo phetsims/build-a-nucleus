@@ -45,7 +45,7 @@ class NucleonCountPanel extends Panel {
       // options for the panel
       fill: BANColors.panelBackgroundColorProperty,
       xMargin: 10,
-      stroke: BANConstants.PANEL_STROKE,
+      stroke: BANColors.panelStrokeColorProperty,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     };
 

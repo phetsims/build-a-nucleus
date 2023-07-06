@@ -218,8 +218,8 @@ class AvailableDecaysPanel extends Panel {
     super( contentNode, {
       xMargin: 15,
       yMargin: 15,
-      fill: '#F2F2F2',
-      stroke: BANConstants.PANEL_STROKE,
+      fill: BANColors.availableDecaysPanelBackgroundColorProperty,
+      stroke: BANColors.panelStrokeColorProperty,
       minWidth: 322,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );

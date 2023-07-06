@@ -7,7 +7,6 @@
  */
 
 import buildANucleus from '../buildANucleus.js';
-import { Color } from '../../../scenery/js/imports.js';
 import ShredConstants from '../../../shred/js/ShredConstants.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -47,7 +46,6 @@ const BANConstants = {
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
   TIME_TO_SHOW_DOES_NOT_EXIST: 1,
 
-  PANEL_STROKE: Color.GRAY,
   PANEL_CORNER_RADIUS: 6,
 
   ELEMENT_NAME_MAX_WIDTH: 300,

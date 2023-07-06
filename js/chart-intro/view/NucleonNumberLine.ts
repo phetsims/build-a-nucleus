@@ -6,7 +6,7 @@
  * @author Luisa Vargas
  */
 
-import { Color, ColorProperty, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
+import { ColorProperty, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
@@ -19,6 +19,7 @@ import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import BANColors from '../../common/BANColors.js';
 
 type SelfOptions = {
   labelHighlightColorProperty: ColorProperty;
@@ -42,7 +43,7 @@ class NucleonNumberLine extends Node {
 
     // create and add the tick marks
     const tickMarkSet = new TickMarkSet( chartTransform, orientation, options.tickSpacing, {
-      stroke: Color.BLACK,
+      stroke: BANColors.nucleonNumberLineAndTextFontColorProperty,
       lineWidth: 1
     } );
     numberLineNode.addChild( tickMarkSet );
@@ -54,13 +55,16 @@ class NucleonNumberLine extends Node {
           fontSize: 12,
           fill: new DerivedProperty( [ particleCountProperty ],
             particleCount => {
-              return particleCount === value ? Color.WHITE : Color.BLACK;
+              // TODO: color profile - can't use ColorProperty here?
+              return particleCount === value ? BANColors.highLightedTickLabelColorProperty.value :
+                     BANColors.nucleonNumberLineAndTextFontColorProperty.value;
             } )
         } ),
         {
           rectangleOptions: {
             fill: new DerivedProperty( [ particleCountProperty ],
               particleCount => {
+              // TODO: color profile - can't use ColorProperty here?
                 return particleCount === value ? options.labelHighlightColorProperty.value : null;
               } ),
             opacity: 1

@@ -6,10 +6,11 @@
  * @author Luisa Vargas
  */
 
-import { Color, Rectangle, RectangleOptions, TPaint } from '../../../../scenery/js/imports.js';
+import { Rectangle, RectangleOptions, TPaint } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
+import BANColors from '../../common/BANColors.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -23,8 +24,8 @@ class NuclideChartCell extends Rectangle {
   public constructor( cellLength: number, cellModel: NuclideChartCellModel, providedOptions: NuclideChartCellOptions ) {
 
     const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
-      stroke: Color.GRAY,
-      fill: cellModel.colorProperty.value
+      stroke: BANColors.nuclideChartBorderColorProperty,
+      fill: cellModel.colorProperty
     }, providedOptions );
 
     super( 0, 0, cellLength, cellLength, 0, 0, options );

@@ -103,7 +103,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         sideLength: 18
       },
       titleAlignX: 'left',
-      stroke: BANConstants.PANEL_STROKE,
+      stroke: BANColors.panelStrokeColorProperty,
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
     this.symbolAccordionBox.right = this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN;
