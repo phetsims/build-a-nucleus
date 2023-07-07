@@ -114,7 +114,7 @@ class NuclideChartNode extends Node {
                                              ' neutronRowIndex = ' + neutronRowIndex );
 
           const decayType = highlightedCell.cellModel.decayType;
-          if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== undefined ) {
+          if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== null ) {
             const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronCount - 1, protonCount ) :
                               decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronCount, protonCount - 1 ) :
                               decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronCount + 1, protonCount - 1 ) :

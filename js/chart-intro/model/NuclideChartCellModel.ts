@@ -17,7 +17,9 @@ class NuclideChartCellModel {
 
   public readonly protonNumber: number;
   public readonly neutronNumber: number;
-  public readonly decayType: DecayType | undefined; // TODO: null please
+
+  // Null could be that it is stable or has an unknown decay type, see NuclideChartCellModel.isStable to differentiate.
+  public readonly decayType: DecayType | null;
   public readonly colorProperty: ColorProperty;
   public readonly decayTypeLikelihoodPercent: number | null;
   public readonly isStable: boolean;
@@ -25,17 +27,15 @@ class NuclideChartCellModel {
   public constructor( protonNumber: number, neutronNumber: number ) {
 
     // get first decay in available decays to color the cell according to that decay type
-    // @ts-expect-error webstorm doesn't know that this is an object of { string: number }, it thinks it's { string: undefined }
-    const decayTypeAndPercent: { string: number } = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber )[ 0 ];
+    const decayTypeAndPercent = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber )[ 0 ];
 
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
     this.isStable = AtomIdentifier.isStable( protonNumber, neutronNumber );
-    this.decayType = decayTypeAndPercent !== undefined ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ 0 ] ) : undefined;
-    // @ts-expect-error webstorm doesn't know that decayTypeAndPercent[ this.decayType.name ] is a number and not 'any'
-    this.decayTypeLikelihoodPercent = this.decayType === undefined ? null : decayTypeAndPercent[ this.decayType.name ];
+    this.decayType = decayTypeAndPercent ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ 0 ] ) : null;
+    this.decayTypeLikelihoodPercent = this.decayType === null ? null : decayTypeAndPercent[ this.decayType.name ];
     this.colorProperty = this.isStable ? BANColors.stableColorProperty :
-                         this.decayType === undefined ? BANColors.unknownColorProperty : // no available decays, unknown decay type
+                         this.decayType === null ? BANColors.unknownColorProperty : // no available decays, unknown decay type
                          this.decayType.colorProperty;
   }
 }
