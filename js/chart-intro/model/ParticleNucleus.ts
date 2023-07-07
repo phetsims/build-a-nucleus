@@ -142,11 +142,10 @@ class ParticleNucleus extends ParticleAtom {
       return particleShellPosition !== undefined;
     } );
 
-    assert && assert( openParticleShellPosition !== undefined, 'To add a particle there must be an empty particleShellPosition.' );
+    assert && assert( openParticleShellPosition, 'To add a particle there must be an empty particleShellPosition.' );
 
     openParticleShellPosition!.particle = particle;
-    // @ts-expect-error openParticleShellPosition should never be undefined
-    const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition.xPosition, yPosition );
+    const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition!.xPosition, yPosition );
 
     // add x offset for neutron particle to be aligned with its energy level position
     viewDestination.addXY( particleType === ParticleType.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
