@@ -34,7 +34,7 @@ class DecayEquationNode extends VBox {
 
         const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
         const mostLikelyDecayString = new Text( StringUtils.fillIn( BuildANucleusStrings.mostLikelyDecayPattern, {
-            decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || 'unknown' // TODO: i18n, https://github.com/phetsims/build-a-nucleus/issues/80
+            decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || 'unknown ' // TODO: i18n, https://github.com/phetsims/build-a-nucleus/issues/80
           } ),
           {
             fontSize: 13
