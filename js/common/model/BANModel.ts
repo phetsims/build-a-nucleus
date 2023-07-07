@@ -92,7 +92,7 @@ class BANModel<T extends ParticleAtom> {
       ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount )
     );
 
-    // TODO: this might be causing bugs since it's being called twice
+    // TODO: this might be causing bugs since it's being called twice https://github.com/phetsims/build-a-nucleus/issues/93
     // reconfigure the nucleus when the massNumber changes
     this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
   }

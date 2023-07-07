@@ -22,7 +22,7 @@ type SelfOptions = {
 };
 type EnergyLevelNodeOptions = SelfOptions & NodeOptions;
 
-// TODO: type is repeated in ParticleNucleus
+// TODO: type is repeated in ParticleNucleus https://github.com/phetsims/build-a-nucleus/issues/93
 type ParticleShellPosition = {
   particle?: Particle;
   xPosition: number; // 0 - 5

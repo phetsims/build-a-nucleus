@@ -258,7 +258,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // TODO: move elementName to BANScreenView bc text node the same, just positioning different
+    // TODO: move elementName to BANScreenView bc text node the same, just positioning different https://github.com/phetsims/build-a-nucleus/issues/93
 
     this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
     this.nucleonCountPanel.left = availableDecaysPanel.left;
@@ -276,7 +276,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
 
-      // TODO: Why should there be two cases? Could remove the latter case?
+      // TODO: Why should there be two cases? Could remove the latter case? https://github.com/phetsims/build-a-nucleus/issues/93
       this.particleAtomNode.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
   }
@@ -425,7 +425,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     this.model.addParticle( particleToEmit );
     particleToEmit.destinationProperty.value = this.getRandomExternalModelPosition();
-    // TODO: stop this callback from being called if particleToEmit is already removed with outgoingParticles (but I can't manually cause that error..)
+    // TODO: stop this callback from being called if particleToEmit is already removed with outgoingParticles (but I can't manually cause that error..) https://github.com/phetsims/build-a-nucleus/issues/93
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
       //if ( this.model.particles.includes( particleToEmit ) ) {
       this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );

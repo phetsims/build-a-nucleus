@@ -64,7 +64,7 @@ class DecayModel extends BANModel<ParticleAtom> {
           halfLife = 0;
         }
 
-        // TODO: is this alright that the halfLife is not correct yet?
+        // TODO: is this alright that the halfLife is not correct yet? https://github.com/phetsims/build-a-nucleus/issues/93
         // one of the boolean properties (doesNuclideExist or isStable) is not updated yet but it will be updated soon
         if ( halfLife === undefined ) {
           return 0;

@@ -48,7 +48,7 @@ class NuclideChartAndNumberLines extends Node {
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;
 
-    // TODO: We don't fully understand this magic number
+    // TODO: We don't fully understand this magic number https://github.com/phetsims/build-a-nucleus/issues/93
     nuclideChartNode.left = chartTransform.modelToViewX( 0.4 );
 
     options.children = [ nuclideChartNode, protonNumberLine, neutronNumberLine ];

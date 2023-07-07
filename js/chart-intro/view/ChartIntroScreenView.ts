@@ -165,7 +165,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( this.neutronEnergyLevelNode );
 
     // create and add dashed 'zoom' lines
-    // TODO: position based on the small atom
+    // TODO: position based on the small atom https://github.com/phetsims/build-a-nucleus/issues/93
     const dashedLineOptions = { stroke: BANColors.zoomInDashedLineStrokeColorProperty, lineDash: [ 6, 3 ] };
     const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, this.doubleArrowButtons.left,
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
@@ -174,7 +174,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
-    // TODO: use align group to match width's of accordion box and periodic table
+    // TODO: use align group to match width's of accordion box and periodic table https://github.com/phetsims/build-a-nucleus/issues/93
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
       this.model.selectedNuclideChartProperty, this.model.decayEquationModel );
