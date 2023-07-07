@@ -15,7 +15,7 @@ import createObservableArray, { ObservableArray } from '../../../../axon/js/crea
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import ParticleType from '../view/ParticleType.js';
+import ParticleType from './ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Vector2 from '../../../../dot/js/Vector2.js';

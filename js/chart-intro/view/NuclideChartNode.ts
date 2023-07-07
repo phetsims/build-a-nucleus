@@ -11,7 +11,7 @@ import { Color, GridBox, Node, NodeOptions, Path, Text } from '../../../../scene
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCell from './NuclideChartCell.js';
-import DecayType from '../../common/view/DecayType.js';
+import DecayType from '../../common/model/DecayType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';

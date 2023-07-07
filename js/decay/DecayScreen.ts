@@ -16,7 +16,7 @@ import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import IconFactory from './view/IconFactory.js';
-import DecayType from '../common/view/DecayType.js';
+import DecayType from '../common/model/DecayType.js';
 import { FlowBox } from '../../../scenery/js/imports.js';
 
 // types

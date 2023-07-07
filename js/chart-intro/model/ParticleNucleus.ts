@@ -8,7 +8,7 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import ParticleType from '../../common/view/ParticleType.js';
+import ParticleType from '../../common/model/ParticleType.js';
 import EnergyLevelType from './EnergyLevelType.js';
 
 /**

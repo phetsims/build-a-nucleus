@@ -13,7 +13,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Particle from '../../../../shred/js/model/Particle.js';
 import BANColors from '../../common/BANColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import ParticleType from '../../common/view/ParticleType.js';
+import ParticleType from '../../common/model/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 

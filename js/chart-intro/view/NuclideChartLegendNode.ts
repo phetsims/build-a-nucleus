@@ -10,7 +10,7 @@ import { GridBox, HBox, Node, ProfileColorProperty, Rectangle, RichText } from '
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import DecayType from '../../common/view/DecayType.js';
+import DecayType from '../../common/model/DecayType.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 

@@ -21,7 +21,7 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import NucleonShellView from './NucleonShellView.js';
-import ParticleType from '../../common/view/ParticleType.js';
+import ParticleType from '../../common/model/ParticleType.js';
 import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

@@ -25,7 +25,7 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import NucleonCreatorNode from './NucleonCreatorNode.js';
-import ParticleType from './ParticleType.js';
+import ParticleType from '../model/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

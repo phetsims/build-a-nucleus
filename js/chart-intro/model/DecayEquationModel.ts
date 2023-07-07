@@ -10,7 +10,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCellModel from './NuclideChartCellModel.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import DecayType from '../../common/view/DecayType.js';
+import DecayType from '../../common/model/DecayType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 

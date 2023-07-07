@@ -12,9 +12,9 @@ import { HBox, HSeparator, Node, Rectangle, RichText, Text, VBox } from '../../.
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import ParticleType from '../../common/view/ParticleType.js';
+import ParticleType from '../../common/model/ParticleType.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
-import DecayType from '../../common/view/DecayType.js';
+import DecayType from '../../common/model/DecayType.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DecayModel from '../model/DecayModel.js';
