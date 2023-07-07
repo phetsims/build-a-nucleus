@@ -10,23 +10,17 @@ import { Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.j
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Particle from '../../../../shred/js/model/Particle.js';
 import BANColors from '../../common/BANColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import { ParticleShellPosition } from '../model/ParticleNucleus.js';
 
 type SelfOptions = {
   xOffset?: number;
 };
 type EnergyLevelNodeOptions = SelfOptions & NodeOptions;
-
-// TODO: type is repeated in ParticleNucleus https://github.com/phetsims/build-a-nucleus/issues/93
-type ParticleShellPosition = {
-  particle?: Particle;
-  xPosition: number; // 0 - 5
-};
 
 // TODO: Remove color arrays, instead https://github.com/phetsims/build-a-nucleus/issues/85.
 // nucleon number to energy level stroke color

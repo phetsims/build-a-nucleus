@@ -19,7 +19,7 @@ import EnergyLevelType from './EnergyLevelType.js';
  * @author Luisa Vargas
  */
 
-type ParticleShellPosition = {
+export type ParticleShellPosition = {
   particle?: Particle;
   xPosition: number; // 0 - 5
   type: ParticleType;
