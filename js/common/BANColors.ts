@@ -51,7 +51,7 @@ const BANColors = {
     default: new Color( 27, 20, 100 )
   } ),
   unknownColorProperty: new ProfileColorProperty( buildANucleus, 'unknownColor', {
-    default: new Color( 170, 170, 170 )
+    default: new Color( 255, 255, 255 )
   } ),
 
   // background color for panels in this sim
