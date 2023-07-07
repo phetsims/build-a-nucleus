@@ -21,6 +21,7 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ChartIntroModel from '../model/ChartIntroModel.js';
+import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -88,8 +89,10 @@ class NuclideChartNode extends Node {
       fontSize: options.cellTextFontSize,
       maxWidth: labelDimension
     } );
-    const gridBox = new GridBox( { rows: [ [ labelText ] ], xAlign: 'center', yAlign: 'center', stretch: true, grow: 1,
-      preferredHeight: labelDimension, preferredWidth: labelDimension } );
+    const gridBox = new GridBox( {
+      rows: [ [ labelText ] ], xAlign: 'center', yAlign: 'center', stretch: true, grow: 1,
+      preferredHeight: labelDimension, preferredWidth: labelDimension
+    } );
     const labelContainer = new Node( { children: [ labelTextBackground, gridBox ] } );
     labelTextBackground.center = gridBox.center;
     this.addChild( labelContainer );
@@ -129,9 +132,7 @@ class NuclideChartNode extends Node {
           labelContainer.visible = true;
           labelText.string = AtomIdentifier.getSymbol( protonCount );
           labelContainer.center = currentCellCenter;
-          labelText.fill = highlightedCell?.cellModel.decayType === DecayType.ALPHA_DECAY ||
-                           highlightedCell?.cellModel.decayType === DecayType.BETA_MINUS_DECAY ?
-                           Color.BLACK : Color.WHITE;
+          labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
           labelTextBackground.fill = highlightedCell.decayBackgroundColor;
         }
         else {
@@ -139,6 +140,17 @@ class NuclideChartNode extends Node {
           labelContainer.visible = false;
         }
       } );
+  }
+
+  // Based on the fill of the cell (which is based on the decay type), choose a light or dark text fill.
+  private getCellLabelFill( cellModel?: NuclideChartCellModel ): Color {
+    if ( !cellModel ) {
+      return Color.WHITE;
+    }
+    return cellModel.decayType === DecayType.ALPHA_DECAY ||
+           cellModel.decayType === DecayType.BETA_MINUS_DECAY ||
+           ( !cellModel.decayType && !cellModel.isStable ) ?
+           Color.BLACK : Color.WHITE;
   }
 
   public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number ): NuclideChartCell[][] {
