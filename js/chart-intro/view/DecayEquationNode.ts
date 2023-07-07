@@ -12,9 +12,6 @@ import DecayEquationModel from '../model/DecayEquationModel.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
-import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
-import TinyProperty from '../../../../axon/js/TinyProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DecaySymbolNode from './DecaySymbolNode.js';
@@ -40,9 +37,8 @@ class DecayEquationNode extends VBox {
             fontSize: 13
           } );
 
-        const currentNuclideSymbol = new SymbolNode( new TinyProperty( currentCellModel.protonNumber ), new TinyProperty( currentCellModel.protonNumber + currentCellModel.neutronNumber ), {
-          scale: 0.15,
-          boundingBoxStroke: null
+        const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber, currentCellModel.protonNumber + currentCellModel.neutronNumber, {
+          scale: 0.15
         } );
 
         const decayEquationArrow = new ArrowNode( 0, 0, 20, 0, {
@@ -52,9 +48,8 @@ class DecayEquationNode extends VBox {
           headWidth: 7.5
         } );
 
-        const newNuclideSymbol = new SymbolNode( decayEquationModel.finalProtonNumberProperty, decayEquationModel.finalMassNumberProperty, {
-          scale: 0.15,
-          boundingBoxStroke: null
+        const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonNumberProperty.value, decayEquationModel.finalMassNumberProperty.value, {
+          scale: 0.15
         } );
 
         const plusNode = new PlusNode( {
@@ -66,21 +61,19 @@ class DecayEquationNode extends VBox {
         if ( currentCellModel.decayType ) {
 
           decaySymbol = new DecaySymbolNode(
-            currentCellModel.decayType.decaySymbol,
-            new NumberProperty( currentCellModel.decayType.protonNumber ),
-            new NumberProperty( currentCellModel.decayType.massNumber ), {
-              scale: 0.15,
-              boundingBoxStroke: null
+            currentCellModel.decayType.protonNumber,
+            currentCellModel.decayType.massNumber, {
+              symbolString: currentCellModel.decayType.decaySymbol,
+              scale: 0.15
             } );
         }
         else {
           // TODO: Handle stable case here, https://github.com/phetsims/build-a-nucleus/issues/80
           decaySymbol = new DecaySymbolNode(
-            '!!',
-            new NumberProperty( 0 ),
-            new NumberProperty( 0 ), {
-              scale: 0.15,
-              boundingBoxStroke: null
+            0,
+            0, {
+              symbolString: '!!',
+              scale: 0.15
             } );
         }
 
