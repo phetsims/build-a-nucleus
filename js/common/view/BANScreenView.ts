@@ -610,7 +610,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   public reset(): void {
-    //TODO
+    // Overridden by subtypes if needed
   }
 
   /**

@@ -1,1 +1,1 @@
-TODO model description
+TODO model description https://github.com/phetsims/build-a-nucleus/issues/94

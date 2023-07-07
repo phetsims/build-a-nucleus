@@ -35,7 +35,7 @@ class NuclideChartLegendNode extends Node {
           new RichText( decayTypeText, { font: LEGEND_FONT } )
         ],
         spacing: 5
-        // TODO: add maxWidth
+        // TODO: add maxWidth https://github.com/phetsims/build-a-nucleus/issues/90
       } );
     };
 
