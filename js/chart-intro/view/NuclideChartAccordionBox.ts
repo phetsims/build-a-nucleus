@@ -48,7 +48,13 @@ class NuclideChartAccordionBox extends AccordionBox {
 
     const chartAndButtonVBox = new VBox( {
       children: [
-        new TextPushButton( BuildANucleusStrings.decayStringProperty, { baseColor: BANColors.decayButtonColorProperty } ),
+        new TextPushButton( BuildANucleusStrings.decayStringProperty, {
+          baseColor: BANColors.decayButtonColorProperty,
+          textNodeOptions: {
+            fontSize: 14
+          },
+          minWidth: 80
+        } ),
         focusedNuclideChartNode
       ],
       spacing: 10,
