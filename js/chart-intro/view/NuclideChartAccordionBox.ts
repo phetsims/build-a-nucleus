@@ -9,7 +9,6 @@
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import buildANucleus from '../../buildANucleus.js';
 import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -24,12 +23,14 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import DecayEquationNode from './DecayEquationNode.js';
 import DecayEquationModel from '../model/DecayEquationModel.js';
 import BANColors from '../../common/BANColors.js';
+import DecayType from '../../common/model/DecayType.js';
+import buildANucleus from '../../buildANucleus.js';
 
 class NuclideChartAccordionBox extends AccordionBox {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
-                      decayEquationModel: DecayEquationModel ) {
+                      decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void ) {
 
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
@@ -53,7 +54,12 @@ class NuclideChartAccordionBox extends AccordionBox {
           textNodeOptions: {
             fontSize: 14
           },
-          minWidth: 80
+          minWidth: 80,
+          listener: () => {
+            const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
+            // TODO: support this function for the chart-intro screen too!, see https://github.com/phetsims/build-a-nucleus/issues/97
+            decayAtom( decayType || null );
+          }
         } ),
         focusedNuclideChartNode
       ],

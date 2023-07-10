@@ -36,10 +36,7 @@ const BUTTON_CONTENT_WIDTH = 145;
 type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
 
-  // decay functions
-  emitNucleon: ( particleType: ParticleType, fromDecay?: string ) => void;
-  emitAlphaParticle: () => void;
-  betaDecay: ( betaDecayType: DecayType ) => void;
+  decayAtom: ( decayType: DecayType ) => void;
 
   // function to store current nucleon counts
   storeNucleonCounts: () => void;
@@ -102,25 +99,7 @@ class AvailableDecaysPanel extends Panel {
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
       options.storeNucleonCounts();
-      switch( decayType ) {
-        case DecayType.NEUTRON_EMISSION:
-          options.emitNucleon( ParticleType.NEUTRON );
-          break;
-        case DecayType.PROTON_EMISSION:
-          options.emitNucleon( ParticleType.PROTON, decayType.name );
-          break;
-        case DecayType.BETA_PLUS_DECAY:
-          options.betaDecay( DecayType.BETA_PLUS_DECAY );
-          break;
-        case DecayType.BETA_MINUS_DECAY:
-          options.betaDecay( DecayType.BETA_MINUS_DECAY );
-          break;
-        case DecayType.ALPHA_DECAY:
-          options.emitAlphaParticle();
-          break;
-        default:
-          break;
-      }
+      options.decayAtom( decayType );
       options.showAndRepositionUndoDecayButton( decayType.name.toString() );
     };
 

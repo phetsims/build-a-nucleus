@@ -1,22 +1,23 @@
 // Copyright 2023, University of Colorado Boulder
 
+/**
+ * Node that holds the ParticleView's from ParticleAtom. Rearranges particles in different node layers using z-indexing.
+ * This also has a blue electron cloud around it, and supports an empty atom display too.
+ *
+ * @author Luisa Vargas
+ * @author Marla Schulz (PhET Interactive Simulations)
+ */
+
 import buildANucleus from '../../buildANucleus.js';
 import { Circle, Color, Node, RadialGradient } from '../../../../scenery/js/imports.js';
-import { ParticleViewMap } from '../../common/view/BANScreenView.js';
-import BANConstants from '../../common/BANConstants.js';
+import { ParticleViewMap } from './BANScreenView.js';
+import BANConstants from '../BANConstants.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Range from '../../../../dot/js/Range.js';
-
-/**
- * Node that holds the ParticleView's from ParticleAtom. Rearranges particles in different node layers using z-indexing.
- *
- * @author Luisa Vargas
- * @author Marla Schulz (PhET Interactive Simulations)
- */
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;

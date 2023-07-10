@@ -1,5 +1,13 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
+/**
+ * A model element that represents a nucleus that is made up of protons and neutrons. This model element
+ * manages the positions and motion of all particles that are a part of the nucleus.
+ *
+ * @author Marla Schulz (PhET Interactive Simulations)
+ * @author Luisa Vargas
+ */
+
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -10,14 +18,6 @@ import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import EnergyLevelType from './EnergyLevelType.js';
-
-/**
- * A model element that represents a nucleus that is made up of protons and neutrons. This model element
- * manages the positions and motion of all particles that are a part of the nucleus.
- *
- * @author Marla Schulz (PhET Interactive Simulations)
- * @author Luisa Vargas
- */
 
 export type ParticleShellPosition = {
   particle?: Particle;

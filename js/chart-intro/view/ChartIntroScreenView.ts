@@ -22,10 +22,7 @@ import BANColors from '../../common/BANColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import NucleonShellView from './NucleonShellView.js';
 import ParticleType from '../../common/model/ParticleType.js';
-import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import StringProperty from '../../../../axon/js/StringProperty.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -59,15 +56,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.energyLevelLayer = new Node();
 
     const miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
-    const miniAtomNode = new AtomNode( model.miniParticleAtom, miniAtomMVT, {
-      showCenterX: false,
-      showElementNameProperty: new BooleanProperty( false ),
-      showNeutralOrIonProperty: new BooleanProperty( false ),
-      showStableOrUnstableProperty: new BooleanProperty( false ),
-      electronShellDepictionProperty: new StringProperty( 'cloud' )
-    } );
-    miniAtomNode.center = this.particleAtomNode.emptyAtomCircle.center;
-    this.addChild( miniAtomNode );
 
     // update nucleons in mini-particle as the particleAtom's nucleon count properties change
     const nucleonCountListener = ( nucleonCount: number, particleType: ParticleType ) => {
@@ -160,8 +148,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( this.protonEnergyLevelNode );
     this.neutronEnergyLevelNode = new NucleonShellView( ParticleType.NEUTRON, model.particleAtom.neutronShellPositions,
       model.particleAtom.neutronCountProperty, options.particleViewPositionVector, {
-      xOffset: BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS
-    } );
+        xOffset: BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS
+      } );
     this.addChild( this.neutronEnergyLevelNode );
 
     // create and add dashed 'zoom' lines
@@ -177,15 +165,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // TODO: use align group to match width's of accordion box and periodic table https://github.com/phetsims/build-a-nucleus/issues/93
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
-      this.model.selectedNuclideChartProperty, this.model.decayEquationModel );
+      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ) );
     nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
 
     const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>( this.model.selectedNuclideChartProperty,
-      [ { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() }, { value: 'zoom', createNode: () => new ZoomInNuclideChartIconNode() } ],
-      { left: nuclideChartAccordionBox.left, top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS, orientation: 'horizontal',
-        radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty } } );
+      [
+        { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() },
+        { value: 'zoom', createNode: () => new ZoomInNuclideChartIconNode() }
+      ], {
+        left: nuclideChartAccordionBox.left, top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS, orientation: 'horizontal',
+        radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty }
+      } );
     this.addChild( partialChartRadioButton );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
@@ -213,6 +205,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   protected override addParticleView( particle: Particle ): void {
     this.energyLevelLayer.addChild( this.findParticleView( particle ) );
+  }
+
+  protected getAtomNodeCenter(): Vector2 {
+    // TODO: this most likely isn't doing anything, https://github.com/phetsims/build-a-nucleus/issues/97
+    return this.particleAtomNode.localToGlobalPoint( this.particleAtomNode.emptyAtomCircle.center );
   }
 }
 

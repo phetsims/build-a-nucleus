@@ -22,24 +22,15 @@ import BANColors from '../../common/BANColors.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
-import AtomNode from '../../../../shred/js/view/AtomNode.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
-import Animation from '../../../../twixt/js/Animation.js';
-import Easing from '../../../../twixt/js/Easing.js';
-import DecayType from '../../common/model/DecayType.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
-import StringProperty from '../../../../axon/js/StringProperty.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
-const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
-const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
 // types
 export type DecayScreenViewOptions = BANScreenViewOptions;
@@ -53,7 +44,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   // show or hide the electron cloud
   private readonly showElectronCloudBooleanProperty: Property<boolean>;
-  private readonly atomNode: AtomNode;
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -62,15 +52,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), options );
 
     this.model = model;
-
-    // create and add the atomNode
-    this.atomNode = new AtomNode( model.particleAtom, ModelViewTransform2.createIdentity(), { showCenterX: false,
-      showElementNameProperty: new Property( false ),
-      showNeutralOrIonProperty: new Property( false ),
-      showStableOrUnstableProperty: new Property( false ),
-      electronShellDepictionProperty: new Property( 'cloud' ) } );
-    this.atomNode.center = this.particleAtomNode.emptyAtomCircle.center;
-    this.addChild( this.atomNode );
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
@@ -173,9 +154,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
-      emitNucleon: this.emitNucleon.bind( this ),
-      emitAlphaParticle: this.emitAlphaParticle.bind( this ),
-      betaDecay: this.betaDecay.bind( this ),
+      decayAtom: this.decayAtom.bind( this ),
       storeNucleonCounts: storeNucleonCounts.bind( this ),
       showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
     } );
@@ -282,179 +261,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   }
 
   /**
-   * Removes a nucleon from the nucleus and animates it out of view.
-   */
-  public emitNucleon( particleType: ParticleType, fromDecay?: string ): void {
-    assert && assert( particleType === ParticleType.PROTON ? this.model.particleAtom.protonCountProperty.value >= 1 :
-                      this.model.particleAtom.neutronCountProperty.value >= 1,
-      'The particleAtom needs a ' + particleType.name + ' to emit it. The decay: ' + fromDecay + ' cannot occur.' );
-
-    const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
-    this.model.outgoingParticles.add( nucleon );
-    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
-  }
-
-  /**
-   * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
-   * particle out of view.
-   */
-  public emitAlphaParticle(): void {
-    assert && assert( this.model.particleAtom.protonCountProperty.value >= 2 &&
-    this.model.particleAtom.neutronCountProperty.value >= 2,
-      'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
-
-    // get the protons and neutrons closest to the center of the particleAtom
-    const protonsToRemove = _.sortBy( [ ...this.model.particleAtom.protons ], proton =>
-      proton.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
-    const neutronsToRemove = _.sortBy( [ ...this.model.particleAtom.neutrons ],
-      neutron => neutron.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
-
-    // create and add the alpha particle node
-    const alphaParticle = new ParticleAtom();
-
-    // pass in empty model view transform because none of the MVT functionality in AtomNode is used
-    const alphaParticleNode = new AtomNode( alphaParticle, ModelViewTransform2.createIdentity(), {
-      showCenterX: false,
-      showElementNameProperty: new BooleanProperty( false ),
-      showNeutralOrIonProperty: new BooleanProperty( false ),
-      showStableOrUnstableProperty: new BooleanProperty( false ),
-      electronShellDepictionProperty: new StringProperty( 'cloud' )
-    } );
-    alphaParticleNode.center = this.atomNode.center;
-    this.addChild( alphaParticleNode );
-
-    // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
-    [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
-      this.model.particleAtom.removeParticle( nucleon );
-      alphaParticle.addParticle( nucleon );
-      this.model.outgoingParticles.add( nucleon );
-    } );
-
-    // ensure the creator nodes are visible since particles are being removed from the particleAtom
-    alphaParticle.moveAllParticlesToDestination();
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
-
-    alphaParticle.protons.forEach( proton => {
-      this.findParticleView( proton ).inputEnabled = false;
-    } );
-    alphaParticle.neutrons.forEach( neutron => {
-      this.findParticleView( neutron ).inputEnabled = false;
-    } );
-
-    // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition( alphaParticleNode.width );
-    const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
-    const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
-
-    const alphaParticleEmissionAnimation = new Animation( {
-      property: alphaParticle.positionProperty,
-      to: destination,
-      duration: animationDuration,
-      easing: Easing.LINEAR
-    } );
-    this.model.particleAnimations.push( alphaParticleEmissionAnimation );
-
-    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
-      alphaParticle.neutrons.forEach( neutron => {
-        this.removeParticle( neutron );
-      } );
-      alphaParticle.protons.forEach( proton => {
-        this.removeParticle( proton );
-      } );
-      alphaParticleNode.dispose();
-      alphaParticle.dispose();
-    } );
-    alphaParticleEmissionAnimation.start();
-
-    // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
-    if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
-      const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
-
-      // the distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
-      const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST *
-                                             ( totalDistanceAlphaParticleTravels / animationDuration );
-
-      let protonsEmitted = false;
-      alphaParticle.positionProperty.link( position => {
-
-        // emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
-        if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
-          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON, DecayType.ALPHA_DECAY.name ); } );
-          protonsEmitted = true;
-        }
-      } );
-    }
-  }
-
-  /**
-   * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
-   */
-  public betaDecay( betaDecayType: DecayType ): void {
-    let particleArray;
-    let particleToEmit: Particle;
-    let nucleonTypeCountValue;
-    let nucleonTypeToChange;
-    if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
-      particleArray = this.model.particleAtom.neutrons;
-      particleToEmit = new Particle( ParticleType.ELECTRON.name.toLowerCase() );
-      nucleonTypeCountValue = this.model.particleAtom.neutronCountProperty.value;
-      nucleonTypeToChange = ParticleType.NEUTRON.name;
-    }
-    else {
-      particleArray = this.model.particleAtom.protons;
-      particleToEmit = new Particle( ParticleType.POSITRON.name.toLowerCase() );
-      nucleonTypeCountValue = this.model.particleAtom.protonCountProperty.value;
-      nucleonTypeToChange = ParticleType.PROTON.name;
-    }
-
-    this.model.outgoingParticles.add( particleToEmit );
-    assert && assert( nucleonTypeCountValue >= 1,
-      'The particleAtom needs a ' + nucleonTypeToChange + ' for a ' + betaDecayType.name );
-
-    // the particle that will change its nucleon type will be the one closest to the center of the atom
-    const particle = _.sortBy( [ ...particleArray ],
-      particle => particle.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
-
-    // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
-    particleToEmit.positionProperty.value = particle.positionProperty.value;
-    particleToEmit.zLayerProperty.value = particle.zLayerProperty.value + 1;
-
-    // add the particle to the model to emit it, then change the nucleon type and remove the particle
-    this.model.addParticle( particleToEmit );
-    particleToEmit.destinationProperty.value = this.getRandomExternalModelPosition();
-    // TODO: stop this callback from being called if particleToEmit is already removed with outgoingParticles (but I can't manually cause that error..) https://github.com/phetsims/build-a-nucleus/issues/93
-    const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
-      //if ( this.model.particles.includes( particleToEmit ) ) {
-      this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
-      this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
-      //}
-    } );
-    this.model.particleAnimations.add( initialColorChangeAnimation );
-  }
-
-  /**
-   * Returns a random position outside of the screen view's visible bounds.
-   */
-  private getRandomExternalModelPosition( particleWidth?: number ): Vector2 {
-    const visibleBounds = this.visibleBoundsProperty.value.dilated( particleWidth ? particleWidth : 0 );
-    const destinationBounds = visibleBounds.dilated( 300 );
-
-    let randomVector = Vector2.ZERO;
-    while ( visibleBounds.containsPoint( randomVector ) ) {
-      randomVector = new Vector2( dotRandom.nextDoubleBetween( destinationBounds.minX, destinationBounds.maxX ),
-        dotRandom.nextDoubleBetween( destinationBounds.minY, destinationBounds.maxY ) );
-    }
-
-    return randomVector.minus( new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ) );
-  }
-
-  /**
    * Returns whether the nucleon is within the circular capture radius around the atom.
    */
   protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
@@ -464,6 +270,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   public override reset(): void {
     this.symbolAccordionBox.reset();
     this.showElectronCloudBooleanProperty.reset();
+  }
+
+  protected getAtomNodeCenter(): Vector2 {
+    return this.particleAtomNode.emptyAtomCircle.center;
   }
 }
 
