@@ -189,6 +189,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       ( protonCount: number, neutronCount: number ) => {
         this.particleAtomNode.emptyAtomCircle.visible = ( protonCount + neutronCount ) === 0;
       } );
+
+    this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
+      nuclideChartAccordionBox,
+      partialChartRadioButton
+    ] );
   }
 
   /**

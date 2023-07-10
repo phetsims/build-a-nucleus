@@ -459,6 +459,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         }
       } );
     }, 0 );
+
+    this.pdomPlayAreaNode.pdomOrder = [
+      protonArrowButtons,
+      doubleArrowButtons,
+      neutronArrowButtons
+    ];
+    this.pdomControlAreaNode.pdomOrder = [ this.resetAllButton ];
   }
 
   /**
