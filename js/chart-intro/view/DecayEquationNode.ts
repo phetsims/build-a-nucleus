@@ -12,11 +12,9 @@ import DecayEquationModel from '../model/DecayEquationModel.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
-import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DecaySymbolNode from './DecaySymbolNode.js';
-import BANColors from '../../common/BANColors.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
+import IconFactory from '../../decay/view/IconFactory.js';
 
 class DecayEquationNode extends VBox {
 
@@ -41,21 +39,13 @@ class DecayEquationNode extends VBox {
           scale: 0.15
         } );
 
-        const decayEquationArrow = new ArrowNode( 0, 0, 20, 0, {
-          fill: BANColors.blueDecayIconSymbolsColorProperty,
-          stroke: null,
-          tailWidth: 1,
-          headWidth: 7.5
-        } );
+        const decayEquationArrow = IconFactory.createDecayArrowNode();
 
         const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonNumberProperty.value, decayEquationModel.finalMassNumberProperty.value, {
           scale: 0.15
         } );
 
-        const plusNode = new PlusNode( {
-          fill: BANColors.blueDecayIconSymbolsColorProperty,
-          size: new Dimension2( 9, 2 )
-        } );
+        const plusNode = IconFactory.createPlusNode();
 
         let decaySymbol: Node;
         if ( currentCellModel.decayType ) {

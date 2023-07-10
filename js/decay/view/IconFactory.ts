@@ -86,6 +86,10 @@ class IconFactory {
     } );
   }
 
+  public static createPlusNode(): Node {
+    return new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } );
+  }
+
   /**
    * Function to create the icon for a beta decay ( left to right contents: a nucleon particle node, a right-pointing
    * arrow, a different nucleon particle node than the first one, a mathematical 'plus' symbol, motion lines, and an
@@ -97,7 +101,7 @@ class IconFactory {
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.NEUTRON ) : IconFactory.createParticleNode( ParticleType.PROTON ),
         IconFactory.createDecayArrowNode(),
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.PROTON ) : IconFactory.createParticleNode( ParticleType.NEUTRON ),
-        new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } ),
+        IconFactory.createPlusNode(),
         IconFactory.createMotionLines( 3.5, true ),
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.ELECTRON ) : IconFactory.createParticleNode( ParticleType.POSITRON )
       ],
