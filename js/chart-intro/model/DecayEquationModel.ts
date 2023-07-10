@@ -32,7 +32,9 @@ class DecayEquationModel {
     massNumberProperty.link( () => {
       this.currentCellModelProperty.value = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
       const currentCell = this.currentCellModelProperty.value;
+      console.log( currentCell );
       if ( !currentCell || !currentCell.decayType ) {
+        console.log( 'stable' );
         this.finalProtonNumberProperty.value = protonCountProperty.value;
         this.finalMassNumberProperty.value = massNumberProperty.value;
         return;
@@ -60,7 +62,10 @@ class DecayEquationModel {
           break;
         default:
           assert && assert( false, 'No valid decay type found: ' + currentCell.decayType );
+
       }
+      console.log( this.finalMassNumberProperty.value );
+      console.log( this.finalProtonNumberProperty.value );
     } );
   }
 

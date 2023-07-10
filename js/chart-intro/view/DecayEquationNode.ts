@@ -25,15 +25,29 @@ class DecayEquationNode extends VBox {
     } );
 
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
-      if ( currentCellModel ) {
 
-        const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
-        const mostLikelyDecayString = new Text( StringUtils.fillIn( BuildANucleusStrings.mostLikelyDecayPattern, {
-            decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || 'unknown ' // TODO: i18n, https://github.com/phetsims/build-a-nucleus/issues/80
+      console.log( currentCellModel );
+
+      console.log( decayEquationModel.finalMassNumberProperty.value );
+      console.log( decayEquationModel.finalProtonNumberProperty.value );
+
+      const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
+      const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecay, { fontSize: 13 } );
+      let decayLikelihoodPercentString: Node;
+      const mostLikelyDecayHBox = new HBox( { spacing: 5 } );
+      const equationHBox = new HBox( {
+        spacing: 10, layoutOptions: {
+          minContentHeight: 45.2
+        }
+      } );
+      if ( currentCellModel ) {
+        decayLikelihoodPercentString = new Text( StringUtils.fillIn( BuildANucleusStrings.percentageInParenthesesPattern, {
+            decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || BuildANucleusStrings.unknown.toLowerCase() + ' ' // TODO: i18n, https://github.com/phetsims/build-a-nucleus/issues/80
           } ),
           {
             fontSize: 13
           } );
+        decayLikelihoodPercentString.visible = true;
 
         const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber, currentCellModel.protonNumber + currentCellModel.neutronNumber, {
           scale: 0.15
@@ -65,18 +79,19 @@ class DecayEquationNode extends VBox {
               symbolString: '!!',
               scale: 0.15
             } );
+          decayLikelihoodPercentString.visible = false;
         }
 
-        const equation = new HBox( {
-          spacing: 10,
-          children: [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ]
-        } );
-
-        this.children = [
-          new HBox( { spacing: 10, children: [ decayArrow, mostLikelyDecayString ] } ),
-          equation
-        ];
+        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString, decayLikelihoodPercentString ] );
+        equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
       }
+      else {
+        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString ] );
+      }
+      this.children = [
+        mostLikelyDecayHBox,
+        equationHBox
+      ];
     } );
   }
 }
