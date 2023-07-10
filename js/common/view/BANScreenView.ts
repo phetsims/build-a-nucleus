@@ -173,7 +173,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     };
 
     // enable or disable the creator node and adjust the opacity accordingly
-    const creatorNodeEnabled = ( creatorNode: Node, enable: boolean ) => {
+    const toggleCreatorNodeEnabled = ( creatorNode: Node, enable: boolean ) => {
       if ( creatorNode ) {
         creatorNode.inputEnabled = enable;
         creatorNode.opacity = enable ? 1 : 0.5;
@@ -193,15 +193,16 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
           const userControlledNucleonCount = userControlledNeutronCount + userControlledProtonCount;
 
           // disable all arrow buttons if the nuclide does not exist
-          if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) && ( model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonCount !== 0 ) ) {
-            creatorNodeEnabled( this.protonsCreatorNode, false );
-            creatorNodeEnabled( this.neutronsCreatorNode, false );
+          if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) &&
+               ( model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonCount !== 0 ) ) {
+            toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
+            toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
             return false;
           }
 
           else {
-            creatorNodeEnabled( this.protonsCreatorNode, true );
-            creatorNodeEnabled( this.neutronsCreatorNode, true );
+            toggleCreatorNodeEnabled( this.protonsCreatorNode, true );
+            toggleCreatorNodeEnabled( this.neutronsCreatorNode, true );
 
             const nextOrPreviousIsoExists = secondParticleType ?
                                             !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
@@ -218,11 +219,19 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
             if ( nuclideExistsBoolean && doesPreviousNuclideExist ) {
               return false;
             }
+
+            // If there are no atoms actually in the atom (only potentially animating to the atom), see https://github.com/phetsims/build-a-nucleus/issues/74
+            if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
+              return ( particleType === ParticleType.NEUTRON && atomNeutronCount === 0 ) ||
+                     ( particleType === ParticleType.PROTON && atomProtonCount === 0 );
+            } ) ) {
+              return false;
+            }
+
             return secondParticleType ? isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount ) &&
                                         isNucleonCountAtRangeBounds( direction, secondParticleType, protonCount, neutronCount ) :
                    isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount );
           }
-
         } );
     };
 
