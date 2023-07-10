@@ -258,6 +258,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       // TODO: Why should there be two cases? Could remove the latter case? https://github.com/phetsims/build-a-nucleus/issues/93
       this.particleAtomNode.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
     } );
+
+    this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
+      halfLifeInformationNode,
+      undoDecayButton,
+      this.symbolAccordionBox,
+      availableDecaysPanel
+    ] );
+    this.pdomControlAreaNode.pdomOrder = [ showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
   }
 
   /**
