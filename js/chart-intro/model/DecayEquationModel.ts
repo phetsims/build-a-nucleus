@@ -10,7 +10,6 @@
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartCellModel from './NuclideChartCellModel.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import DecayType from '../../common/model/DecayType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 
@@ -30,42 +29,20 @@ class DecayEquationModel {
     this.finalMassNumberProperty = new NumberProperty( -1 );
 
     massNumberProperty.link( () => {
-      this.currentCellModelProperty.value = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
-      const currentCell = this.currentCellModelProperty.value;
-      console.log( currentCell );
+      const currentCell = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
+
+      // if there's no cell or decay type, just take the current proton and mass number values
       if ( !currentCell || !currentCell.decayType ) {
-        console.log( 'stable' );
         this.finalProtonNumberProperty.value = protonCountProperty.value;
         this.finalMassNumberProperty.value = massNumberProperty.value;
-        return;
       }
-      switch( currentCell.decayType ) {
-        case DecayType.NEUTRON_EMISSION:
-          this.finalProtonNumberProperty.value = currentCell.protonNumber - DecayType.NEUTRON_EMISSION.protonNumber;
-          this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - DecayType.NEUTRON_EMISSION.massNumber;
-          break;
-        case DecayType.PROTON_EMISSION:
-          this.finalProtonNumberProperty.value = currentCell.protonNumber - DecayType.PROTON_EMISSION.protonNumber;
-          this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - DecayType.PROTON_EMISSION.massNumber;
-          break;
-        case DecayType.BETA_PLUS_DECAY:
-          this.finalProtonNumberProperty.value = currentCell.protonNumber - DecayType.BETA_PLUS_DECAY.protonNumber;
-          this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - DecayType.BETA_PLUS_DECAY.massNumber;
-          break;
-        case DecayType.BETA_MINUS_DECAY:
-          this.finalProtonNumberProperty.value = currentCell.protonNumber - DecayType.BETA_MINUS_DECAY.protonNumber;
-          this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - DecayType.BETA_MINUS_DECAY.massNumber;
-          break;
-        case DecayType.ALPHA_DECAY:
-          this.finalProtonNumberProperty.value = currentCell.protonNumber - DecayType.ALPHA_DECAY.protonNumber;
-          this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - DecayType.ALPHA_DECAY.massNumber;
-          break;
-        default:
-          assert && assert( false, 'No valid decay type found: ' + currentCell.decayType );
+      else {
+        this.finalProtonNumberProperty.value = currentCell.protonNumber - currentCell.decayType.protonNumber;
+        this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - currentCell.decayType.massNumber;
+      }
 
-      }
-      console.log( this.finalMassNumberProperty.value );
-      console.log( this.finalProtonNumberProperty.value );
+      // this must be last so the listener on it in the view (DecayEquationNode) updates with the correct final values
+      this.currentCellModelProperty.value = currentCell;
     } );
   }
 
