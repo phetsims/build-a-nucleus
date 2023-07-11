@@ -28,7 +28,7 @@ class BANModel<T extends ParticleAtom> {
   // if a nuclide exists
   public readonly doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean>;
 
-  // arrays of all Particle's that exist in all places
+  // arrays of all Particle's that exist in all places, except the mini atom in the Chart Intro screen.
   public readonly particles: ObservableArray<Particle>;
 
   // the atom that the user will build, modify, and generally play with.
@@ -53,7 +53,7 @@ class BANModel<T extends ParticleAtom> {
   public readonly userControlledProtons: ObservableArray<Particle>;
   public readonly userControlledNeutrons: ObservableArray<Particle>;
 
-  // array of all emitted particles
+  // array of all emitted particles, this helps keep track of particles that are no longer "counted" in the atom
   public readonly outgoingParticles: ObservableArray<Particle>;
 
   protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T ) {

@@ -104,6 +104,13 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     this.miniParticleAtom.neutrons.forEach( particle => {
       particle.step( dt );
     } );
+
+    // When decaying, the animated particle from the miniParticleAtom is removed from it, but still needs to be stepped off the screen
+    this.outgoingParticles.forEach( particle => {
+      if ( !this.particles.includes( particle ) ) {
+        particle.step( dt );
+      }
+    } );
   }
 }
 
