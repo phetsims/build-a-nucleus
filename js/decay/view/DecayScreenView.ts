@@ -288,7 +288,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * particle out of view.
    */
   public emitAlphaParticle(): void {
-    console.log( 'oh hello' );
     assert && assert( this.model.particleAtom.protonCountProperty.value >= 2 &&
     this.model.particleAtom.neutronCountProperty.value >= 2,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
@@ -404,16 +403,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     this.model.addParticle( particleToEmit );
-    particleToEmit.destinationProperty.value = this.getRandomExternalModelPosition();
-    // TODO: stop this callback from being called if particleToEmit is already removed with outgoingParticles (but I can't manually cause that error..) https://github.com/phetsims/build-a-nucleus/issues/93
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
-      //if ( this.model.particles.includes( particleToEmit ) ) {
-      this.animateAndRemoveParticle( particleToEmit, particleToEmit.destinationProperty.value );
+      if ( this.model.particles.includes( particleToEmit ) ) {
+      this.animateAndRemoveParticle( particleToEmit, this.getRandomExternalModelPosition() );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
       this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
       this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
-      //}
+      }
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );
   }
