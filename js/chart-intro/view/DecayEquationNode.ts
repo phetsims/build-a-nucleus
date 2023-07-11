@@ -28,8 +28,8 @@ class DecayEquationNode extends VBox {
 
       console.log( currentCellModel );
 
-      console.log( decayEquationModel.finalMassNumberProperty.value );
-      console.log( decayEquationModel.finalProtonNumberProperty.value );
+      console.log( 'finalMass ' + decayEquationModel.finalMassNumberProperty.value );
+      console.log( 'finalProton ' + decayEquationModel.finalProtonNumberProperty.value );
 
       const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
       const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecay, { fontSize: 13 } );
@@ -71,16 +71,22 @@ class DecayEquationNode extends VBox {
             } );
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
         }
-        else {
+        else if ( currentCellModel.isStable ) {
 
           const stableString = new Text( BuildANucleusStrings.stable, { fontSize: 22 } );
           equationHBox.setChildren( [ stableString ] );
+          decayLikelihoodPercentString.visible = false;
+        }
+        else {
+          const unknownString = new Text( BuildANucleusStrings.unknown, { fontSize: 22 } );
+          equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, unknownString ] );
           decayLikelihoodPercentString.visible = false;
         }
 
         mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString, decayLikelihoodPercentString ] );
       }
       else {
+
         mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString ] );
       }
       this.children = [
