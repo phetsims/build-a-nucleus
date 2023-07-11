@@ -61,29 +61,24 @@ class DecayEquationNode extends VBox {
 
         const plusNode = IconFactory.createPlusNode();
 
-        let decaySymbol: Node;
         if ( currentCellModel.decayType ) {
 
-          decaySymbol = new DecaySymbolNode(
+          const decaySymbol = new DecaySymbolNode(
             currentCellModel.decayType.protonNumber,
             currentCellModel.decayType.massNumber, {
               symbolString: currentCellModel.decayType.decaySymbol,
               scale: 0.15
             } );
+          equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
         }
         else {
-          // TODO: Handle stable case here, https://github.com/phetsims/build-a-nucleus/issues/80
-          decaySymbol = new DecaySymbolNode(
-            0,
-            0, {
-              symbolString: '!!',
-              scale: 0.15
-            } );
+
+          const stableString = new Text( BuildANucleusStrings.stable, { fontSize: 22 } );
+          equationHBox.setChildren( [ stableString ] );
           decayLikelihoodPercentString.visible = false;
         }
 
         mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString, decayLikelihoodPercentString ] );
-        equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
       }
       else {
         mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString ] );
