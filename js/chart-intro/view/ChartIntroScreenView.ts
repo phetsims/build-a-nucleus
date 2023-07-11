@@ -76,7 +76,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       if ( nucleonDelta < 0 ) {
         _.times( nucleonDelta * -1, () => {
           const miniParticle = model.createMiniParticleModel( particleType );
-          this.particleViewMap[ miniParticle.id ] = new ParticleView( miniParticle, miniAtomMVT );
+          this.particleViewMap[ miniParticle.id ] = new ParticleView( miniParticle, miniAtomMVT, { inputEnabled: false } );
           this.particleAtomNode.addParticleView( miniParticle );
         } );
       }

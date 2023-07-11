@@ -25,6 +25,7 @@ import DecayEquationModel from '../model/DecayEquationModel.js';
 import BANColors from '../../common/BANColors.js';
 import DecayType from '../../common/model/DecayType.js';
 import buildANucleus from '../../buildANucleus.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 class NuclideChartAccordionBox extends AccordionBox {
 
@@ -50,6 +51,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     const chartAndButtonVBox = new VBox( {
       children: [
         new TextPushButton( BuildANucleusStrings.decayStringProperty, {
+          enabledProperty: new DerivedProperty( [ decayEquationModel.currentCellModelProperty ], currentCellModel => !!currentCellModel?.decayType ),
           baseColor: BANColors.decayButtonColorProperty,
           textNodeOptions: {
             fontSize: 14
