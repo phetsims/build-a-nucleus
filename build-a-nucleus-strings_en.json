@@ -20,6 +20,9 @@
   "unknown": {
     "value": "Unknown"
   },
+  "unknownSpacePattern": {
+    "value": "unknown{{space}}"
+  },
   "s": {
     "value": "s"
   },

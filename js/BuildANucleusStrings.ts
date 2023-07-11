@@ -25,6 +25,8 @@ type StringsType = {
   'halfLifeColonStringProperty': LocalizedStringProperty;
   'unknown': string;
   'unknownStringProperty': LocalizedStringProperty;
+  'unknownSpacePattern': string;
+  'unknownSpacePatternStringProperty': LocalizedStringProperty;
   's': string;
   'sStringProperty': LocalizedStringProperty;
   'lessStable': string;

@@ -30,7 +30,8 @@ class DecaySymbolNode extends Node {
                       providedOptions?: DecaySymbolNodeOptions ) {
 
     const options = optionize<DecaySymbolNodeOptions, SelfOptions, NodeOptions>()( {
-      symbolString: protonCount > 0 ? AtomIdentifier.getSymbol( protonCount ) : '-'
+      symbolString: protonCount > 0 ? AtomIdentifier.getSymbol( protonCount ) : '-',
+      scale: 0.15
     }, providedOptions );
 
     super( options );
