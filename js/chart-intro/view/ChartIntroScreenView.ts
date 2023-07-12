@@ -36,7 +36,10 @@ import BANParticle from '../../common/model/BANParticle.js';
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
 
+// constants
 const CHART_VERTICAL_MARGINS = 10;
+const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
+const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
@@ -233,12 +236,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
-  private animateAndRemoveMiniAtomParticle( miniNucleon: Particle, destination: Vector2 ): void {
+  private animateAndRemoveMiniAtomParticle( miniNucleon: Particle, destination?: Vector2 ): void {
     this.model.outgoingParticles.add( miniNucleon );
     const miniParticleView = this.findParticleView( miniNucleon );
     miniParticleView.inputEnabled = false;
 
-    miniNucleon.destinationProperty.value = destination;
+    if ( destination ) {
+      miniNucleon.destinationProperty.value = destination;
+    }
 
     miniNucleon.animationEndedEmitter.addListener( () => {
       this.model.outgoingParticles.remove( miniNucleon );
@@ -293,7 +298,83 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return shellNucleusNucleon;
   }
 
-  protected emitAlphaParticle(): void { /* for now */ }
+  /**
+   * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
+   * particle out of view.
+   */
+  protected emitAlphaParticle(): void {
+
+    this.decaying = true;
+
+    // animate mini particle atom
+    assert && assert( this.model.miniParticleAtom.protonCountProperty.value >= 2 &&
+    this.model.miniParticleAtom.neutronCountProperty.value >= 2,
+      'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
+
+    // get the protons and neutrons closest to the center of the particleAtom
+    const protonsToRemove = _.sortBy( [ ...this.model.miniParticleAtom.protons ], proton =>
+      proton.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) )
+      .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
+    const neutronsToRemove = _.sortBy( [ ...this.model.miniParticleAtom.neutrons ],
+      neutron => neutron.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) )
+      .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
+
+    // create and add the alpha particle node
+    const alphaParticle = new ParticleAtom();
+
+    // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
+    [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
+      this.model.miniParticleAtom.removeParticle( nucleon );
+      alphaParticle.addParticle( nucleon );
+      this.model.outgoingParticles.add( nucleon );
+    } );
+
+    // ensure the creator nodes are visible since particles are being removed from the particleAtom
+    alphaParticle.moveAllParticlesToDestination();
+    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
+    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+
+    alphaParticle.protons.forEach( proton => {
+      this.findParticleView( proton ).inputEnabled = false;
+    } );
+    alphaParticle.neutrons.forEach( neutron => {
+      this.findParticleView( neutron ).inputEnabled = false;
+    } );
+
+    // animate the particle to a random destination outside the model
+    const destination = this.getRandomExternalModelPosition();
+    const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
+
+    // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
+    const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
+
+    const alphaParticleEmissionAnimation = new Animation( {
+      property: alphaParticle.positionProperty,
+      to: destination,
+      duration: animationDuration,
+      easing: Easing.LINEAR
+    } );
+    this.model.particleAnimations.push( alphaParticleEmissionAnimation );
+
+    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
+      alphaParticle.neutrons.forEach( neutron => {
+        this.animateAndRemoveMiniAtomParticle( neutron );
+      } );
+      alphaParticle.protons.forEach( proton => {
+       this.animateAndRemoveMiniAtomParticle( proton );
+      } );
+      alphaParticle.dispose();
+    } );
+    this.model.miniParticleAtom.reconfigureNucleus();
+    alphaParticleEmissionAnimation.start();
+
+
+    // animate nucleons in NucleonShellView
+    _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.PROTON, animationDuration ) );
+    _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.NEUTRON, animationDuration ) );
+
+    this.decaying = false;
+  }
 
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
