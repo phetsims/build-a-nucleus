@@ -12,7 +12,6 @@ import buildANucleus from '../../buildANucleus.js';
 import BANScreenView from './BANScreenView.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../model/ParticleType.js';
-import Particle from '../../../../shred/js/model/Particle.js';
 import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
