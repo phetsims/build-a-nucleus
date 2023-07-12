@@ -160,12 +160,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( this.neutronEnergyLevelNode );
 
     // create and add dashed 'zoom' lines
-    // TODO: position based on the small atom https://github.com/phetsims/build-a-nucleus/issues/93
     const dashedLineOptions = { stroke: BANColors.zoomInDashedLineStrokeColorProperty, lineDash: [ 6, 3 ] };
-    const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, this.doubleArrowButtons.left,
+
+    const endLeft = this.particleAtomNode.emptyAtomCircle.center.x - ( BANConstants.PARTICLE_RADIUS * 2 );
+    const endRight = this.particleAtomNode.emptyAtomCircle.center.x + ( BANConstants.PARTICLE_RADIUS * 2 );
+
+    const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, endLeft,
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( leftDashedLine );
-    const rightDashedLine = new Line( this.neutronEnergyLevelNode.right, arrow.top, this.doubleArrowButtons.right,
+    const rightDashedLine = new Line( this.neutronEnergyLevelNode.right, arrow.top, endRight,
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
