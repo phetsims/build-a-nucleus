@@ -60,9 +60,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model = model;
     this.energyLevelLayer = new Node();
 
-    const miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
-
-    this.miniAtomMVT = miniAtomMVT;
+    this.miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
     // update nucleons in mini-particle as the particleAtom's nucleon count properties change
     const nucleonCountListener = ( nucleonCount: number, particleType: ParticleType ) => {
       const currentMiniAtomNucleonCount = particleType === ParticleType.PROTON ?
@@ -74,10 +72,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
       // add nucleons to miniAtom
       if ( nucleonDelta < 0 ) {
+        // TODO: why not do the decaying check here? Investigate. https://github.com/phetsims/build-a-nucleus/issues/97
         _.times( nucleonDelta * -1, () => {
           const miniParticle = model.createMiniParticleModel( particleType );
-          this.particleViewMap[ miniParticle.id ] = new ParticleView( miniParticle, miniAtomMVT, { inputEnabled: false } );
-          this.particleAtomNode.addParticleView( miniParticle );
+          this.createMiniParticleView( miniParticle );
         } );
       }
 
@@ -183,7 +181,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() },
         { value: 'zoom', createNode: () => new ZoomInNuclideChartIconNode() }
       ], {
-        left: nuclideChartAccordionBox.left, top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS, orientation: 'horizontal',
+        left: nuclideChartAccordionBox.left,
+        top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS,
+        orientation: 'horizontal',
         radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty }
       } );
     this.addChild( partialChartRadioButton );
@@ -225,6 +225,26 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.particleAtomNode.localToGlobalPoint( this.particleAtomNode.emptyAtomCircle.center );
   }
 
+  private getRandomExternalModelPosition(): Vector2 {
+    return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
+  }
+
+  private animateAndRemoveMiniAtomParticle( miniNucleon: Particle, destination: Vector2 ): void {
+    this.model.outgoingParticles.add( miniNucleon );
+    const miniParticleView = this.findParticleView( miniNucleon );
+    miniParticleView.inputEnabled = false;
+
+    miniNucleon.destinationProperty.value = destination;
+
+    miniNucleon.animationEndedEmitter.addListener( () => {
+      this.model.outgoingParticles.remove( miniNucleon );
+      delete this.particleViewMap[ miniParticleView.particle.id ];
+
+      miniParticleView.dispose();
+      miniNucleon.dispose();
+    } );
+  }
+
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
@@ -235,26 +255,22 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.name.toLowerCase() );
 
     // animate the particle to a random destination outside the model
-    const destination = this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
+    const destination = this.getRandomExternalModelPosition();
     const totalDistanceAlphaParticleTravels = miniNucleon.positionProperty.value.distance( destination );
     const animationDuration = totalDistanceAlphaParticleTravels / miniNucleon.animationVelocityProperty.value;
 
-    this.model.outgoingParticles.add( miniNucleon ); // FADE PLEASE
-    const miniParticleView = this.findParticleView( miniNucleon );
-    miniParticleView.inputEnabled = false;
-
-    miniNucleon.destinationProperty.value = destination;
     this.model.miniParticleAtom.reconfigureNucleus();
-
-    miniNucleon.animationEndedEmitter.addListener( () => {
-      this.model.outgoingParticles.remove( miniNucleon );
-      delete this.particleViewMap[ particleView.particle.id ];
-
-      miniParticleView.dispose();
-      miniNucleon.dispose();
-    } );
+    this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );
 
     // Fade away the nucleon in the ParticleNucleus
+    const shellNucleusNucleon = this.fadeOutShellNucleon( particleType, animationDuration, fromDecay );
+
+    this.decaying = false;
+
+    return shellNucleusNucleon;
+  }
+
+  private fadeOutShellNucleon( particleType: ParticleType, animationDuration: number, fromDecay?: string ): Particle {
     const shellNucleusNucleon = super.emitNucleon( particleType, fromDecay );
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;
@@ -270,14 +286,92 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model.particleAnimations.push( fadeAnimation );
     fadeAnimation.start();
 
-    this.decaying = false;
-
     return shellNucleusNucleon;
   }
 
   protected emitAlphaParticle(): void { /* for now */ }
 
-  protected betaDecay( betaDecayType: DecayType ): void { /* for now */ }
+  /**
+   * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
+   */
+  protected betaDecay( betaDecayType: DecayType ): void {
+    this.decaying = true;
+
+    // animate mini particleAtom
+    let particleArray;
+    let particleToEmit: Particle;
+    let nucleonTypeCountValue;
+    let nucleonTypeToChange;
+    let newNucleonType;
+    if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
+      particleArray = this.model.miniParticleAtom.neutrons;
+      particleToEmit = new Particle( ParticleType.ELECTRON.name.toLowerCase() );
+      nucleonTypeCountValue = this.model.miniParticleAtom.neutronCountProperty.value;
+      nucleonTypeToChange = ParticleType.NEUTRON;
+      newNucleonType = ParticleType.PROTON;
+    }
+    else {
+      particleArray = this.model.miniParticleAtom.protons;
+      particleToEmit = new Particle( ParticleType.POSITRON.name.toLowerCase() );
+      nucleonTypeCountValue = this.model.miniParticleAtom.protonCountProperty.value;
+      nucleonTypeToChange = ParticleType.PROTON;
+      newNucleonType = ParticleType.NEUTRON;
+    }
+
+    this.model.outgoingParticles.add( particleToEmit );
+    this.createMiniParticleView( particleToEmit );
+    assert && assert( nucleonTypeCountValue >= 1,
+      'The particleAtom needs a ' + nucleonTypeToChange.name + ' for a ' + betaDecayType.name );
+
+    // the particle that will change its nucleon type will be the one closest to the center of the atom
+    const closestParticle = _.sortBy( [ ...particleArray ],
+      closestParticle => closestParticle.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) ).shift();
+
+    // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
+    particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
+    particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
+
+    // add the particle to the model to emit it, then change the nucleon type and remove the particle
+    const initialColorChangeAnimation = this.model.miniParticleAtom.changeNucleonType( closestParticle, () => {
+
+      // TODO: particle disappears inside devBounds, https://github.com/phetsims/build-a-nucleus/issues/97
+      this.animateAndRemoveMiniAtomParticle( particleToEmit, this.getRandomExternalModelPosition() );
+
+      // TODO: factor out these lines of code of checking if creator node should be visible, https://github.com/phetsims/build-a-nucleus/issues/97
+      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
+      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
+      this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
+      this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+    } );
+    this.model.particleAnimations.add( initialColorChangeAnimation );
+
+    // animate the shell view
+    // TODO: calculate the duration based on how long the particleToEmit takes to leave, https://github.com/phetsims/build-a-nucleus/issues/97
+    const animationDuration = 1;
+    this.fadeOutShellNucleon( nucleonTypeToChange, animationDuration );
+
+    const particle = this.createParticleFromStack( newNucleonType );
+
+    // place particle right beside its destination so that animationEndedEmitter fires
+    particle.positionProperty.value = particle.destinationProperty.value.plusXY( 0.000001, 0.000001 );
+    const particleView = this.findParticleView( particle );
+    particleView.opacityProperty.value = 0;
+    const fadeAnimation = new Animation( {
+      property: particleView.opacityProperty,
+      to: 1,
+      duration: animationDuration,
+      easing: Easing.LINEAR
+    } );
+    this.model.particleAnimations.push( fadeAnimation );
+    fadeAnimation.start();
+
+    this.decaying = false;
+  }
+
+  private createMiniParticleView( miniParticle: Particle ): void {
+    this.particleViewMap[ miniParticle.id ] = new ParticleView( miniParticle, this.miniAtomMVT, { inputEnabled: false } );
+    this.particleAtomNode.addParticleView( miniParticle );
+  }
 }
 
 buildANucleus.register( 'ChartIntroScreenView', ChartIntroScreenView );

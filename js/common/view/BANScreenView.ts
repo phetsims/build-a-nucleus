@@ -532,7 +532,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   /**
    * Create a particle of particleType at its creator node and send it (and add it) to the particleAtom.
    */
-  public createParticleFromStack( particleType: ParticleType ): void {
+  public createParticleFromStack( particleType: ParticleType ): Particle {
 
     // create a particle at the center of its creator node
     const particle = new Particle( particleType.name.toLowerCase(), {
@@ -575,6 +575,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         particle.animationEndedEmitter.removeAllListeners();
       }
     } );
+
+    return particle;
   }
 
   /**
