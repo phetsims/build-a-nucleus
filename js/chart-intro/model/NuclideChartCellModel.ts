@@ -9,7 +9,7 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import DecayType from '../../common/model/DecayType.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomIdentifier, { DecayTypeStrings } from '../../../../shred/js/AtomIdentifier.js';
 import BANColors from '../../common/BANColors.js';
 import { ColorProperty } from '../../../../scenery/js/imports.js';
 
@@ -33,7 +33,7 @@ class NuclideChartCellModel {
     this.neutronNumber = neutronNumber;
     this.isStable = AtomIdentifier.isStable( protonNumber, neutronNumber );
     this.decayType = decayTypeAndPercent ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ 0 ] ) : null;
-    this.decayTypeLikelihoodPercent = this.decayType === null ? null : decayTypeAndPercent[ this.decayType.name ];
+    this.decayTypeLikelihoodPercent = this.decayType === null ? null : decayTypeAndPercent[ this.decayType.name as DecayTypeStrings ]!;
     this.colorProperty = this.isStable ? BANColors.stableColorProperty :
                          this.decayType === null ? BANColors.unknownColorProperty : // no available decays, unknown decay type
                          this.decayType.colorProperty;
