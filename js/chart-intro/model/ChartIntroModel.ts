@@ -17,6 +17,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Property from '../../../../axon/js/Property.js';
 import NuclideChartCellModel from './NuclideChartCellModel.js';
 import DecayEquationModel from './DecayEquationModel.js';
+import BANParticle from '../../common/model/BANParticle.js';
 
 // types
 export type SelectedChartType = 'partial' | 'zoom';
@@ -68,7 +69,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    * Create model for particle in mini-nucleus.
    */
   public createMiniParticleModel( particleType: ParticleType ): Particle {
-    const particle = new Particle( particleType.particleTypeString );
+    const particle = new BANParticle( particleType.particleTypeString );
     this.miniParticleAtom.addParticle( particle );
     return particle;
   }

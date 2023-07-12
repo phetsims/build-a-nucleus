@@ -17,6 +17,7 @@ import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import BANParticle from '../model/BANParticle.js';
 
 class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
@@ -31,7 +32,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
-      const particle = new Particle( particleType.particleTypeString, {
+      const particle = new BANParticle( particleType.particleTypeString, {
         maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
       } );
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;

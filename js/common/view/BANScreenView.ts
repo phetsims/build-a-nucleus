@@ -37,6 +37,7 @@ import ParticleAtomNode from './ParticleAtomNode.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import DecayType from '../model/DecayType.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import BANParticle from '../model/BANParticle.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -509,7 +510,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Create and add a nucleon of particleType immediately to the particleAtom.
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
-    const particle = new Particle( particleType.particleTypeString, {
+    const particle = new BANParticle( particleType.particleTypeString, {
       maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
 
@@ -535,10 +536,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public createParticleFromStack( particleType: ParticleType ): Particle {
 
     // create a particle at the center of its creator node
-    const particle = new Particle( particleType.particleTypeString, {
+    const particle = new BANParticle( particleType.particleTypeString, {
       maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
-    particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
     const origin = particleType === ParticleType.PROTON ?
                    this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );

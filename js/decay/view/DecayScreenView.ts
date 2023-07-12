@@ -31,6 +31,7 @@ import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from '../../common/model/DecayType.js';
+import BANParticle from '../../common/model/BANParticle.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -379,13 +380,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     let nucleonTypeToChange;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = this.model.particleAtom.neutrons;
-      particleToEmit = new Particle( ParticleType.ELECTRON.particleTypeString );
+      particleToEmit = new BANParticle( ParticleType.ELECTRON.particleTypeString );
       nucleonTypeCountValue = this.model.particleAtom.neutronCountProperty.value;
       nucleonTypeToChange = ParticleType.NEUTRON.name;
     }
     else {
       particleArray = this.model.particleAtom.protons;
-      particleToEmit = new Particle( ParticleType.POSITRON.particleTypeString );
+      particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
       nucleonTypeCountValue = this.model.particleAtom.protonCountProperty.value;
       nucleonTypeToChange = ParticleType.PROTON.name;
     }

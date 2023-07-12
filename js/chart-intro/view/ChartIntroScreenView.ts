@@ -31,6 +31,7 @@ import ZoomInNuclideChartIconNode from './ZoomInNuclideChartIconNode.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from '../../common/model/DecayType.js';
+import BANParticle from '../../common/model/BANParticle.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -305,14 +306,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     let newNucleonType;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = this.model.miniParticleAtom.neutrons;
-      particleToEmit = new Particle( ParticleType.ELECTRON.particleTypeString );
+      particleToEmit = new BANParticle( ParticleType.ELECTRON.particleTypeString );
       nucleonTypeCountValue = this.model.miniParticleAtom.neutronCountProperty.value;
       nucleonTypeToChange = ParticleType.NEUTRON;
       newNucleonType = ParticleType.PROTON;
     }
     else {
       particleArray = this.model.miniParticleAtom.protons;
-      particleToEmit = new Particle( ParticleType.POSITRON.particleTypeString );
+      particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
       nucleonTypeCountValue = this.model.miniParticleAtom.protonCountProperty.value;
       nucleonTypeToChange = ParticleType.PROTON;
       newNucleonType = ParticleType.NEUTRON;
