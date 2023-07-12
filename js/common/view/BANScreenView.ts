@@ -368,26 +368,26 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.model.particleAtom.removeParticle( particle );
       }
 
-      if ( isUserControlled && particle.type === ParticleType.PROTON.name.toLowerCase() && !this.model.userControlledProtons.includes( particle ) ) {
+      if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && !this.model.userControlledProtons.includes( particle ) ) {
         this.model.userControlledProtons.add( particle );
       }
-      else if ( !isUserControlled && particle.type === ParticleType.PROTON.name.toLowerCase() && this.model.userControlledProtons.includes( particle ) ) {
+      else if ( !isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && this.model.userControlledProtons.includes( particle ) ) {
         this.model.userControlledProtons.remove( particle );
       }
-      else if ( isUserControlled && particle.type === ParticleType.NEUTRON.name.toLowerCase() && !this.model.userControlledNeutrons.includes( particle ) ) {
+      else if ( isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString && !this.model.userControlledNeutrons.includes( particle ) ) {
         this.model.userControlledNeutrons.add( particle );
       }
-      else if ( !isUserControlled && particle.type === ParticleType.NEUTRON.name.toLowerCase() && this.model.userControlledNeutrons.includes( particle ) ) {
+      else if ( !isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString && this.model.userControlledNeutrons.includes( particle ) ) {
         this.model.userControlledNeutrons.remove( particle );
       }
     };
 
     // convert string particle type to a ParticleType
     const getParticleTypeFromStringType = ( particleTypeString: string ) => {
-      const particleType = particleTypeString === ParticleType.PROTON.name.toLowerCase() ? ParticleType.PROTON :
-                           particleTypeString === ParticleType.NEUTRON.name.toLowerCase() ? ParticleType.NEUTRON :
-                           particleTypeString === ParticleType.ELECTRON.name.toLowerCase() ? ParticleType.ELECTRON :
-                           particleTypeString === ParticleType.POSITRON.name.toLowerCase() ? ParticleType.POSITRON :
+      const particleType = particleTypeString === ParticleType.PROTON.particleTypeString ? ParticleType.PROTON :
+                           particleTypeString === ParticleType.NEUTRON.particleTypeString ? ParticleType.NEUTRON :
+                           particleTypeString === ParticleType.ELECTRON.particleTypeString ? ParticleType.ELECTRON :
+                           particleTypeString === ParticleType.POSITRON.particleTypeString ? ParticleType.POSITRON :
                            null;
       assert && assert( particleType !== null, `Particle type ${particleTypeString} is not a valid particle type.` );
       return particleType;
@@ -471,9 +471,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const maxCount = particleType === ParticleType.PROTON ? this.model.protonCountRange.max : this.model.neutronCountRange.max;
     const creatorNode = particleType === ParticleType.PROTON ? this.protonsCreatorNode : this.neutronsCreatorNode;
     const numberOfNucleons = [ ...this.model.particles ]
-      .filter( particle => particle.type === particleType.name.toLowerCase() ).length;
+      .filter( particle => particle.type === particleType.particleTypeString ).length;
     const outgoingNucleons = [ ...this.model.outgoingParticles ]
-      .filter( particle => particle.type === particleType.name.toLowerCase() ).length;
+      .filter( particle => particle.type === particleType.particleTypeString ).length;
 
     return {
       maxCount: maxCount,
@@ -509,7 +509,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Create and add a nucleon of particleType immediately to the particleAtom.
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
-    const particle = new Particle( particleType.name.toLowerCase(), {
+    const particle = new Particle( particleType.particleTypeString, {
       maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
 
@@ -535,7 +535,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public createParticleFromStack( particleType: ParticleType ): Particle {
 
     // create a particle at the center of its creator node
-    const particle = new Particle( particleType.name.toLowerCase(), {
+    const particle = new Particle( particleType.particleTypeString, {
       maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
     } );
     particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
@@ -741,7 +741,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Define a function that will decide where to put nucleons.
    */
   protected dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
-    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.name.toLowerCase() ?
+    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
     if ( this.isNucleonInCaptureArea( nucleon, atom ) ||
@@ -821,7 +821,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
                       this.model.particleAtom.neutronCountProperty.value >= 1,
       'The particleAtom needs a ' + particleType.name + ' to emit it. The decay: ' + fromDecay + ' cannot occur.' );
 
-    const nucleon = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+    const nucleon = this.model.particleAtom.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( nucleon );
     return nucleon;
   }

@@ -56,7 +56,7 @@ class NucleonCountPanel extends Panel {
                            nucleonCountProperty: TReadOnlyProperty<number>, nucleonCountRange: Range ): NucleonLabel => {
 
       const nucleonTitle = new Text( nucleonString, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
-      const nucleonParticleNode = new ParticleNode( nucleonType.name.toLowerCase(), NUCLEON_PARTICLE_RADIUS );
+      const nucleonParticleNode = new ParticleNode( nucleonType.particleTypeString, NUCLEON_PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
       nucleonTitle.left = nucleonParticleNode.right + nucleonParticleNode.width / 2;
       nucleonTitle.top = nucleonContents.top;

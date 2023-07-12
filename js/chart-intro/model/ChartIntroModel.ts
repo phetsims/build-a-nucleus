@@ -68,7 +68,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    * Create model for particle in mini-nucleus.
    */
   public createMiniParticleModel( particleType: ParticleType ): Particle {
-    const particle = new Particle( particleType.name.toLowerCase() );
+    const particle = new Particle( particleType.particleTypeString );
     this.miniParticleAtom.addParticle( particle );
     return particle;
   }

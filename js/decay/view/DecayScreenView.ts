@@ -140,7 +140,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // remove a nucleon of a given particleType from the atom immediately
     const removeNucleonImmediatelyFromAtom = ( particleType: ParticleType ) => {
-      const particleToRemove = this.model.particleAtom.extractParticle( particleType.name.toLowerCase() );
+
+      const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
       this.animateAndRemoveParticle( particleToRemove );
     };
 
@@ -378,13 +379,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     let nucleonTypeToChange;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = this.model.particleAtom.neutrons;
-      particleToEmit = new Particle( ParticleType.ELECTRON.name.toLowerCase() );
+      particleToEmit = new Particle( ParticleType.ELECTRON.particleTypeString );
       nucleonTypeCountValue = this.model.particleAtom.neutronCountProperty.value;
       nucleonTypeToChange = ParticleType.NEUTRON.name;
     }
     else {
       particleArray = this.model.particleAtom.protons;
-      particleToEmit = new Particle( ParticleType.POSITRON.name.toLowerCase() );
+      particleToEmit = new Particle( ParticleType.POSITRON.particleTypeString );
       nucleonTypeCountValue = this.model.particleAtom.protonCountProperty.value;
       nucleonTypeToChange = ParticleType.PROTON.name;
     }
@@ -395,7 +396,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const particle = _.sortBy( [ ...particleArray ],
-      particle => particle.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift();
+      particle => particle.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift()!;
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
     particleToEmit.positionProperty.value = particle.positionProperty.value;
@@ -405,11 +406,11 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.model.addParticle( particleToEmit );
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
       if ( this.model.particles.includes( particleToEmit ) ) {
-      this.animateAndRemoveParticle( particleToEmit, this.getRandomExternalModelPosition() );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
-      this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+        this.animateAndRemoveParticle( particleToEmit, this.getRandomExternalModelPosition() );
+        this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
+        this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
+        this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
+        this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
       }
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );

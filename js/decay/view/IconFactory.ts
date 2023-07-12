@@ -29,7 +29,7 @@ class IconFactory {
    * Function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon
    */
   private static createParticleNode( particleType: ParticleType ): ParticleNode {
-    return new ParticleNode( particleType.name.toLowerCase(),
+    return new ParticleNode( particleType.particleTypeString,
       particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS
     );
   }
@@ -68,7 +68,7 @@ class IconFactory {
     return new HBox( {
       children: [
         IconFactory.createMotionLines( 4 ),
-        new ParticleNode( particleType.name.toLowerCase(), NUCLEON_PARTICLE_RADIUS )
+        new ParticleNode( particleType.particleTypeString, NUCLEON_PARTICLE_RADIUS )
       ],
       spacing: SPACING / 4
     } );

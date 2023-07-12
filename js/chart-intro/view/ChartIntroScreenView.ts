@@ -83,7 +83,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       else if ( nucleonDelta > 0 ) {
         _.times( nucleonDelta, () => {
           if ( !this.decaying ) {
-            const particle = model.miniParticleAtom.extractParticle( particleType.name.toLowerCase() );
+            const particle = model.miniParticleAtom.extractParticle( particleType.particleTypeString );
             const particleView = this.findParticleView( particle );
             delete this.particleViewMap[ particleView.particle.id ];
 
@@ -252,7 +252,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.decaying = true;
 
     // Handle the animation for the mini ParticleAtom
-    const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.name.toLowerCase() );
+    const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.particleTypeString );
 
     // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition();
@@ -305,14 +305,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     let newNucleonType;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = this.model.miniParticleAtom.neutrons;
-      particleToEmit = new Particle( ParticleType.ELECTRON.name.toLowerCase() );
+      particleToEmit = new Particle( ParticleType.ELECTRON.particleTypeString );
       nucleonTypeCountValue = this.model.miniParticleAtom.neutronCountProperty.value;
       nucleonTypeToChange = ParticleType.NEUTRON;
       newNucleonType = ParticleType.PROTON;
     }
     else {
       particleArray = this.model.miniParticleAtom.protons;
-      particleToEmit = new Particle( ParticleType.POSITRON.name.toLowerCase() );
+      particleToEmit = new Particle( ParticleType.POSITRON.particleTypeString );
       nucleonTypeCountValue = this.model.miniParticleAtom.protonCountProperty.value;
       nucleonTypeToChange = ParticleType.PROTON;
       newNucleonType = ParticleType.NEUTRON;
@@ -325,7 +325,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const closestParticle = _.sortBy( [ ...particleArray ],
-      closestParticle => closestParticle.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) ).shift();
+      closestParticle => closestParticle.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) ).shift()!;
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
     particleToEmit.positionProperty.value = closestParticle.positionProperty.value;

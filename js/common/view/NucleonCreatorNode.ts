@@ -23,7 +23,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
   public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleViewPositionVector: Vector2 ) {
     super();
 
-    const targetNode = new ParticleNode( particleType.name.toLowerCase(), BANConstants.PARTICLE_RADIUS );
+    const targetNode = new ParticleNode( particleType.particleTypeString, BANConstants.PARTICLE_RADIUS );
     this.addChild( targetNode );
     this.touchArea = this.localBounds.dilated( 10 );
 
@@ -31,7 +31,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
-      const particle = new Particle( particleType.name.toLowerCase(), {
+      const particle = new Particle( particleType.particleTypeString, {
         maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
       } );
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;

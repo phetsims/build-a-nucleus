@@ -114,7 +114,7 @@ class BANModel<T extends ParticleAtom> {
    */
   public getParticlesByType( particleType: ParticleType ): Particle[] {
     const filteredParticles = _.filter( this.particles, particle => {
-      return this.particleAtom.containsParticle( particle ) && particle.type === particleType.name.toLowerCase();
+      return this.particleAtom.containsParticle( particle ) && particle.type === particleType.particleTypeString;
     } );
 
     assert && assert( filteredParticles.length !== 0, 'No particles of particleType ' + particleType.name + ' are in the particleAtom.' );
@@ -134,7 +134,7 @@ class BANModel<T extends ParticleAtom> {
    */
   public addParticle( particle: Particle ): void {
     assert && assert( _.some( ParticleType.enumeration.values, particleType => {
-        return particle.type === particleType.name.toLowerCase();
+        return particle.type === particleType.particleTypeString;
       } ),
       'Particles must be one of the types in ParticleType ' + particle.type );
     this.particles.push( particle );

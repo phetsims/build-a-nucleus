@@ -161,7 +161,7 @@ class AvailableDecaysPanel extends Panel {
     const createParticleLabel = ( particleType: ParticleType ): Node => {
       return new HBox( {
         children: [
-          new ParticleNode( particleType.name.toLowerCase(), particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
+          new ParticleNode( particleType.particleTypeString, particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
           new Text( particleType.label, { font: LABEL_FONT, maxWidth: 100 } )
         ],
         spacing: SPACING
