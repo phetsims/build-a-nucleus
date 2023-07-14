@@ -236,6 +236,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
+  private removeMiniAtomParticle( miniNucleon: Particle, miniParticleView: ParticleView ): void {
+    this.model.outgoingParticles.remove( miniNucleon );
+    delete this.particleViewMap[ miniParticleView.particle.id ];
+
+    miniParticleView.dispose();
+    miniNucleon.dispose();
+  }
+
   private animateAndRemoveMiniAtomParticle( miniNucleon: Particle, destination?: Vector2 ): void {
     this.model.outgoingParticles.add( miniNucleon );
     const miniParticleView = this.findParticleView( miniNucleon );
@@ -243,15 +251,16 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     if ( destination ) {
       miniNucleon.destinationProperty.value = destination;
+
+      miniNucleon.animationEndedEmitter.addListener( () => {
+        this.removeMiniAtomParticle( miniNucleon, miniParticleView );
+      } );
+    }
+    else {
+      this.removeMiniAtomParticle( miniNucleon, miniParticleView );
     }
 
-    miniNucleon.animationEndedEmitter.addListener( () => {
-      this.model.outgoingParticles.remove( miniNucleon );
-      delete this.particleViewMap[ miniParticleView.particle.id ];
 
-      miniParticleView.dispose();
-      miniNucleon.dispose();
-    } );
   }
 
   /**
@@ -326,7 +335,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
       this.model.miniParticleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
-      this.model.outgoingParticles.add( nucleon );
     } );
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
@@ -361,12 +369,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         this.animateAndRemoveMiniAtomParticle( neutron );
       } );
       alphaParticle.protons.forEach( proton => {
-       this.animateAndRemoveMiniAtomParticle( proton );
+        this.animateAndRemoveMiniAtomParticle( proton );
       } );
       alphaParticle.dispose();
     } );
-    this.model.miniParticleAtom.reconfigureNucleus();
     alphaParticleEmissionAnimation.start();
+    this.model.miniParticleAtom.reconfigureNucleus();
 
 
     // animate nucleons in NucleonShellView
