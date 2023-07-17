@@ -410,7 +410,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       newNucleonType = ParticleType.NEUTRON;
     }
 
-    this.model.outgoingParticles.add( particleToEmit );
     this.createMiniParticleView( particleToEmit );
     assert && assert( nucleonTypeCountValue >= 1,
       'The particleAtom needs a ' + nucleonTypeToChange.name + ' for a ' + betaDecayType.name );
