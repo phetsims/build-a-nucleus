@@ -429,7 +429,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
       // TODO: particle disappears inside devBounds, https://github.com/phetsims/build-a-nucleus/issues/97
       this.animateAndRemoveMiniAtomParticle( particleToEmit, destination );
-
       this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );

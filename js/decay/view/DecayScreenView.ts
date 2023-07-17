@@ -395,16 +395,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       'The particleAtom needs a ' + nucleonTypeToChange + ' for a ' + betaDecayType.name );
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
-    const particle = _.sortBy( [ ...particleArray ],
-      particle => particle.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift()!;
+    const closestParticle = _.sortBy( [ ...particleArray ],
+      closestParticle => closestParticle.positionProperty.value.distance( this.model.particleAtom.positionProperty.value ) ).shift()!;
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
-    particleToEmit.positionProperty.value = particle.positionProperty.value;
-    particleToEmit.zLayerProperty.value = particle.zLayerProperty.value + 1;
+    particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
+    particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     this.model.addParticle( particleToEmit );
-    const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
+    const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( closestParticle, () => {
       if ( this.model.particles.includes( particleToEmit ) ) {
         this.animateAndRemoveParticle( particleToEmit, this.getRandomExternalModelPosition() );
         this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
