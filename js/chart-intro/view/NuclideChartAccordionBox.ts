@@ -92,6 +92,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         chartsHBox,
         nuclideChartLegendNode
       ],
+      align: 'left',
       spacing: 10,
       excludeInvisibleChildrenFromBounds: true
     } );

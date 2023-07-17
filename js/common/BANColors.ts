@@ -130,6 +130,10 @@ const BANColors = {
   // colors of the energy level bars
   zeroNucleonsEnergyLevelColorProperty: new ProfileColorProperty( buildANucleus, 'zeroNucleonsEnergyLevelColor', {
     default: Color.BLACK
+  } ),
+
+  decayEquationPlusNodeColorProperty: new ProfileColorProperty( buildANucleus, 'decayEquationPlusNodeColor', {
+    default: Color.BLACK
   } )
 };
 

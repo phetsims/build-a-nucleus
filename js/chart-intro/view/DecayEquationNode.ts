@@ -16,6 +16,7 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DecaySymbolNode from './DecaySymbolNode.js';
 import IconFactory from '../../decay/view/IconFactory.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
+import BANColors from '../../common/BANColors.js';
 
 const unknownSpacePatternStringProperty = new PatternStringProperty( BuildANucleusStrings.unknownSpacePatternStringProperty, { space: ' ' } );
 
@@ -30,6 +31,7 @@ class DecayEquationNode extends VBox {
 
     super( {
       spacing: 5,
+      align: 'left',
 
       // leave equationHBox space visible despite being blank sometimes
       excludeInvisibleChildrenFromBounds: false
@@ -62,7 +64,7 @@ class DecayEquationNode extends VBox {
 
         const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonNumberProperty.value, decayEquationModel.finalMassNumberProperty.value );
 
-        const plusNode = IconFactory.createPlusNode();
+        const plusNode = IconFactory.createPlusNode( BANColors.decayEquationPlusNodeColorProperty );
 
         if ( currentCellModel.decayType ) {
 

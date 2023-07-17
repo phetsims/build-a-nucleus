@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import BANColors from '../../common/BANColors.js';
-import { HBox, Line, Node, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Line, Node, TColor, VBox } from '../../../../scenery/js/imports.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -86,8 +86,8 @@ class IconFactory {
     } );
   }
 
-  public static createPlusNode(): Node {
-    return new PlusNode( { fill: BANColors.blueDecayIconSymbolsColorProperty, size: new Dimension2( 9, 2 ) } );
+  public static createPlusNode( fillColor: TColor ): Node {
+    return new PlusNode( { fill: fillColor, size: new Dimension2( 9, 2 ) } );
   }
 
   /**
@@ -101,7 +101,7 @@ class IconFactory {
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.NEUTRON ) : IconFactory.createParticleNode( ParticleType.PROTON ),
         IconFactory.createDecayArrowNode(),
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.PROTON ) : IconFactory.createParticleNode( ParticleType.NEUTRON ),
-        IconFactory.createPlusNode(),
+        IconFactory.createPlusNode( BANColors.blueDecayIconSymbolsColorProperty ),
         IconFactory.createMotionLines( 3.5, true ),
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.ELECTRON ) : IconFactory.createParticleNode( ParticleType.POSITRON )
       ],
