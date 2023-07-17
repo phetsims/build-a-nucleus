@@ -498,13 +498,30 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   /**
    * Shows the given creator node if the count for that nucleon type is below its max.
    */
-  public checkIfCreatorNodeShouldBeVisible( particleType: ParticleType ): void {
+  private checkIfCreatorNodeShouldBeVisible( particleType: ParticleType ): void {
     const infoForParticleType = this.getInfoForParticleType( particleType );
 
     if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) < infoForParticleType.maxCount ) {
       BANScreenView.setCreatorNodeVisibility( infoForParticleType.creatorNode, true );
     }
   }
+
+  /**
+   * Make nucleon creator nodes visible if their nucleon counts are below their max amounts.
+   */
+  protected checkIfCreatorNodesShouldBeVisible(): void {
+    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
+    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+  }
+
+  /**
+   * Show or hide nucleon creator nodes depending on their current nucleon counts and max allowed amount.
+   */
+  protected checkIfCreatorNodesShouldBeVisibleOrInvisible(): void {
+  this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
+  this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
+  this.checkIfCreatorNodesShouldBeVisible();
+}
 
   /**
    * Create and add a nucleon of particleType immediately to the particleAtom.

@@ -314,8 +314,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
     alphaParticle.moveAllParticlesToDestination();
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+    this.checkIfCreatorNodesShouldBeVisible();
 
     alphaParticle.protons.forEach( proton => {
       this.findParticleView( proton ).inputEnabled = false;
@@ -408,10 +407,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( particle, () => {
       if ( this.model.particles.includes( particleToEmit ) ) {
         this.animateAndRemoveParticle( particleToEmit, this.getRandomExternalModelPosition() );
-        this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
-        this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
-        this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-        this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+        this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
       }
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );

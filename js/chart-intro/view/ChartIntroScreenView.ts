@@ -274,8 +274,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition();
-    const totalDistanceAlphaParticleTravels = miniNucleon.positionProperty.value.distance( destination );
-    const animationDuration = totalDistanceAlphaParticleTravels / miniNucleon.animationVelocityProperty.value;
+    const totalDistanceParticleTravels = miniNucleon.positionProperty.value.distance( destination );
+    const animationDuration = totalDistanceParticleTravels / miniNucleon.animationVelocityProperty.value;
 
     this.model.miniParticleAtom.reconfigureNucleus();
     this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );
@@ -339,8 +339,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
     alphaParticle.moveAllParticlesToDestination();
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+    this.checkIfCreatorNodesShouldBeVisible();
 
     alphaParticle.protons.forEach( proton => {
       this.findParticleView( proton ).inputEnabled = false;
@@ -424,23 +423,21 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
     particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
 
+    const destination = this.getRandomExternalModelPosition();
+
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     const initialColorChangeAnimation = this.model.miniParticleAtom.changeNucleonType( closestParticle, () => {
 
       // TODO: particle disappears inside devBounds, https://github.com/phetsims/build-a-nucleus/issues/97
-      this.animateAndRemoveMiniAtomParticle( particleToEmit, this.getRandomExternalModelPosition() );
+      this.animateAndRemoveMiniAtomParticle( particleToEmit, destination );
 
-      // TODO: factor out these lines of code of checking if creator node should be visible, https://github.com/phetsims/build-a-nucleus/issues/97
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
-      this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+      this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
     } );
     this.model.particleAnimations.add( initialColorChangeAnimation );
 
     // animate the shell view
-    // TODO: calculate the duration based on how long the particleToEmit takes to leave, https://github.com/phetsims/build-a-nucleus/issues/97
-    const animationDuration = 1;
+    const totalDistanceParticleTravels = particleToEmit.positionProperty.value.distance( destination );
+    const animationDuration = totalDistanceParticleTravels / particleToEmit.animationVelocityProperty.value;
     this.fadeOutShellNucleon( nucleonTypeToChange, animationDuration );
 
     const particle = this.createParticleFromStack( newNucleonType );
