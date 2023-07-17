@@ -17,6 +17,7 @@ import DecaySymbolNode from './DecaySymbolNode.js';
 import IconFactory from '../../decay/view/IconFactory.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import BANColors from '../../common/BANColors.js';
+import BANConstants from '../../common/BANConstants.js';
 
 const unknownSpacePatternStringProperty = new PatternStringProperty( BuildANucleusStrings.unknownSpacePatternStringProperty, { space: ' ' } );
 
@@ -39,7 +40,7 @@ class DecayEquationNode extends VBox {
 
     const stableString = new Text( BuildANucleusStrings.stable, TEXT_OPTIONS );
     const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
-    const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecay, { fontSize: 13 } );
+    const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecay, { font: BANConstants.LEGEND_FONT } );
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
@@ -53,7 +54,7 @@ class DecayEquationNode extends VBox {
         const decayLikelihoodPercentString = new Text( StringUtils.fillIn( BuildANucleusStrings.percentageInParenthesesPattern, {
           decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || unknownSpacePatternStringProperty
         } ), {
-          fontSize: 13
+          font: BANConstants.LEGEND_FONT
         } );
 
         const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber, currentCellModel.protonNumber + currentCellModel.neutronNumber );

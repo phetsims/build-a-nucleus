@@ -12,10 +12,9 @@ import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import DecayType from '../../common/model/DecayType.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import BANConstants from '../../common/BANConstants.js';
 
 // constants
-const LEGEND_FONT = new PhetFont( 12 );
 const LEGEND_KEY_BOX_SIZE = 14;
 
 class NuclideChartLegendNode extends Node {
@@ -32,7 +31,7 @@ class NuclideChartLegendNode extends Node {
             fill: decayTypeColor,
             stroke: BANColors.nuclideChartBorderColorProperty
           } ),
-          new RichText( decayTypeText, { font: LEGEND_FONT } )
+          new RichText( decayTypeText, { font: BANConstants.LEGEND_FONT } )
         ],
         spacing: 5
         // TODO: add maxWidth https://github.com/phetsims/build-a-nucleus/issues/90

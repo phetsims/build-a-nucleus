@@ -46,7 +46,7 @@ class NuclideChartAccordionBox extends AccordionBox {
       zoomInChartTransform );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
-    const decayEquationVBox = new DecayEquationNode( decayEquationModel );
+    const decayEquationNode = new DecayEquationNode( decayEquationModel );
 
     const chartAndButtonVBox = new VBox( {
       children: [
@@ -72,7 +72,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       zoomInNuclideChartNode.visible = selectedNuclideChart === 'zoom';
       chartAndButtonVBox.visible = selectedNuclideChart === 'zoom';
-      decayEquationVBox.visible = selectedNuclideChart === 'zoom';
+      decayEquationNode.visible = selectedNuclideChart === 'zoom';
       nuclideChartAndNumberLines.visible = selectedNuclideChart === 'partial';
     } );
 
@@ -88,7 +88,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     } );
     const contentVBox = new VBox( {
       children: [
-        decayEquationVBox,
+        decayEquationNode,
         chartsHBox,
         nuclideChartLegendNode
       ],
