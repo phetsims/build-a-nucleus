@@ -9,7 +9,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
+import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues, EmitAlphaParticleValues } from '../../common/view/BANScreenView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
@@ -31,7 +31,6 @@ import ZoomInNuclideChartIconNode from './ZoomInNuclideChartIconNode.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from '../../common/model/DecayType.js';
-import BANParticle from '../../common/model/BANParticle.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -232,7 +231,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.particleAtomNode.localToGlobalPoint( this.particleAtomNode.emptyAtomCircle.center );
   }
 
-  private getRandomExternalModelPosition(): Vector2 {
+  public getRandomExternalModelPosition(): Vector2 {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
@@ -259,8 +258,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     else {
       this.removeMiniAtomParticle( miniNucleon, miniParticleView );
     }
-
-
   }
 
   /**
@@ -307,72 +304,29 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return shellNucleusNucleon;
   }
 
+  public override getParticleAtom(): ParticleAtom {
+    return this.model.miniParticleAtom;
+  }
+
+  public override removeAlphaParticle( particle: Particle ): void {
+    this.animateAndRemoveMiniAtomParticle( particle );
+  }
+
+  public override addOutgoingParticle( particle: Particle ): void {
+    // no need to add the outgoing particle because that's done in a subclass
+  }
+
   /**
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
    */
-  protected emitAlphaParticle(): void {
+  protected override emitAlphaParticle(): EmitAlphaParticleValues {
 
     this.decaying = true;
 
     // animate mini particle atom
-    assert && assert( this.model.miniParticleAtom.protonCountProperty.value >= 2 &&
-    this.model.miniParticleAtom.neutronCountProperty.value >= 2,
-      'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
-
-    // get the protons and neutrons closest to the center of the particleAtom
-    const protonsToRemove = _.sortBy( [ ...this.model.miniParticleAtom.protons ], proton =>
-      proton.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
-    const neutronsToRemove = _.sortBy( [ ...this.model.miniParticleAtom.neutrons ],
-      neutron => neutron.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
-
-    // create and add the alpha particle node
-    const alphaParticle = new ParticleAtom();
-
-    // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
-    [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
-      this.model.miniParticleAtom.removeParticle( nucleon );
-      alphaParticle.addParticle( nucleon );
-    } );
-
-    // ensure the creator nodes are visible since particles are being removed from the particleAtom
-    alphaParticle.moveAllParticlesToDestination();
-    this.checkIfCreatorNodesShouldBeVisible();
-
-    alphaParticle.protons.forEach( proton => {
-      this.findParticleView( proton ).inputEnabled = false;
-    } );
-    alphaParticle.neutrons.forEach( neutron => {
-      this.findParticleView( neutron ).inputEnabled = false;
-    } );
-
-    // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition();
-    const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
-
-    // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
-    const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
-
-    const alphaParticleEmissionAnimation = new Animation( {
-      property: alphaParticle.positionProperty,
-      to: destination,
-      duration: animationDuration,
-      easing: Easing.LINEAR
-    } );
-    this.model.particleAnimations.push( alphaParticleEmissionAnimation );
-
-    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
-      alphaParticle.neutrons.forEach( neutron => {
-        this.animateAndRemoveMiniAtomParticle( neutron );
-      } );
-      alphaParticle.protons.forEach( proton => {
-        this.animateAndRemoveMiniAtomParticle( proton );
-      } );
-      alphaParticle.dispose();
-    } );
-    alphaParticleEmissionAnimation.start();
+    const values = super.emitAlphaParticle();
+    const animationDuration = values.animationDuration;
     this.model.miniParticleAtom.reconfigureNucleus();
 
 
@@ -381,48 +335,27 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.NEUTRON, animationDuration ) );
 
     this.decaying = false;
+
+    return values;
+  }
+
+  protected override betaDecayMiniFunction( particle: Particle ): void {
+    this.createMiniParticleView( particle );
   }
 
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  protected betaDecay( betaDecayType: DecayType ): void {
+  protected override betaDecay( betaDecayType: DecayType ): BetaDecayReturnValues {
     this.decaying = true;
 
     // animate mini particleAtom
-    let particleArray;
-    let particleToEmit: Particle;
-    let nucleonTypeCountValue;
-    let nucleonTypeToChange;
-    let newNucleonType;
-    if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
-      particleArray = this.model.miniParticleAtom.neutrons;
-      particleToEmit = new BANParticle( ParticleType.ELECTRON.particleTypeString );
-      nucleonTypeCountValue = this.model.miniParticleAtom.neutronCountProperty.value;
-      nucleonTypeToChange = ParticleType.NEUTRON;
-      newNucleonType = ParticleType.PROTON;
-    }
-    else {
-      particleArray = this.model.miniParticleAtom.protons;
-      particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
-      nucleonTypeCountValue = this.model.miniParticleAtom.protonCountProperty.value;
-      nucleonTypeToChange = ParticleType.PROTON;
-      newNucleonType = ParticleType.NEUTRON;
-    }
-
-    this.createMiniParticleView( particleToEmit );
-    assert && assert( nucleonTypeCountValue >= 1,
-      'The particleAtom needs a ' + nucleonTypeToChange.name + ' for a ' + betaDecayType.name );
-
-    // the particle that will change its nucleon type will be the one closest to the center of the atom
-    const closestParticle = _.sortBy( [ ...particleArray ],
-      closestParticle => closestParticle.positionProperty.value.distance( this.model.miniParticleAtom.positionProperty.value ) ).shift()!;
-
-    // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
-    particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
-    particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
-
-    const destination = this.getRandomExternalModelPosition();
+    const values = super.betaDecay( betaDecayType );
+    const particleToEmit = values.particleToEmit;
+    const destination = values.destination;
+    const closestParticle = values.closestParticle;
+    const nucleonTypeToChange = values.nucleonTypeToChange;
+    const newNucleonType = values.newNucleonType;
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     const initialColorChangeAnimation = this.model.miniParticleAtom.changeNucleonType( closestParticle, () => {
@@ -454,6 +387,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     fadeAnimation.start();
 
     this.decaying = false;
+
+    return values;
   }
 
   private createMiniParticleView( miniParticle: Particle ): void {
