@@ -889,7 +889,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
-      this.model.particleAtom.removeParticle( nucleon );
+      particleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
       this.addOutgoingParticle( nucleon );
       this.addOutgoingParticle( nucleon );
