@@ -149,6 +149,9 @@ class BANModel<T extends ParticleAtom> {
   }
 
   public reset(): void {
+
+    // particleAnimations must be cleared before any particle arrays so any remaining animation endedEmitters can complete on remaining particles
+    this.particleAnimations.clear();
     this.particleAtom.clear();
     this.particles.clear();
     this.incomingProtons.clear();
@@ -156,7 +159,8 @@ class BANModel<T extends ParticleAtom> {
     this.outgoingParticles.clear();
     this.userControlledProtons.clear();
     this.userControlledNeutrons.clear();
-    this.particleAnimations.clear();
+
+    console.log( this.outgoingParticles );
   }
 
   /**

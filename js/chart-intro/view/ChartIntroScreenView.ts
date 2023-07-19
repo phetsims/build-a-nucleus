@@ -235,28 +235,28 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
-  private removeMiniAtomParticle( miniNucleon: Particle, miniParticleView: ParticleView ): void {
-    this.model.outgoingParticles.remove( miniNucleon );
-    delete this.particleViewMap[ miniParticleView.particle.id ];
+  private removeMiniAtomParticle( particle: Particle, particleView: ParticleView ): void {
+    this.model.outgoingParticles.remove( particle );
+    delete this.particleViewMap[ particleView.particle.id ];
 
-    miniParticleView.dispose();
-    miniNucleon.dispose();
+    particleView.dispose();
+    particle.dispose();
   }
 
-  private animateAndRemoveMiniAtomParticle( miniNucleon: Particle, destination?: Vector2 ): void {
-    this.model.outgoingParticles.add( miniNucleon );
-    const miniParticleView = this.findParticleView( miniNucleon );
-    miniParticleView.inputEnabled = false;
+  private animateAndRemoveMiniAtomParticle( particle: Particle, destination?: Vector2 ): void {
+    this.model.outgoingParticles.add( particle );
+    const particleView = this.findParticleView( particle );
+    particleView.inputEnabled = false;
 
     if ( destination ) {
-      miniNucleon.destinationProperty.value = destination;
+      particle.destinationProperty.value = destination;
 
-      miniNucleon.animationEndedEmitter.addListener( () => {
-        this.removeMiniAtomParticle( miniNucleon, miniParticleView );
+      particle.animationEndedEmitter.addListener( () => {
+        this.removeMiniAtomParticle( particle, particleView );
       } );
     }
     else {
-      this.removeMiniAtomParticle( miniNucleon, miniParticleView );
+      this.removeMiniAtomParticle( particle, particleView );
     }
   }
 
@@ -369,7 +369,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // animate the shell view
     const totalDistanceParticleTravels = particleToEmit.positionProperty.value.distance( destination );
     const animationDuration = totalDistanceParticleTravels / particleToEmit.animationVelocityProperty.value;
-    this.fadeOutShellNucleon( nucleonTypeToChange, animationDuration );
+    this.fadeOutShellNucleon( nucleonTypeToChange, animationDuration, betaDecayType.name );
 
     const particle = this.createParticleFromStack( newNucleonType );
 

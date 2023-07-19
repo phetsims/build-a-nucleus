@@ -814,7 +814,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public decayAtom( decayType: DecayType | null ): void {
     switch( decayType ) {
       case DecayType.NEUTRON_EMISSION:
-        this.emitNucleon( ParticleType.NEUTRON );
+        this.emitNucleon( ParticleType.NEUTRON, decayType.name );
         break;
       case DecayType.PROTON_EMISSION:
         this.emitNucleon( ParticleType.PROTON, decayType.name );
