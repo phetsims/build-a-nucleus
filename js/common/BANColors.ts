@@ -134,6 +134,18 @@ const BANColors = {
 
   decayEquationPlusNodeColorProperty: new ProfileColorProperty( buildANucleus, 'decayEquationPlusNodeColor', {
     default: Color.BLACK
+  } ),
+
+  selectedPeriodicTableCellFillAndStrokeColorProperty: new ProfileColorProperty( buildANucleus, 'selectedPeriodicTableCellFillAndStrokeColor', {
+    default: Color.BLACK
+  } ),
+
+  disabledPeriodicTableCellColorProperty: new ProfileColorProperty( buildANucleus, 'disabledPeriodicTableCellColor', {
+    default: Color.WHITE
+  } ),
+
+  selectedPeriodicTableCellLabelTextColorProperty: new ProfileColorProperty( buildANucleus, 'selectedPeriodicTableCellLabelTextColor', {
+    default: Color.WHITE
   } )
 };
 
