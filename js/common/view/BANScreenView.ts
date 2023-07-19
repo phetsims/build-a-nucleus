@@ -622,7 +622,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     if ( this.model.particleAtom.containsParticle( particleToReturn ) ) {
       this.model.particleAtom.removeParticle( particleToReturn );
     }
-    else {
+    else if ( this.model.incomingNeutrons.includes( particleToReturn ) || this.model.incomingProtons.includes( particleToReturn ) ) {
       arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particleToReturn );
       particleToReturn.animationEndedEmitter.removeAllListeners();
     }
