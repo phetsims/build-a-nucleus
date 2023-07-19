@@ -892,7 +892,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
       this.addOutgoingParticle( nucleon );
-      this.addOutgoingParticle( nucleon );
     } );
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom

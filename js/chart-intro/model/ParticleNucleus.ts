@@ -18,6 +18,7 @@ import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import EnergyLevelType from './EnergyLevelType.js';
+import BANParticle from '../../common/model/BANParticle.js';
 
 export type ParticleShellPosition = {
   particle?: Particle;
@@ -174,7 +175,7 @@ class ParticleNucleus extends ParticleAtom {
   /**
    * Fill all nucleons in open positions from bottom to top, left to right
    */
-  private updateNucleonPositions( particleArray: ObservableArray<Particle>, particleShellPositions: ParticleShellPosition[][],
+  private updateNucleonPositions( particleArray: ObservableArray<BANParticle>, particleShellPositions: ParticleShellPosition[][],
                                   levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
     const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 5 ] ) -
                        this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );

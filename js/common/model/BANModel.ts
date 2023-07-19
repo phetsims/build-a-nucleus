@@ -19,6 +19,7 @@ import ParticleType from './ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import BANParticle from './BANParticle.js';
 
 class BANModel<T extends ParticleAtom> {
 
@@ -29,7 +30,7 @@ class BANModel<T extends ParticleAtom> {
   public readonly doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean>;
 
   // arrays of all Particle's that exist in all places, except the mini atom in the Chart Intro screen.
-  public readonly particles: ObservableArray<Particle>;
+  public readonly particles: ObservableArray<BANParticle>;
 
   // the atom that the user will build, modify, and generally play with.
   public readonly particleAtom: T;
@@ -41,8 +42,8 @@ class BANModel<T extends ParticleAtom> {
   public readonly neutronCountRange: Range;
 
   // array of particles sent to the nucleus but not there yet
-  public readonly incomingProtons: ObservableArray<Particle>;
-  public readonly incomingNeutrons: ObservableArray<Particle>;
+  public readonly incomingProtons: ObservableArray<BANParticle>;
+  public readonly incomingNeutrons: ObservableArray<BANParticle>;
 
   // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
   public readonly doubleArrowButtonClickedBooleanProperty: TProperty<boolean>;
@@ -50,11 +51,11 @@ class BANModel<T extends ParticleAtom> {
   // keep track of any particle related animations that may need to be cancelled at some point
   public readonly particleAnimations: ObservableArray<Animation | null>;
 
-  public readonly userControlledProtons: ObservableArray<Particle>;
-  public readonly userControlledNeutrons: ObservableArray<Particle>;
+  public readonly userControlledProtons: ObservableArray<BANParticle>;
+  public readonly userControlledNeutrons: ObservableArray<BANParticle>;
 
   // array of all emitted particles, this helps keep track of particles that are no longer "counted" in the atom
-  public readonly outgoingParticles: ObservableArray<Particle>;
+  public readonly outgoingParticles: ObservableArray<BANParticle>;
 
   protected constructor( maximumProtonCount: number, maximumNeutronCount: number, particleAtom: T ) {
 

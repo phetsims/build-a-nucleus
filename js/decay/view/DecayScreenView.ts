@@ -106,6 +106,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       undoDecayButton.visible = false;
       restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
       restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
+
+      // remove all particles in the outgoingParticles array from the particles array
       this.model.outgoingParticles.forEach( particle => {
         this.model.removeParticle( particle );
       } );
