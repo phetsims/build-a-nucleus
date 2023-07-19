@@ -30,16 +30,16 @@ class DecayType extends EnumerationValue {
   public readonly label: string;
   public readonly colorProperty: ProfileColorProperty;
   public readonly massNumber: number;
-  public readonly protonNumber: number;
+  public readonly protonCount: number;
   public readonly decaySymbol: string;
 
-  public constructor( label: string, colorProperty: ProfileColorProperty, massNumber: number, protonNumber: number, decaySymbol: string ) {
+  public constructor( label: string, colorProperty: ProfileColorProperty, massNumber: number, protonCount: number, decaySymbol: string ) {
     super();
 
     this.label = label;
     this.colorProperty = colorProperty;
     this.massNumber = massNumber;
-    this.protonNumber = protonNumber;
+    this.protonCount = protonCount;
     this.decaySymbol = decaySymbol;
 
   }

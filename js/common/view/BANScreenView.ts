@@ -758,7 +758,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       // multiple neutrons
       else {
         name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPattern, {
-          neutronNumber: neutronCount
+          neutronCount: neutronCount
         } );
       }
 

@@ -15,8 +15,8 @@ import { ColorProperty } from '../../../../scenery/js/imports.js';
 
 class NuclideChartCellModel {
 
-  public readonly protonNumber: number;
-  public readonly neutronNumber: number;
+  public readonly protonCount: number;
+  public readonly neutronCount: number;
 
   // Null could be that it is stable or has an unknown decay type, see NuclideChartCellModel.isStable to differentiate.
   public readonly decayType: DecayType | null;
@@ -24,14 +24,14 @@ class NuclideChartCellModel {
   public readonly decayTypeLikelihoodPercent: number | null;
   public readonly isStable: boolean;
 
-  public constructor( protonNumber: number, neutronNumber: number ) {
+  public constructor( protonCount: number, neutronCount: number ) {
 
     // get first decay in available decays to color the cell according to that decay type
-    const decayTypeAndPercent = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber )[ 0 ];
+    const decayTypeAndPercent = AtomIdentifier.getAvailableDecaysAndPercents( protonCount, neutronCount )[ 0 ];
 
-    this.protonNumber = protonNumber;
-    this.neutronNumber = neutronNumber;
-    this.isStable = AtomIdentifier.isStable( protonNumber, neutronNumber );
+    this.protonCount = protonCount;
+    this.neutronCount = neutronCount;
+    this.isStable = AtomIdentifier.isStable( protonCount, neutronCount );
     this.decayType = decayTypeAndPercent ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ 0 ] ) : null;
     this.decayTypeLikelihoodPercent = this.decayType === null ? null : decayTypeAndPercent[ this.decayType.name as DecayTypeStrings ]!;
     this.colorProperty = this.isStable ? BANColors.stableColorProperty :

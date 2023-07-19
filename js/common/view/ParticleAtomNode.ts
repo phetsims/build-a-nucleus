@@ -150,7 +150,7 @@ class ParticleAtomNode extends Node {
   }
 
   /**
-   * Update size of electron cloud based on protonNumber since the nuclides created are neutral, meaning the number of
+   * Update size of electron cloud based on protonCount since the nuclides created are neutral, meaning the number of
    * electrons is the same as the number of protons.
    */
   public updateCloudSize( protonCount: number, factor: number, minChangedRadius: number, maxChangedRadius: number ): void {

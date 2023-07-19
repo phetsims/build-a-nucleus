@@ -56,7 +56,7 @@ class BANModel<T extends ParticleAtom> {
   // array of all emitted particles, this helps keep track of particles that are no longer "counted" in the atom
   public readonly outgoingParticles: ObservableArray<Particle>;
 
-  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T ) {
+  protected constructor( maximumProtonCount: number, maximumNeutronCount: number, particleAtom: T ) {
 
     // Create the atom
     this.particleAtom = particleAtom;
@@ -79,8 +79,8 @@ class BANModel<T extends ParticleAtom> {
 
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
-    this.protonCountRange = new Range( 0, maximumProtonNumber );
-    this.neutronCountRange = new Range( 0, maximumNeutronNumber );
+    this.protonCountRange = new Range( 0, maximumProtonCount );
+    this.neutronCountRange = new Range( 0, maximumNeutronCount );
 
     // the stability of the nuclide is determined by the given number of protons and neutrons
     this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],

@@ -31,7 +31,7 @@ type SelfOptions = {
 type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 
 // 2D array that defines the table structure.
-// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
+// The rows are the proton number, for example the first row is protonCount = 0. The numbers in the rows are the neutron number.
 const POPULATED_CELLS = [
   [ 1, 4, 6 ],
   [ 0, 1, 2, 3, 4, 5, 6 ],
