@@ -75,7 +75,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   }
 
   /**
-   * Select the particle closest to its creator node.
+   * Select the particle in the farthest energy level.
    */
   public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
     const particleToReturn = this.particleNucleus.getLastParticleInShell( particleType );

@@ -614,7 +614,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Remove a particle of particleType from the particleAtom and send it back to its creator node.
+   * Remove a particle of particleType from the particleAtom, if it is in the particleAtom, and send it back to its creator node.
    */
   public returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
@@ -622,8 +622,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const particleToReturn = this.model.getParticleToReturn( particleType, creatorNodePosition );
 
-    // remove the particle from the particleAtom and send it back to its creator node position
-    this.model.particleAtom.removeParticle( particleToReturn );
+    // TODO: is this hacky? https://github.com/phetsims/build-a-nucleus/issues/74
+    // remove the particle from the particleAtom, if the particle is a part of the particleAtom
+    this.model.particleAtom.containsParticle( particleToReturn ) && this.model.particleAtom.removeParticle( particleToReturn );
+
+    // send particle back to its creator node position
     this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
   }
 
