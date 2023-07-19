@@ -597,12 +597,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
 
         // must remove incoming particles before adding it to particleAtom so incoming count is accurate
-        if ( particleType === ParticleType.PROTON ) {
-          arrayRemove( this.model.incomingProtons, particle );
-        }
-        else {
-          arrayRemove( this.model.incomingNeutrons, particle );
-        }
+        arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particle );
 
         this.model.particleAtom.addParticle( particle );
         particleView.inputEnabled = true;
@@ -624,7 +619,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // TODO: is this hacky? https://github.com/phetsims/build-a-nucleus/issues/74
     // remove the particle from the particleAtom, if the particle is a part of the particleAtom
-    this.model.particleAtom.containsParticle( particleToReturn ) && this.model.particleAtom.removeParticle( particleToReturn );
+    if ( this.model.particleAtom.containsParticle( particleToReturn ) ) {
+      this.model.particleAtom.removeParticle( particleToReturn );
+    }
+    else {
+      arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particleToReturn );
+      particleToReturn.animationEndedEmitter.removeAllListeners();
+    }
 
     // send particle back to its creator node position
     this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );

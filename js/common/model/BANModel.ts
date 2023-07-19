@@ -159,8 +159,6 @@ class BANModel<T extends ParticleAtom> {
     this.outgoingParticles.clear();
     this.userControlledProtons.clear();
     this.userControlledNeutrons.clear();
-
-    console.log( this.outgoingParticles );
   }
 
   /**
