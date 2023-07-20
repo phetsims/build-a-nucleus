@@ -77,9 +77,9 @@ class IconFactory {
   /**
    * Function to create a right-pointing arrow.
    */
-  public static createDecayArrowNode(): Node {
+  public static createDecayArrowNode( fillColor: TColor ): Node {
     return new ArrowNode( 0, 0, 20, 0, {
-      fill: BANColors.blueDecayIconSymbolsColorProperty,
+      fill: fillColor,
       stroke: null,
       tailWidth: 1,
       headWidth: 7.5
@@ -99,7 +99,7 @@ class IconFactory {
     return new HBox( {
       children: [
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.NEUTRON ) : IconFactory.createParticleNode( ParticleType.PROTON ),
-        IconFactory.createDecayArrowNode(),
+        IconFactory.createDecayArrowNode( BANColors.blueDecayIconSymbolsColorProperty ),
         isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.PROTON ) : IconFactory.createParticleNode( ParticleType.NEUTRON ),
         IconFactory.createPlusNode( BANColors.blueDecayIconSymbolsColorProperty ),
         IconFactory.createMotionLines( 3.5, true ),

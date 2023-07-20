@@ -132,7 +132,7 @@ const BANColors = {
     default: Color.BLACK
   } ),
 
-  decayEquationPlusNodeColorProperty: new ProfileColorProperty( buildANucleus, 'decayEquationPlusNodeColor', {
+  decayEquationArrowAndPlusNodeColorProperty: new ProfileColorProperty( buildANucleus, 'decayEquationArrowAndPlusNodeColor', {
     default: Color.BLACK
   } ),
 

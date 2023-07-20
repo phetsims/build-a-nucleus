@@ -61,11 +61,11 @@ class DecayEquationNode extends VBox {
         assert && assert( currentNuclideSymbol.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT,
           `Min content height must be a max so the space is consistent across all equation forms. Current nuclide symbol height is ${currentNuclideSymbol.height}` );
 
-        const decayEquationArrow = IconFactory.createDecayArrowNode();
+        const decayEquationArrow = IconFactory.createDecayArrowNode( BANColors.blueDecayIconSymbolsColorProperty );
 
         const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonCountProperty.value, decayEquationModel.finalMassNumberProperty.value );
 
-        const plusNode = IconFactory.createPlusNode( BANColors.decayEquationPlusNodeColorProperty );
+        const plusNode = IconFactory.createPlusNode( BANColors.decayEquationArrowAndPlusNodeColorProperty );
 
         if ( currentCellModel.decayType ) {
 
