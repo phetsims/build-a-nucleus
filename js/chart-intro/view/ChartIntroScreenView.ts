@@ -39,6 +39,7 @@ export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
 const CHART_VERTICAL_MARGINS = 10;
 const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
 const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
+const PERCENT_TO_REDUCE_ANIMATION_SPEED = 0.5;
 
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
@@ -292,7 +293,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const fadeAnimation = new Animation( {
       property: particleView.opacityProperty,
       to: 0,
-      duration: animationDuration,
+      duration: animationDuration * PERCENT_TO_REDUCE_ANIMATION_SPEED,
       easing: Easing.LINEAR
     } );
     fadeAnimation.endedEmitter.addListener( () => {
@@ -380,7 +381,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const fadeAnimation = new Animation( {
       property: particleView.opacityProperty,
       to: 1,
-      duration: animationDuration,
+      duration: animationDuration * PERCENT_TO_REDUCE_ANIMATION_SPEED,
       easing: Easing.LINEAR
     } );
     this.model.particleAnimations.push( fadeAnimation );
