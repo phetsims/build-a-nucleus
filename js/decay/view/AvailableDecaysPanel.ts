@@ -57,11 +57,11 @@ class AvailableDecaysPanel extends Panel {
   public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
     // create and add the title
-    const titleNode = new Text( BuildANucleusStrings.availableDecays, { font: TITLE_FONT, maxWidth: 285 } );
+    const titleNode = new Text( BuildANucleusStrings.availableDecaysStringProperty, { font: TITLE_FONT, maxWidth: 285 } );
 
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
-      new RichText( BuildANucleusStrings.availableDecaysInfoPanelText, {
+      new RichText( BuildANucleusStrings.availableDecaysInfoPanelTextStringProperty, {
         font: BANConstants.REGULAR_FONT,
         lineWrap: 400,
         maxWidth: 400
@@ -107,7 +107,7 @@ class AvailableDecaysPanel extends Panel {
     // manually layout the button text due to the superscripts causing the normal layout to look out of place
     const createDecayButton = ( decayType: DecayType ): Node => {
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
-      const buttonText = new RichText( decayType.label, { font: LABEL_FONT, maxWidth: BUTTON_CONTENT_WIDTH } );
+      const buttonText = new RichText( decayType.labelStringProperty, { font: LABEL_FONT, maxWidth: BUTTON_CONTENT_WIDTH } );
 
       assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
       buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
@@ -162,7 +162,7 @@ class AvailableDecaysPanel extends Panel {
       return new HBox( {
         children: [
           new ParticleNode( particleType.particleTypeString, particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
-          new Text( particleType.label, { font: LABEL_FONT, maxWidth: 100 } )
+          new Text( particleType.labelStringProperty, { font: LABEL_FONT, maxWidth: 100 } )
         ],
         spacing: SPACING
       } );

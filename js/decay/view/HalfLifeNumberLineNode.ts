@@ -159,7 +159,7 @@ class HalfLifeNumberLineNode extends Node {
     this.addChild( this.halfLifeDisplayNode );
 
     // create and add the text for "Half-life:"
-    const halfLifeColonText = new RichText( BuildANucleusStrings.halfLifeColon, {
+    const halfLifeColonText = new RichText( BuildANucleusStrings.halfLifeColonStringProperty, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
@@ -168,7 +168,7 @@ class HalfLifeNumberLineNode extends Node {
     this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
 
     // create and add the "Unknown" text
-    const halfLifeUnknownText = new RichText( BuildANucleusStrings.unknown, {
+    const halfLifeUnknownText = new RichText( BuildANucleusStrings.unknownStringProperty, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
@@ -189,7 +189,7 @@ class HalfLifeNumberLineNode extends Node {
     const halfLifeNumberText = new HBox( {
       children: [
         halfLifeScientificNotation,
-        new Text( BuildANucleusStrings.s, { font: TITLE_FONT, maxWidth: 30 } )
+        new Text( BuildANucleusStrings.sStringProperty, { font: TITLE_FONT, maxWidth: 30 } )
       ],
       align: 'bottom',
       spacing: 10
@@ -320,7 +320,7 @@ class HalfLifeNumberLineNode extends Node {
     } );
 
     // create and add the units label on the number line
-    const numberLineUnitsLabel = new Text( BuildANucleusStrings.seconds, {
+    const numberLineUnitsLabel = new Text( BuildANucleusStrings.secondsStringProperty, {
       font: options.unitsLabelFont,
       maxWidth: 150
     } );
@@ -415,7 +415,7 @@ class HalfLifeNumberLineNode extends Node {
   /**
    * Add an arrow with a label to the number line.
    */
-  public addArrowAndLabel( label: string, halfLife: number ): void {
+  public addArrowAndLabel( label: TReadOnlyProperty<string>, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
     const arrow = new ArrowNode( this.chartTransform.modelToViewX( xPosition ), -17.5,
       this.chartTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {

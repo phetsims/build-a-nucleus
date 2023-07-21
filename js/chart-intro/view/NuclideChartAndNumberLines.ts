@@ -38,12 +38,12 @@ class NuclideChartAndNumberLines extends Node {
 
     const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,
-      axisLabel: BuildANucleusStrings.axis.protonNumber
+      axisLabelStringProperty: BuildANucleusStrings.axis.protonNumberStringProperty
     } );
 
     const neutronNumberLine = new NucleonNumberLine( chartTransform, neutronCountProperty, Orientation.HORIZONTAL, {
       labelHighlightColorProperty: BANColors.neutronColorProperty,
-      axisLabel: BuildANucleusStrings.axis.neutronNumber
+      axisLabelStringProperty: BuildANucleusStrings.axis.neutronNumberStringProperty
     } );
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;

@@ -38,9 +38,9 @@ class DecayEquationNode extends VBox {
       excludeInvisibleChildrenFromBounds: false
     } );
 
-    const stableString = new Text( BuildANucleusStrings.stable, TEXT_OPTIONS );
+    const stableString = new Text( BuildANucleusStrings.stableStringProperty, TEXT_OPTIONS );
     const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
-    const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecay, { font: BANConstants.LEGEND_FONT } );
+    const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, { font: BANConstants.LEGEND_FONT } );
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
@@ -51,7 +51,7 @@ class DecayEquationNode extends VBox {
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       equationHBox.visible = true;
       if ( currentCellModel ) {
-        const decayLikelihoodPercentString = new Text( StringUtils.fillIn( BuildANucleusStrings.percentageInParenthesesPattern, {
+        const decayLikelihoodPercentString = new Text( StringUtils.fillIn( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
           decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || unknownSpacePatternStringProperty
         } ), {
           font: BANConstants.LEGEND_FONT
@@ -81,7 +81,7 @@ class DecayEquationNode extends VBox {
           decayLikelihoodPercentString.visible = false;
         }
         else {
-          const unknownString = new Text( BuildANucleusStrings.unknown, TEXT_OPTIONS );
+          const unknownString = new Text( BuildANucleusStrings.unknownStringProperty, TEXT_OPTIONS );
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, unknownString ] );
           decayLikelihoodPercentString.visible = false;
         }

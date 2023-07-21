@@ -345,12 +345,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
 
     // create and add the Protons and Neutrons label
-    const protonsLabel = new Text( BuildANucleusStrings.protons, nucleonLabelTextOptions );
+    const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, nucleonLabelTextOptions );
     protonsLabel.bottom = doubleArrowButtons.bottom;
     protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
     this.addChild( protonsLabel );
 
-    const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercase, nucleonLabelTextOptions );
+    const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, nucleonLabelTextOptions );
     neutronsLabel.bottom = doubleArrowButtons.bottom;
     neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
     this.addChild( neutronsLabel );
@@ -739,10 +739,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       // no protons
       if ( name.length === 0 ) {
-        name += massNumber.toString() + ' ' + BuildANucleusStrings.neutronsLowercase + ' ' + BuildANucleusStrings.doesNotForm;
+        // TODO: support dynamic locale, https://github.com/phetsims/build-a-nucleus/issues/90
+        name += massNumber.toString() + ' ' + BuildANucleusStrings.neutronsLowercaseStringProperty.value + ' ' + BuildANucleusStrings.doesNotFormStringProperty.value;
       }
       else {
-        name += ' - ' + massNumber.toString() + ' ' + BuildANucleusStrings.doesNotForm;
+        name += ' - ' + massNumber.toString() + ' ' + BuildANucleusStrings.doesNotFormStringProperty.value;
       }
     }
 
@@ -756,12 +757,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       // only one neutron
       else if ( neutronCount === 1 ) {
-        name = neutronCount + ' ' + BuildANucleusStrings.neutronLowercase;
+        name = neutronCount + ' ' + BuildANucleusStrings.neutronLowercaseStringProperty;
       }
 
       // multiple neutrons
       else {
-        name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPattern, {
+        name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
           neutronCount: neutronCount
         } );
       }

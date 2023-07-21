@@ -123,7 +123,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     );
 
     // create and add the 'Nuclear Shell Model' title
-    const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModel, { font: BANConstants.REGULAR_FONT } );
+    const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, { font: BANConstants.REGULAR_FONT } );
     nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
     nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
 
@@ -140,7 +140,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( nuclearShellModelText );
 
     // create and add the 'Energy' label
-    const energyText = new RichText( BuildANucleusStrings.energy, { font: BANConstants.REGULAR_FONT } );
+    const energyText = new RichText( BuildANucleusStrings.energyStringProperty, { font: BANConstants.REGULAR_FONT } );
     energyText.rotate( -Math.PI / 2 );
     energyText.left = this.nucleonCountPanel.left;
     energyText.centerY = this.layoutBounds.centerY + 20;

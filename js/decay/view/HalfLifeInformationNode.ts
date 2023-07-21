@@ -57,7 +57,7 @@ class HalfLifeInformationNode extends Node {
     this.addChild( infoButton );
 
     // function to create and add the arrow and more/less stable label set
-    const arrowAndStableLabel = ( arrowNodeTailX: number, arrowNodeTipX: number, stabilityText: string ) => {
+    const arrowAndStableLabel = ( arrowNodeTailX: number, arrowNodeTipX: number, stabilityText: TReadOnlyProperty<string> ) => {
       const arrow = new ArrowNode( arrowNodeTailX, halfLifeNumberLineNode.bottom, arrowNodeTipX,
         halfLifeNumberLineNode.bottom, {
           headWidth: 6,
@@ -77,8 +77,8 @@ class HalfLifeInformationNode extends Node {
     };
 
     // create and add the 'less stable' and 'more  stable' arrow and text set
-    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, BuildANucleusStrings.lessStable );
-    arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, BuildANucleusStrings.moreStable );
+    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, BuildANucleusStrings.lessStableStringProperty );
+    arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, BuildANucleusStrings.moreStableStringProperty );
   }
 }
 

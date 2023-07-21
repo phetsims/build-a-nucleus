@@ -70,7 +70,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       scale: 0.3
     } );
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
-      titleNode: new Text( BuildANucleusStrings.symbol, {
+      titleNode: new Text( BuildANucleusStrings.symbolStringProperty, {
         font: BANConstants.REGULAR_FONT,
         maxWidth: 118
       } ),
@@ -187,7 +187,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add the electronCloud checkbox
     const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
       children: [
-        new Text( BuildANucleusStrings.electronCloud, { font: BANConstants.REGULAR_FONT, maxWidth: 210 } ),
+        new Text( BuildANucleusStrings.electronCloudStringProperty, { font: BANConstants.REGULAR_FONT, maxWidth: 210 } ),
 
         // electron cloud icon
         new Circle( {
@@ -220,10 +220,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
       if ( protonCount > 0 ) {
         if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
-          this.stabilityIndicator.string = BuildANucleusStrings.stable;
+          this.stabilityIndicator.stringProperty = BuildANucleusStrings.stableStringProperty;
         }
         else {
-          this.stabilityIndicator.string = BuildANucleusStrings.unstable;
+          this.stabilityIndicator.stringProperty = BuildANucleusStrings.unstableStringProperty;
         }
       }
       else {

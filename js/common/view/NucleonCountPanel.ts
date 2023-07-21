@@ -52,10 +52,10 @@ class NucleonCountPanel extends Panel {
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
 
     // function to create the nucleon labels and add them to panelContents
-    const nucleonLabel = ( nucleonString: string, nucleonType: ParticleType,
+    const nucleonLabel = ( nucleonStringProperty: TReadOnlyProperty<string>, nucleonType: ParticleType,
                            nucleonCountProperty: TReadOnlyProperty<number>, nucleonCountRange: Range ): NucleonLabel => {
 
-      const nucleonTitle = new Text( nucleonString, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
+      const nucleonTitle = new Text( nucleonStringProperty, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
       const nucleonParticleNode = new ParticleNode( nucleonType.particleTypeString, NUCLEON_PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
       nucleonTitle.left = nucleonParticleNode.right + nucleonParticleNode.width / 2;
@@ -134,9 +134,9 @@ class NucleonCountPanel extends Panel {
     };
 
     // create the nucleon labels
-    const protonLabel = nucleonLabel( BuildANucleusStrings.protonsColon, ParticleType.PROTON, protonCountProperty,
+    const protonLabel = nucleonLabel( BuildANucleusStrings.protonsColonStringProperty, ParticleType.PROTON, protonCountProperty,
       protonCountRange );
-    const neutronLabel = nucleonLabel( BuildANucleusStrings.neutronsColon, ParticleType.NEUTRON, neutronCountProperty,
+    const neutronLabel = nucleonLabel( BuildANucleusStrings.neutronsColonStringProperty, ParticleType.NEUTRON, neutronCountProperty,
       neutronCountRange );
 
     // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's

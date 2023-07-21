@@ -23,7 +23,7 @@ import BANColors from '../../common/BANColors.js';
 
 type SelfOptions = {
   labelHighlightColorProperty: ColorProperty;
-  axisLabel: string;
+  axisLabelStringProperty: TReadOnlyProperty<string>;
   tickSpacing?: number;
 };
 type NucleonNumberLineOptions = SelfOptions & StrictOmit<NodeOptions, 'children'>;
@@ -94,7 +94,7 @@ class NucleonNumberLine extends Node {
     this.addChild( numberLineNode );
 
     // create and add the number line axis label
-    const numberLineLabel = new Text( options.axisLabel, { fontSize: 12 } );
+    const numberLineLabel = new Text( options.axisLabelStringProperty, { fontSize: 12 } );
     if ( orientation === Orientation.HORIZONTAL ) {
       numberLineLabel.top = numberLine.bottom + 15;
       numberLineLabel.centerX = numberLine.centerX;

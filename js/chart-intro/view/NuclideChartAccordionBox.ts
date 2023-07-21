@@ -98,7 +98,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     } );
 
     super( contentVBox, {
-      titleNode: new Text( BuildANucleusStrings.partialNuclideChart, {
+      titleNode: new Text( BuildANucleusStrings.partialNuclideChartStringProperty, {
         font: BANConstants.REGULAR_FONT,
         maxWidth: 200
       } ),
