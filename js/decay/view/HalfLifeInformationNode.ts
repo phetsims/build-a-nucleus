@@ -25,10 +25,10 @@ const LABEL_FONT = new PhetFont( 14 );
 class HalfLifeInformationNode extends Node {
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
-               isStableBooleanProperty: TReadOnlyProperty<boolean>,
-               protonCountProperty: TReadOnlyProperty<number>,
-               neutronCountProperty: TReadOnlyProperty<number>,
-               doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean> ) {
+                      isStableBooleanProperty: TReadOnlyProperty<boolean>,
+                      protonCountProperty: TReadOnlyProperty<number>,
+                      neutronCountProperty: TReadOnlyProperty<number>,
+                      doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean> ) {
     super();
 
     // create and add the halfLifeNumberLineNode

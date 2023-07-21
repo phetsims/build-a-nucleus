@@ -9,7 +9,7 @@
 
 import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
-import { HBox, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Font, GridBox, HBox, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
@@ -17,7 +17,6 @@ import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 import BANTimescalePoints from '../model/BANTimescalePoints.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import BANConstants from '../../common/BANConstants.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
@@ -32,36 +31,61 @@ class HalfLifeInfoDialog extends Dialog {
                       neutronCountProperty: TReadOnlyProperty<number>,
                       doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean> ) {
 
-    const leftSideStringProperties = [
-      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.timescaleStringProperty,
-      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM.timescaleStringProperty,
-      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS.timescaleStringProperty,
-      BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER.timescaleStringProperty,
-      BANTimescalePoints.A_BLINK_OF_AN_EYE.timescaleStringProperty
+    const leftSideTimescalePoints = [
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS,
+      BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER,
+      BANTimescalePoints.A_BLINK_OF_AN_EYE
     ];
-    const rightSideStringProperties = [
-      BANTimescalePoints.ONE_MINUTE.timescaleStringProperty,
-      BANTimescalePoints.ONE_YEAR.timescaleStringProperty,
-      BANTimescalePoints.AVERAGE_HUMAN_LIFESPAN.timescaleStringProperty,
-      BANTimescalePoints.AGE_OF_THE_UNIVERSE.timescaleStringProperty,
-      BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS.timescaleStringProperty
+    const rightSideTimescalePoints = [
+      BANTimescalePoints.ONE_MINUTE,
+      BANTimescalePoints.ONE_YEAR,
+      BANTimescalePoints.AVERAGE_HUMAN_LIFESPAN,
+      BANTimescalePoints.AGE_OF_THE_UNIVERSE,
+      BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS
     ];
 
-    // join the strings in each array, placing one on each line
-    const createTextFromStringProperties = ( stringProperties: TReadOnlyProperty<string>[] ): Node => {
-      return new RichText( DerivedStringProperty.deriveAny( stringProperties, () => {
+    const createGridBox = ( timescalePoints: BANTimescalePoints[] ): Node => {
 
-        // TODO is this actually supporting i18n right now? https://github.com/phetsims/build-a-nucleus/issues/90
-        return stringProperties.map( x => x.value ).join( '<br>' );
-      } ), {
-        font: LEGEND_FONT,
-        leading: 6
+      const grid = new GridBox( {
+        resize: true,
+        xSpacing: 6,
+        ySpacing: 6
       } );
+      timescalePoints.forEach( ( timescalePoint, rowIndex ) => {
+
+        grid.addRow( [
+          new Text( timescalePoint.timescaleMarkerStringProperty, {
+            font: new Font( {
+              size: '20px',
+              family: 'monospace',
+              weight: 'bold'
+            } ),
+            layoutOptions: {
+              xAlign: 'left'
+            }
+          } ),
+          new Node( {
+            children: [ new Text( '-', {
+              font: LEGEND_FONT
+            } ) ]
+          } ),
+          new Text( timescalePoint.timescaleDescriptionStringProperty, {
+            font: LEGEND_FONT,
+            layoutOptions: {
+              xAlign: 'left'
+            }
+          } )
+        ] );
+      } );
+      return grid;
     };
+
     const legend = new HBox( {
       children: [
-        createTextFromStringProperties( leftSideStringProperties ),
-        createTextFromStringProperties( rightSideStringProperties )
+        createGridBox( leftSideTimescalePoints ),
+        createGridBox( rightSideTimescalePoints )
       ],
       spacing: 70,
       align: 'top',
@@ -85,7 +109,7 @@ class HalfLifeInfoDialog extends Dialog {
       children: [ legend, halfLifeNumberLineNode ],
       spacing: 30,
       align: 'center',
-      resize: false
+      resize: true
     } );
 
     // surround contents with rectangle for extra padding
@@ -94,36 +118,23 @@ class HalfLifeInfoDialog extends Dialog {
     numberLineNodeAndLegend.centerX = contents.centerX;
 
     // the half-life's of the strings, in respective order
-    const halfLifeTime = [
-      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS.numberOfSeconds,
-      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM.numberOfSeconds,
-      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS.numberOfSeconds,
-      BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER.numberOfSeconds,
-      BANTimescalePoints.A_BLINK_OF_AN_EYE.numberOfSeconds,
-      BANTimescalePoints.ONE_MINUTE.numberOfSeconds,
-      BANTimescalePoints.ONE_YEAR.numberOfSeconds,
-      BANTimescalePoints.AVERAGE_HUMAN_LIFESPAN.numberOfSeconds,
-      BANTimescalePoints.AGE_OF_THE_UNIVERSE.numberOfSeconds,
-      BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS.numberOfSeconds
-    ];
-
-    // the labels on the half-life's, in respective order
-    const halfLifeLabels = [
-      BuildANucleusStrings.AStringProperty,
-      BuildANucleusStrings.BStringProperty,
-      BuildANucleusStrings.CStringProperty,
-      BuildANucleusStrings.DStringProperty,
-      BuildANucleusStrings.EStringProperty,
-      BuildANucleusStrings.FStringProperty,
-      BuildANucleusStrings.GStringProperty,
-      BuildANucleusStrings.HStringProperty,
-      BuildANucleusStrings.IStringProperty,
-      BuildANucleusStrings.JStringProperty
+    const timescalePoints = [
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM,
+      BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_ONE_THOUSAND_ATOMS,
+      BANTimescalePoints.TIME_FOR_SOUND_TO_TRAVEL_ONE_MILLIMETER,
+      BANTimescalePoints.A_BLINK_OF_AN_EYE,
+      BANTimescalePoints.ONE_MINUTE,
+      BANTimescalePoints.ONE_YEAR,
+      BANTimescalePoints.AVERAGE_HUMAN_LIFESPAN,
+      BANTimescalePoints.AGE_OF_THE_UNIVERSE,
+      BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS
     ];
 
     // create and add the half-life arrow and label
-    for ( let i = 0; i < halfLifeTime.length; i++ ) {
-      halfLifeNumberLineNode.addArrowAndLabel( halfLifeLabels[ i ], halfLifeTime[ i ] );
+    for ( let i = 0; i < timescalePoints.length; i++ ) {
+      const timescalePoint = timescalePoints[ i ];
+      halfLifeNumberLineNode.addArrowAndLabel( timescalePoint.timescaleMarkerStringProperty, timescalePoints[ i ].numberOfSeconds );
     }
 
     const titleNode = new Text( BuildANucleusStrings.halfLifeTimescaleStringProperty, {
