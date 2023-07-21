@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Line, Node, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -31,6 +31,8 @@ import ZoomInNuclideChartIconNode from './ZoomInNuclideChartIconNode.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from '../../common/model/DecayType.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -194,6 +196,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty }
       } );
     this.addChild( partialChartRadioButton );
+
+    const showMagicNumbersCheckbox = new Checkbox( new BooleanProperty( false ),
+      new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ),
+      {
+        boxWidth: 15
+      } );
+    showMagicNumbersCheckbox.left = partialChartRadioButton.right + CHART_VERTICAL_MARGINS;
+    showMagicNumbersCheckbox.top = nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
+    this.addChild( showMagicNumbersCheckbox );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );

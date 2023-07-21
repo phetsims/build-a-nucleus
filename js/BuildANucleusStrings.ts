@@ -74,6 +74,7 @@ type StringsType = {
   };
   'mostLikelyDecayStringProperty': LocalizedStringProperty;
   'percentageInParenthesesPatternStringProperty': LocalizedStringProperty;
+  'magicNumbersStringProperty': LocalizedStringProperty;
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
