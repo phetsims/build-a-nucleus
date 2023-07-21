@@ -430,25 +430,23 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       // TODO: unlink userControlledListener https://github.com/phetsims/build-a-nucleus/issues/93
       particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
+
+      particle.disposeEmitter.addListener( () => {
+        delete this.particleViewMap[ particle.id ];
+
+        particleView.dispose();
+
+        const particleType = getParticleTypeFromStringType( particle.type );
+
+        if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
+          this.checkIfCreatorNodeShouldBeVisible( particleType );
+        }
+      } );
     } );
 
     // remove ParticleView's to match the model
     this.model.particles.addItemRemovedListener( ( particle: Particle ) => {
-      const particleView = this.findParticleView( particle );
-
-      particle.dragEndedEmitter.dispose();
-      particle.animationEndedEmitter.dispose();
-
-      delete this.particleViewMap[ particleView.particle.id ];
-
-      particleView.dispose();
       particle.dispose();
-
-      const particleType = getParticleTypeFromStringType( particle.type );
-
-      if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
-        this.checkIfCreatorNodeShouldBeVisible( particleType );
-      }
     } );
 
     this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, this.atomCenter, this.model.protonCountRange );

@@ -90,10 +90,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         _.times( nucleonDelta, () => {
           if ( !this.decaying ) {
             const particle = model.miniParticleAtom.extractParticle( particleType.particleTypeString );
-            const particleView = this.findParticleView( particle );
-            delete this.particleViewMap[ particleView.particle.id ];
-
-            particleView.dispose();
             particle.dispose();
             model.miniParticleAtom.reconfigureNucleus();
           }
@@ -247,14 +243,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
-  private removeMiniAtomParticle( particle: Particle, particleView: ParticleView ): void {
-    this.model.outgoingParticles.remove( particle );
-    delete this.particleViewMap[ particleView.particle.id ];
-
-    particleView.dispose();
-    particle.dispose();
-  }
-
   private animateAndRemoveMiniAtomParticle( particle: Particle, destination?: Vector2 ): void {
     this.model.outgoingParticles.add( particle );
     const particleView = this.findParticleView( particle );
@@ -264,11 +252,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       particle.destinationProperty.value = destination;
 
       particle.animationEndedEmitter.addListener( () => {
-        this.removeMiniAtomParticle( particle, particleView );
+        this.model.removeDecayingMiniParticle( particle );
       } );
     }
     else {
-      this.removeMiniAtomParticle( particle, particleView );
+      this.model.removeDecayingMiniParticle( particle );
     }
   }
 
@@ -404,8 +392,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   }
 
   private createMiniParticleView( miniParticle: Particle ): void {
-    this.particleViewMap[ miniParticle.id ] = new ParticleView( miniParticle, this.miniAtomMVT, { inputEnabled: false } );
+    const particleView = new ParticleView( miniParticle, this.miniAtomMVT, { inputEnabled: false } );
+    this.particleViewMap[ miniParticle.id ] = particleView;
     this.particleAtomNode.addParticleView( miniParticle );
+    miniParticle.disposeEmitter.addListener( () => {
+      delete this.particleViewMap[ miniParticle.id ];
+
+      particleView.dispose();
+    } );
   }
 }
 
