@@ -10,7 +10,6 @@
 import buildANucleus from '../../buildANucleus.js';
 import DecayEquationModel from '../model/DecayEquationModel.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DecaySymbolNode from './DecaySymbolNode.js';
@@ -18,6 +17,7 @@ import IconFactory from '../../decay/view/IconFactory.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 
 const unknownSpacePatternStringProperty = new PatternStringProperty( BuildANucleusStrings.unknownSpacePatternStringProperty, { space: ' ' } );
 
@@ -51,8 +51,10 @@ class DecayEquationNode extends VBox {
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       equationHBox.visible = true;
       if ( currentCellModel ) {
-        const decayLikelihoodPercentString = new Text( StringUtils.fillIn( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
-          decayLikelihoodPercent: currentCellModel.decayTypeLikelihoodPercent || unknownSpacePatternStringProperty
+        const decayLikelihoodPercentString = new Text( new PatternStringProperty( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
+          decayLikelihoodPercent: new DerivedStringProperty( [
+            unknownSpacePatternStringProperty
+          ], unknownString => `${currentCellModel.decayTypeLikelihoodPercent}` || unknownString )
         } ), {
           font: BANConstants.LEGEND_FONT
         } );

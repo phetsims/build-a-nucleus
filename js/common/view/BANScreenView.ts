@@ -30,7 +30,6 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from './ParticleAtomNode.js';
@@ -40,6 +39,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import BANParticle from '../model/BANParticle.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -728,6 +728,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
   /**
    * Define the update function for the element name.
+   * TODO: support dynamic locale for this whole function, https://github.com/phetsims/build-a-nucleus/issues/90
+   *
    */
   public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number,
                                    doesNuclideExist: boolean, centerX: number, centerY?: number ): void {
@@ -739,7 +741,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       // no protons
       if ( name.length === 0 ) {
-        // TODO: support dynamic locale, https://github.com/phetsims/build-a-nucleus/issues/90
         name += massNumber.toString() + ' ' + BuildANucleusStrings.neutronsLowercaseStringProperty.value + ' ' + BuildANucleusStrings.doesNotFormStringProperty.value;
       }
       else {
@@ -762,9 +763,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       // multiple neutrons
       else {
-        name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
+        name = new PatternStringProperty( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
           neutronCount: neutronCount
-        } );
+        } ).value;
       }
 
     }

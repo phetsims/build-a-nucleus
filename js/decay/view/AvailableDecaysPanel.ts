@@ -57,7 +57,9 @@ class AvailableDecaysPanel extends Panel {
   public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
 
     // create and add the title
-    const titleNode = new Text( BuildANucleusStrings.availableDecaysStringProperty, { font: TITLE_FONT, maxWidth: 285 } );
+    const titleNode = new Text( BuildANucleusStrings.availableDecaysStringProperty, {
+      font: TITLE_FONT, maxWidth: 250
+    } );
 
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
@@ -109,8 +111,10 @@ class AvailableDecaysPanel extends Panel {
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
       const buttonText = new RichText( decayType.labelStringProperty, { font: LABEL_FONT, maxWidth: BUTTON_CONTENT_WIDTH } );
 
-      assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
-      buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
+      buttonText.boundsProperty.link( () => {
+        assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
+        buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
+      } );
       buttonBackgroundRectangle.addChild( buttonText );
 
       return new RectangularPushButton( {
@@ -162,7 +166,7 @@ class AvailableDecaysPanel extends Panel {
       return new HBox( {
         children: [
           new ParticleNode( particleType.particleTypeString, particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
-          new Text( particleType.labelStringProperty, { font: LABEL_FONT, maxWidth: 100 } )
+          new Text( particleType.labelStringProperty, { font: LABEL_FONT, maxWidth: 110 } )
         ],
         spacing: SPACING
       } );
@@ -180,7 +184,8 @@ class AvailableDecaysPanel extends Panel {
         createParticleLabelsVBox( [ particleLabels[ 0 ], particleLabels[ 2 ] ] ),
         createParticleLabelsVBox( [ particleLabels[ 1 ], particleLabels[ 3 ] ] )
       ],
-      spacing: SPACING * 5
+      spacing: SPACING,
+      minContentWidth: 100
     } );
     particleLabelsLegend.top = separator.bottom + SPACING;
 
