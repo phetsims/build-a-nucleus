@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2023, University of Colorado Boulder
 
 /**
  * Half-life information section at the top half of the Decay screen contains the units label, 'more stable' and 'less
