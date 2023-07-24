@@ -38,23 +38,23 @@ class DecayEquationNode extends VBox {
       excludeInvisibleChildrenFromBounds: false
     } );
 
-    const stableString = new Text( BuildANucleusStrings.stableStringProperty, TEXT_OPTIONS );
+    const stableText = new Text( BuildANucleusStrings.stableStringProperty, TEXT_OPTIONS );
     const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
-    const mostLikelyDecayString = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, { font: BANConstants.LEGEND_FONT } );
+    const mostLikelyDecayText = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, { font: BANConstants.LEGEND_FONT } );
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
       minContentHeight: EQUATION_HBOX_MIN_CONTENT_HEIGHT
     } );
-    assert && assert( stableString.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT, `Min content height must be a max so the space is consistent across all equation forms. Stable string height is ${stableString.height}` );
+    assert && assert( stableText.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT, `Min content height must be a max so the space is consistent across all equation forms. Stable string height is ${stableText.height}` );
 
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       equationHBox.visible = true;
       if ( currentCellModel ) {
-        const decayLikelihoodPercentString = new Text( new PatternStringProperty( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
+        const decayLikelihoodPercentText = new Text( new PatternStringProperty( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
           decayLikelihoodPercent: new DerivedStringProperty( [
             unknownSpacePatternStringProperty
-          ], unknownString => `${currentCellModel.decayTypeLikelihoodPercent}` || unknownString )
+          ], unknownText => `${currentCellModel.decayTypeLikelihoodPercent}` || unknownText )
         } ), {
           font: BANConstants.LEGEND_FONT
         } );
@@ -79,22 +79,29 @@ class DecayEquationNode extends VBox {
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
         }
         else if ( currentCellModel.isStable ) {
-          equationHBox.setChildren( [ stableString ] );
-          decayLikelihoodPercentString.visible = false;
+          equationHBox.setChildren( [ stableText ] );
+          decayLikelihoodPercentText.visible = false;
+
+          stableText.boundsProperty.link( () => {
+            const mostLikelyDecayTextGlobalCenter = mostLikelyDecayHBox.localToGlobalPoint( mostLikelyDecayText.center );
+            const mostLikelyDecayTextLocalPointCenter = equationHBox.globalToLocalPoint( mostLikelyDecayTextGlobalCenter );
+            const leftMargin = mostLikelyDecayTextLocalPointCenter.x - stableText.width / 2;
+            stableText.setLayoutOptions( { leftMargin: leftMargin } );
+          } );
         }
         else {
-          const unknownString = new Text( BuildANucleusStrings.unknownStringProperty, TEXT_OPTIONS );
-          equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, unknownString ] );
-          decayLikelihoodPercentString.visible = false;
+          const unknownText = new Text( BuildANucleusStrings.unknownStringProperty, TEXT_OPTIONS );
+          equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, unknownText ] );
+          decayLikelihoodPercentText.visible = false;
         }
 
-        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString, decayLikelihoodPercentString ] );
+        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayText, decayLikelihoodPercentText ] );
       }
       else {
 
-        equationHBox.setChildren( [ stableString ] );
+        equationHBox.setChildren( [ stableText ] );
         equationHBox.visible = false;
-        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayString ] );
+        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayText ] );
       }
       this.children = [
         mostLikelyDecayHBox,
