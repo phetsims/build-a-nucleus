@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Range from '../../../../dot/js/Range.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Line, Node, NodeOptions, Path, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Line, Node, NodeOptions, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -32,6 +32,8 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import BANScreenView from '../../common/view/BANScreenView.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Property from '../../../../axon/js/Property.js';
 
 // types
 type SelfOptions = {
@@ -43,9 +45,9 @@ type SelfOptions = {
   // scale for the halfLifeDisplayNode
   halfLifeDisplayScale?: number;
 
-  isHalfLifeLabelFixed: boolean; // if the half-life label is fixed, place it centered above the number line, otherwise,
-  // animate its position with the half-life arrow
-
+  // if the half-life label is fixed, place it centered above the number line, otherwise, animate its position with
+  // the half-life arrow
+  isHalfLifeLabelFixed: boolean;
   protonCountProperty?: TReadOnlyProperty<number>;
   neutronCountProperty?: TReadOnlyProperty<number>;
   doesNuclideExistBooleanProperty?: TReadOnlyProperty<boolean>;
@@ -53,6 +55,9 @@ type SelfOptions = {
   unitsLabelFont?: PhetFont;
 };
 export type HalfLifeNumberLineNodeOptions = SelfOptions & NodeOptions;
+
+// Distance between the moving arrow and the half life and element name that travel with it.
+const ARROW_TOP_MARGIN = 14;
 
 // constants
 const TITLE_FONT = new PhetFont( 24 );
@@ -71,11 +76,8 @@ class HalfLifeNumberLineNode extends Node {
   // x position of half-life arrow in model coordinates
   private readonly arrowXPositionProperty: TProperty<number>;
 
-  // x position of the halfLifeText in model coordinates
-  private readonly halfLifeTextXPositionProperty: TProperty<number> | undefined;
-
-  // the half life display node
-  public readonly halfLifeDisplayNode: Node;
+  // the half life display node, public for positioning the infoButton
+  public readonly halfLifeDisplayNode: VBox;
 
   // contains the whole number-line portion, including tick marks and labels
   private readonly numberLineNode: Node;
@@ -132,7 +134,6 @@ class HalfLifeNumberLineNode extends Node {
       stroke: Color.BLACK
     } );
     this.numberLineNode.addChild( numberLine );
-    this.addChild( this.numberLineNode );
 
     // create and add the halfLifeArrow
     const arrowNode = new ArrowNode( 0, 0, 0, options.halfLifeArrowLength, {
@@ -141,52 +142,65 @@ class HalfLifeNumberLineNode extends Node {
       tailWidth: 4,
       headWidth: 12
     } );
+
     const halfLifeArrow = new Node();
-    this.addChild( halfLifeArrow );
     halfLifeArrow.addChild( arrowNode );
 
     this.arrowXPositionProperty = new NumberProperty( 0 );
-    this.arrowXPositionProperty.link( xPosition => {
-      halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
-        this.tickMarkSet.centerY - options.halfLifeArrowLength );
-    } );
+
     this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
 
     // create and add the half life display, which is a parent node used to contain the number readout, the infinity
     // symbol, and the 'Unknown' text.
-    this.halfLifeDisplayNode = new Node( {
+    this.halfLifeDisplayNode = new VBox( {
       scale: options.halfLifeDisplayScale,
-      excludeInvisibleChildrenFromBounds: true
+      excludeInvisibleChildrenFromBounds: true,
+      spacing: 4
     } );
-    this.addChild( this.halfLifeDisplayNode );
+
+    const sentenceHBox = new HBox( {
+      spacing: 8,
+      align: 'bottom'
+    } );
+    this.halfLifeDisplayNode.addChild( sentenceHBox );
 
     // create and add the text for "Half-life:"
     const halfLifeColonText = new RichText( BuildANucleusStrings.halfLifeColonStringProperty, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
-    this.halfLifeDisplayNode.addChild( halfLifeColonText );
-    this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
-    this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
+    sentenceHBox.addChild( halfLifeColonText );
 
     // create and add the "Unknown" text
     const halfLifeUnknownText = new RichText( BuildANucleusStrings.unknownStringProperty, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
-    halfLifeUnknownText.left = halfLifeColonText.right + 8;
-    halfLifeUnknownText.bottom = halfLifeColonText.bottom;
-    this.halfLifeDisplayNode.addChild( halfLifeUnknownText );
+    sentenceHBox.addChild( halfLifeUnknownText );
 
     // create and add the infinity node, which represents a math infinity symbol
-    const infinityNode = new InfinityNode();
-    infinityNode.left = halfLifeUnknownText.left;
-    infinityNode.bottom = halfLifeUnknownText.bottom - 5; // offset to match the apparent bottom position of the text
-    this.halfLifeDisplayNode.addChild( infinityNode );
+    const infinityNode = new InfinityNode( {
+      layoutOptions: {
+        align: 'center',
+        bottomMargin: -5 // offset to match the apparent bottom position of the text
+      }
+    } );
+    sentenceHBox.addChild( infinityNode );
+
+    // something with scientific notation needs
+    const startupTestProperty = new Property<null | number>( 10000 );
+    const compositeHalfLifeProperty = new DerivedProperty( [ halfLifeNumberProperty, startupTestProperty ],
+      ( halfLife, startupTest ) => {
+        if ( startupTest ) {
+          return startupTest;
+        }
+        return halfLife;
+      }
+    );
 
     // the half life number in scientific notation with an 's' for seconds at the end
-    const halfLifeScientificNotation = new ScientificNotationNode( halfLifeNumberProperty, {
+    const halfLifeScientificNotation = new ScientificNotationNode( compositeHalfLifeProperty, {
       font: TITLE_FONT
     } );
     const halfLifeNumberText = new HBox( {
@@ -197,60 +211,30 @@ class HalfLifeNumberLineNode extends Node {
       align: 'bottom',
       spacing: 10
     } );
-    halfLifeNumberText.left = halfLifeUnknownText.left;
-    this.halfLifeDisplayNode.addChild( halfLifeNumberText );
+    sentenceHBox.addChild( halfLifeNumberText );
+    sentenceHBox.minContentHeight = halfLifeNumberText.height;
+    startupTestProperty.value = null; // Clear the startup item used to get the max height needed, and use the model from here.
 
     // if the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
 
-      const distanceBetweenElementNameAndHalfLifeText = 4;
-      const distanceBetweenHalfLifeTextAndArrow = 14;
-
       // Create the textual readout for the element name.
       const elementName = new Text( '', {
-        font: this.numberLineLabelFont,
+        font: TITLE_FONT,
         fill: Color.RED,
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
-      elementName.center = this.halfLifeDisplayNode.center.minusXY( 0, this.halfLifeDisplayNode.height + 10 );
-      this.addChild( elementName );
+      this.halfLifeDisplayNode.insertChild( 0, elementName );
 
       // Hook up update listeners.
-      Multilink.multilink( [ options.protonCountProperty, options.neutronCountProperty, options.doesNuclideExistBooleanProperty ],
-        ( protonCount, neutronCount, doesNuclideExist ) =>
-          BANScreenView.updateElementName( elementName, protonCount, neutronCount, doesNuclideExist,
-            this.halfLifeDisplayNode.centerX,
-            this.halfLifeDisplayNode.centerY - this.halfLifeDisplayNode.height - distanceBetweenElementNameAndHalfLifeText )
+      Multilink.multilink( [
+          options.protonCountProperty,
+          options.neutronCountProperty,
+          options.doesNuclideExistBooleanProperty
+        ],
+        ( protonCount, neutronCount, doesNuclideExist ) => BANScreenView.updateElementName( elementName,
+          protonCount, neutronCount, doesNuclideExist, this.halfLifeDisplayNode.centerX )
       );
-
-      this.halfLifeTextXPositionProperty = new NumberProperty( 0 );
-      this.halfLifeTextXPositionProperty.link( xPosition => {
-
-        this.halfLifeDisplayNode.translation =
-          new Vector2( this.chartTransform.modelToViewX( xPosition ) - this.halfLifeDisplayNode.width / 2,
-            halfLifeArrow.top - distanceBetweenHalfLifeTextAndArrow );
-
-        elementName.translation =
-          new Vector2( this.chartTransform.modelToViewX( xPosition ) - elementName.width / 2,
-            halfLifeArrow.top - this.halfLifeDisplayNode.height - distanceBetweenHalfLifeTextAndArrow
-            - distanceBetweenElementNameAndHalfLifeText );
-
-        // left-align the text if it goes over the left edge of the this.numberLineNode
-        if ( this.halfLifeDisplayNode.left < this.numberLineNode.left ) {
-          this.halfLifeDisplayNode.left = this.numberLineNode.left;
-        }
-        if ( elementName.left < this.numberLineNode.left ) {
-          elementName.left = this.numberLineNode.left;
-        }
-
-        // right-align the text if it goes over the right edge of the this.numberLineNode
-        if ( this.halfLifeDisplayNode.right > this.numberLineNode.right ) {
-          this.halfLifeDisplayNode.right = this.numberLineNode.right;
-        }
-        if ( elementName.right > this.numberLineNode.right ) {
-          elementName.right = this.numberLineNode.right;
-        }
-      } );
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
@@ -327,9 +311,57 @@ class HalfLifeNumberLineNode extends Node {
       font: options.unitsLabelFont,
       maxWidth: 150
     } );
-    numberLineUnitsLabel.centerY = this.bottom + numberLineUnitsLabel.height / 2;
-    numberLineUnitsLabel.centerX = this.centerX;
-    this.addChild( numberLineUnitsLabel );
+
+    // Add the units to the number line
+    const numberLineVBox = new VBox( {
+      spacing: 5,
+      children: [
+        this.numberLineNode,
+        numberLineUnitsLabel
+      ]
+    } );
+
+    this.children = [
+      numberLineVBox,
+      this.halfLifeDisplayNode,
+      halfLifeArrow
+    ];
+//
+
+    this.arrowXPositionProperty.link( xPosition => {
+      const numberLineCenterY = this.numberLineNode.localToParentPoint( this.tickMarkSet.center ).y;
+      halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
+        numberLineCenterY - options.halfLifeArrowLength );
+
+      // Translate the half life text also
+      if ( !options.isHalfLifeLabelFixed ) {
+        this.halfLifeDisplayNode.centerBottom =
+          new Vector2( this.chartTransform.modelToViewX( xPosition ),
+            halfLifeArrow.top - ARROW_TOP_MARGIN );
+
+
+        // make sure the text never goes over the edge of the numberLineNode
+        if ( this.halfLifeDisplayNode.left < this.numberLineNode.left ) {
+          this.halfLifeDisplayNode.left = this.numberLineNode.left;
+          this.halfLifeDisplayNode.align = 'left';
+        }
+        else if ( this.halfLifeDisplayNode.right > this.numberLineNode.right ) {
+          this.halfLifeDisplayNode.right = this.numberLineNode.right;
+          this.halfLifeDisplayNode.align = 'right';
+        }
+        else {
+          this.halfLifeDisplayNode.align = 'center';
+        }
+      }
+    } );
+
+    if ( options.isHalfLifeLabelFixed ) {
+
+      // TODO: if/else on whether we are fixed https://github.com/phetsims/build-a-nucleus/issues/102
+      this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
+      this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
+    }
+
   }
 
   /**
@@ -347,27 +379,12 @@ class HalfLifeNumberLineNode extends Node {
       this.arrowXPositionAnimation = null;
     }
 
-    if ( isHalfLifeLabelFixed ) {
-      this.arrowXPositionAnimation = new Animation( {
-        to: newXPosition,
-        property: this.arrowXPositionProperty,
-        duration: arrowXPositionAnimationDuration,
-        easing: Easing.QUADRATIC_IN_OUT
-      } );
-    }
-    else {
-      this.arrowXPositionAnimation = new Animation( {
-        targets: [ {
-          to: newXPosition,
-          property: this.arrowXPositionProperty
-        }, {
-          to: newXPosition,
-          property: this.halfLifeTextXPositionProperty
-        } ],
-        duration: arrowXPositionAnimationDuration,
-        easing: Easing.QUADRATIC_IN_OUT
-      } );
-    }
+    this.arrowXPositionAnimation = new Animation( {
+      to: newXPosition,
+      property: this.arrowXPositionProperty,
+      duration: arrowXPositionAnimationDuration,
+      easing: Easing.QUADRATIC_IN_OUT
+    } );
 
     const arrowRotationAnimationDuration = 0.1; // in seconds
 
