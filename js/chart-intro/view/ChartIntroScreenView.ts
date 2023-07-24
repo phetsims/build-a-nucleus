@@ -33,6 +33,8 @@ import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from '../../common/model/DecayType.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
+import Dialog from '../../../../sun/js/Dialog.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -204,6 +206,20 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     showMagicNumbersCheckbox.left = partialChartRadioButton.right + CHART_VERTICAL_MARGINS;
     showMagicNumbersCheckbox.top = nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
     this.addChild( showMagicNumbersCheckbox );
+
+    // create and add the full chart info dialog and button
+    const fullChartInfoDialog = new Dialog(
+      new RichText( BuildANucleusStrings.fullChartInfoPanelTextStringProperty, BANConstants.INFO_DIALOG_TEXT_OPTIONS ),
+      BANConstants.INFO_DIALOG_OPTIONS
+    );
+    const fullChartInfoButton = new InfoButton( {
+      listener: () => fullChartInfoDialog.show(),
+      maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
+      baseColor: BANColors.regularInfoButtonColorProperty
+    } );
+    fullChartInfoButton.left = showMagicNumbersCheckbox.left;//right + CHART_VERTICAL_MARGINS;
+    fullChartInfoButton.bottom = partialChartRadioButton.bottom;
+    this.addChild( fullChartInfoButton );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );

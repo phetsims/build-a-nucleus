@@ -64,7 +64,7 @@ const BANColors = {
     default: new Color( 255, 0, 255 )
   } ),
 
-  // info button color on Decay screen
+  // half-life info button color on Decay screen
   infoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'infoButtonColor', {
     default: new Color( 255, 153, 255 )
   } ),
@@ -150,6 +150,10 @@ const BANColors = {
 
   selectedPeriodicTableCellLabelTextColorProperty: new ProfileColorProperty( buildANucleus, 'selectedPeriodicTableCellLabelTextColor', {
     default: Color.WHITE
+  } ),
+
+  regularInfoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'regularInfoButtonColor', {
+    default: new Color( 400, 400, 400 )
   } )
 };
 

@@ -63,20 +63,13 @@ class AvailableDecaysPanel extends Panel {
 
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
-      new RichText( BuildANucleusStrings.availableDecaysInfoPanelTextStringProperty, {
-        font: BANConstants.REGULAR_FONT,
-        lineWrap: 400,
-        maxWidth: 400
-      } ),
-      {
-        topMargin: 40,
-        bottomMargin: 30
-      }
+      new RichText( BuildANucleusStrings.availableDecaysInfoPanelTextStringProperty, BANConstants.INFO_DIALOG_TEXT_OPTIONS ),
+      BANConstants.INFO_DIALOG_OPTIONS
     );
     const decaysInfoButton = new InfoButton( {
       listener: () => decaysInfoDialog.show(),
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
-      baseColor: 'rgb( 400, 400, 400 )'
+      baseColor: BANColors.regularInfoButtonColorProperty
     } );
 
     // function to return the correct enabled derived property for each type of decay
@@ -109,7 +102,10 @@ class AvailableDecaysPanel extends Panel {
     // manually layout the button text due to the superscripts causing the normal layout to look out of place
     const createDecayButton = ( decayType: DecayType ): Node => {
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
-      const buttonText = new RichText( decayType.labelStringProperty, { font: LABEL_FONT, maxWidth: BUTTON_CONTENT_WIDTH } );
+      const buttonText = new RichText( decayType.labelStringProperty, {
+        font: LABEL_FONT,
+        maxWidth: BUTTON_CONTENT_WIDTH
+      } );
 
       buttonText.boundsProperty.link( () => {
         assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );

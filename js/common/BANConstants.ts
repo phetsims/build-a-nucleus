@@ -76,7 +76,18 @@ const BANConstants = {
   X_SHIFT_HIGHLIGHT_RECTANGLE: 0.5,
   Y_SHIFT_HIGHLIGHT_RECTANGLE: -0.5,
 
-  NUCLIDE_CHART_CELL_LINE_WIDTH: 0.05
+  NUCLIDE_CHART_CELL_LINE_WIDTH: 0.05,
+
+  INFO_DIALOG_TEXT_OPTIONS: {
+    font: new PhetFont( 20 ), // TODO: how to use REGULAR_FONT here? https://github.com/phetsims/build-a-nucleus/issues/78
+    lineWrap: 400,
+    maxWidth: 400
+  },
+
+  INFO_DIALOG_OPTIONS: {
+    topMargin: 40,
+    bottomMargin: 30
+  }
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );
