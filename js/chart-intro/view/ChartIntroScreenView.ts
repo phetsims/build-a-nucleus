@@ -173,10 +173,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
+    // Whether to show a special highlight for magic-numbered nuclides in the charts
+    const showMagicNumbersProperty = new BooleanProperty( false );
+
     // TODO: use align group to match width's of accordion box and periodic table https://github.com/phetsims/build-a-nucleus/issues/93
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
-      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ) );
+      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ), showMagicNumbersProperty );
+
     nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
@@ -193,9 +197,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       } );
     this.addChild( partialChartRadioButton );
 
-    const showMagicNumbersCheckbox = new Checkbox( new BooleanProperty( false ),
-      new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ),
-      {
+    const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersProperty,
+      new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ), {
         boxWidth: 15
       } );
     showMagicNumbersCheckbox.left = partialChartRadioButton.right + CHART_VERTICAL_MARGINS;

@@ -21,7 +21,7 @@ class NuclideChartCell extends Rectangle {
   public readonly decayBackgroundColor: TPaint;
   public readonly cellModel: NuclideChartCellModel;
 
-  public constructor( cellLength: number, cellModel: NuclideChartCellModel, providedOptions: NuclideChartCellOptions ) {
+  public constructor( cellLength: number, cellModel: NuclideChartCellModel, providedOptions?: NuclideChartCellOptions ) {
 
     const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
       stroke: BANColors.nuclideChartBorderColorProperty,

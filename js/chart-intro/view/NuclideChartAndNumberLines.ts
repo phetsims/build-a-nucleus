@@ -14,27 +14,33 @@ import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import NucleonNumberLine from './NucleonNumberLine.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
-import NuclideChartNode from './NuclideChartNode.js';
+import NuclideChartNode, { NuclideChartNodeOptions } from './NuclideChartNode.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 
-type NuclideChartNodeOptions = StrictOmit<NodeOptions, 'excludeInvisibleChildrenFromBounds' | 'children'>;
+type SelfOptions = {
+  nuclideChartNodeOptions?: Partial<NuclideChartNodeOptions>;
+};
+type NuclideChartAndNumberLinesOptions = SelfOptions & StrictOmit<NodeOptions, 'excludeInvisibleChildrenFromBounds' | 'children'>;
 
 class NuclideChartAndNumberLines extends Node {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform, providedOptions?: NuclideChartNodeOptions ) {
+                      chartTransform: ChartTransform, providedOptions?: NuclideChartAndNumberLinesOptions ) {
 
-    const options = optionize<NuclideChartNodeOptions, EmptySelfOptions, NodeOptions>()( {
-      excludeInvisibleChildrenFromBounds: true
+    const options = optionize<NuclideChartAndNumberLinesOptions, SelfOptions, NodeOptions>()( {
+      excludeInvisibleChildrenFromBounds: true,
+      nuclideChartNodeOptions: {}
     }, providedOptions );
 
     // create and add the nuclideChartNode
-    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform, {
-      cellTextFontSize: 11,
-      arrowSymbol: false
-    } );
+    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform,
+      combineOptions<NuclideChartNodeOptions>( {
+        cellTextFontSize: 11,
+        arrowSymbol: false
+      }, options.nuclideChartNodeOptions )
+    );
 
     const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,

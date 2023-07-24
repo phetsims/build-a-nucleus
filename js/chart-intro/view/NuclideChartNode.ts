@@ -22,13 +22,19 @@ import BANConstants from '../../common/BANConstants.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ChartIntroModel from '../model/ChartIntroModel.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import BANColors from '../../common/BANColors.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
   arrowSymbol: boolean;
+  showMagicNumbersProperty?: TReadOnlyProperty<boolean>;
 };
 
-type NuclideChartNodeOptions = SelfOptions & NodeOptions;
+export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
+
+// Applies to both proton and neutron counts see showMagicNumbersProperty for details.
+const MAGIC_COUNTS = [ 2, 8 ];
 
 // 2D array that defines the table structure.
 // The rows are the proton number, for example the first row is protonCount = 0. The numbers in the rows are the neutron number.
@@ -53,7 +59,8 @@ class NuclideChartNode extends Node {
                       chartTransform: ChartTransform, providedOptions: NuclideChartNodeOptions ) {
 
     const options = optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {
-      excludeInvisibleChildrenFromBounds: true
+      excludeInvisibleChildrenFromBounds: true,
+      showMagicNumbersProperty: new BooleanProperty( false )
     }, providedOptions );
     super( options );
 
@@ -61,7 +68,7 @@ class NuclideChartNode extends Node {
     const cellLayerNode = new Node();
 
     // keep track of the cells of the chart
-    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength );
+    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength, options.showMagicNumbersProperty );
 
     this.addChild( cellLayerNode );
 
@@ -153,22 +160,36 @@ class NuclideChartNode extends Node {
            Color.BLACK : Color.WHITE;
   }
 
-  public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number ): NuclideChartCell[][] {
+  /**
+   * Public for icon creation.
+   */
+  public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number,
+                                    showMagicNumbersProperty: TReadOnlyProperty<boolean> = new BooleanProperty( false ) ): NuclideChartCell[][] {
     const cells: NuclideChartCell[][] = [];
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
-    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( row, viewPosition ) => {
-      const populatedCellsInRow = POPULATED_CELLS[ row ];
+    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( protonCount, viewPosition ) => {
+      const populatedCellsInRow = POPULATED_CELLS[ protonCount ];
       const rowCells: NuclideChartCell[] = [];
-      populatedCellsInRow.forEach( ( column, columnIndex ) => {
+      populatedCellsInRow.forEach( ( neutronCount, columnIndex ) => {
 
         // create and add the NuclideChartCell
-        const cell = new NuclideChartCell( cellLength, ChartIntroModel.cellModelArray[ row ][ columnIndex ], {
-          lineWidth: chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH )
+        const defaultLineWidth = chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH );
+        const cell = new NuclideChartCell( cellLength, ChartIntroModel.cellModelArray[ protonCount ][ columnIndex ], {
+          lineWidth: defaultLineWidth
         } );
-        cell.translation = new Vector2( chartTransform.modelToViewX( column ), viewPosition );
+        cell.translation = new Vector2( chartTransform.modelToViewX( neutronCount ), viewPosition );
         cellLayerNode.addChild( cell );
         rowCells.push( cell );
+
+        const cellIsMagic = MAGIC_COUNTS.includes( protonCount ) || MAGIC_COUNTS.includes( neutronCount );
+        if ( cellIsMagic ) {
+          showMagicNumbersProperty.link( showMagic => {
+            showMagic && cell.moveToFront();
+            cell.lineWidth = showMagic ? defaultLineWidth + 2 : defaultLineWidth;
+            cell.stroke = showMagic ? BANColors.nuclideChartBorderMagicNumberColorProperty : BANColors.nuclideChartBorderColorProperty;
+          } );
+        }
       } );
       cells.push( rowCells );
     } );

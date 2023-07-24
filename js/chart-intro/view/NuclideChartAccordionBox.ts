@@ -31,14 +31,19 @@ class NuclideChartAccordionBox extends AccordionBox {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
-                      decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void ) {
+                      decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
+                      showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
 
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
     const zoomInChartTransform = NuclideChartAccordionBox.getChartTransform( 30 );
 
     const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( protonCountProperty, neutronCountProperty,
-      partialChartTransform );
+      partialChartTransform, {
+        nuclideChartNodeOptions: {
+          showMagicNumbersProperty: showMagicNumbersProperty
+        }
+      } );
 
     const focusedNuclideChartNode = new FocusedNuclideChartNode( protonCountProperty, neutronCountProperty,
       focusedChartTransform );
