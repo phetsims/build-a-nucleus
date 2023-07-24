@@ -77,6 +77,9 @@ class HalfLifeNumberLineNode extends Node {
   // the half life display node
   public readonly halfLifeDisplayNode: Node;
 
+  // contains the whole number-line portion, including tick marks and labels
+  private readonly numberLineNode: Node;
+
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
                       isStableBooleanProperty: TReadOnlyProperty<boolean>,
                       providedOptions: HalfLifeNumberLineNodeOptions ) {
@@ -102,7 +105,7 @@ class HalfLifeNumberLineNode extends Node {
     };
 
     // create and add numberLineNode
-    const numberLineNode = new Node();
+    this.numberLineNode = new Node();
 
     this.chartTransform = new ChartTransform( {
       viewWidth: options.numberLineWidth,
@@ -116,20 +119,20 @@ class HalfLifeNumberLineNode extends Node {
       lineWidth: 2
     } );
     this.tickMarkSet.centerY = 0;
-    numberLineNode.addChild( this.tickMarkSet );
+    this.numberLineNode.addChild( this.tickMarkSet );
     const tickLabelSet = new TickLabelSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       extent: 0,
       createLabel: ( value: number ) => createExponentialLabel( value )
     } );
     tickLabelSet.top = this.tickMarkSet.bottom;
-    numberLineNode.addChild( tickLabelSet );
+    this.numberLineNode.addChild( tickLabelSet );
     const numberLine = new Line( {
       x1: this.chartTransform.modelToViewX( NUMBER_LINE_START_EXPONENT ), y1: this.tickMarkSet.centerY,
       x2: this.chartTransform.modelToViewX( NUMBER_LINE_END_EXPONENT ), y2: this.tickMarkSet.centerY,
       stroke: Color.BLACK
     } );
-    numberLineNode.addChild( numberLine );
-    this.addChild( numberLineNode );
+    this.numberLineNode.addChild( numberLine );
+    this.addChild( this.numberLineNode );
 
     // create and add the halfLifeArrow
     const arrowNode = new ArrowNode( 0, 0, 0, options.halfLifeArrowLength, {
@@ -232,20 +235,20 @@ class HalfLifeNumberLineNode extends Node {
             halfLifeArrow.top - this.halfLifeDisplayNode.height - distanceBetweenHalfLifeTextAndArrow
             - distanceBetweenElementNameAndHalfLifeText );
 
-        // left-align the text if it goes over the left edge of the numberLineNode
-        if ( this.halfLifeDisplayNode.left < numberLineNode.left ) {
-          this.halfLifeDisplayNode.left = numberLineNode.left;
+        // left-align the text if it goes over the left edge of the this.numberLineNode
+        if ( this.halfLifeDisplayNode.left < this.numberLineNode.left ) {
+          this.halfLifeDisplayNode.left = this.numberLineNode.left;
         }
-        if ( elementName.left < numberLineNode.left ) {
-          elementName.left = numberLineNode.left;
+        if ( elementName.left < this.numberLineNode.left ) {
+          elementName.left = this.numberLineNode.left;
         }
 
-        // right-align the text if it goes over the right edge of the numberLineNode
-        if ( this.halfLifeDisplayNode.right > numberLineNode.right ) {
-          this.halfLifeDisplayNode.right = numberLineNode.right;
+        // right-align the text if it goes over the right edge of the this.numberLineNode
+        if ( this.halfLifeDisplayNode.right > this.numberLineNode.right ) {
+          this.halfLifeDisplayNode.right = this.numberLineNode.right;
         }
-        if ( elementName.right > numberLineNode.right ) {
-          elementName.right = numberLineNode.right;
+        if ( elementName.right > this.numberLineNode.right ) {
+          elementName.right = this.numberLineNode.right;
         }
       } );
     }
@@ -424,11 +427,13 @@ class HalfLifeNumberLineNode extends Node {
         tailWidth: 1.5,
         headWidth: 5
       } );
-    this.addChild( arrow );
+    this.numberLineNode.addChild( arrow );
     const numberText = new RichText( label, { font: this.numberLineLabelFont, maxWidth: 25 } );
-    numberText.bottom = arrow.top;
-    numberText.centerX = arrow.centerX;
-    this.addChild( numberText );
+    numberText.boundsProperty.link( () => {
+      numberText.bottom = arrow.top;
+      numberText.centerX = arrow.centerX;
+    } );
+    this.numberLineNode.addChild( numberText );
   }
 
   /**
