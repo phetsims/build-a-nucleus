@@ -82,9 +82,15 @@ class DecayEquationNode extends VBox {
           equationHBox.setChildren( [ stableText ] );
           decayLikelihoodPercentText.visible = false;
 
+          // re-center the stable text at the horizontal center of the mostLikelyDecayText whenever the text changes length due to a language change
           stableText.boundsProperty.link( () => {
+
+            // how the mostLikelyDecayText sits relative to DecayEquationNode
             const mostLikelyDecayTextGlobalCenter = mostLikelyDecayHBox.localToGlobalPoint( mostLikelyDecayText.center );
+
+            // translate the global center of the mostLikelyDecayText to the equationHBox coordinate frame
             const mostLikelyDecayTextLocalPointCenter = equationHBox.globalToLocalPoint( mostLikelyDecayTextGlobalCenter );
+
             const leftMargin = mostLikelyDecayTextLocalPointCenter.x - stableText.width / 2;
             stableText.setLayoutOptions( { leftMargin: leftMargin } );
           } );
