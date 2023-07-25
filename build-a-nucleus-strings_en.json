@@ -187,5 +187,8 @@
   },
   "fullChartInfoPanelTextPattern": {
     "value": "A full, interactive chart of the nuclides and their decays is available from Energy Education Project at University of Calgary, see {{link}}."
+  },
+  "fullChartHere": {
+    "value": "full chart here"
   }
 }

@@ -76,6 +76,7 @@ type StringsType = {
   'percentageInParenthesesPatternStringProperty': LocalizedStringProperty;
   'magicNumbersStringProperty': LocalizedStringProperty;
   'fullChartInfoPanelTextPatternStringProperty': LocalizedStringProperty;
+  'fullChartHereStringProperty': LocalizedStringProperty;
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

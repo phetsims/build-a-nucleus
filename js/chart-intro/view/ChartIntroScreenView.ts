@@ -211,9 +211,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // If links are allowed, use hyperlinks. Otherwise, just output the URL. This doesn't need to be internationalized.
     const linkText = 'https://energyeducation.ca/simulations/nuclear/nuclidechart.html';
-    const stringProperty = new DerivedStringProperty( [ allowLinksProperty, BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty ],
-      ( allowLinks, fullChartInfoText ) => {
-        return allowLinks ? StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${linkText}</a>` } ) :
+    const stringProperty = new DerivedStringProperty(
+      [ allowLinksProperty, BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty, BuildANucleusStrings.fullChartHereStringProperty ],
+      ( allowLinks, fullChartInfoText, fullChartHereText ) => {
+        return allowLinks ? StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartHereText}</a>` } ) :
                StringUtils.fillIn( fullChartInfoText, { link: `${linkText}` } );
       } );
 
@@ -422,12 +423,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return values;
   }
 
-  private createMiniParticleView( miniParticle: Particle ): void {
-    const particleView = new ParticleView( miniParticle, this.miniAtomMVT, { inputEnabled: false } );
-    this.particleViewMap[ miniParticle.id ] = particleView;
-    this.particleAtomNode.addParticleView( miniParticle );
-    miniParticle.disposeEmitter.addListener( () => {
-      delete this.particleViewMap[ miniParticle.id ];
+  private createMiniParticleView( particle: Particle ): void {
+    const particleView = new ParticleView( particle, this.miniAtomMVT, { inputEnabled: false } );
+    this.particleViewMap[ particle.id ] = particleView;
+    this.particleAtomNode.addParticleView( particle );
+    particle.disposeEmitter.addListener( () => {
+      delete this.particleViewMap[ particle.id ];
 
       particleView.dispose();
     } );
