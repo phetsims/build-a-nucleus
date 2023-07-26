@@ -122,7 +122,8 @@ class ParticleNucleus extends ParticleAtom {
   }
 
   /**
-   * Return the view destination of the next open position for the given particleType shell positions.
+   * Return the view destination of the next open position for the given particleType shell positions and set the particle on that open shell position,
+   * even though it is not yet 'counted' as part of the particleAtom.
    */
   public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
@@ -159,7 +160,15 @@ class ParticleNucleus extends ParticleAtom {
       BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS );
   }
 
+  /**
+   * Remove the particle's placement in the shell and from the ParticleAtom.
+   */
   public override removeParticle( particle: Particle ): void {
+    this.removeParticleFromShell( particle );
+    super.removeParticle( particle );
+  }
+
+  public removeParticleFromShell( particle: Particle ): void {
     const nucleonShellPositions = particle.type === ParticleType.PROTON.particleTypeString ? this.protonShellPositions : this.neutronShellPositions;
     nucleonShellPositions.forEach( nucleonShellRow => {
       nucleonShellRow.forEach( nucleonShellPosition => {
@@ -168,14 +177,26 @@ class ParticleNucleus extends ParticleAtom {
         }
       } );
     } );
-
-    super.removeParticle( particle );
   }
 
   public override clear(): void {
     this.protonsLevelProperty.reset();
     this.neutronsLevelProperty.reset();
+
+    // clear all particles that have a set shell position but may not be in the ParticleAtom
+    this.clearAllShellPositionParticles( this.protonShellPositions );
+    this.clearAllShellPositionParticles( this.neutronShellPositions );
     super.clear();
+  }
+
+  private clearAllShellPositionParticles( nucleonShellPositions: ParticleShellPosition[][] ): void {
+    nucleonShellPositions.forEach( nucleonShellRow => {
+      nucleonShellRow.forEach( nucleonShellPosition => {
+        if ( nucleonShellPosition.particle ) {
+          nucleonShellPosition.particle = undefined;
+        }
+      } );
+    } );
   }
 
   /**

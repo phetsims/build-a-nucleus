@@ -142,7 +142,7 @@ class BANModel<T extends ParticleAtom> {
   }
 
   /**
-   * Remove a Particle from the model
+   * Remove a Particle from the model (from the particles array).
    */
   public removeParticle( particle: Particle ): void {
     this.particles.remove( particle );

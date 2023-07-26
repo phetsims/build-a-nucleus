@@ -75,6 +75,14 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   }
 
   /**
+   * Remove the particle from its shell position in the ParticleNucleus.
+   */
+  public override removeParticle( particle: Particle ): void {
+    this.particleNucleus.removeParticleFromShell( particle );
+    super.removeParticle( particle );
+  }
+
+  /**
    * Remove particles flying away from the mini-nucleus. Dispose emitter deals with the view portion.
    */
   public removeDecayingMiniParticle( particle: Particle ): void {

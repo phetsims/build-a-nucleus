@@ -104,6 +104,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     model.particleAtom.protonCountProperty.link( protonCount => nucleonCountListener( protonCount, ParticleType.PROTON ) );
     model.particleAtom.neutronCountProperty.link( neutronCount => nucleonCountListener( neutronCount, ParticleType.NEUTRON ) );
     const particleAtomNodeCenter = this.particleAtomNode.center;
+
+    // scale down to make nucleus 'mini' sized
     this.particleAtomNode.scale( 0.75 );
     this.particleAtomNode.center = particleAtomNodeCenter;
 
