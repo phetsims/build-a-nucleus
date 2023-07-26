@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { allowLinksProperty, Line, Node, Rectangle, RichText, RichTextOptions, Text } from '../../../../scenery/js/imports.js';
+import { allowLinksProperty, Color, Image, Line, Node, Rectangle, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -37,6 +37,7 @@ import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import fullNuclideChart_png from '../../../images/fullNuclideChart_png.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -218,11 +219,22 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
                StringUtils.fillIn( fullChartInfoText, { link: `${linkText}` } );
       } );
 
+    const fullChartImage = new Image( fullNuclideChart_png );
+    const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
+      links: { url: linkText } // RichText must fill in URL for link
+    }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) );
+    fullChartImage.setMaxWidth( fullChartInfoText.width );
+    const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ), { stroke: Color.BLACK } );
+
     // create and add the full chart info dialog and button
     const fullChartInfoDialog = new Dialog(
-      new RichText( stringProperty, combineOptions<RichTextOptions>( {
-        links: { url: linkText } // RichText must fill in URL for link
-      }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) ),
+      new VBox( {
+        children: [
+          fullChartInfoText,
+          new Node( { children: [ fullChartImage, fullChartImageBorderRectangle ] } )
+        ],
+        spacing: 10
+      } ),
       BANConstants.INFO_DIALOG_OPTIONS
     );
     const fullChartInfoButton = new InfoButton( {

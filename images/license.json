@@ -14,5 +14,13 @@
     "projectURL": "https://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by John Blanco and Luisa Vargas"
+  },
+  "fullNuclideChart.png": {
+    "text": [
+      "Copyright 2023 University of Colorado Boulder"
+    ],
+    "projectURL": "https://energyeducation.ca/",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Luisa Vargas"
   }
 }
