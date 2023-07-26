@@ -756,7 +756,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       // only one neutron
       else if ( neutronCount === 1 ) {
-        name = neutronCount + ' ' + BuildANucleusStrings.neutronLowercaseStringProperty;
+        name = neutronCount + ' ' + BuildANucleusStrings.neutronLowercaseStringProperty.value;
       }
 
       // multiple neutrons
