@@ -212,12 +212,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // If links are allowed, use hyperlinks. Otherwise, just output the URL. This doesn't need to be internationalized.
     const linkText = 'https://energyeducation.ca/simulations/nuclear/nuclidechart.html';
-    const stringProperty = new DerivedStringProperty(
-      [ allowLinksProperty, BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty, BuildANucleusStrings.fullChartHereStringProperty ],
-      ( allowLinks, fullChartInfoText, fullChartHereText ) => {
-        return allowLinks ? StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartHereText}</a>` } ) :
-               StringUtils.fillIn( fullChartInfoText, { link: `${linkText}` } );
-      } );
+    const stringProperty = new DerivedStringProperty( [
+      allowLinksProperty,
+      BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty,
+      BuildANucleusStrings.fullChartHereStringProperty
+    ], ( allowLinks, fullChartInfoText, fullChartHereText ) => {
+      return allowLinks ?
+             StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartHereText}</a>` } ) :
+             StringUtils.fillIn( fullChartInfoText, { link: linkText } );
+    } );
 
     const fullChartImage = new Image( fullNuclideChart_png );
     const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
@@ -242,7 +245,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
       baseColor: BANColors.regularInfoButtonColorProperty
     } );
-    fullChartInfoButton.left = showMagicNumbersCheckbox.left;//right + CHART_VERTICAL_MARGINS;
+    fullChartInfoButton.left = showMagicNumbersCheckbox.left;
     fullChartInfoButton.bottom = partialChartRadioButton.bottom;
     this.addChild( fullChartInfoButton );
 
