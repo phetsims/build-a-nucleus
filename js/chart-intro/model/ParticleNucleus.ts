@@ -172,6 +172,12 @@ class ParticleNucleus extends ParticleAtom {
     super.removeParticle( particle );
   }
 
+  public override clear(): void {
+    this.protonsLevelProperty.reset();
+    this.neutronsLevelProperty.reset();
+    super.clear();
+  }
+
   /**
    * Fill all nucleons in open positions from bottom to top, left to right
    */

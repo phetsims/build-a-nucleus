@@ -91,6 +91,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
     const particleToReturn = this.particleNucleus.getLastParticleInShell( particleType );
     assert && assert( particleToReturn, 'No particle of type ' + particleType.name + ' exists in the particleAtom.' );
+    assert && assert( !particleToReturn!.isDisposed, 'Particle should not already be disposed.' );
 
     // We know that sortedParticles is not empty, and does not contain null.
     return particleToReturn!;
