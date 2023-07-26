@@ -64,7 +64,6 @@ class NuclideChartAccordionBox extends AccordionBox {
           minWidth: 80,
           listener: () => {
             const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
-            // TODO: support this function for the chart-intro screen too!, see https://github.com/phetsims/build-a-nucleus/issues/97
             decayAtom( decayType || null );
           }
         } ),
