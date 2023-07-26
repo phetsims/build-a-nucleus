@@ -23,8 +23,12 @@ const HIGHLIGHT_RECTANGLE_LINE_WIDTH = 1.5;
 class FocusedNuclideChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform ) {
-    super( protonCountProperty, neutronCountProperty, chartTransform, { cellTextFontSize: 6, arrowSymbol: false } );
+                      chartTransform: ChartTransform, showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
+    super( protonCountProperty, neutronCountProperty, chartTransform, {
+      cellTextFontSize: 6,
+      arrowSymbol: false,
+      showMagicNumbersProperty: showMagicNumbersProperty
+    } );
 
     // keep track of the current center of the highlight rectangle
     const viewHighlightRectangleCenterProperty = new Property(

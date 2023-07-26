@@ -21,11 +21,12 @@ import BANConstants from '../../common/BANConstants.js';
 class ZoomInChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform ) {
+                      chartTransform: ChartTransform, showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
 
     super( protonCountProperty, neutronCountProperty, chartTransform, {
       cellTextFontSize: 18,
-      arrowSymbol: true
+      arrowSymbol: true,
+      showMagicNumbersProperty: showMagicNumbersProperty
     } );
 
     const squareLength = chartTransform.modelToViewDeltaX( 5 + ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );

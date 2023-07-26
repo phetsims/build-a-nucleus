@@ -46,9 +46,9 @@ class NuclideChartAccordionBox extends AccordionBox {
       } );
 
     const focusedNuclideChartNode = new FocusedNuclideChartNode( protonCountProperty, neutronCountProperty,
-      focusedChartTransform );
+      focusedChartTransform, showMagicNumbersProperty );
     const zoomInNuclideChartNode = new ZoomInChartNode( protonCountProperty, neutronCountProperty,
-      zoomInChartTransform );
+      zoomInChartTransform, showMagicNumbersProperty );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
     const decayEquationNode = new DecayEquationNode( decayEquationModel );
