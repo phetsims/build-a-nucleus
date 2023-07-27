@@ -234,14 +234,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
               return false;
             }
 
-            // If there are no atoms actually in the atom (only potentially animating to the atom), see https://github.com/phetsims/build-a-nucleus/issues/74
-            if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
-              return ( particleType === ParticleType.NEUTRON && atomNeutronCount === 0 ) ||
-                     ( particleType === ParticleType.PROTON && atomProtonCount === 0 );
-            } ) ) {
-              return false;
-            }
-
             return secondParticleType ? isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount ) &&
                                         isNucleonCountAtRangeBounds( direction, secondParticleType, protonCount, neutronCount ) :
                    isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount );
