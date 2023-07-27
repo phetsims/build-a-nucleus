@@ -168,6 +168,7 @@ class BANModel<T extends ParticleAtom> {
 
     // Update particle positions
     this.particles.forEach( particle => {
+      assert && assert( !particle.isDisposed, 'cannot step a particle that has already been disposed' );
       particle.step( dt );
     } );
   }

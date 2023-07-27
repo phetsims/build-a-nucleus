@@ -607,8 +607,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const particleToReturn = this.model.getParticleToReturn( particleType, creatorNodePosition );
 
-    // TODO: is this hacky? https://github.com/phetsims/build-a-nucleus/issues/74
-    // remove the particle from the particleAtom, if the particle is a part of the particleAtom
+    // Remove the particle from the particleAtom, if the particle is a part of the particleAtom. It should not count
+    // in the atom while animating back to the stack
     if ( this.model.particleAtom.containsParticle( particleToReturn ) ) {
       this.model.particleAtom.removeParticle( particleToReturn );
     }
@@ -616,6 +616,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particleToReturn );
       particleToReturn.animationEndedEmitter.removeAllListeners();
     }
+    else {
+      assert && assert( false, 'The above cases should cover all possibilities' );
+    }
+
+    assert && assert( !particleToReturn.animationEndedEmitter.hasListeners(),
+      'should not have animation listeners, we are about to animate' );
 
     // send particle back to its creator node position
     this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
@@ -644,6 +650,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Remove the given particle from the model.
    */
   protected removeParticle( particle: Particle ): void {
+    assert && assert( !particle.isDisposed, 'cannot remove a particle that is already disposed' );
+
     this.model.outgoingParticles.includes( particle ) && this.model.outgoingParticles.remove( particle );
     this.model.removeParticle( particle );
   }

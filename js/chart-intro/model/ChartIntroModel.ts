@@ -126,9 +126,13 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   public override step( dt: number ): void {
     super.step( dt );
     this.miniParticleAtom.protons.forEach( particle => {
+      assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
+      assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
       particle.step( dt );
     } );
     this.miniParticleAtom.neutrons.forEach( particle => {
+      assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
+      assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
       particle.step( dt );
     } );
 

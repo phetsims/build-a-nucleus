@@ -93,6 +93,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
           if ( !this.decaying ) {
             const particle = model.miniParticleAtom.extractParticle( particleType.particleTypeString );
             particle.dispose();
+            assert && assert( !this.model.particles.includes( particle ),
+              'Particle from mini atom should not be a part of the particles array when disposed.' );
+
             model.miniParticleAtom.reconfigureNucleus();
           }
         } );
@@ -211,13 +214,13 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     const fullChartDialog = new FullChartDialog();
     const fullChartTextButton = new TextPushButton( BuildANucleusStrings.fullChartCapitalizedStringProperty, {
-        baseColor: BANColors.fullChartButtonColorProperty,
-        textNodeOptions: {
-          font: BANConstants.LEGEND_FONT
-        },
-        minWidth: 80,
-        listener: () => fullChartDialog.show()
-      } );
+      baseColor: BANColors.fullChartButtonColorProperty,
+      textNodeOptions: {
+        font: BANConstants.LEGEND_FONT
+      },
+      minWidth: 80,
+      listener: () => fullChartDialog.show()
+    } );
     fullChartTextButton.left = showMagicNumbersCheckbox.left;
     fullChartTextButton.bottom = partialChartRadioButton.bottom;
     this.addChild( fullChartTextButton );
