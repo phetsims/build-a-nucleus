@@ -16,8 +16,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import BANConstants from '../../common/BANConstants.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ChartIntroModel from '../model/ChartIntroModel.js';
@@ -72,13 +72,9 @@ class NuclideChartNode extends Node {
 
     this.addChild( cellLayerNode );
 
-    const arrowNode = new ArrowNode( 0, 0, 0, 0, {
-      tailWidth: 3,
-      fill: Color.WHITE,
-      stroke: Color.BLACK,
-      lineWidth: 0.5,
+    const arrowNode = new ArrowNode( 0, 0, 0, 0, combineOptions<ArrowNodeOptions>( {
       visible: false
-    } );
+    }, BANConstants.DECAY_ARROW_OPTIONS ) );
     if ( options.arrowSymbol ) {
       this.addChild( arrowNode );
     }

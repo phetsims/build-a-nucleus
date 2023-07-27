@@ -11,6 +11,7 @@ import ShredConstants from '../../../shred/js/ShredConstants.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../dot/js/Bounds2.js';
+import { Color } from '../../../scenery/js/imports.js';
 
 const PARTICLE_RADIUS = ShredConstants.NUCLEON_RADIUS;
 const REGULAR_FONT = new PhetFont( 20 );
@@ -87,10 +88,16 @@ const BANConstants = {
     lineWrap: 400,
     maxWidth: 400
   },
-
   INFO_DIALOG_OPTIONS: {
     topMargin: 40,
     bottomMargin: 30
+  },
+
+  DECAY_ARROW_OPTIONS: {
+    tailWidth: 3,
+    fill: Color.WHITE,
+    stroke: Color.BLACK,
+    lineWidth: 0.5
   }
 };
 

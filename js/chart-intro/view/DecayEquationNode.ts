@@ -39,7 +39,6 @@ class DecayEquationNode extends VBox {
     } );
 
     const stableText = new Text( BuildANucleusStrings.stableStringProperty, TEXT_OPTIONS );
-    const decayArrow = new ArrowNode( 0, 0, 20, 0, { fill: null } );
     const mostLikelyDecayText = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, { font: BANConstants.LEGEND_FONT } );
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
@@ -63,7 +62,8 @@ class DecayEquationNode extends VBox {
         assert && assert( currentNuclideSymbol.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT,
           `Min content height must be a max so the space is consistent across all equation forms. Current nuclide symbol height is ${currentNuclideSymbol.height}` );
 
-        const decayEquationArrow = IconFactory.createDecayArrowNode( BANColors.decayEquationArrowAndPlusNodeColorProperty );
+        // Choose a length of the arrow that works well for the equation look, and matches the look of the chart arrow
+        const decayEquationArrow = new ArrowNode( 0, 0, 25, 0, BANConstants.DECAY_ARROW_OPTIONS );
 
         const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonCountProperty.value, decayEquationModel.finalMassNumberProperty.value );
 
@@ -101,13 +101,13 @@ class DecayEquationNode extends VBox {
           decayLikelihoodPercentText.visible = false;
         }
 
-        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayText, decayLikelihoodPercentText ] );
+        mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText, decayLikelihoodPercentText ] );
       }
       else {
 
         equationHBox.setChildren( [ stableText ] );
         equationHBox.visible = false;
-        mostLikelyDecayHBox.setChildren( [ decayArrow, mostLikelyDecayText ] );
+        mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText ] );
       }
       this.children = [
         mostLikelyDecayHBox,
