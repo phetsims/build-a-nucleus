@@ -14,7 +14,6 @@ import Bounds2 from '../../../dot/js/Bounds2.js';
 import { Color } from '../../../scenery/js/imports.js';
 
 const PARTICLE_RADIUS = ShredConstants.NUCLEON_RADIUS;
-const REGULAR_FONT = new PhetFont( 20 );
 
 const BANConstants = {
 
@@ -55,7 +54,7 @@ const BANConstants = {
   INFO_BUTTON_MAX_HEIGHT: 30,
 
   // font size throughout the first screen (stability strings, legend strings, accordion box titles, etc.)
-  REGULAR_FONT: REGULAR_FONT,
+  REGULAR_FONT: new PhetFont( 20 ),
 
   // font size of the legend text in the accordion box and the 'most likely decay' string
   LEGEND_FONT: new PhetFont( 12 ),
@@ -84,13 +83,12 @@ const BANConstants = {
   NUCLIDE_CHART_CELL_LINE_WIDTH: 0.05,
 
   INFO_DIALOG_TEXT_OPTIONS: {
-    font: REGULAR_FONT,
-    lineWrap: 400,
-    maxWidth: 400
+    font: new PhetFont( 19 ),
+    lineWrap: 600,
+    maxWidth: 600
   },
   INFO_DIALOG_OPTIONS: {
-    topMargin: 40,
-    bottomMargin: 30
+    topMargin: 40
   },
 
   DECAY_ARROW_OPTIONS: {

@@ -152,7 +152,11 @@ const BANColors = {
     default: Color.WHITE
   } ),
 
-  regularInfoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'regularInfoButtonColor', {
+  availableDecaysInfoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'availableDecaysInfoButtonColor', {
+    default: new Color( 255, 255, 255 )
+  } ),
+
+  fullChartButtonColorProperty: new ProfileColorProperty( buildANucleus, 'fullChartButtonColor', {
     default: new Color( 255, 255, 255 )
   } )
 };

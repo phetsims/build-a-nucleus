@@ -24,10 +24,10 @@ class FullChartDialog extends Dialog {
     const stringProperty = new DerivedStringProperty( [
       allowLinksProperty,
       BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty,
-      BuildANucleusStrings.fullChartHereStringProperty
-    ], ( allowLinks, fullChartInfoText, fullChartHereText ) => {
+      BuildANucleusStrings.fullChartStringProperty
+    ], ( allowLinks, fullChartInfoText, fullChartText ) => {
       return allowLinks ?
-             StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartHereText}</a>` } ) :
+             StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartText}</a>` } ) :
              StringUtils.fillIn( fullChartInfoText, { link: linkText } );
     } );
 
@@ -35,7 +35,7 @@ class FullChartDialog extends Dialog {
     const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
       links: { url: linkText } // RichText must fill in URL for link
     }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) );
-    fullChartImage.setMaxWidth( fullChartInfoText.width );
+    fullChartImage.setMaxWidth( fullChartInfoText.width - 100 ); // determined empirically so image is a bit smaller than text length
     const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ), { stroke: Color.BLACK } );
 
     // create and add the full chart info dialog and button
@@ -48,7 +48,10 @@ class FullChartDialog extends Dialog {
       } ),
       combineOptions<DialogOptions>( {
         title: new Text( BuildANucleusStrings.fullNuclideChartStringProperty, { font: BANConstants.TITLE_FONT } )
-      }, BANConstants.INFO_DIALOG_OPTIONS )
+      }, combineOptions<DialogOptions>( {
+        maxWidthMargin: 800,
+        bottomMargin: 60
+      }, BANConstants.INFO_DIALOG_OPTIONS ) )
     );
   }
 }

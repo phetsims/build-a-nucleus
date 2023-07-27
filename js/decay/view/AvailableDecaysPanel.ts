@@ -20,8 +20,9 @@ import BANConstants from '../../common/BANConstants.js';
 import DecayModel from '../model/DecayModel.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
-import Dialog from '../../../../sun/js/Dialog.js';
+import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
 import IconFactory from './IconFactory.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
@@ -64,12 +65,14 @@ class AvailableDecaysPanel extends Panel {
     // create and add the decays info dialog and button
     const decaysInfoDialog = new Dialog(
       new RichText( BuildANucleusStrings.availableDecaysInfoPanelTextStringProperty, BANConstants.INFO_DIALOG_TEXT_OPTIONS ),
-      BANConstants.INFO_DIALOG_OPTIONS
+      combineOptions<DialogOptions>( {
+        bottomMargin: 40
+      }, BANConstants.INFO_DIALOG_OPTIONS )
     );
     const decaysInfoButton = new InfoButton( {
       listener: () => decaysInfoDialog.show(),
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
-      baseColor: BANColors.regularInfoButtonColorProperty
+      baseColor: BANColors.availableDecaysInfoButtonColorProperty
     } );
 
     // function to return the correct enabled derived property for each type of decay
