@@ -10,7 +10,6 @@
 import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
 import { Font, GridBox, HBox, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
@@ -20,7 +19,6 @@ import BANConstants from '../../common/BANConstants.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;
-const TITLE_FONT = new PhetFont( 32 );
 const LEGEND_FONT = BANConstants.REGULAR_FONT;
 
 class HalfLifeInfoDialog extends Dialog {
@@ -138,7 +136,7 @@ class HalfLifeInfoDialog extends Dialog {
     }
 
     const titleNode = new Text( BuildANucleusStrings.halfLifeTimescaleStringProperty, {
-      font: TITLE_FONT,
+      font: BANConstants.TITLE_FONT,
       maxWidth: 0.75 * MAX_CONTENT_WIDTH
     } );
 

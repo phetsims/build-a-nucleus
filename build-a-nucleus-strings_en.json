@@ -190,5 +190,8 @@
   },
   "fullChartHere": {
     "value": "full chart here"
+  },
+  "fullNuclideChart": {
+    "value": "Full Nuclide Chart"
   }
 }

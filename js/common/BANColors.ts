@@ -153,7 +153,7 @@ const BANColors = {
   } ),
 
   regularInfoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'regularInfoButtonColor', {
-    default: new Color( 400, 400, 400 )
+    default: new Color( 255, 255, 255 )
   } )
 };
 

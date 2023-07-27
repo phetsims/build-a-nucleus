@@ -8,14 +8,14 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues, EmitAlphaParticleValues } from '../../common/view/BANScreenView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { allowLinksProperty, Color, Image, Line, Node, Rectangle, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -34,10 +34,7 @@ import DecayType from '../../common/model/DecayType.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
-import Dialog from '../../../../sun/js/Dialog.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import fullNuclideChart_png from '../../../images/fullNuclideChart_png.js';
+import FullChartDialog from './FullChartDialog.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -212,38 +209,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     showMagicNumbersCheckbox.top = nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
     this.addChild( showMagicNumbersCheckbox );
 
-    // If links are allowed, use hyperlinks. Otherwise, just output the URL. This doesn't need to be internationalized.
-    const linkText = 'https://energyeducation.ca/simulations/nuclear/nuclidechart.html';
-    const stringProperty = new DerivedStringProperty( [
-      allowLinksProperty,
-      BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty,
-      BuildANucleusStrings.fullChartHereStringProperty
-    ], ( allowLinks, fullChartInfoText, fullChartHereText ) => {
-      return allowLinks ?
-             StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartHereText}</a>` } ) :
-             StringUtils.fillIn( fullChartInfoText, { link: linkText } );
-    } );
-
-    const fullChartImage = new Image( fullNuclideChart_png );
-    const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
-      links: { url: linkText } // RichText must fill in URL for link
-    }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) );
-    fullChartImage.setMaxWidth( fullChartInfoText.width );
-    const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ), { stroke: Color.BLACK } );
-
-    // create and add the full chart info dialog and button
-    const fullChartInfoDialog = new Dialog(
-      new VBox( {
-        children: [
-          fullChartInfoText,
-          new Node( { children: [ fullChartImage, fullChartImageBorderRectangle ] } )
-        ],
-        spacing: 10
-      } ),
-      BANConstants.INFO_DIALOG_OPTIONS
-    );
+    const fullChartDialog = new FullChartDialog();
     const fullChartInfoButton = new InfoButton( {
-      listener: () => fullChartInfoDialog.show(),
+      listener: () => fullChartDialog.show(),
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
       baseColor: BANColors.regularInfoButtonColorProperty
     } );

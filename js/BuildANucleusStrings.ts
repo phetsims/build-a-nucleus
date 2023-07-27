@@ -77,6 +77,7 @@ type StringsType = {
   'magicNumbersStringProperty': LocalizedStringProperty;
   'fullChartInfoPanelTextPatternStringProperty': LocalizedStringProperty;
   'fullChartHereStringProperty': LocalizedStringProperty;
+  'fullNuclideChartStringProperty': LocalizedStringProperty;
 };
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;

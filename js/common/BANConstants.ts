@@ -59,6 +59,9 @@ const BANConstants = {
   // font size of the legend text in the accordion box and the 'most likely decay' string
   LEGEND_FONT: new PhetFont( 12 ),
 
+  // font size of the info dialog title's
+  TITLE_FONT: new PhetFont( 32 ),
+
   DEFAULT_INITIAL_PROTON_COUNT: 0,
   DEFAULT_INITIAL_NEUTRON_COUNT: 0,
 
