@@ -33,7 +33,6 @@ import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from './ParticleAtomNode.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
 import DecayType from '../model/DecayType.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import BANParticle from '../model/BANParticle.js';
@@ -459,18 +458,21 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( protonCount => this.particleAtomNode.updateCloudSize( protonCount, 0.27, 10, 20 ) );
 
-    // TODO: a timeout is likely NOT the right solution here, https://github.com/phetsims/build-a-nucleus/issues/84
-    stepTimer.setTimeout( () => {
-      // add initial neutrons and protons specified by the query parameters to the atom
-      _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
-        if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons ) {
-          this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
-        }
-        if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons ) {
-          this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
-        }
-      } );
-    }, 0 );
+    phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
+      if ( complete ) {
+        // add initial neutrons and protons specified by the query parameters to the atom
+        _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
+          if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons &&
+               this.model.particleAtom.neutronCountProperty.value < this.model.neutronCountRange.max ) {
+            this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+          }
+          if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons &&
+               this.model.particleAtom.protonCountProperty.value < this.model.protonCountRange.max ) {
+            this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+          }
+        } );
+      }
+    } );
 
     this.pdomPlayAreaNode.pdomOrder = [
       protonArrowButtons,
