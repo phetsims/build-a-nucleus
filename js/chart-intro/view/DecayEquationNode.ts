@@ -19,16 +19,19 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 
-const unknownSpacePatternStringProperty = new PatternStringProperty( BuildANucleusStrings.unknownSpacePatternStringProperty, { space: ' ' } );
+// Fill in the space eagerly, as a constant
+const unknownSpacePatternStringProperty = new PatternStringProperty( BuildANucleusStrings.unknownSpacePatternStringProperty, {
+  space: ' '
+} );
 
 const EQUATION_HBOX_MIN_CONTENT_HEIGHT = 30;
 const TEXT_OPTIONS = {
-  fontSize: 20
+  fontSize: 20,
+  maxWidth: 100
 };
 
 class DecayEquationNode extends VBox {
-
-  public constructor( decayEquationModel: DecayEquationModel ) {
+  public constructor( decayEquationModel: DecayEquationModel, stableTextCenterXPosition: number ) {
 
     super( {
       spacing: 5,
@@ -82,17 +85,10 @@ class DecayEquationNode extends VBox {
           equationHBox.setChildren( [ stableText ] );
           decayLikelihoodPercentText.visible = false;
 
-          // re-center the stable text at the horizontal center of the mostLikelyDecayText whenever the text changes length due to a language change
+          // re-center the stable text at the horizontal center based on the parameter dimension. Do this whenever the
+          // text changes length due to a language change.
           stableText.boundsProperty.link( () => {
-
-            // how the mostLikelyDecayText sits relative to DecayEquationNode
-            const mostLikelyDecayTextGlobalCenter = mostLikelyDecayHBox.localToGlobalPoint( mostLikelyDecayText.center );
-
-            // translate the global center of the mostLikelyDecayText to the equationHBox coordinate frame
-            const mostLikelyDecayTextLocalPointCenter = equationHBox.globalToLocalPoint( mostLikelyDecayTextGlobalCenter );
-
-            const leftMargin = mostLikelyDecayTextLocalPointCenter.x - stableText.width / 2;
-            stableText.setLayoutOptions( { leftMargin: leftMargin } );
+            stableText.setLayoutOptions( { leftMargin: stableTextCenterXPosition - stableText.width / 2 } );
           } );
         }
         else {

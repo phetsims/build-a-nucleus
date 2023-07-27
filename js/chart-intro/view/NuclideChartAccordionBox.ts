@@ -51,22 +51,24 @@ class NuclideChartAccordionBox extends AccordionBox {
       zoomInChartTransform, showMagicNumbersProperty );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
-    const decayEquationNode = new DecayEquationNode( decayEquationModel );
+    const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.centerX );
 
-    const chartAndButtonVBox = new VBox( {
+    const decayPushButton = new TextPushButton( BuildANucleusStrings.decayStringProperty, {
+      enabledProperty: new DerivedProperty( [ decayEquationModel.currentCellModelProperty ], currentCellModel => !!currentCellModel?.decayType ),
+      baseColor: BANColors.decayButtonColorProperty,
+      textNodeOptions: {
+        fontSize: 14
+      },
+      minWidth: 80,
+      listener: () => {
+        const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
+        decayAtom( decayType || null );
+      }
+    } );
+
+    const focusedChartAndButtonVBox = new VBox( {
       children: [
-        new TextPushButton( BuildANucleusStrings.decayStringProperty, {
-          enabledProperty: new DerivedProperty( [ decayEquationModel.currentCellModelProperty ], currentCellModel => !!currentCellModel?.decayType ),
-          baseColor: BANColors.decayButtonColorProperty,
-          textNodeOptions: {
-            fontSize: 14
-          },
-          minWidth: 80,
-          listener: () => {
-            const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
-            decayAtom( decayType || null );
-          }
-        } ),
+        decayPushButton,
         focusedNuclideChartNode
       ],
       spacing: 10,
@@ -75,7 +77,7 @@ class NuclideChartAccordionBox extends AccordionBox {
 
     selectedNuclideChartProperty.link( selectedNuclideChart => {
       zoomInNuclideChartNode.visible = selectedNuclideChart === 'zoom';
-      chartAndButtonVBox.visible = selectedNuclideChart === 'zoom';
+      focusedChartAndButtonVBox.visible = selectedNuclideChart === 'zoom';
       decayEquationNode.visible = selectedNuclideChart === 'zoom';
       nuclideChartAndNumberLines.visible = selectedNuclideChart === 'partial';
     } );
@@ -84,7 +86,7 @@ class NuclideChartAccordionBox extends AccordionBox {
       children: [
         zoomInNuclideChartNode,
         nuclideChartAndNumberLines,
-        chartAndButtonVBox
+        focusedChartAndButtonVBox
       ],
       spacing: 10,
       align: 'top',
@@ -96,6 +98,8 @@ class NuclideChartAccordionBox extends AccordionBox {
         chartsHBox,
         nuclideChartLegendNode
       ],
+
+      // This is important! Changing wisely only after seeing the positioning done for the "Stable" text in the DecayEquationNode.
       align: 'left',
       spacing: 10,
       excludeInvisibleChildrenFromBounds: true
