@@ -51,7 +51,7 @@ class NuclideChartAccordionBox extends AccordionBox {
       zoomInChartTransform, showMagicNumbersProperty );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
-    const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.centerX );
+    const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.width / 2 );
 
     const decayPushButton = new TextPushButton( BuildANucleusStrings.decayStringProperty, {
       enabledProperty: new DerivedProperty( [ decayEquationModel.currentCellModelProperty ], currentCellModel => !!currentCellModel?.decayType ),
@@ -84,6 +84,9 @@ class NuclideChartAccordionBox extends AccordionBox {
 
     const chartsHBox = new HBox( {
       children: [
+
+        // It is important that the zoom in chart is the first child! Changing wisely only after seeing the positioning
+        // done for the "Stable" text in the DecayEquationNode.
         zoomInNuclideChartNode,
         nuclideChartAndNumberLines,
         focusedChartAndButtonVBox
@@ -99,7 +102,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         nuclideChartLegendNode
       ],
 
-      // This is important! Changing wisely only after seeing the positioning done for the "Stable" text in the DecayEquationNode.
+      // Left align is important! Changing wisely only after seeing the positioning done for the "Stable" text in the DecayEquationNode.
       align: 'left',
       spacing: 10,
       excludeInvisibleChildrenFromBounds: true
