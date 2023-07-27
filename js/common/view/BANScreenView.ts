@@ -613,8 +613,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.particleAtom.removeParticle( particleToReturn );
     }
     else if ( this.model.incomingNeutrons.includes( particleToReturn ) || this.model.incomingProtons.includes( particleToReturn ) ) {
-      arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particleToReturn );
-      particleToReturn.animationEndedEmitter.removeAllListeners();
+      this.clearIncomingParticle( particleToReturn, particleType );
     }
     else {
       assert && assert( false, 'The above cases should cover all possibilities' );
@@ -625,6 +624,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // send particle back to its creator node position
     this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
+  }
+
+  /**
+   * Don't finish the animation towards to the particle atom, because now it is time to remove this particle
+   * (animating it back to the stack).
+   */
+  protected clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
+    arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particle );
+    particle.animationEndedEmitter.removeAllListeners();
   }
 
   /**
