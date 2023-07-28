@@ -20,6 +20,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import BANParticle from './BANParticle.js';
+import BANConstants from '../BANConstants.js';
 
 class BANModel<T extends ParticleAtom> {
 
@@ -80,8 +81,8 @@ class BANModel<T extends ParticleAtom> {
 
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
-    this.protonCountRange = new Range( 0, maximumProtonCount );
-    this.neutronCountRange = new Range( 0, maximumNeutronCount );
+    this.protonCountRange = new Range( BANConstants.CHART_MIN, maximumProtonCount );
+    this.neutronCountRange = new Range( BANConstants.CHART_MIN, maximumNeutronCount );
 
     // the stability of the nuclide is determined by the given number of protons and neutrons
     this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],

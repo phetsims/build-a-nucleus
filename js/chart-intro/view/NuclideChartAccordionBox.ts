@@ -128,12 +128,12 @@ class NuclideChartAccordionBox extends AccordionBox {
   }
 
   public static getChartTransform( scaleFactor: number ): ChartTransform {
-    const modelXRange = new Range( BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS );
-    const modelYRange = new Range( BANConstants.DEFAULT_INITIAL_PROTON_COUNT, BANConstants.CHART_MAX_NUMBER_OF_PROTONS );
+    const modelXRange = new Range( BANConstants.CHART_MIN, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS );
+    const modelYRange = new Range( BANConstants.CHART_MIN, BANConstants.CHART_MAX_NUMBER_OF_PROTONS );
     return new ChartTransform( {
-      viewWidth: BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS * scaleFactor,
+      viewWidth: modelXRange.getLength() * scaleFactor,
       modelXRange: modelXRange,
-      viewHeight: BANConstants.CHART_MAX_NUMBER_OF_PROTONS * scaleFactor,
+      viewHeight: modelYRange.getLength() * scaleFactor,
       modelYRange: modelYRange
     } );
   }

@@ -96,7 +96,10 @@ const BANConstants = {
     fill: Color.WHITE,
     stroke: Color.BLACK,
     lineWidth: 0.5
-  }
+  },
+
+  // the minimum number where the nuclide chart always begins
+  CHART_MIN: 0
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );
