@@ -758,7 +758,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.model.removeParticle( particle );
   }
 
-  protected abstract removeAlphaParticle( particle: Particle ): void;
+  /**
+   * Complete the removal process for a given nucleon particle, which is a part of the alpha particle atom.
+   */
+  protected abstract removeAlphaNucleonParticle( particle: Particle ): void;
 
   /**
    * Add a particle to the model and immediately start dragging it with the provided event.
@@ -884,10 +887,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     }
   }
 
-  protected abstract getAtomNodeCenter(): Vector2;
-
   /**
-   * Returns a random position outside the screen view's visible bounds.
+   * Returns a random position, in view coordinates, outside the screen view's visible bounds.
    */
   protected getRandomEscapePosition(): Vector2 {
     const visibleBounds = this.visibleBoundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 20 ); // 10 particles wide
@@ -921,11 +922,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   protected abstract getParticleAtom(): ParticleAtom;
 
+  /**
+   * Add the given particle to the outgoingParticles array.
+   */
   protected abstract addOutgoingParticle( particle: Particle ): void;
 
-  protected abstract getRandomExternalModelPosition(): Vector2;
-
-  protected abstract betaDecayMiniFunction( particle: Particle ): void;
+  /**
+   * Return a random position, in either model or view coordinates, that is outside the visible bounds.
+   */
+  protected abstract getRandomExternalPosition(): Vector2;
 
   protected emitAlphaParticle(): EmitAlphaParticleValues {
     const particleAtom = this.getParticleAtom();
@@ -963,7 +968,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
 
     // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition();
+    const destination = this.getRandomExternalPosition();
     const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
 
     // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
@@ -979,10 +984,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       alphaParticle.neutrons.forEach( neutron => {
-        this.removeAlphaParticle( neutron );
+        this.removeAlphaNucleonParticle( neutron );
       } );
       alphaParticle.protons.forEach( proton => {
-        this.removeAlphaParticle( proton );
+        this.removeAlphaNucleonParticle( proton );
       } );
       alphaParticle.dispose();
     } );
@@ -1017,7 +1022,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       newNucleonType = ParticleType.NEUTRON;
     }
 
-    this.betaDecayMiniFunction( particleToEmit );
     assert && assert( nucleonTypeCountValue >= 1,
       'The particleAtom needs a ' + nucleonTypeToChange.name + ' for a ' + betaDecayType.name );
 
@@ -1029,7 +1033,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
     particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
 
-    const destination = this.getRandomExternalModelPosition();
+    const destination = this.getRandomExternalPosition();
+    // TODO: particle disappears inside devBounds, https://github.com/phetsims/build-a-nucleus/issues/97
+    assert && assert( !this.visibleBoundsProperty.value.containsPoint( destination ), 'Particle will disappear inside visible bounds.' );
 
     return {
       closestParticle: closestParticle,

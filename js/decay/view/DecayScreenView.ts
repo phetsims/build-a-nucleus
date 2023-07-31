@@ -267,13 +267,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.pdomControlAreaNode.pdomOrder = [ showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
   }
 
-  public getRandomExternalModelPosition(): Vector2 {
+  /**
+   * Return a random external position, in view coordinates, outside the visible bounds.
+   */
+  public getRandomExternalPosition(): Vector2 {
     return this.getRandomEscapePosition().minus( new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ) );
   }
 
   public override emitNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
     const nucleon = super.emitNucleon( particleType, fromDecay );
-    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
+    this.animateAndRemoveParticle( nucleon, this.getRandomExternalPosition() );
     return nucleon;
   }
 
@@ -317,12 +320,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     return values;
   }
 
-  public override removeAlphaParticle( particle: Particle ): void {
+  public override removeAlphaNucleonParticle( particle: Particle ): void {
     this.removeParticle( particle );
-  }
-
-  protected override betaDecayMiniFunction( particle: Particle ): void {
-    this.model.outgoingParticles.add( particle );
   }
 
   /**
@@ -333,6 +332,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const particleToEmit = values.particleToEmit;
     const destination = values.destination;
     const closestParticle = values.closestParticle;
+    this.addOutgoingParticle( particleToEmit );
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( closestParticle, () => {
@@ -358,10 +358,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   public override reset(): void {
     this.symbolAccordionBox.reset();
     this.showElectronCloudBooleanProperty.reset();
-  }
-
-  protected getAtomNodeCenter(): Vector2 {
-    return this.particleAtomNode.emptyAtomCircle.center;
   }
 }
 

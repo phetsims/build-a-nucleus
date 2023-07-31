@@ -262,12 +262,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.energyLevelLayer.addChild( this.findParticleView( particle ) );
   }
 
-  protected getAtomNodeCenter(): Vector2 {
-    // TODO: this most likely isn't doing anything, https://github.com/phetsims/build-a-nucleus/issues/97
-    return this.particleAtomNode.localToGlobalPoint( this.particleAtomNode.emptyAtomCircle.center );
-  }
-
-  public getRandomExternalModelPosition(): Vector2 {
+  /**
+   * Return a random external position outside the visible view bounds, in model coordinates.
+   */
+  public override getRandomExternalPosition(): Vector2 {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
@@ -298,7 +296,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.particleTypeString );
 
     // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition();
+    const destination = this.getRandomExternalPosition();
 
     this.model.miniParticleAtom.reconfigureNucleus();
     this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );
@@ -334,7 +332,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.model.miniParticleAtom;
   }
 
-  public override removeAlphaParticle( particle: Particle ): void {
+  public override removeAlphaNucleonParticle( particle: Particle ): void {
     this.animateAndRemoveMiniAtomParticle( particle );
   }
 
@@ -364,10 +362,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return values;
   }
 
-  protected override betaDecayMiniFunction( particle: Particle ): void {
-    this.createMiniParticleView( particle );
-  }
-
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
@@ -381,11 +375,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const closestParticle = values.closestParticle;
     const nucleonTypeToChange = values.nucleonTypeToChange;
     const newNucleonType = values.newNucleonType;
+    this.createMiniParticleView( particleToEmit );
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     const initialColorChangeAnimation = this.model.miniParticleAtom.changeNucleonType( closestParticle, () => {
 
-      // TODO: particle disappears inside devBounds, https://github.com/phetsims/build-a-nucleus/issues/97
       this.animateAndRemoveMiniAtomParticle( particleToEmit, destination );
       this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
     } );

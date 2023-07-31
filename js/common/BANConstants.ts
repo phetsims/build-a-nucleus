@@ -65,7 +65,7 @@ const BANConstants = {
   DEFAULT_INITIAL_PROTON_COUNT: 0,
   DEFAULT_INITIAL_NEUTRON_COUNT: 0,
 
-  // center of the atom
+  // center of the atom in view coordinates
   SCREEN_VIEW_ATOM_CENTER_X: 335,
   SCREEN_VIEW_ATOM_CENTER_Y: 339,
 
