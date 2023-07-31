@@ -751,8 +751,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * TODO: support dynamic locale for this whole function, https://github.com/phetsims/build-a-nucleus/issues/90
    *
    */
-  public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number,
-                                   doesNuclideExist: boolean, centerX: number, centerY?: number ): void {
+  public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number, doesNuclideExist: boolean ): void {
     let name = AtomIdentifier.getName( protonCount );
     const massNumber = protonCount + neutronCount;
 
@@ -793,10 +792,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       name += ' - ' + massNumber.toString();
     }
     elementNameText.string = name;
-    elementNameText.centerX = centerX;
-    if ( centerY ) {
-      elementNameText.centerY = centerY;
-    }
   }
 
   /**

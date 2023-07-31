@@ -225,6 +225,10 @@ class HalfLifeNumberLineNode extends Node {
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
       this.halfLifeDisplayNode.insertChild( 0, elementName );
+      const desiredCenterX = this.halfLifeDisplayNode.centerX;
+      this.halfLifeDisplayNode.boundsProperty.link( () => {
+        this.halfLifeDisplayNode.centerX = desiredCenterX;
+      } );
 
       // Hook up update listeners.
       Multilink.multilink( [
@@ -233,7 +237,7 @@ class HalfLifeNumberLineNode extends Node {
           options.doesNuclideExistBooleanProperty
         ],
         ( protonCount, neutronCount, doesNuclideExist ) => BANScreenView.updateElementName( elementName,
-          protonCount, neutronCount, doesNuclideExist, this.halfLifeDisplayNode.centerX )
+          protonCount, neutronCount, doesNuclideExist )
       );
     }
 

@@ -115,16 +115,17 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
     this.addChild( this.periodicTableAndIsotopeSymbol );
 
-    this.elementName.centerX = this.doubleArrowButtons.centerX;
-    this.elementName.top = this.nucleonCountPanel.top;
+    this.elementName.boundsProperty.link( () => {
+      this.elementName.centerX = this.doubleArrowButtons.centerX;
+      this.elementName.top = this.nucleonCountPanel.top;
+    } );
 
     this.nucleonCountPanel.left = this.layoutBounds.left + 20;
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist,
-          this.doubleArrowButtons.centerX )
+        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist )
     );
 
     // create and add the 'Nuclear Shell Model' title

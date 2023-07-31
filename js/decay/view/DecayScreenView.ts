@@ -242,15 +242,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
-    // TODO: move elementName to BANScreenView bc text node the same, just positioning different https://github.com/phetsims/build-a-nucleus/issues/93
-
-    this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+    this.elementName.boundsProperty.link( () => {
+      this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+    } );
     this.nucleonCountPanel.left = availableDecaysPanel.left;
 
     // Hook up update listeners.
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist, this.stabilityIndicator.centerX )
+        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist )
     );
 
     // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to show it when there's
