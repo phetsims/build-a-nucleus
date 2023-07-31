@@ -33,19 +33,19 @@ const BANColors = {
 
   // decay colors
   protonEmissionColorProperty: new ProfileColorProperty( buildANucleus, 'protonEmissionColor', {
-    default: new Color( 212, 20, 90 )
+    default: new Color( 247, 2, 93 )
   } ),
   neutronEmissionColorProperty: new ProfileColorProperty( buildANucleus, 'neutronEmissionColor', {
-    default: Color.MAGENTA
+    default: new Color( 255, 31, 255 )
   } ),
   betaPlusColorProperty: new ProfileColorProperty( buildANucleus, 'betaPlusColor', {
-    default: Color.BLUE
+    default: new Color( 133, 202, 255 )
   } ),
   betaMinusColorProperty: new ProfileColorProperty( buildANucleus, 'betaMinusColor', {
-    default: Color.CYAN
+    default: new Color( 148, 245, 245 )
   } ),
   alphaColorProperty: new ProfileColorProperty( buildANucleus, 'alphaColor', {
-    default: Color.GREEN
+    default: new Color( 40, 215, 86 )
   } ),
   stableColorProperty: new ProfileColorProperty( buildANucleus, 'stableColor', {
     default: new Color( 27, 20, 100 )
@@ -115,7 +115,7 @@ const BANColors = {
   } ),
 
   nuclideChartBorderMagicNumberColorProperty: new ProfileColorProperty( buildANucleus, 'nuclideChartBorderMagicNumberColor', {
-    default: new Color( 253, 255, 143 )
+    default: new Color( 251, 255, 36 )
   } ),
 
   chartRadioButtonsBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'chartRadioButtonsBackgroundColor', {
