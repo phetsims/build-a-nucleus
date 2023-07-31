@@ -65,7 +65,7 @@ class BANModel<T extends ParticleAtom> {
 
     this.particles = createObservableArray( {
 
-      // Not positive that this is true, but CT will let us know, see https://github.com/phetsims/build-a-nucleus/issues/105
+      // TODO: Not positive that this is true, but CT will let us know, see https://github.com/phetsims/build-a-nucleus/issues/105
       hasListenerOrderDependencies: true
     } );
 
@@ -80,7 +80,7 @@ class BANModel<T extends ParticleAtom> {
     this.particleAnimations = createObservableArray();
     this.particleAnimations.addItemRemovedListener( animation => {
       animation && animation.stop();
-      animation = null;
+      animation = null; // REVIEW: Is this line needed?
     } );
 
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
