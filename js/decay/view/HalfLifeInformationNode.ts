@@ -9,7 +9,7 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
-import { Node, Text } from '../../../../scenery/js/imports.js';
+import { HBox, HBoxOptions, Node, Text } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
@@ -21,6 +21,16 @@ import BANConstants from '../../common/BANConstants.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );
+
+const ARROW_OPTIONS = {
+  headWidth: 6,
+  tailWidth: 1
+};
+const TEXT_OPTIONS = { font: LABEL_FONT, maxWidth: 175 };
+const HBOX_OPTIONS: HBoxOptions = {
+  spacing: 5,
+  align: 'center'
+};
 
 class HalfLifeInformationNode extends Node {
 
@@ -56,29 +66,23 @@ class HalfLifeInformationNode extends Node {
     infoButton.left = halfLifeNumberLineNode.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE;
     this.addChild( infoButton );
 
-    // function to create and add the arrow and more/less stable label set
-    const arrowAndStableLabel = ( arrowNodeTailX: number, arrowNodeTipX: number, stabilityText: TReadOnlyProperty<string> ) => {
-      const arrow = new ArrowNode( arrowNodeTailX, halfLifeNumberLineNode.bottom, arrowNodeTipX,
-        halfLifeNumberLineNode.bottom, {
-          headWidth: 6,
-          tailWidth: 1
-        } );
-      this.addChild( arrow );
+    const leftArrow = new ArrowNode( 30, 0, 0,
+      0, ARROW_OPTIONS );
+    const leftArrowText = new Text( BuildANucleusStrings.lessStableStringProperty, TEXT_OPTIONS );
+    const leftArrowAndLabelHBox = new HBox( HBOX_OPTIONS );
+    leftArrowAndLabelHBox.children = [ leftArrow, leftArrowText ];
 
-      const arrowText = new Text( stabilityText, { font: LABEL_FONT, maxWidth: 175 } );
-      arrowText.centerY = arrow.centerY;
-      if ( arrowNodeTipX === halfLifeNumberLineNode.left ) {
-        arrowText.left = arrow.right + 5;
-      }
-      else {
-        arrowText.right = arrow.left - 5;
-      }
-      this.addChild( arrowText );
-    };
+    const rightArrow = new ArrowNode( 0, 0, 30,
+      0, ARROW_OPTIONS );
+    const rightArrowText = new Text( BuildANucleusStrings.moreStableStringProperty, TEXT_OPTIONS );
+    const rightArrowAndLabelHBox = new HBox( HBOX_OPTIONS );
+    rightArrowAndLabelHBox.children = [ rightArrowText, rightArrow ];
 
-    // create and add the 'less stable' and 'more  stable' arrow and text set
-    arrowAndStableLabel( halfLifeNumberLineNode.left + 30, halfLifeNumberLineNode.left, BuildANucleusStrings.lessStableStringProperty );
-    arrowAndStableLabel( halfLifeNumberLineNode.right - 30, halfLifeNumberLineNode.right, BuildANucleusStrings.moreStableStringProperty );
+    this.addChild( new HBox( {
+      children: [ leftArrowAndLabelHBox, rightArrowAndLabelHBox ],
+      preferredWidth: halfLifeNumberLineNode.width,
+      centerY: halfLifeNumberLineNode.bottom
+    } ) );
   }
 }
 

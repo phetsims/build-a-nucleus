@@ -345,13 +345,17 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // create and add the Protons and Neutrons label
     const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, nucleonLabelTextOptions );
-    protonsLabel.bottom = doubleArrowButtons.bottom;
-    protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
+    protonsLabel.boundsProperty.link( () => {
+      protonsLabel.bottom = doubleArrowButtons.bottom;
+      protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
+    } );
     this.addChild( protonsLabel );
 
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, nucleonLabelTextOptions );
-    neutronsLabel.bottom = doubleArrowButtons.bottom;
-    neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
+    neutronsLabel.boundsProperty.link( () => {
+      neutronsLabel.bottom = doubleArrowButtons.bottom;
+      neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
+    } );
     this.addChild( neutronsLabel );
 
     // create and add the NucleonCreatorNode for the protons

@@ -210,7 +210,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       visible: true,
       maxWidth: 225
     } );
-    this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
+    this.stabilityIndicator.boundsProperty.link( () => {
+      this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
+    } );
     this.addChild( this.stabilityIndicator );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
@@ -229,7 +231,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       else {
         this.stabilityIndicator.string = '';
       }
-      this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
     };
 
     // Add the listeners that control the label content
