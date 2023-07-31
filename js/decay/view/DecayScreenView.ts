@@ -56,7 +56,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
-      model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty );
+      this.elementNameStringProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 30;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
@@ -246,12 +246,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
     } );
     this.nucleonCountPanel.left = availableDecaysPanel.left;
-
-    // Hook up update listeners.
-    Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
-      ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist )
-    );
 
     // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to show it when there's
     // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the

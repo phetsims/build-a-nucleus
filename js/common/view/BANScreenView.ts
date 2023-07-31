@@ -38,7 +38,9 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import BANParticle from '../model/BANParticle.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -97,6 +99,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly protonArrowButtons: Node;
   protected readonly neutronArrowButtons: Node;
   protected readonly elementName: Text;
+
+  // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
+  protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
   private readonly atomCenter: Vector2;
   private readonly particleViewPositionVector: Vector2;
   protected particleAtomNode: ParticleAtomNode;
@@ -125,8 +130,83 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.nucleonCountPanel );
 
+    this.elementNameStringProperty = new DerivedStringProperty( [
+      model.particleAtom.protonCountProperty,
+      model.particleAtom.neutronCountProperty,
+      model.doesNuclideExistBooleanProperty,
+
+      // We need to update whenever any of these strings change, to support Dynamic Locale
+      BuildANucleusStrings.nameMassPatternStringProperty,
+      BuildANucleusStrings.neutronsLowercaseStringProperty,
+      BuildANucleusStrings.elementDoesNotFormPatternStringProperty,
+      BuildANucleusStrings.doesNotFormStringProperty,
+      BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty,
+      BuildANucleusStrings.neutronLowercaseStringProperty,
+      BuildANucleusStrings.clusterOfNeutronsPatternStringProperty
+    ], ( protonCount, neutronCount, doesNuclideExist ) => {
+      let name = AtomIdentifier.getName( protonCount );
+      const massNumber = protonCount + neutronCount;
+
+      const massNumberString = massNumber.toString();
+
+      const nameMass = StringUtils.fillIn( BuildANucleusStrings.nameMassPatternStringProperty, {
+        name: name,
+        mass: massNumberString
+      } );
+
+      // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
+      if ( !doesNuclideExist && massNumber !== 0 ) {
+
+        // no protons
+        if ( name.length === 0 ) {
+          name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
+            mass: massNumberString,
+            particleType: BuildANucleusStrings.neutronsLowercaseStringProperty,
+            doesNotForm: BuildANucleusStrings.doesNotFormStringProperty
+          } );
+        }
+        else {
+          name = StringUtils.fillIn( BuildANucleusStrings.elementDoesNotFormPatternStringProperty, {
+            nameMass: nameMass,
+            doesNotForm: BuildANucleusStrings.doesNotFormStringProperty
+          } );
+        }
+      }
+
+      // no protons
+      else if ( name.length === 0 ) {
+
+        // no neutrons
+        if ( neutronCount === 0 ) {
+          name = '';
+        }
+
+        // only one neutron
+        else if ( neutronCount === 1 ) {
+          name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
+            mass: neutronCount,
+            particleType: BuildANucleusStrings.neutronLowercaseStringProperty,
+            doesNotForm: ''
+          } );
+        }
+
+        // multiple neutrons
+        else {
+          // TODO: how do I get here? https://github.com/phetsims/build-a-nucleus/issues/106
+          name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
+            neutronCount: neutronCount
+          } );
+        }
+
+      }
+      else {
+        name = nameMass;
+      }
+      return name;
+    } );
+
     // Create the textual readout for the element name.
-    this.elementName = new Text( '', {
+    this.elementName = new Text( this.elementNameStringProperty, {
       font: BANConstants.REGULAR_FONT,
       fill: Color.RED,
       maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
@@ -744,54 +824,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const particleView = this.particleViewMap[ particle.id ];
     assert && assert( particleView, 'Did not find matching ParticleView for type ' + particle.type + ' and id ' + particle.id );
     return particleView;
-  }
-
-  /**
-   * Define the update function for the element name.
-   * TODO: support dynamic locale for this whole function, https://github.com/phetsims/build-a-nucleus/issues/90
-   *
-   */
-  public static updateElementName( elementNameText: Text, protonCount: number, neutronCount: number, doesNuclideExist: boolean ): void {
-    let name = AtomIdentifier.getName( protonCount );
-    const massNumber = protonCount + neutronCount;
-
-    // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
-    if ( !doesNuclideExist && massNumber !== 0 ) {
-
-      // no protons
-      if ( name.length === 0 ) {
-        name += massNumber.toString() + ' ' + BuildANucleusStrings.neutronsLowercaseStringProperty.value + ' ' + BuildANucleusStrings.doesNotFormStringProperty.value;
-      }
-      else {
-        name += ' - ' + massNumber.toString() + ' ' + BuildANucleusStrings.doesNotFormStringProperty.value;
-      }
-    }
-
-    // no protons
-    else if ( name.length === 0 ) {
-
-      // no neutrons
-      if ( neutronCount === 0 ) {
-        name = '';
-      }
-
-      // only one neutron
-      else if ( neutronCount === 1 ) {
-        name = neutronCount + ' ' + BuildANucleusStrings.neutronLowercaseStringProperty.value;
-      }
-
-      // multiple neutrons
-      else {
-        name = new PatternStringProperty( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
-          neutronCount: neutronCount
-        } ).value;
-      }
-
-    }
-    else {
-      name += ' - ' + massNumber.toString();
-    }
-    elementNameText.string = name;
   }
 
   /**

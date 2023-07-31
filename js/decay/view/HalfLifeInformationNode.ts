@@ -36,9 +36,7 @@ class HalfLifeInformationNode extends Node {
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
                       isStableBooleanProperty: TReadOnlyProperty<boolean>,
-                      protonCountProperty: TReadOnlyProperty<number>,
-                      neutronCountProperty: TReadOnlyProperty<number>,
-                      doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean> ) {
+                      elementNameStringProperty: TReadOnlyProperty<string> ) {
     super();
 
     // create and add the halfLifeNumberLineNode
@@ -54,7 +52,7 @@ class HalfLifeInformationNode extends Node {
 
     // create and add the HalfLifeInfoDialog
     const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty,
-      protonCountProperty, neutronCountProperty, doesNuclideExistBooleanProperty );
+      elementNameStringProperty );
 
     // create and add the info button
     const infoButton = new InfoButton( {

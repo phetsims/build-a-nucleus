@@ -122,12 +122,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     this.nucleonCountPanel.left = this.layoutBounds.left + 20;
 
-    // Hook up update listeners.
-    Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty ],
-      ( protonCount: number, neutronCount: number, doesNuclideExist: boolean ) =>
-        BANScreenView.updateElementName( this.elementName, protonCount, neutronCount, doesNuclideExist )
-    );
-
     // create and add the 'Nuclear Shell Model' title
     const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, { font: BANConstants.REGULAR_FONT } );
     nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;

@@ -28,12 +28,11 @@ import BANConstants from '../../common/BANConstants.js';
 import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfinityNode from './InfinityNode.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import BANScreenView from '../../common/view/BANScreenView.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
 
 // types
 type SelfOptions = {
@@ -48,9 +47,7 @@ type SelfOptions = {
   // if the half-life label is fixed, place it centered above the number line, otherwise, animate its position with
   // the half-life arrow
   isHalfLifeLabelFixed: boolean;
-  protonCountProperty?: TReadOnlyProperty<number>;
-  neutronCountProperty?: TReadOnlyProperty<number>;
-  doesNuclideExistBooleanProperty?: TReadOnlyProperty<boolean>;
+  elementNameStringProperty?: TReadOnlyProperty<string>;
 
   unitsLabelFont?: PhetFont;
 };
@@ -89,9 +86,7 @@ class HalfLifeNumberLineNode extends Node {
 
     const options = optionize<HalfLifeNumberLineNodeOptions, SelfOptions, NodeOptions>()( {
       halfLifeDisplayScale: 1,
-      protonCountProperty: new NumberProperty( 0 ),
-      neutronCountProperty: new NumberProperty( 0 ),
-      doesNuclideExistBooleanProperty: new BooleanProperty( false ),
+      elementNameStringProperty: new StringProperty( '' ),
       unitsLabelFont: new PhetFont( 18 )
     }, providedOptions );
 
@@ -219,7 +214,7 @@ class HalfLifeNumberLineNode extends Node {
     if ( !options.isHalfLifeLabelFixed ) {
 
       // Create the textual readout for the element name.
-      const elementName = new Text( '', {
+      const elementName = new Text( options.elementNameStringProperty, {
         font: TITLE_FONT,
         fill: Color.RED,
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
@@ -229,16 +224,6 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeDisplayNode.boundsProperty.link( () => {
         this.halfLifeDisplayNode.centerX = desiredCenterX;
       } );
-
-      // Hook up update listeners.
-      Multilink.multilink( [
-          options.protonCountProperty,
-          options.neutronCountProperty,
-          options.doesNuclideExistBooleanProperty
-        ],
-        ( protonCount, neutronCount, doesNuclideExist ) => BANScreenView.updateElementName( elementName,
-          protonCount, neutronCount, doesNuclideExist )
-      );
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );

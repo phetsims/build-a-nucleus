@@ -25,9 +25,7 @@ class HalfLifeInfoDialog extends Dialog {
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
                       isStableBooleanProperty: TReadOnlyProperty<boolean>,
-                      protonCountProperty: TReadOnlyProperty<number>,
-                      neutronCountProperty: TReadOnlyProperty<number>,
-                      doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean> ) {
+                      elementNameStringProperty: TReadOnlyProperty<string> ) {
 
     const leftSideTimescalePoints = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS,
@@ -98,9 +96,7 @@ class HalfLifeInfoDialog extends Dialog {
       halfLifeArrowLength: 45,
       halfLifeDisplayScale: 0.8,
       isHalfLifeLabelFixed: false,
-      protonCountProperty: protonCountProperty,
-      neutronCountProperty: neutronCountProperty,
-      doesNuclideExistBooleanProperty: doesNuclideExistBooleanProperty
+      elementNameStringProperty: elementNameStringProperty
     } );
 
     const numberLineNodeAndLegend = new VBox( {

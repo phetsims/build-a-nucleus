@@ -61,6 +61,9 @@ type StringsType = {
   'protonsStringProperty': LocalizedStringProperty;
   'neutronsUppercaseStringProperty': LocalizedStringProperty;
   'neutronsLowercaseStringProperty': LocalizedStringProperty;
+  'nameMassPatternStringProperty': LocalizedStringProperty;
+  'elementDoesNotFormPatternStringProperty': LocalizedStringProperty;
+  'zeroParticlesDoesNotFormPatternStringProperty': LocalizedStringProperty;
   'electronCloudStringProperty': LocalizedStringProperty;
   'clusterOfNeutronsPatternStringProperty': LocalizedStringProperty;
   'availableDecaysInfoPanelTextStringProperty': LocalizedStringProperty;
