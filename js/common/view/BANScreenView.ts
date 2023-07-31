@@ -915,6 +915,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     return nucleon;
   }
 
+  /**
+   * Return the model of the cluster of nucleons, which is the main model in the Decay Screen and the mini nucleus in
+   * the Chart Screen.
+   */
   protected abstract getParticleAtom(): ParticleAtom;
 
   protected abstract addOutgoingParticle( particle: Particle ): void;
@@ -925,8 +929,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
   protected emitAlphaParticle(): EmitAlphaParticleValues {
     const particleAtom = this.getParticleAtom();
-    assert && assert( particleAtom.protonCountProperty.value >= 2 &&
-    particleAtom.neutronCountProperty.value >= 2,
+    assert && assert( this.model.particleAtom.protonCountProperty.value >= 2 &&
+    this.model.particleAtom.neutronCountProperty.value >= 2,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
     // get the protons and neutrons closest to the center of the particleAtom
@@ -1001,14 +1005,14 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = particleAtom.neutrons;
       particleToEmit = new BANParticle( ParticleType.ELECTRON.particleTypeString );
-      nucleonTypeCountValue = particleAtom.neutronCountProperty.value;
+      nucleonTypeCountValue = this.model.particleAtom.neutronCountProperty.value;
       nucleonTypeToChange = ParticleType.NEUTRON;
       newNucleonType = ParticleType.PROTON;
     }
     else {
       particleArray = particleAtom.protons;
       particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
-      nucleonTypeCountValue = particleAtom.protonCountProperty.value;
+      nucleonTypeCountValue = this.model.particleAtom.protonCountProperty.value;
       nucleonTypeToChange = ParticleType.PROTON;
       newNucleonType = ParticleType.NEUTRON;
     }
