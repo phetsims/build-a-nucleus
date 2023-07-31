@@ -294,21 +294,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition();
-    const totalDistanceParticleTravels = miniNucleon.positionProperty.value.distance( destination );
-    const animationDuration = totalDistanceParticleTravels / miniNucleon.animationVelocityProperty.value;
 
     this.model.miniParticleAtom.reconfigureNucleus();
     this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );
 
     // Fade away the nucleon in the ParticleNucleus
-    const shellNucleusNucleon = this.fadeOutShellNucleon( particleType, animationDuration, fromDecay );
+    const shellNucleusNucleon = this.fadeOutShellNucleon( particleType, fromDecay );
 
     this.decaying = false;
 
     return shellNucleusNucleon;
   }
 
-  private fadeOutShellNucleon( particleType: ParticleType, animationDuration: number, fromDecay?: string ): Particle {
+  private fadeOutShellNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
     const shellNucleusNucleon = super.emitNucleon( particleType, fromDecay );
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;
@@ -336,7 +334,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   }
 
   public override addOutgoingParticle( particle: Particle ): void {
-    // no need to add the outgoing particle because that's done in a subclass
+    // no need to add the outgoing particle because that's done in this.animateAndRemoveMiniAtomParticle()
   }
 
   /**
@@ -349,13 +347,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // animate mini particle atom
     const values = super.emitAlphaParticle();
-    const animationDuration = values.animationDuration;
     this.model.miniParticleAtom.reconfigureNucleus();
 
 
     // animate nucleons in NucleonShellView
-    _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.PROTON, animationDuration ) );
-    _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.NEUTRON, animationDuration ) );
+    _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.PROTON ) );
+    _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.NEUTRON ) );
 
     this.decaying = false;
 
@@ -390,9 +387,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model.particleAnimations.add( initialColorChangeAnimation );
 
     // animate the shell view
-    const totalDistanceParticleTravels = particleToEmit.positionProperty.value.distance( destination );
-    const animationDuration = totalDistanceParticleTravels / particleToEmit.animationVelocityProperty.value;
-    this.fadeOutShellNucleon( nucleonTypeToChange, animationDuration, betaDecayType.name );
+    this.fadeOutShellNucleon( nucleonTypeToChange, betaDecayType.name );
 
     const particle = this.createParticleFromStack( newNucleonType );
 
