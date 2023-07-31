@@ -123,27 +123,39 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.nucleonCountPanel.left = this.layoutBounds.left + 20;
 
     // create and add the 'Nuclear Shell Model' title
-    const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, { font: BANConstants.REGULAR_FONT } );
-    nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
-    nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
+    const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, {
+      font: BANConstants.REGULAR_FONT,
+      maxWidth: 220
+    } );
 
     // create the 'highlight' text behind 'Nuclear Shell Model' text
     const nuclearShellModelTextHighlight = new Rectangle( nuclearShellModelText.bounds.dilateXY( 15, 5 ), {
       fill: BANColors.shellModelTextHighlightColorProperty,
       cornerRadius: 10
     } );
-    nuclearShellModelTextHighlight.centerX = nuclearShellModelText.centerX;
-    nuclearShellModelTextHighlight.centerY = nuclearShellModelText.centerY;
+    nuclearShellModelText.boundsProperty.link( () => {
+      nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
+      nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
+
+      nuclearShellModelTextHighlight.setRectBounds( nuclearShellModelText.bounds.dilateXY( 15, 5 ) );
+      nuclearShellModelTextHighlight.centerX = nuclearShellModelText.centerX;
+      nuclearShellModelTextHighlight.centerY = nuclearShellModelText.centerY;
+    } );
 
     // place highlight behind the text
     this.addChild( nuclearShellModelTextHighlight );
     this.addChild( nuclearShellModelText );
 
     // create and add the 'Energy' label
-    const energyText = new RichText( BuildANucleusStrings.energyStringProperty, { font: BANConstants.REGULAR_FONT } );
+    const energyText = new RichText( BuildANucleusStrings.energyStringProperty, {
+      font: BANConstants.REGULAR_FONT,
+      maxWidth: 150
+    } );
     energyText.rotate( -Math.PI / 2 );
-    energyText.left = this.nucleonCountPanel.left;
-    energyText.centerY = this.layoutBounds.centerY + 20;
+    energyText.boundsProperty.link( () => {
+      energyText.left = this.nucleonCountPanel.left;
+      energyText.centerY = this.layoutBounds.centerY + 20;
+    } );
     this.addChild( energyText );
 
     // create and add the 'Energy' arrow
@@ -214,6 +226,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         font: BANConstants.LEGEND_FONT
       },
       minWidth: 80,
+      maxWidth: 160,
       listener: () => fullChartDialog.show()
     } );
     fullChartTextButton.left = showMagicNumbersCheckbox.left;

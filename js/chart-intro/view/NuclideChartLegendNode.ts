@@ -32,7 +32,10 @@ class NuclideChartLegendNode extends Node {
             fill: decayTypeColor,
             stroke: BANColors.nuclideChartBorderColorProperty
           } ),
-          new RichText( decayTypeText, { font: BANConstants.LEGEND_FONT } )
+          new RichText( decayTypeText, {
+            font: BANConstants.LEGEND_FONT.font,
+            maxWidth: 100
+          } )
         ],
         spacing: 5
         // TODO: add maxWidth https://github.com/phetsims/build-a-nucleus/issues/90

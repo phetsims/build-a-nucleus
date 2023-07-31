@@ -94,16 +94,22 @@ class NucleonNumberLine extends Node {
     this.addChild( numberLineNode );
 
     // create and add the number line axis label
-    const numberLineLabel = new Text( options.axisLabelStringProperty, { fontSize: 12 } );
-    if ( orientation === Orientation.HORIZONTAL ) {
-      numberLineLabel.top = numberLine.bottom + 15;
-      numberLineLabel.centerX = numberLine.centerX;
-    }
-    else {
-      numberLineLabel.setRotation( 3 * Math.PI / 2 );
-      numberLineLabel.centerX = numberLine.centerX - 25;
-      numberLineLabel.centerY = numberLine.centerY;
-    }
+    const numberLineLabel = new Text( options.axisLabelStringProperty, {
+      fontSize: 12,
+      maxWidth: 150
+    } );
+    numberLineLabel.boundsProperty.link( () => {
+
+      if ( orientation === Orientation.HORIZONTAL ) {
+        numberLineLabel.top = numberLine.bottom + 15;
+        numberLineLabel.centerX = numberLine.centerX;
+      }
+      else {
+        numberLineLabel.setRotation( 3 * Math.PI / 2 );
+        numberLineLabel.centerX = numberLine.centerX - 25;
+        numberLineLabel.centerY = numberLine.centerY;
+      }
+    } );
     this.addChild( numberLineLabel );
   }
 }

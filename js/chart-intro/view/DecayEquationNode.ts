@@ -42,7 +42,10 @@ class DecayEquationNode extends VBox {
     } );
 
     const stableText = new Text( BuildANucleusStrings.stableStringProperty, TEXT_OPTIONS );
-    const mostLikelyDecayText = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, { font: BANConstants.LEGEND_FONT } );
+    const mostLikelyDecayText = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, {
+      font: BANConstants.LEGEND_FONT,
+      maxWidth: 150
+    } );
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
@@ -58,6 +61,7 @@ class DecayEquationNode extends VBox {
             unknownSpacePatternStringProperty
           ], unknownText => `${currentCellModel.decayTypeLikelihoodPercent}` || unknownText )
         } ), {
+          maxWidth: 100,
           font: BANConstants.LEGEND_FONT
         } );
 
