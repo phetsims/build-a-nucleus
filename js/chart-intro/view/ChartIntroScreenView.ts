@@ -15,7 +15,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Line, Node, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Line, Node, RichText, Text } from '../../../../scenery/js/imports.js';
 import BANConstants from '../../common/BANConstants.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BANColors from '../../common/BANColors.js';
@@ -35,6 +35,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import FullChartDialog from './FullChartDialog.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -127,24 +128,20 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       font: BANConstants.REGULAR_FONT,
       maxWidth: 220
     } );
-
-    // create the 'highlight' text behind 'Nuclear Shell Model' text
-    const nuclearShellModelTextHighlight = new Rectangle( nuclearShellModelText.bounds.dilateXY( 15, 5 ), {
-      fill: BANColors.shellModelTextHighlightColorProperty,
-      cornerRadius: 10
-    } );
-    nuclearShellModelText.boundsProperty.link( () => {
-      nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
-      nuclearShellModelText.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
-
-      nuclearShellModelTextHighlight.setRectBounds( nuclearShellModelText.bounds.dilateXY( 15, 5 ) );
-      nuclearShellModelTextHighlight.centerX = nuclearShellModelText.centerX;
-      nuclearShellModelTextHighlight.centerY = nuclearShellModelText.centerY;
+    const textBackground = new BackgroundNode( nuclearShellModelText, {
+      xMargin: 15,
+      yMargin: 5,
+      rectangleOptions: {
+        fill: BANColors.shellModelTextHighlightColorProperty,
+        cornerRadius: 10
+      }
     } );
 
-    // place highlight behind the text
-    this.addChild( nuclearShellModelTextHighlight );
-    this.addChild( nuclearShellModelText );
+    textBackground.boundsProperty.link( () => {
+      textBackground.centerX = this.doubleArrowButtons.centerX;
+      textBackground.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
+    } );
+    this.addChild( textBackground );
 
     // create and add the 'Energy' label
     const energyText = new RichText( BuildANucleusStrings.energyStringProperty, {
