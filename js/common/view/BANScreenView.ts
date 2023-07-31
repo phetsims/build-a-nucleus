@@ -511,7 +511,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.checkIfCreatorNodeShouldBeInvisible( particleType );
       }
 
-      // TODO: unlink userControlledListener https://github.com/phetsims/build-a-nucleus/issues/93
       particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
 
       particle.disposeEmitter.addListener( () => {
