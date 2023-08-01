@@ -252,7 +252,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
       nuclideChartAccordionBox,
-      partialChartRadioButton
+      partialChartRadioButton,
+      showMagicNumbersCheckbox,
+      fullChartTextButton
     ] );
   }
 
