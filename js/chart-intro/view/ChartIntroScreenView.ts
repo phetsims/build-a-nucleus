@@ -53,7 +53,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   private readonly protonEnergyLevelNode: NucleonShellView;
   private readonly neutronEnergyLevelNode: NucleonShellView;
   private readonly energyLevelLayer: Node;
-  private decaying = false; // TODO: LV and MK really hate this flag, https://github.com/phetsims/build-a-nucleus/issues/97
+
+  // If the miniAtom is connected to the main particleAtom (ParticleNucleus in the Chart Intro screen). When true the
+  // mini ParticleAtom is kept in sync (false only for when decaying particles cause behavior differences in each
+  // representation).
+  private isMiniAtomConnected = true;
   private readonly miniAtomMVT: ModelViewTransform2;
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
@@ -71,7 +75,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.energyLevelLayer = new Node();
 
     this.miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
-    // update nucleons in mini-particle as the particleAtom's nucleon count properties change
+
+    // update nucleons in mini-particle as the particleAtom's nucleon changes. This listener keeps the mini-particle in sync.
     const nucleonCountListener = ( nucleonCount: number, particleType: ParticleType ) => {
       const currentMiniAtomNucleonCount = particleType === ParticleType.PROTON ?
                                           model.miniParticleAtom.protonCountProperty.value :
@@ -82,7 +87,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
       // add nucleons to miniAtom
       if ( nucleonDelta < 0 ) {
-        if ( !this.decaying ) {
+
+        // If true, keep the mini atom's particles identical to those in the ParticleNucleus
+        if ( this.isMiniAtomConnected ) {
           _.times( nucleonDelta * -1, () => {
             const miniParticle = model.createMiniParticleModel( particleType );
             this.createMiniParticleView( miniParticle );
@@ -93,7 +100,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       // remove nucleons from miniAtom
       else if ( nucleonDelta > 0 ) {
         _.times( nucleonDelta, () => {
-          if ( !this.decaying ) {
+
+          // If true, keep the mini atom's particles identical to those in the ParticleNucleus
+          if ( this.isMiniAtomConnected ) {
             const particle = model.miniParticleAtom.extractParticle( particleType.particleTypeString );
             particle.dispose();
             assert && assert( !this.model.particles.includes( particle ),
@@ -292,7 +301,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Removes a nucleon from the nucleus and animates it out of view.
    */
   public override emitNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
-    this.decaying = true;
+    this.isMiniAtomConnected = false;
 
     // Handle the animation for the mini ParticleAtom
     const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.particleTypeString );
@@ -306,7 +315,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // Fade away the nucleon in the ParticleNucleus
     const shellNucleusNucleon = this.fadeOutShellNucleon( particleType, fromDecay );
 
-    this.decaying = false;
+    this.isMiniAtomConnected = true;
 
     return shellNucleusNucleon;
   }
@@ -347,7 +356,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * particle out of view.
    */
   protected override emitAlphaParticle(): AlphaParticle {
-    this.decaying = true;
+    this.isMiniAtomConnected = false;
 
     // animate mini particle atom
     const alphaParticle = super.emitAlphaParticle();
@@ -357,7 +366,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.PROTON ) );
     _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.NEUTRON ) );
 
-    this.decaying = false;
+    this.isMiniAtomConnected = true;
 
     return alphaParticle;
   }
@@ -366,7 +375,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
   protected override betaDecay( betaDecayType: DecayType ): BetaDecayReturnValues {
-    this.decaying = true;
+    this.isMiniAtomConnected = false;
 
     // animate mini particleAtom
     const values = super.betaDecay( betaDecayType );
@@ -403,7 +412,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model.particleAnimations.push( fadeAnimation );
     fadeAnimation.start();
 
-    this.decaying = false;
+    this.isMiniAtomConnected = true;
 
     return values;
   }
