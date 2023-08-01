@@ -263,9 +263,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   }
 
   /**
-   * Return a random external position outside the visible view bounds, in model coordinates.
+   * In this screen, particles are only emitted from the miniAtom so use the miniAtomMVT to return an external position in model coordinates.
    */
-  public override getRandomExternalPosition(): Vector2 {
+  public override getRandomExternalModelPosition(): Vector2 {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
@@ -296,7 +296,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.particleTypeString );
 
     // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalPosition();
+    const destination = this.getRandomExternalModelPosition();
 
     this.model.miniParticleAtom.reconfigureNucleus();
     this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );

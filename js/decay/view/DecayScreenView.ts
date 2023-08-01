@@ -267,16 +267,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.pdomControlAreaNode.pdomOrder = [ showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
   }
 
-  /**
-   * Return a random external position, in view coordinates, outside the visible bounds.
-   */
-  public getRandomExternalPosition(): Vector2 {
-    return this.getRandomEscapePosition().minus( new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ) );
+  public getRandomExternalModelPosition(): Vector2 {
+    return this.particleTransform.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
   public override emitNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
     const nucleon = super.emitNucleon( particleType, fromDecay );
-    this.animateAndRemoveParticle( nucleon, this.getRandomExternalPosition() );
+    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
     return nucleon;
   }
 

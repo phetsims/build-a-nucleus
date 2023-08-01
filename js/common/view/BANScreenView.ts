@@ -92,8 +92,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly protonsCreatorNode: Node;
   protected readonly neutronsCreatorNode: Node;
 
-  public protonsCreatorNodeModelCenter: Vector2;
-  public neutronsCreatorNodeModelCenter: Vector2;
+  public readonly protonsCreatorNodeModelCenter: Vector2;
+  public readonly neutronsCreatorNodeModelCenter: Vector2;
 
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
@@ -104,7 +104,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
   private readonly atomCenter: Vector2;
   private readonly particleViewPositionVector: Vector2;
-  protected particleAtomNode: ParticleAtomNode;
+  protected readonly particleAtomNode: ParticleAtomNode;
+  protected readonly particleTransform: ModelViewTransform2;
 
   protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
 
@@ -450,8 +451,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
-    this.protonsCreatorNodeModelCenter = this.protonsCreatorNode.center.minus( options.particleViewPositionVector );
-    this.neutronsCreatorNodeModelCenter = this.neutronsCreatorNode.center.minus( options.particleViewPositionVector );
+    this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 );
+    this.protonsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.protonsCreatorNode.center );
+    this.neutronsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.neutronsCreatorNode.center );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -494,11 +496,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       return particleType;
     };
 
-    const particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 );
-
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
-      const particleView = new ParticleView( particle, particleTransform );
+      const particleView = new ParticleView( particle, this.particleTransform );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle );
@@ -847,7 +847,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // only animate the removal of a nucleon if it was dragged out of the creator node
     else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-      this.animateAndRemoveParticle( nucleon, particleCreatorNodeCenter.minus( this.particleViewPositionVector ) );
+      this.animateAndRemoveParticle( nucleon, this.particleTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 
@@ -927,9 +927,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected abstract addOutgoingParticle( particle: Particle ): void;
 
   /**
-   * Return a random position, in either model or view coordinates, that is outside the visible bounds.
+   * Return a random position, in model coordinates, that is outside the visible bounds.
    */
-  protected abstract getRandomExternalPosition(): Vector2;
+  protected abstract getRandomExternalModelPosition(): Vector2;
 
   protected emitAlphaParticle(): EmitAlphaParticleValues {
     const particleAtom = this.getParticleAtom();
@@ -967,7 +967,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
 
     // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalPosition();
+    const destination = this.getRandomExternalModelPosition();
     const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
 
     // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
@@ -1032,9 +1032,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
     particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
 
-    const destination = this.getRandomExternalPosition();
-    // TODO: particle disappears inside devBounds, https://github.com/phetsims/build-a-nucleus/issues/97
-    assert && assert( !this.visibleBoundsProperty.value.containsPoint( destination ), 'Particle will disappear inside visible bounds.' );
+    const destination = this.getRandomExternalModelPosition();
 
     return {
       closestParticle: closestParticle,
