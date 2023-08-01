@@ -198,7 +198,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // Whether to show a special highlight for magic-numbered nuclides in the charts
     const showMagicNumbersProperty = new BooleanProperty( false );
 
-    // TODO: use align group to match width's of accordion box and periodic table https://github.com/phetsims/build-a-nucleus/issues/93
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
       this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ), showMagicNumbersProperty );
