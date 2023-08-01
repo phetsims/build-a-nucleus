@@ -953,18 +953,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
       this.addOutgoingParticle( nucleon );
+      this.findParticleView( nucleon ).inputEnabled = false;
     } );
 
     // ensure the creator nodes are visible since particles are being removed from the particleAtom
     alphaParticle.moveAllParticlesToDestination();
     this.checkIfCreatorNodesShouldBeVisible();
-
-    alphaParticle.protons.forEach( proton => {
-      this.findParticleView( proton ).inputEnabled = false;
-    } );
-    alphaParticle.neutrons.forEach( neutron => {
-      this.findParticleView( neutron ).inputEnabled = false;
-    } );
 
     // animate the particle to a random destination outside the model
     const destination = this.getRandomExternalModelPosition();
