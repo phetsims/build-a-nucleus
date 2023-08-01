@@ -31,7 +31,6 @@ class ParticleType extends EnumerationValue {
                       public readonly labelStringProperty: TReadOnlyProperty<string>,
                       public readonly colorProperty: ProfileColorProperty ) {
     super();
-
   }
 }
 
