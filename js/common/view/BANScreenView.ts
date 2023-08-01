@@ -938,19 +938,16 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
     // get the protons and neutrons closest to the center of the particleAtom
-    const protonsToRemove = _.sortBy( [ ...particleAtom.protons ], proton =>
-      proton.positionProperty.value.distance( particleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE );
-    const neutronsToRemove = _.sortBy( [ ...particleAtom.neutrons ],
-      neutron => neutron.positionProperty.value.distance( particleAtom.positionProperty.value ) )
-      .slice( 0, NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE );
+    const protonsToRemove = _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE,
+      () => particleAtom.extractParticleClosestToCenter( ParticleType.PROTON.particleTypeString ) );
+    const neutronsToRemove = _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE,
+      () => particleAtom.extractParticleClosestToCenter( ParticleType.NEUTRON.particleTypeString ) );
 
     // create and add the alpha particle node
     const alphaParticle = new ParticleAtom();
 
     // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
-      particleAtom.removeParticle( nucleon );
       alphaParticle.addParticle( nucleon );
       this.addOutgoingParticle( nucleon );
       this.findParticleView( nucleon ).inputEnabled = false;
