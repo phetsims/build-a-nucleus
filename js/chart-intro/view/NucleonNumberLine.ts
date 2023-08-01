@@ -34,6 +34,9 @@ class NucleonNumberLine extends Node {
                       orientation: Orientation, providedOptions: NucleonNumberLineOptions ) {
 
     const options = optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
+
+      // In model coordinates. This will be used to position the labels to be aligned with the "bar" space in between
+      // the tick marks, and not as labels for the actual tick marks.
       tickSpacing: 1
     }, providedOptions );
 
