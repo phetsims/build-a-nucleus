@@ -82,11 +82,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
       // add nucleons to miniAtom
       if ( nucleonDelta < 0 ) {
-        // TODO: why not do the decaying check here? Investigate. https://github.com/phetsims/build-a-nucleus/issues/97
-        _.times( nucleonDelta * -1, () => {
-          const miniParticle = model.createMiniParticleModel( particleType );
-          this.createMiniParticleView( miniParticle );
-        } );
+        if ( !this.decaying ) {
+          _.times( nucleonDelta * -1, () => {
+            const miniParticle = model.createMiniParticleModel( particleType );
+            this.createMiniParticleView( miniParticle );
+          } );
+        }
       }
 
       // remove nucleons from miniAtom
