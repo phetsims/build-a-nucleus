@@ -38,7 +38,7 @@ class DecayModel extends BANModel<ParticleAtom> {
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],
       ( protonCount: number, neutronCount: number, doesNuclideExist: boolean, isStable: boolean ) => {
 
-        let halfLife;
+        let halfLife: number | undefined | null;
 
         // a nuclide of 0 protons and 0 neutrons does not exist
         if ( doesNuclideExist && !( protonCount === 0 && neutronCount === 0 ) ) {
@@ -55,7 +55,7 @@ class DecayModel extends BANModel<ParticleAtom> {
 
           // the nuclide is unstable and its half-life data is not missing, update its half-life
           else {
-            halfLife = AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount )!;
+            halfLife = AtomIdentifier.getNuclideHalfLife( protonCount, neutronCount );
           }
         }
 
@@ -64,9 +64,10 @@ class DecayModel extends BANModel<ParticleAtom> {
           halfLife = 0;
         }
 
-        // TODO: is this alright that the halfLife is not correct yet? https://github.com/phetsims/build-a-nucleus/issues/93
-        // one of the boolean properties (doesNuclideExist or isStable) is not updated yet but it will be updated soon
-        if ( halfLife === undefined ) {
+        // Since this sim relies on two Properties (one for protons and one for neutrons), it is possible to have an
+        // intermediate state where there is an unexpected "no half life". Be graceful in this case, knowing that
+        // listeners are going to soon fire that will bring this nuclide back into an actual substance.
+        if ( halfLife === undefined || halfLife === null ) {
           return 0;
         }
         else {
