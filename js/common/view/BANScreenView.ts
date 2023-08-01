@@ -41,6 +41,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import AlphaParticle from '../model/AlphaParticle.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -70,8 +71,6 @@ export type BetaDecayReturnValues = {
 
 // constants
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
-const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
-const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 
 abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>> extends ScreenView {
 
@@ -928,22 +927,22 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   protected abstract getRandomExternalModelPosition(): Vector2;
 
-  protected emitAlphaParticle(): EmitAlphaParticleValues {
+  protected emitAlphaParticle(): AlphaParticle {
     const particleAtom = this.getParticleAtom();
     assert && assert( this.model.particleAtom.protonCountProperty.value >= 2 &&
     this.model.particleAtom.neutronCountProperty.value >= 2,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
-    // get the protons and neutrons closest to the center of the particleAtom
-    const protonsToRemove = _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE,
+    // create and add the alpha particle node
+    const alphaParticle = new AlphaParticle();
+
+    // get the protons and neutrons closest to the center of the particleAtom and remove them from the particleAtom
+    const protonsToRemove = _.times( alphaParticle.numberOfAllowedProtons,
       () => particleAtom.extractParticleClosestToCenter( ParticleType.PROTON.particleTypeString ) );
-    const neutronsToRemove = _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE,
+    const neutronsToRemove = _.times( alphaParticle.numberOfAllowedNeutrons,
       () => particleAtom.extractParticleClosestToCenter( ParticleType.NEUTRON.particleTypeString ) );
 
-    // create and add the alpha particle node
-    const alphaParticle = new ParticleAtom();
-
-    // remove the obtained protons and neutrons from the particleAtom and add them to the alphaParticle
+    // add the obtained protons and neutrons to the alphaParticle
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
       alphaParticle.addParticle( nucleon );
       this.addOutgoingParticle( nucleon );
@@ -961,7 +960,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
     const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
 
-    const alphaParticleVelocity = totalDistanceAlphaParticleTravels / animationDuration;
+    alphaParticle.velocity = totalDistanceAlphaParticleTravels / animationDuration;
 
     const alphaParticleEmissionAnimation = new Animation( {
       property: alphaParticle.positionProperty,
@@ -982,10 +981,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
     alphaParticleEmissionAnimation.start();
 
-    return {
-      alphaParticle: alphaParticle,
-      alphaParticleVelocity: alphaParticleVelocity
-    };
+    return alphaParticle;
   }
 
   protected betaDecay( betaDecayType: DecayType ): BetaDecayReturnValues {

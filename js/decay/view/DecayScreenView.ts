@@ -9,7 +9,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues, EmitAlphaParticleValues } from '../../common/view/BANScreenView.js';
+import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues } from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
@@ -29,6 +29,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import DecayType from '../../common/model/DecayType.js';
+import AlphaParticle from '../../common/model/AlphaParticle.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -289,17 +290,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
    */
-  public override emitAlphaParticle(): EmitAlphaParticleValues {
-    const values = super.emitAlphaParticle();
-    const alphaParticle = values.alphaParticle;
-    const alphaParticleVelocity = values.alphaParticleVelocity;
+  public override emitAlphaParticle(): AlphaParticle {
+    const alphaParticle = super.emitAlphaParticle();
 
     // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
     if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
       const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
 
       // the distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
-      const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * alphaParticleVelocity;
+      const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * alphaParticle.velocity;
 
       let protonsEmitted = false;
       alphaParticle.positionProperty.link( position => {
@@ -312,7 +311,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       } );
     }
 
-    return values;
+    return alphaParticle;
   }
 
   public override removeAlphaNucleonParticle( particle: Particle ): void {

@@ -9,7 +9,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues, EmitAlphaParticleValues } from '../../common/view/BANScreenView.js';
+import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues } from '../../common/view/BANScreenView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
@@ -36,6 +36,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import FullChartDialog from './FullChartDialog.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
+import AlphaParticle from '../../common/model/AlphaParticle.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -344,14 +345,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
    */
-  protected override emitAlphaParticle(): EmitAlphaParticleValues {
-
+  protected override emitAlphaParticle(): AlphaParticle {
     this.decaying = true;
 
     // animate mini particle atom
-    const values = super.emitAlphaParticle();
+    const alphaParticle = super.emitAlphaParticle();
     this.model.miniParticleAtom.reconfigureNucleus();
-
 
     // animate nucleons in NucleonShellView
     _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.PROTON ) );
@@ -359,7 +358,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     this.decaying = false;
 
-    return values;
+    return alphaParticle;
   }
 
   /**
