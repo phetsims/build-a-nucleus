@@ -373,8 +373,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const particleToEmit = values.particleToEmit;
     const destination = values.destination;
     const closestParticle = values.closestParticle;
-    const nucleonTypeToChange = values.nucleonTypeToChange;
-    const newNucleonType = values.newNucleonType;
+    const nucleonTypeToChange = ParticleType.enumeration.getValue( closestParticle.type.toUpperCase() );
+    const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ? ParticleType.NEUTRON : ParticleType.PROTON;
     this.createMiniParticleView( particleToEmit );
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle

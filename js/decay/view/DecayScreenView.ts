@@ -292,16 +292,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   public override emitAlphaParticle(): EmitAlphaParticleValues {
     const values = super.emitAlphaParticle();
     const alphaParticle = values.alphaParticle;
-    const totalDistanceAlphaParticleTravels = values.totalDistanceAlphaParticleTravels;
-    const animationDuration = values.animationDuration;
+    const alphaParticleVelocity = values.alphaParticleVelocity;
 
     // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
     if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
       const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
 
       // the distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
-      const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST *
-                                             ( totalDistanceAlphaParticleTravels / animationDuration );
+      const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * alphaParticleVelocity;
 
       let protonsEmitted = false;
       alphaParticle.positionProperty.link( position => {

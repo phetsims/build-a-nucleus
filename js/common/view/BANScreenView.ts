@@ -60,15 +60,12 @@ type ParticleTypeInfo = {
 
 export type EmitAlphaParticleValues = {
   alphaParticle: ParticleAtom;
-  totalDistanceAlphaParticleTravels: number;
-  animationDuration: number;
+  alphaParticleVelocity: number;
 };
 export type BetaDecayReturnValues = {
   closestParticle: Particle;
   particleToEmit: Particle;
   destination: Vector2;
-  nucleonTypeToChange: ParticleType;
-  newNucleonType: ParticleType;
 };
 
 // constants
@@ -964,6 +961,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
     const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
 
+    const alphaParticleVelocity = totalDistanceAlphaParticleTravels / animationDuration;
+
     const alphaParticleEmissionAnimation = new Animation( {
       property: alphaParticle.positionProperty,
       to: destination,
@@ -985,8 +984,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     return {
       alphaParticle: alphaParticle,
-      totalDistanceAlphaParticleTravels: totalDistanceAlphaParticleTravels,
-      animationDuration: animationDuration
+      alphaParticleVelocity: alphaParticleVelocity
     };
   }
 
@@ -994,26 +992,18 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const particleAtom = this.getParticleAtom();
     let particleArray;
     let particleToEmit: Particle;
-    let nucleonTypeCountValue;
-    let nucleonTypeToChange;
-    let newNucleonType;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = particleAtom.neutrons;
       particleToEmit = new BANParticle( ParticleType.ELECTRON.particleTypeString );
-      nucleonTypeCountValue = this.model.particleAtom.neutronCountProperty.value;
-      nucleonTypeToChange = ParticleType.NEUTRON;
-      newNucleonType = ParticleType.PROTON;
     }
     else {
       particleArray = particleAtom.protons;
       particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
-      nucleonTypeCountValue = this.model.particleAtom.protonCountProperty.value;
-      nucleonTypeToChange = ParticleType.PROTON;
-      newNucleonType = ParticleType.NEUTRON;
     }
 
-    assert && assert( nucleonTypeCountValue >= 1,
-      'The particleAtom needs a ' + nucleonTypeToChange.name + ' for a ' + betaDecayType.name );
+    const particleTypeString = ParticleType.enumeration.getValue( particleArray.get( 0 ).type.toUpperCase() ).name;
+    assert && assert( particleArray.lengthProperty.value >= 1,
+      'The particleAtom needs a ' + particleTypeString + ' for a ' + betaDecayType.name );
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const closestParticle = _.sortBy( [ ...particleArray ],
@@ -1028,9 +1018,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     return {
       closestParticle: closestParticle,
       particleToEmit: particleToEmit,
-      destination: destination,
-      nucleonTypeToChange: nucleonTypeToChange,
-      newNucleonType: newNucleonType
+      destination: destination
     };
   }
 }
