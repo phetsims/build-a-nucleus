@@ -975,11 +975,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.model.outgoingParticles.add( particleToEmit );
 
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
-    const initialColorChangeAnimation = particleAtom.changeNucleonType( closestParticle, () => {
+    particleAtom.changeNucleonType( closestParticle, () => {
       this.animateAndRemoveParticle( particleToEmit, destination );
       this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
     } );
-    this.model.particleAnimations.add( initialColorChangeAnimation );
 
     return particleToEmit;
   }

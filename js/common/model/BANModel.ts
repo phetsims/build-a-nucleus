@@ -80,7 +80,6 @@ class BANModel<T extends ParticleAtom> {
     this.particleAnimations = createObservableArray();
     this.particleAnimations.addItemRemovedListener( animation => {
       animation && animation.stop();
-      animation = null; // REVIEW: Is this line needed?
     } );
 
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
