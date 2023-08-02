@@ -8,7 +8,7 @@
 
 import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
 import buildANucleus from '../buildANucleus.js';
-import PhetColorScheme from '../../../scenery-phet/js/PhetColorScheme.js';
+import { PARTICLE_COLORS } from '../../../shred/js/model/Particle.js';
 
 const BANColors = {
 
@@ -19,16 +19,16 @@ const BANColors = {
 
   // particle colors
   protonColorProperty: new ProfileColorProperty( buildANucleus, 'protonColor', {
-    default: PhetColorScheme.RED_COLORBLIND
+    default: PARTICLE_COLORS.proton
   } ),
   neutronColorProperty: new ProfileColorProperty( buildANucleus, 'neutronColor', {
-    default: Color.GRAY
+    default: PARTICLE_COLORS.neutron
   } ),
   electronColorProperty: new ProfileColorProperty( buildANucleus, 'electronColor', {
-    default: Color.BLUE
+    default: PARTICLE_COLORS.electron
   } ),
   positronColorProperty: new ProfileColorProperty( buildANucleus, 'positronColor', {
-    default: new Color( 53, 182, 74 )
+    default: PARTICLE_COLORS.positron
   } ),
 
   // decay colors

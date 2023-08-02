@@ -15,43 +15,12 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import { ParticleShellPosition } from '../model/ParticleNucleus.js';
+import { FIRST_LEVEL_CAPACITY, ParticleShellPosition, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
 
 type SelfOptions = {
   xOffset?: number;
 };
 type EnergyLevelNodeOptions = SelfOptions & NodeOptions;
-
-// TODO: Remove color arrays, instead https://github.com/phetsims/build-a-nucleus/issues/85.
-// nucleon number to energy level stroke color
-const neutronNumberToColorLowerLevel = [
-  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
-  Color.interpolateRGBA( BANColors.zeroNucleonsEnergyLevelColorProperty.value, BANColors.neutronColorProperty.value, 0.5 ), // 1
-  BANColors.neutronColorProperty // 2
-];
-const neutronNumberToColorUpperLevel = [
-  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
-  new Color( 21, 21, 21 ), // 1
-  new Color( 43, 43, 43 ), // 2
-  new Color( 64, 64, 64 ), // 3
-  new Color( 85, 85, 85 ), // 4
-  new Color( 107, 107, 107 ), // 5
-  BANColors.neutronColorProperty // 6
-];
-const protonNumberToColorLowerLevel = [
-  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
-  Color.interpolateRGBA( BANColors.zeroNucleonsEnergyLevelColorProperty.value, BANColors.neutronColorProperty.value, 0.5 ), // 1
-  BANColors.protonColorProperty // 2
-];
-const protonNumberToColorUpperLevel = [
-  BANColors.zeroNucleonsEnergyLevelColorProperty, // 0
-  new Color( 43, 14, 0 ), // 1
-  new Color( 85, 28, 0 ), // 2
-  new Color( 128, 43, 0 ), // 3
-  new Color( 170, 57, 0 ), // 4
-  new Color( 213, 71, 0 ), // 5
-  BANColors.protonColorProperty // 6
-];
 
 class NucleonShellView extends Node {
   private modelViewTransform: ModelViewTransform2;
@@ -59,6 +28,9 @@ class NucleonShellView extends Node {
   public constructor( particleType: ParticleType, nucleonShellPositions: ParticleShellPosition[][],
                       nucleonCountProperty: TReadOnlyProperty<number>, particleViewPositionVector: Vector2,
                       providedOptions?: EnergyLevelNodeOptions ) {
+
+    assert && assert( particleType === ParticleType.NEUTRON || particleType === ParticleType.PROTON,
+      'only protons and neutrons supported in NucleonShellView' );
 
     const options = optionize<EnergyLevelNodeOptions, SelfOptions, NodeOptions>()( {
       xOffset: 0
@@ -69,6 +41,14 @@ class NucleonShellView extends Node {
     this.x = particleViewPositionVector.x + options.xOffset - BANConstants.PARTICLE_RADIUS;
 
     this.modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
+
+    // Color when the layer is completely empty
+    const emptyLayerColor = BANColors.zeroNucleonsEnergyLevelColorProperty.value;
+
+    // Color when the layer is completely full
+    const fullLayerColor = particleType === ParticleType.NEUTRON ?
+                           BANColors.neutronColorProperty.value :
+                           BANColors.protonColorProperty.value;
 
     // create and add the nucleon energy levels
     const energyLevels: Line[] = [];
@@ -93,28 +73,27 @@ class NucleonShellView extends Node {
     // update the stroke color and width of the respective energy levels as the nucleon count changes
     const boldEnergyLevelWidth = 4;
     const defaultEnergyLevelWidth = 1;
-    const nucleonCountToColorLowerLevel = particleType === ParticleType.PROTON ? protonNumberToColorLowerLevel :
-                                          neutronNumberToColorLowerLevel;
-    const nucleonCountToColorUpperLevel = particleType === ParticleType.PROTON ? protonNumberToColorUpperLevel :
-                                          neutronNumberToColorUpperLevel;
     nucleonCountProperty.link( nucleonCount => {
-      if ( nucleonCount <= 2 ) {
-        energyLevels[ 0 ].stroke = nucleonCountToColorLowerLevel[ nucleonCount ];
+      if ( nucleonCount <= FIRST_LEVEL_CAPACITY ) {
+        energyLevels[ 0 ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonCount / FIRST_LEVEL_CAPACITY );
 
         // if the energy level is full (2 particles on the lower energy level), double the lineWidth
-        energyLevels[ 0 ].lineWidth = nucleonCount === 2 ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
+        energyLevels[ 0 ].lineWidth = nucleonCount === FIRST_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
       else {
         let energyLevelNumber = 1;
-        if ( nucleonCount > 8 ) {
-          nucleonCount -= 6;
-          energyLevelNumber = 2;
+        if ( nucleonCount > SECOND_LEVEL_CAPACITY + FIRST_LEVEL_CAPACITY ) {
+          nucleonCount -= SECOND_LEVEL_CAPACITY;
+          energyLevelNumber = FIRST_LEVEL_CAPACITY;
         }
-        nucleonCount -= 2;
-        energyLevels[ energyLevelNumber ].stroke = nucleonCountToColorUpperLevel[ nucleonCount ];
+        nucleonCount -= FIRST_LEVEL_CAPACITY; // REVIEW: instead of mutating the listener variable, it is better to name a new one (less confusing that way)
+        const stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonCount / SECOND_LEVEL_CAPACITY );
+
+        console.log( nucleonCount / SECOND_LEVEL_CAPACITY );
+        energyLevels[ energyLevelNumber ].stroke = stroke;
 
         // if the energy level is full (6 particles on the upper and middle energy levels), double the lineWidth
-        energyLevels[ energyLevelNumber ].lineWidth = nucleonCount === 6 ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
+        energyLevels[ energyLevelNumber ].lineWidth = nucleonCount === SECOND_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
     } );
   }

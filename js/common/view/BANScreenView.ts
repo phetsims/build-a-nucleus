@@ -747,6 +747,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.dispose();
     }
   }
+
   /**
    * Add a particle to the model and immediately start dragging it with the provided event.
    */

@@ -27,6 +27,8 @@ export type ParticleShellPosition = {
 };
 
 // constants
+export const FIRST_LEVEL_CAPACITY = 2; // Number of particles available on the first energy level of a nucleus.
+export const SECOND_LEVEL_CAPACITY = 6; // Number of particles available on the second and third energy levels of a nucleus.
 
 // row is yPosition, number is xPosition
 const ALLOWED_PARTICLE_POSITIONS = [
@@ -34,6 +36,9 @@ const ALLOWED_PARTICLE_POSITIONS = [
   [ 0, 1, 2, 3, 4, 5 ],
   [ 0, 1, 2, 3, 4, 5 ]
 ];
+assert && assert( ALLOWED_PARTICLE_POSITIONS[ 1 ].length === SECOND_LEVEL_CAPACITY, 'second level spots check' );
+assert && assert( ALLOWED_PARTICLE_POSITIONS[ 2 ].length === SECOND_LEVEL_CAPACITY, 'third level spots check' );
+assert && assert( ALLOWED_PARTICLE_POSITIONS[ 0 ].length === FIRST_LEVEL_CAPACITY, 'first level spots check' );
 
 class ParticleNucleus extends ParticleAtom {
 
@@ -78,10 +83,10 @@ class ParticleNucleus extends ParticleAtom {
 
     // update bound levels based on nucleon counts
     this.protonCountProperty.link( protonCount => {
-      if ( protonCount >= 9 ) {
+      if ( protonCount >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
         this.protonsLevelProperty.value = EnergyLevelType.SECOND;
       }
-      else if ( protonCount >= 3 ) {
+      else if ( protonCount > FIRST_LEVEL_CAPACITY ) {
         this.protonsLevelProperty.value = EnergyLevelType.FIRST;
       }
       else {
@@ -89,10 +94,10 @@ class ParticleNucleus extends ParticleAtom {
       }
     } );
     this.neutronCountProperty.link( neutronCount => {
-      if ( neutronCount >= 9 ) {
+      if ( neutronCount >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
         this.neutronsLevelProperty.value = EnergyLevelType.SECOND;
       }
-      else if ( neutronCount >= 3 ) {
+      else if ( neutronCount > FIRST_LEVEL_CAPACITY ) {
         this.neutronsLevelProperty.value = EnergyLevelType.FIRST;
       }
       else {
