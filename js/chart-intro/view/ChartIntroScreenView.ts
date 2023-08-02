@@ -282,29 +282,22 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
-  public override emitNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
+  public override emitNucleon( particleType: ParticleType, particleAtom: ParticleAtom ): void {
     this.isMiniAtomConnected = false;
 
     // Handle the animation for the mini ParticleAtom
-    const miniNucleon = this.model.miniParticleAtom.extractParticle( particleType.particleTypeString );
-
-    // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition();
-
+    super.emitNucleon( particleType, this.model.miniParticleAtom );
     this.model.miniParticleAtom.reconfigureNucleus();
-    this.model.outgoingParticles.add( miniNucleon );
-    this.animateAndRemoveParticle( miniNucleon, destination );
 
     // Fade away the nucleon in the ParticleNucleus
-    const shellNucleusNucleon = this.fadeOutShellNucleon( particleType, fromDecay );
+    this.fadeOutShellNucleon( particleType );
 
     this.isMiniAtomConnected = true;
-
-    return shellNucleusNucleon;
   }
 
-  private fadeOutShellNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
-    const shellNucleusNucleon = super.emitNucleon( particleType, fromDecay );
+  private fadeOutShellNucleon( particleType: ParticleType ): void {
+    const shellNucleusNucleon = this.model.particleNucleus.extractParticle( particleType.particleTypeString );
+    this.model.outgoingParticles.add( shellNucleusNucleon );
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;
     const fadeAnimation = new Animation( {
@@ -318,8 +311,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     } );
     this.model.particleAnimations.push( fadeAnimation );
     fadeAnimation.start();
-
-    return shellNucleusNucleon;
   }
 
   public override getParticleAtom(): ParticleAtom {
@@ -359,7 +350,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // animate the shell view
     const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ? ParticleType.NEUTRON : ParticleType.PROTON;
-    this.fadeOutShellNucleon( nucleonTypeToChange, betaDecayType.name );
+    this.fadeOutShellNucleon( nucleonTypeToChange );
 
     const particle = this.createParticleFromStack( newNucleonType );
 

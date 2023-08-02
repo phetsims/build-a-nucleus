@@ -272,12 +272,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     return this.particleTransform.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
-  public override emitNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
-    const nucleon = super.emitNucleon( particleType, fromDecay );
-    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
-    return nucleon;
-  }
-
   public override getParticleAtom(): ParticleAtom {
     return this.model.particleAtom;
   }
@@ -301,7 +295,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
         // emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
         if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
-          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON, DecayType.ALPHA_DECAY.name ); } );
+          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
           protonsEmitted = true;
         }
       } );

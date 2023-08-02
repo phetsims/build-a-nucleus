@@ -852,10 +852,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public decayAtom( decayType: DecayType | null ): void {
     switch( decayType ) {
       case DecayType.NEUTRON_EMISSION:
-        this.emitNucleon( ParticleType.NEUTRON, decayType.name );
+        this.emitNucleon( ParticleType.NEUTRON );
         break;
       case DecayType.PROTON_EMISSION:
-        this.emitNucleon( ParticleType.PROTON, decayType.name );
+        this.emitNucleon( ParticleType.PROTON );
         break;
       case DecayType.BETA_PLUS_DECAY:
         this.betaDecay( DecayType.BETA_PLUS_DECAY );
@@ -891,14 +891,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
-  protected emitNucleon( particleType: ParticleType, fromDecay?: string ): Particle {
-    assert && assert( particleType === ParticleType.PROTON ? this.model.particleAtom.protonCountProperty.value >= 1 :
-                      this.model.particleAtom.neutronCountProperty.value >= 1,
-      'The particleAtom needs a ' + particleType.name + ' to emit it. The decay: ' + fromDecay + ' cannot occur.' );
-
-    const nucleon = this.model.particleAtom.extractParticle( particleType.particleTypeString );
+  protected emitNucleon( particleType: ParticleType, particleAtom: ParticleAtom = this.model.particleAtom ): void {
+    const nucleon = particleAtom.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( nucleon );
-    return nucleon;
+    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
   }
 
   /**
