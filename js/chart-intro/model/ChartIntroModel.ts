@@ -83,17 +83,6 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   }
 
   /**
-   * Remove particles flying away from the mini-nucleus. Dispose emitter deals with the view portion.
-   */
-  public removeDecayingMiniParticle( particle: Particle ): void {
-    assert && assert( !this.particles.includes( particle ), 'Particle should not be a part of the particles array.' );
-    assert && assert( !this.miniParticleAtom.containsParticle( particle ), 'Particle is a decaying particle so it should not be a part of the miniParticleAtom.' );
-
-    this.outgoingParticles.remove( particle );
-    particle.dispose();
-  }
-
-  /**
    * Select the particle in the farthest energy level.
    */
   public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {

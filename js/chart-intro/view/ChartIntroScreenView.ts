@@ -279,22 +279,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
-  private animateAndRemoveMiniAtomParticle( particle: Particle, destination?: Vector2 ): void {
-    const particleView = this.findParticleView( particle );
-    particleView.inputEnabled = false;
-
-    if ( destination ) {
-      particle.destinationProperty.value = destination;
-
-      particle.animationEndedEmitter.addListener( () => {
-        this.model.removeDecayingMiniParticle( particle );
-      } );
-    }
-    else {
-      this.model.removeDecayingMiniParticle( particle );
-    }
-  }
-
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
@@ -309,7 +293,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     this.model.miniParticleAtom.reconfigureNucleus();
     this.model.outgoingParticles.add( miniNucleon );
-    this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );
+    this.animateAndRemoveParticle( miniNucleon, destination );
 
     // Fade away the nucleon in the ParticleNucleus
     const shellNucleusNucleon = this.fadeOutShellNucleon( particleType, fromDecay );

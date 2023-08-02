@@ -742,6 +742,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.removeParticle( particle );
     }
     else {
+      // Remove particles flying away from the mini-nucleus. Dispose emitter deals with the view portion.
       assert && assert( !this.getParticleAtom().containsParticle( particle ), 'Particle is a decaying particle so it should not be a part of the miniParticleAtom.' );
       particle.dispose();
     }
