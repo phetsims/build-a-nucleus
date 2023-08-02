@@ -783,8 +783,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     if ( this.timeSinceCountdownStarted >= BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST ) {
       this.timeSinceCountdownStarted = 0;
 
-      // TODO: change this because it is a bit hacky, uses a boolean property to keep track of if a double arrow button was clicked https://github.com/phetsims/build-a-nucleus/issues/93
-      // a proton and neutron were added to create a nuclide that does not exist, so return a proton and neutron
       if ( this.model.doubleArrowButtonClickedBooleanProperty.value &&
            AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) ) {
         this.returnParticleToStack( ParticleType.NEUTRON );
