@@ -8,6 +8,11 @@
 
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import buildANucleus from '../../buildANucleus.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import BANConstants from '../BANConstants.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
+import Particle from '../../../../shred/js/model/Particle.js';
 
 class AlphaParticle extends ParticleAtom {
   public velocity: number;
@@ -18,6 +23,38 @@ class AlphaParticle extends ParticleAtom {
     super();
 
     this.velocity = 0;
+  }
+
+  /**
+   * Animate the alpha particle to a destination and remove its particles when it reaches that destination.
+   */
+  public animateAndRemoveParticle( destination: Vector2, removeAlphaNucleonParticle: ( particle: Particle ) => void ): Animation {
+    const totalDistanceAlphaParticleTravels = this.positionProperty.value.distance( destination );
+
+    // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
+    const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
+
+    this.velocity = totalDistanceAlphaParticleTravels / animationDuration;
+
+    const alphaParticleEmissionAnimation = new Animation( {
+      property: this.positionProperty,
+      to: destination,
+      duration: animationDuration,
+      easing: Easing.LINEAR
+    } );
+
+    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
+      this.neutrons.forEach( neutron => {
+        removeAlphaNucleonParticle( neutron );
+      } );
+      this.protons.forEach( proton => {
+        removeAlphaNucleonParticle( proton );
+      } );
+      this.dispose();
+    } );
+    alphaParticleEmissionAnimation.start();
+
+    return alphaParticleEmissionAnimation;
   }
 }
 

@@ -36,8 +36,6 @@ import ParticleAtomNode from './ParticleAtomNode.js';
 import DecayType from '../model/DecayType.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import BANParticle from '../model/BANParticle.js';
-import Animation from '../../../../twixt/js/Animation.js';
-import Easing from '../../../../twixt/js/Easing.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
@@ -954,32 +952,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.checkIfCreatorNodesShouldBeVisible();
 
     // animate the particle to a random destination outside the model
-    const destination = this.getRandomExternalModelPosition();
-    const totalDistanceAlphaParticleTravels = alphaParticle.positionProperty.value.distance( destination );
-
-    // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
-    const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
-
-    alphaParticle.velocity = totalDistanceAlphaParticleTravels / animationDuration;
-
-    const alphaParticleEmissionAnimation = new Animation( {
-      property: alphaParticle.positionProperty,
-      to: destination,
-      duration: animationDuration,
-      easing: Easing.LINEAR
-    } );
+    const alphaParticleEmissionAnimation = alphaParticle.animateAndRemoveParticle(
+      this.getRandomExternalModelPosition(), () => this.removeAlphaNucleonParticle );
     this.model.particleAnimations.push( alphaParticleEmissionAnimation );
-
-    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
-      alphaParticle.neutrons.forEach( neutron => {
-        this.removeAlphaNucleonParticle( neutron );
-      } );
-      alphaParticle.protons.forEach( proton => {
-        this.removeAlphaNucleonParticle( proton );
-      } );
-      alphaParticle.dispose();
-    } );
-    alphaParticleEmissionAnimation.start();
 
     return alphaParticle;
   }
