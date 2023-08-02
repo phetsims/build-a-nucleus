@@ -28,7 +28,7 @@ class AlphaParticle extends ParticleAtom {
   /**
    * Animate the alpha particle to a destination and remove its particles when it reaches that destination.
    */
-  public animateAndRemoveParticle( destination: Vector2, removeAlphaNucleonParticle: ( particle: Particle ) => void ): Animation {
+  public animateAndRemoveParticle( destination: Vector2, removeParticle: ( particle: Particle ) => void ): Animation {
     const totalDistanceAlphaParticleTravels = this.positionProperty.value.distance( destination );
 
     // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
@@ -45,10 +45,10 @@ class AlphaParticle extends ParticleAtom {
 
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       this.neutrons.forEach( neutron => {
-        removeAlphaNucleonParticle( neutron );
+        removeParticle( neutron );
       } );
       this.protons.forEach( proton => {
-        removeAlphaNucleonParticle( proton );
+        removeParticle( proton );
       } );
       this.dispose();
     } );

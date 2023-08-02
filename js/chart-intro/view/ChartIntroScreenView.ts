@@ -280,7 +280,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   }
 
   private animateAndRemoveMiniAtomParticle( particle: Particle, destination?: Vector2 ): void {
-    this.model.outgoingParticles.add( particle );
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
@@ -309,6 +308,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const destination = this.getRandomExternalModelPosition();
 
     this.model.miniParticleAtom.reconfigureNucleus();
+    this.model.outgoingParticles.add( miniNucleon );
     this.animateAndRemoveMiniAtomParticle( miniNucleon, destination );
 
     // Fade away the nucleon in the ParticleNucleus
@@ -340,14 +340,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   public override getParticleAtom(): ParticleAtom {
     return this.model.miniParticleAtom;
-  }
-
-  public override removeAlphaNucleonParticle( particle: Particle ): void {
-    this.animateAndRemoveMiniAtomParticle( particle );
-  }
-
-  public override addOutgoingParticle( particle: Particle ): void {
-    // no need to add the outgoing particle because that's done in animateAndRemoveMiniAtomParticle
   }
 
   /**

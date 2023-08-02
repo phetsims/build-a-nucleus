@@ -746,12 +746,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.dispose();
     }
   }
-
-  /**
-   * Complete the removal process for a given nucleon particle, which is a part of the alpha particle atom.
-   */
-  protected abstract removeAlphaNucleonParticle( particle: Particle ): void;
-
   /**
    * Add a particle to the model and immediately start dragging it with the provided event.
    */
@@ -912,11 +906,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected abstract getParticleAtom(): ParticleAtom;
 
   /**
-   * Add the given particle to the outgoingParticles array.
-   */
-  protected abstract addOutgoingParticle( particle: Particle ): void;
-
-  /**
    * Return a random position, in model coordinates, that is outside the visible bounds.
    */
   protected abstract getRandomExternalModelPosition(): Vector2;
@@ -939,7 +928,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // add the obtained protons and neutrons to the alphaParticle
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
       alphaParticle.addParticle( nucleon );
-      this.addOutgoingParticle( nucleon );
+      this.model.outgoingParticles.add( nucleon );
       this.findParticleView( nucleon ).inputEnabled = false;
     } );
 
@@ -949,7 +938,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // animate the particle to a random destination outside the model
     const alphaParticleEmissionAnimation = alphaParticle.animateAndRemoveParticle(
-      this.getRandomExternalModelPosition(), () => this.removeAlphaNucleonParticle );
+      this.getRandomExternalModelPosition(), () => this.removeParticle );
     this.model.particleAnimations.push( alphaParticleEmissionAnimation );
 
     return alphaParticle;

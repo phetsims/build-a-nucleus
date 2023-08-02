@@ -282,10 +282,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     return this.model.particleAtom;
   }
 
-  public override addOutgoingParticle( particle: Particle ): void {
-    this.model.outgoingParticles.add( particle );
-  }
-
   /**
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
@@ -312,10 +308,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     }
 
     return alphaParticle;
-  }
-
-  public override removeAlphaNucleonParticle( particle: Particle ): void {
-    this.removeParticle( particle );
   }
 
   /**
