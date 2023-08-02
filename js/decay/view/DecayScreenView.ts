@@ -248,15 +248,12 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
     this.nucleonCountPanel.left = availableDecaysPanel.left;
 
-    // only show the emptyAtomCircle if less than 2 particles are in the atom. We still want to show it when there's
-    // only one nucleon, and no electron cloud, to accommodate for when the first nucleon is being animated towards the
-    // atomNode center. However, if the electronCloud is showing, then only show the emptyAtomCircle when there are zero
-    // nucleons
-    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-      this.showElectronCloudBooleanProperty ], ( protonCount, neutronCount, showElectronCloud ) => {
-
-      // TODO: Why should there be two cases? Could remove the latter case? https://github.com/phetsims/build-a-nucleus/issues/93
-      this.particleAtomNode.emptyAtomCircle.visible = showElectronCloud ? ( protonCount + neutronCount ) === 0 : ( protonCount + neutronCount ) <= 1;
+    // Only show the emptyAtomCircle if there are zero particles in the atom.
+    Multilink.multilink( [
+      this.model.particleAtom.protonCountProperty,
+      this.model.particleAtom.neutronCountProperty
+    ], ( protonCount, neutronCount ) => {
+      this.particleAtomNode.emptyAtomCircle.visible = protonCount + neutronCount === 0;
     } );
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
