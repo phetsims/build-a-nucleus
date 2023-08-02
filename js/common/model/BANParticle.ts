@@ -9,7 +9,7 @@
 import Particle, { ParticleOptions } from '../../../../shred/js/model/Particle.js';
 import BANConstants from '../BANConstants.js';
 import buildANucleus from '../../buildANucleus.js';
-import { ParticleTypeString } from '../../../../shred/js/model/ParticleAtom.js';
+import { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 
 export type BANParticleOptions = ParticleOptions;
 export default class BANParticle extends Particle {

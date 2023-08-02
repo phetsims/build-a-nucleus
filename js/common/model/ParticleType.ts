@@ -12,7 +12,7 @@ import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import { ProfileColorProperty } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../BANColors.js';
-import { ParticleTypeString } from '../../../../shred/js/model/ParticleAtom.js';
+import { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 class ParticleType extends EnumerationValue {
