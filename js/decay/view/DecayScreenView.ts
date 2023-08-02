@@ -9,7 +9,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import DecayModel from '../model/DecayModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues } from '../../common/view/BANScreenView.js';
+import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
@@ -321,25 +321,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  public override betaDecay( betaDecayType: DecayType ): BetaDecayReturnValues {
-    const values = super.betaDecay( betaDecayType );
-    const particleToEmit = values.particleToEmit;
-    const destination = values.destination;
-    const closestParticle = values.closestParticle;
-    this.addOutgoingParticle( particleToEmit );
-
-    // add the particle to the model to emit it, then change the nucleon type and remove the particle
-    const initialColorChangeAnimation = this.model.particleAtom.changeNucleonType( closestParticle, () => {
-      if ( this.model.particles.includes( particleToEmit ) ) {
-        this.animateAndRemoveParticle( particleToEmit, destination );
-        this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
-      }
-    } );
-    this.model.particleAnimations.add( initialColorChangeAnimation );
-
+  public override betaDecay( betaDecayType: DecayType ): Particle {
+    const particleToEmit = super.betaDecay( betaDecayType );
     this.model.addParticle( particleToEmit );
-
-    return values;
+    return particleToEmit;
   }
 
   /**

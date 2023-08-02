@@ -9,7 +9,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions, BetaDecayReturnValues } from '../../common/view/BANScreenView.js';
+import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Multilink from '../../../../axon/js/Multilink.js';
@@ -347,7 +347,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   }
 
   public override addOutgoingParticle( particle: Particle ): void {
-    // no need to add the outgoing particle because that's done in this.animateAndRemoveMiniAtomParticle()
+    // no need to add the outgoing particle because that's done in animateAndRemoveMiniAtomParticle
   }
 
   /**
@@ -373,27 +373,16 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  protected override betaDecay( betaDecayType: DecayType ): BetaDecayReturnValues {
+  protected override betaDecay( betaDecayType: DecayType ): Particle {
     this.isMiniAtomConnected = false;
 
     // animate mini particleAtom
-    const values = super.betaDecay( betaDecayType );
-    const particleToEmit = values.particleToEmit;
-    const destination = values.destination;
-    const closestParticle = values.closestParticle;
-    const nucleonTypeToChange = ParticleType.enumeration.getValue( closestParticle.type.toUpperCase() );
-    const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ? ParticleType.NEUTRON : ParticleType.PROTON;
+    const nucleonTypeToChange = betaDecayType === DecayType.BETA_MINUS_DECAY ? ParticleType.NEUTRON : ParticleType.PROTON;
+    const particleToEmit = super.betaDecay( betaDecayType );
     this.createMiniParticleView( particleToEmit );
 
-    // add the particle to the model to emit it, then change the nucleon type and remove the particle
-    const initialColorChangeAnimation = this.model.miniParticleAtom.changeNucleonType( closestParticle, () => {
-
-      this.animateAndRemoveMiniAtomParticle( particleToEmit, destination );
-      this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
-    } );
-    this.model.particleAnimations.add( initialColorChangeAnimation );
-
     // animate the shell view
+    const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ? ParticleType.NEUTRON : ParticleType.PROTON;
     this.fadeOutShellNucleon( nucleonTypeToChange, betaDecayType.name );
 
     const particle = this.createParticleFromStack( newNucleonType );
@@ -413,7 +402,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     this.isMiniAtomConnected = true;
 
-    return values;
+    return particleToEmit;
   }
 
   private createMiniParticleView( particle: Particle ): void {

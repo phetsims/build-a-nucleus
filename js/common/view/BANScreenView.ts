@@ -57,16 +57,6 @@ type ParticleTypeInfo = {
   outgoingNucleons: number;
 };
 
-export type EmitAlphaParticleValues = {
-  alphaParticle: ParticleAtom;
-  alphaParticleVelocity: number;
-};
-export type BetaDecayReturnValues = {
-  closestParticle: Particle;
-  particleToEmit: Particle;
-  destination: Vector2;
-};
-
 // constants
 const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 
@@ -748,7 +738,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     assert && assert( !particle.isDisposed, 'cannot remove a particle that is already disposed' );
 
     this.model.outgoingParticles.includes( particle ) && this.model.outgoingParticles.remove( particle );
-    this.model.removeParticle( particle );
+    if ( this.model.particles.includes( particle ) ) {
+      this.model.removeParticle( particle );
+    }
+    else {
+      assert && assert( !this.getParticleAtom().containsParticle( particle ), 'Particle is a decaying particle so it should not be a part of the miniParticleAtom.' );
+      particle.dispose();
+    }
   }
 
   /**
@@ -959,7 +955,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     return alphaParticle;
   }
 
-  protected betaDecay( betaDecayType: DecayType ): BetaDecayReturnValues {
+  protected betaDecay( betaDecayType: DecayType ): Particle {
     const particleAtom = this.getParticleAtom();
     let particleArray;
     let particleToEmit: Particle;
@@ -986,11 +982,16 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const destination = this.getRandomExternalModelPosition();
 
-    return {
-      closestParticle: closestParticle,
-      particleToEmit: particleToEmit,
-      destination: destination
-    };
+    this.model.outgoingParticles.add( particleToEmit );
+
+    // add the particle to the model to emit it, then change the nucleon type and remove the particle
+    const initialColorChangeAnimation = particleAtom.changeNucleonType( closestParticle, () => {
+      this.animateAndRemoveParticle( particleToEmit, destination );
+      this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
+    } );
+    this.model.particleAnimations.add( initialColorChangeAnimation );
+
+    return particleToEmit;
   }
 }
 
