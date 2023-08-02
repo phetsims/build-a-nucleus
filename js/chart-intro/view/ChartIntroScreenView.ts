@@ -43,8 +43,6 @@ export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
 
 // constants
 const CHART_VERTICAL_MARGINS = 10;
-const NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE = 2;
-const NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE = 2;
 const FADE_ANINIMATION_DURATION = 1; // in seconds
 
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
@@ -364,8 +362,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model.miniParticleAtom.reconfigureNucleus();
 
     // animate nucleons in NucleonShellView
-    _.times( NUMBER_OF_PROTONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.PROTON ) );
-    _.times( NUMBER_OF_NEUTRONS_IN_ALPHA_PARTICLE, () => this.fadeOutShellNucleon( ParticleType.NEUTRON ) );
+    _.times( AlphaParticle.NUMBER_OF_ALLOWED_PROTONS, () => this.fadeOutShellNucleon( ParticleType.PROTON ) );
+    _.times( AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS, () => this.fadeOutShellNucleon( ParticleType.NEUTRON ) );
 
     this.isMiniAtomConnected = true;
 

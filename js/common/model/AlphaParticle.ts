@@ -11,15 +11,13 @@ import buildANucleus from '../../buildANucleus.js';
 
 class AlphaParticle extends ParticleAtom {
   public velocity: number;
-  public readonly numberOfAllowedProtons: number;
-  public readonly numberOfAllowedNeutrons: number;
+  public static readonly NUMBER_OF_ALLOWED_PROTONS = 2;
+  public static readonly NUMBER_OF_ALLOWED_NEUTRONS = 2;
 
   public constructor() {
     super();
 
     this.velocity = 0;
-    this.numberOfAllowedProtons = 2;
-    this.numberOfAllowedNeutrons = 2;
   }
 }
 

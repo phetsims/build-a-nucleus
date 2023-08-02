@@ -937,9 +937,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const alphaParticle = new AlphaParticle();
 
     // get the protons and neutrons closest to the center of the particleAtom and remove them from the particleAtom
-    const protonsToRemove = _.times( alphaParticle.numberOfAllowedProtons,
+    const protonsToRemove = _.times( AlphaParticle.NUMBER_OF_ALLOWED_PROTONS,
       () => particleAtom.extractParticleClosestToCenter( ParticleType.PROTON.particleTypeString ) );
-    const neutronsToRemove = _.times( alphaParticle.numberOfAllowedNeutrons,
+    const neutronsToRemove = _.times( AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
       () => particleAtom.extractParticleClosestToCenter( ParticleType.NEUTRON.particleTypeString ) );
 
     // add the obtained protons and neutrons to the alphaParticle
