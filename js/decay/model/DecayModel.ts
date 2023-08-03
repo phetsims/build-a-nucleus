@@ -83,9 +83,9 @@ class DecayModel extends BANModel<ParticleAtom> {
 
       // Disallow having more protons that Uranium. Though this is not scientifically accurate, it keeps the model in
       // the confines of 92 protons. See https://github.com/phetsims/build-a-nucleus/issues/42
-      if ( protonCount === 92 && neutronCount === 145 && decayType === DecayType.BETA_MINUS_DECAY ) {
-        return false;
-      }
+      // if ( protonCount === 92 && neutronCount === 145 && decayType === DecayType.BETA_MINUS_DECAY ) {
+      //   return false;
+      // }
 
       return decays.find( decay => Object.keys( decay ).includes( decayType.name ) ) !== undefined;
     };
