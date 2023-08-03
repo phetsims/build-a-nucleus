@@ -177,7 +177,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
         // multiple neutrons
         else {
-          // TODO: how do I get here? https://github.com/phetsims/build-a-nucleus/issues/106
           name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
             neutronCount: neutronCount
           } );
