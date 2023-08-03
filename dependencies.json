@@ -1,5 +1,5 @@
 {
-  "comment": "# build-a-nucleus 1.0.0-dev.18 Mon Jul 31 2023 10:18:00 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# build-a-nucleus 1.0.0-dev.20 Thu Aug 03 2023 11:01:09 GMT-0600 (Mountain Daylight Saving Time)",
   "assert": {
     "sha": "cc59d7f0574270924a886cb3d43a1b7507cd0553",
     "branch": "master"
@@ -17,7 +17,7 @@
     "branch": "master"
   },
   "build-a-nucleus": {
-    "sha": "aadef53e32002a5cd0dda4b21c17ffe2d9627afe",
+    "sha": "6796716decfc5a079a5773552bfacd9fe885f1f1",
     "branch": "master"
   },
   "build-an-atom": {
@@ -25,7 +25,7 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "042372513fa520953ae3dccd39a5525032a598e5",
+    "sha": "38b20009c2f68b52276b55dbc3b5c66ed31f26dd",
     "branch": "master"
   },
   "dot": {
@@ -33,7 +33,7 @@
     "branch": "master"
   },
   "joist": {
-    "sha": "de8540555bf4471e55f337b111b5bbdf509d6efe",
+    "sha": "d7f8e01598e8e865e61e2884642102398939300e",
     "branch": "master"
   },
   "kite": {
@@ -41,7 +41,7 @@
     "branch": "master"
   },
   "perennial-alias": {
-    "sha": "cdab170c7cb308e48975a5ee0bfa8cd4ce85c892",
+    "sha": "b79d08086e50d0724317188da1648836d543b6e1",
     "branch": "master"
   },
   "phet-core": {
@@ -53,7 +53,7 @@
     "branch": "master"
   },
   "phet-io-sim-specific": {
-    "sha": "c3443f7772fb38ebc2a2bf8c8295761f48a472bd",
+    "sha": "7f4fa26f7ec89341ceca4c400ccc0a37b6993185",
     "branch": "master"
   },
   "phet-io-wrappers": {
@@ -61,7 +61,7 @@
     "branch": "master"
   },
   "phetcommon": {
-    "sha": "fe3d37c96572efc13823ee54d9792453b38769ed",
+    "sha": "ce0920e1dd4a965065d2c2731f3ca6b7b09d3687",
     "branch": "master"
   },
   "phetmarks": {
@@ -73,7 +73,7 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "190d3c54cdfd9389c8700d8c86e57aeb58509937",
+    "sha": "735c3bd3d64b4a6ebdd37775e8a8eedfcde33f8c",
     "branch": "master"
   },
   "scenery-phet": {
@@ -85,7 +85,7 @@
     "branch": "master"
   },
   "shred": {
-    "sha": "ab0ff96e646977611ae05c07f01c5f96f61b1aab",
+    "sha": "5f3b89ad7881c1826726284ff6e008784b27c2a5",
     "branch": "master"
   },
   "studio": {
@@ -97,7 +97,7 @@
     "branch": "master"
   },
   "tambo": {
-    "sha": "0b41902db8e5cabdc3f124edb1ab14869af5b303",
+    "sha": "f9fc303fa5433276c76b6041158f77b6ccffb517",
     "branch": "master"
   },
   "tandem": {
