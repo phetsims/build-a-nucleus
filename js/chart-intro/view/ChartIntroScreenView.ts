@@ -230,6 +230,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       textNodeOptions: {
         font: BANConstants.LEGEND_FONT
       },
+      stroke: 'black',
+      lineWidth: 1,
       minWidth: 80,
       maxWidth: 160,
       listener: () => fullChartDialog.show()
