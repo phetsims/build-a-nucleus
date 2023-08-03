@@ -48,13 +48,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
       yMargin: 5,
       touchAreaXDilation: 7,
       touchAreaYDilation: 7,
-      heightSizable: false,
-
-      // options related to fire-on-hold feature
-      fireOnHold: true,
-      fireOnHoldDelay: 400, // start to fire continuously after pressing for this long (milliseconds)
-      fireOnHoldInterval: 100 // fire continuously at this interval (milliseconds)
-
+      heightSizable: false
     }, providedOptions );
 
     options.listener = callback;
