@@ -70,30 +70,30 @@ class NucleonShellView extends Node {
     } );
     energyLevels.forEach( energyLevel => this.addChild( energyLevel ) );
 
-    // update the stroke color and width of the respective energy levels as the nucleon count changes
+    // update the stroke color and width of the respective energy levels as the nucleon number changes
     const boldEnergyLevelWidth = 4;
     const defaultEnergyLevelWidth = 1;
-    nucleonCountProperty.link( nucleonCount => {
-      if ( nucleonCount <= FIRST_LEVEL_CAPACITY ) {
-        energyLevels[ 0 ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonCount / FIRST_LEVEL_CAPACITY );
+    nucleonCountProperty.link( nucleonNumber => {
+      if ( nucleonNumber <= FIRST_LEVEL_CAPACITY ) {
+        energyLevels[ 0 ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonNumber / FIRST_LEVEL_CAPACITY );
 
         // if the energy level is full (2 particles on the lower energy level), double the lineWidth
-        energyLevels[ 0 ].lineWidth = nucleonCount === FIRST_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
+        energyLevels[ 0 ].lineWidth = nucleonNumber === FIRST_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
       else {
         let energyLevelNumber = 1;
-        if ( nucleonCount > SECOND_LEVEL_CAPACITY + FIRST_LEVEL_CAPACITY ) {
-          nucleonCount -= SECOND_LEVEL_CAPACITY;
+        if ( nucleonNumber > SECOND_LEVEL_CAPACITY + FIRST_LEVEL_CAPACITY ) {
+          nucleonNumber -= SECOND_LEVEL_CAPACITY;
           energyLevelNumber = FIRST_LEVEL_CAPACITY;
         }
-        nucleonCount -= FIRST_LEVEL_CAPACITY; // REVIEW: instead of mutating the listener variable, it is better to name a new one (less confusing that way)
-        const stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonCount / SECOND_LEVEL_CAPACITY );
+        nucleonNumber -= FIRST_LEVEL_CAPACITY; // REVIEW: instead of mutating the listener variable, it is better to name a new one (less confusing that way)
+        const stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonNumber / SECOND_LEVEL_CAPACITY );
 
-        console.log( nucleonCount / SECOND_LEVEL_CAPACITY );
+        console.log( nucleonNumber / SECOND_LEVEL_CAPACITY );
         energyLevels[ energyLevelNumber ].stroke = stroke;
 
         // if the energy level is full (6 particles on the upper and middle energy levels), double the lineWidth
-        energyLevels[ energyLevelNumber ].lineWidth = nucleonCount === SECOND_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
+        energyLevels[ energyLevelNumber ].lineWidth = nucleonNumber === SECOND_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
     } );
   }

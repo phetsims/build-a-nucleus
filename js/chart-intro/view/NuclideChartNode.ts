@@ -33,11 +33,11 @@ type SelfOptions = {
 
 export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 
-// Applies to both proton and neutron counts see showMagicNumbersProperty for details.
-const MAGIC_COUNTS = [ 2, 8 ];
+// Applies to both proton and neutron numbers see showMagicNumbersProperty for details.
+const MAGIC_NUMBERS = [ 2, 8 ];
 
 // 2D array that defines the table structure.
-// The rows are the proton number, for example the first row is protonCount = 0. The numbers in the rows are the neutron number.
+// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
 const POPULATED_CELLS = [
   [ 1, 4, 6 ],
   [ 0, 1, 2, 3, 4, 5, 6 ],
@@ -103,26 +103,26 @@ class NuclideChartNode extends Node {
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => {
+      ( protonNumber: number, neutronNumber: number ) => {
 
-        const currentCellCenter = chartTransform.modelToViewXY( neutronCount + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-          protonCount + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+        const currentCellCenter = chartTransform.modelToViewXY( neutronNumber + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+          protonNumber + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
 
         // highlight the cell if it exists
-        if ( AtomIdentifier.doesExist( protonCount, neutronCount ) && ( protonCount !== 0 || neutronCount !== 0 ) ) {
-          const protonRowIndex = protonCount;
-          const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronCount );
+        if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) && ( protonNumber !== 0 || neutronNumber !== 0 ) ) {
+          const protonRowIndex = protonNumber;
+          const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
           highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
           assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
                                              ' neutronRowIndex = ' + neutronRowIndex );
 
           const decayType = highlightedCell.cellModel.decayType;
-          if ( !AtomIdentifier.isStable( protonCount, neutronCount ) && decayType !== null ) {
-            const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronCount - 1, protonCount ) :
-                              decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronCount, protonCount - 1 ) :
-                              decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronCount + 1, protonCount - 1 ) :
-                              decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronCount - 1, protonCount + 1 ) :
-                              new Vector2( neutronCount - 2, protonCount - 2 );
+          if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
+            const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
+                              decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
+                              decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
+                              decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
+                              new Vector2( neutronNumber - 2, protonNumber - 2 );
             const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
               direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
             arrowNode.setTailAndTip( currentCellCenter.x, currentCellCenter.y, arrowTip.x, arrowTip.y );
@@ -133,7 +133,7 @@ class NuclideChartNode extends Node {
           }
 
           labelContainer.visible = true;
-          labelText.string = AtomIdentifier.getSymbol( protonCount );
+          labelText.string = AtomIdentifier.getSymbol( protonNumber );
           labelContainer.center = currentCellCenter;
           labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
           labelTextBackground.fill = highlightedCell.decayBackgroundColor;
@@ -164,21 +164,21 @@ class NuclideChartNode extends Node {
     const cells: NuclideChartCell[][] = [];
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
-    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( protonCount, viewPosition ) => {
-      const populatedCellsInRow = POPULATED_CELLS[ protonCount ];
+    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( protonNumber, viewPosition ) => {
+      const populatedCellsInRow = POPULATED_CELLS[ protonNumber ];
       const rowCells: NuclideChartCell[] = [];
-      populatedCellsInRow.forEach( ( neutronCount, columnIndex ) => {
+      populatedCellsInRow.forEach( ( neutronNumber, columnIndex ) => {
 
         // create and add the NuclideChartCell
         const defaultLineWidth = chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH );
-        const cell = new NuclideChartCell( cellLength, ChartIntroModel.cellModelArray[ protonCount ][ columnIndex ], {
+        const cell = new NuclideChartCell( cellLength, ChartIntroModel.cellModelArray[ protonNumber ][ columnIndex ], {
           lineWidth: defaultLineWidth
         } );
-        cell.translation = new Vector2( chartTransform.modelToViewX( neutronCount ), viewPosition );
+        cell.translation = new Vector2( chartTransform.modelToViewX( neutronNumber ), viewPosition );
         cellLayerNode.addChild( cell );
         rowCells.push( cell );
 
-        const cellIsMagic = MAGIC_COUNTS.includes( protonCount ) || MAGIC_COUNTS.includes( neutronCount );
+        const cellIsMagic = MAGIC_NUMBERS.includes( protonNumber ) || MAGIC_NUMBERS.includes( neutronNumber );
         if ( cellIsMagic ) {
           showMagicNumbersProperty.link( showMagic => {
             showMagic && cell.moveToFront();

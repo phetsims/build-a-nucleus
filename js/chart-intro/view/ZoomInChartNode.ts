@@ -33,10 +33,10 @@ class ZoomInChartNode extends NuclideChartNode {
 
     const borderPath = new Path( null, { stroke: Color.BLACK, lineWidth: 1.5 } );
     this.addChild( borderPath );
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
-      const cellX = neutronCount;
-      const cellY = protonCount;
-      if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
+    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
+      const cellX = neutronNumber;
+      const cellY = protonNumber;
+      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
 
         // limit the bounds of the ZoomInChartNode to avoid showing white space
         const clampedCellX = Utils.clamp( cellX, 2, 10 );

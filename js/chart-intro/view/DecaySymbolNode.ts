@@ -25,19 +25,19 @@ const NUMBER_FONT = new PhetFont( 100 );
 
 class DecaySymbolNode extends Node {
 
-  public constructor( protonCount: number,
+  public constructor( protonNumber: number,
                       massNumber: number,
                       providedOptions?: DecaySymbolNodeOptions ) {
 
     const options = optionize<DecaySymbolNodeOptions, SelfOptions, NodeOptions>()( {
-      symbolString: protonCount > 0 ? AtomIdentifier.getSymbol( protonCount ) : '-',
+      symbolString: protonNumber > 0 ? AtomIdentifier.getSymbol( protonNumber ) : '-',
       scale: 0.15
     }, providedOptions );
 
     super( options );
 
-    // Add the proton count display.
-    const protonCountDisplay = new Text( protonCount, {
+    // Add the proton number display.
+    const protonNumberDisplay = new Text( protonNumber, {
       font: NUMBER_FONT,
       fill: PhetColorScheme.RED_COLORBLIND,
       boundsMethod: 'accurate'
@@ -50,7 +50,7 @@ class DecaySymbolNode extends Node {
     } );
 
     const numbersVBox = new VBox( {
-      children: [ massNumberDisplay, protonCountDisplay ],
+      children: [ massNumberDisplay, protonNumberDisplay ],
       spacing: 15,
       align: 'right'
     } );

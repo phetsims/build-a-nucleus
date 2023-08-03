@@ -20,13 +20,13 @@ const BANConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
-  // radius of the particle node used on the NucleonCountPanel and AvailableDecaysPanel
+  // radius of the particle node used on the NucleonNumberPanel and AvailableDecaysPanel
   PARTICLE_RADIUS: PARTICLE_RADIUS,
 
   // CSS pixels per second
   PARTICLE_ANIMATION_SPEED: 300,
 
-  // font size of the content labels in the NucleonCountPanel and AvailableDecaysPanel
+  // font size of the content labels in the NucleonNumberPanel and AvailableDecaysPanel
   BUTTONS_AND_LEGEND_FONT_SIZE: 18,
 
   // This is based on max number of particles, may need adjustment if that changes.
@@ -62,8 +62,8 @@ const BANConstants = {
   // font size of the info dialog title's
   TITLE_FONT: new PhetFont( 32 ),
 
-  DEFAULT_INITIAL_PROTON_COUNT: 0,
-  DEFAULT_INITIAL_NEUTRON_COUNT: 0,
+  DEFAULT_INITIAL_PROTON_NUMBER: 0,
+  DEFAULT_INITIAL_NEUTRON_NUMBER: 0,
 
   // center of the atom in view coordinates
   SCREEN_VIEW_ATOM_CENTER_X: 335,

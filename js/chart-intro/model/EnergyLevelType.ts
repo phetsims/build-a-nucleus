@@ -22,13 +22,13 @@ class EnergyLevelType extends EnumerationValue {
 
   public readonly yPosition: number;
   public readonly xPosition: number;
-  public readonly fullPlusOneCount: number;
+  public readonly fullPlusOneNumber: number;
 
-  public constructor( yPosition: number, xPosition: number, fullPlusOneCount: number ) {
+  public constructor( yPosition: number, xPosition: number, fullPlusOneNumber: number ) {
     super();
 
     this.yPosition = yPosition;
-    this.fullPlusOneCount = fullPlusOneCount;
+    this.fullPlusOneNumber = fullPlusOneNumber;
     this.xPosition = xPosition;
   }
 }

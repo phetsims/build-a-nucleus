@@ -15,7 +15,7 @@ import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import { Color, Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
-import NucleonCountPanel from './NucleonCountPanel.js';
+import NucleonNumberPanel from './NucleonNumberPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -51,7 +51,7 @@ export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
 export type ParticleViewMap = Record<number, ParticleView>;
 
 type ParticleTypeInfo = {
-  maxCount: number;
+  maxNumber: number;
   creatorNode: Node;
   numberOfNucleons: number;
   outgoingNucleons: number;
@@ -64,10 +64,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
   protected model: M;
   private timeSinceCountdownStarted: number;
-  private previousProtonCount: number;
-  private previousNeutronCount: number;
+  private previousProtonNumber: number;
+  private previousNeutronNumber: number;
   public readonly resetAllButton: Node;
-  public readonly nucleonCountPanel: Node;
+  public readonly nucleonNumberPanel: Node;
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
   protected readonly particleViewMap: ParticleViewMap;
@@ -103,17 +103,17 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.particleViewPositionVector = options.particleViewPositionVector;
     this.model = model;
     this.timeSinceCountdownStarted = 0;
-    this.previousProtonCount = 0;
-    this.previousNeutronCount = 0;
+    this.previousProtonNumber = 0;
+    this.previousNeutronNumber = 0;
 
     this.atomCenter = atomCenter;
 
     this.particleViewMap = {};
 
-    this.nucleonCountPanel = new NucleonCountPanel( model.particleAtom.protonCountProperty, model.protonCountRange,
-      model.particleAtom.neutronCountProperty, model.neutronCountRange );
-    this.nucleonCountPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
-    this.addChild( this.nucleonCountPanel );
+    this.nucleonNumberPanel = new NucleonNumberPanel( model.particleAtom.protonCountProperty, model.protonNumberRange,
+      model.particleAtom.neutronCountProperty, model.neutronNumberRange );
+    this.nucleonNumberPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
+    this.addChild( this.nucleonNumberPanel );
 
     this.elementNameStringProperty = new DerivedStringProperty( [
       model.particleAtom.protonCountProperty,
@@ -128,9 +128,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty,
       BuildANucleusStrings.neutronLowercaseStringProperty,
       BuildANucleusStrings.clusterOfNeutronsPatternStringProperty
-    ], ( protonCount, neutronCount, doesNuclideExist ) => {
-      let name = AtomIdentifier.getName( protonCount );
-      const massNumber = protonCount + neutronCount;
+    ], ( protonNumber, neutronNumber, doesNuclideExist ) => {
+      let name = AtomIdentifier.getName( protonNumber );
+      const massNumber = protonNumber + neutronNumber;
 
       const massNumberString = massNumber.toString();
 
@@ -162,14 +162,14 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       else if ( name.length === 0 ) {
 
         // no neutrons
-        if ( neutronCount === 0 ) {
+        if ( neutronNumber === 0 ) {
           name = '';
         }
 
         // only one neutron
-        else if ( neutronCount === 1 ) {
+        else if ( neutronNumber === 1 ) {
           name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
-            mass: neutronCount,
+            mass: neutronNumber,
             particleType: BuildANucleusStrings.neutronLowercaseStringProperty,
             doesNotForm: ''
           } );
@@ -178,7 +178,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         // multiple neutrons
         else {
           name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
-            neutronCount: neutronCount
+            neutronNumber: neutronNumber
           } );
         }
 
@@ -205,48 +205,48 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     };
 
     // return if any nuclides exist above, below, or to the left or right of a given nuclide
-    const getNextOrPreviousIso = ( direction: string, particleType: ParticleType, protonCount: number, neutronCount: number ) => {
+    const getNextOrPreviousIso = ( direction: string, particleType: ParticleType, protonNumber: number, neutronNumber: number ) => {
 
       if ( direction === 'up' ) {
 
         // proton up arrow
         if ( particleType === ParticleType.PROTON ) {
-          return AtomIdentifier.doesNextIsotoneExist( protonCount, neutronCount );
+          return AtomIdentifier.doesNextIsotoneExist( protonNumber, neutronNumber );
         }
 
         // neutron up arrow
-        return AtomIdentifier.doesNextIsotopeExist( protonCount, neutronCount );
+        return AtomIdentifier.doesNextIsotopeExist( protonNumber, neutronNumber );
       }
 
       // proton down arrow
       if ( particleType === ParticleType.PROTON ) {
-        return AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount );
+        return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber );
       }
 
       // neutron down arrow
-      return AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount );
+      return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber );
     };
 
-    // function returns whether the protonCount or neutronCount is at its min or max range
-    const isNucleonCountAtRangeBounds = ( direction: string, particleType: ParticleType, protonCount: number, neutronCount: number ) => {
+    // function returns whether the protonNumber or neutronNumber is at its min or max range
+    const isNucleonNumberAtRangeBounds = ( direction: string, particleType: ParticleType, protonNumber: number, neutronNumber: number ) => {
       if ( direction === 'up' ) {
 
         // proton up arrow
         if ( particleType === ParticleType.PROTON ) {
-          return protonCount !== model.protonCountRange.max;
+          return protonNumber !== model.protonNumberRange.max;
         }
 
         // neutron up arrow
-        return neutronCount !== model.neutronCountRange.max;
+        return neutronNumber !== model.neutronNumberRange.max;
       }
 
       // proton down arrow
       if ( particleType === ParticleType.PROTON ) {
-        return protonCount !== model.protonCountRange.min;
+        return protonNumber !== model.protonNumberRange.min;
       }
 
       // neutron down arrow
-      return neutronCount !== model.neutronCountRange.min;
+      return neutronNumber !== model.neutronNumberRange.min;
     };
 
     // enable or disable the creator node and adjust the opacity accordingly
@@ -262,16 +262,16 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       return new DerivedProperty( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty,
           model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty, model.userControlledProtons.lengthProperty,
           model.userControlledNeutrons.lengthProperty ],
-        ( atomProtonCount, atomNeutronCount, incomingProtonsCount, incomingNeutronsCount,
-          userControlledProtonCount, userControlledNeutronCount ) => {
+        ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
+          userControlledProtonNumber, userControlledNeutronNumber ) => {
 
-          const protonCount = atomProtonCount + incomingProtonsCount + userControlledProtonCount;
-          const neutronCount = atomNeutronCount + incomingNeutronsCount + userControlledNeutronCount;
-          const userControlledNucleonCount = userControlledNeutronCount + userControlledProtonCount;
+          const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
+          const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
+          const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
 
           // disable all arrow buttons if the nuclide does not exist
-          if ( !AtomIdentifier.doesExist( protonCount, neutronCount ) &&
-               ( model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonCount !== 0 ) ) {
+          if ( !AtomIdentifier.doesExist( protonNumber, neutronNumber ) &&
+               ( model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonNumber !== 0 ) ) {
             toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
             toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
             return false;
@@ -282,15 +282,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
             toggleCreatorNodeEnabled( this.neutronsCreatorNode, true );
 
             const nextOrPreviousIsoExists = secondParticleType ?
-                                            !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount ) ||
-                                            !getNextOrPreviousIso( direction, secondParticleType, protonCount, neutronCount ) :
-                                            !getNextOrPreviousIso( direction, firstParticleType, protonCount, neutronCount );
+                                            !getNextOrPreviousIso( direction, firstParticleType, protonNumber, neutronNumber ) ||
+                                            !getNextOrPreviousIso( direction, secondParticleType, protonNumber, neutronNumber ) :
+                                            !getNextOrPreviousIso( direction, firstParticleType, protonNumber, neutronNumber );
 
-            const doesNuclideExist = AtomIdentifier.doesExist( protonCount, neutronCount );
+            const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
             const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
 
             const doesPreviousNuclideExist = secondParticleType && direction === 'down' ?
-                                             !AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) :
+                                             !AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber ) :
                                              nextOrPreviousIsoExists;
 
             if ( nuclideExistsBoolean && doesPreviousNuclideExist ) {
@@ -299,15 +299,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
             // If there are no atoms actually in the atom (only potentially animating to the atom), see https://github.com/phetsims/build-a-nucleus/issues/74
             if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
-              return ( particleType === ParticleType.NEUTRON && atomNeutronCount === 0 ) ||
-                     ( particleType === ParticleType.PROTON && atomProtonCount === 0 );
+              return ( particleType === ParticleType.NEUTRON && atomNeutronNumber === 0 ) ||
+                     ( particleType === ParticleType.PROTON && atomProtonNumber === 0 );
             } ) ) {
               return false;
             }
 
-            return secondParticleType ? isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount ) &&
-                                        isNucleonCountAtRangeBounds( direction, secondParticleType, protonCount, neutronCount ) :
-                   isNucleonCountAtRangeBounds( direction, firstParticleType, protonCount, neutronCount );
+            return secondParticleType ? isNucleonNumberAtRangeBounds( direction, firstParticleType, protonNumber, neutronNumber ) &&
+                                        isNucleonNumberAtRangeBounds( direction, secondParticleType, protonNumber, neutronNumber ) :
+                   isNucleonNumberAtRangeBounds( direction, firstParticleType, protonNumber, neutronNumber );
           }
         } );
     };
@@ -324,8 +324,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): Node => {
       return new DoubleArrowButton( direction,
         direction === 'up' ?
-        () => increaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
-        () => decreaseNucleonCountListener( ParticleType.PROTON, ParticleType.NEUTRON ),
+        () => increaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
+        () => decreaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ),
         merge( {
           leftArrowFill: BANColors.protonColorProperty,
           rightArrowFill: BANColors.neutronColorProperty,
@@ -345,13 +345,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.addChild( doubleArrowButtons );
 
     // functions to create the listeners that create or remove a particle
-    const increaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
+    const increaseNucleonNumberListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
       this.createParticleFromStack( firstNucleonType );
       if ( secondNucleonType ) {
         this.createParticleFromStack( secondNucleonType );
       }
     };
-    const decreaseNucleonCountListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
+    const decreaseNucleonNumberListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
       this.returnParticleToStack( firstNucleonType );
       if ( secondNucleonType ) {
         this.returnParticleToStack( secondNucleonType );
@@ -361,14 +361,14 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // function to create the single arrow buttons
     const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): Node => {
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
-      const upArrowButton = new ArrowButton( 'up', () => increaseNucleonCountListener( nucleonType ),
+      const upArrowButton = new ArrowButton( 'up', () => increaseNucleonNumberListener( nucleonType ),
         merge( {
             enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty,
             touchAreaYDilation: TOUCH_AREA_Y_DILATION
           },
           singleArrowButtonOptions )
       );
-      const downArrowButton = new ArrowButton( 'down', () => decreaseNucleonCountListener( nucleonType ),
+      const downArrowButton = new ArrowButton( 'down', () => decreaseNucleonNumberListener( nucleonType ),
         merge( {
             enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty,
             touchAreaYDilation: TOUCH_AREA_Y_DILATION
@@ -514,7 +514,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.dispose();
     } );
 
-    this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, this.atomCenter, this.model.protonCountRange );
+    this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, this.atomCenter, this.model.protonNumberRange );
 
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
@@ -522,18 +522,18 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.neutronArrowButtons = neutronArrowButtons;
 
     // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( protonCount => this.particleAtomNode.updateCloudSize( protonCount, 0.27, 10, 20 ) );
+    model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
       if ( complete ) {
         // add initial neutrons and protons specified by the query parameters to the atom
         _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
           if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons &&
-               this.model.particleAtom.neutronCountProperty.value < this.model.neutronCountRange.max ) {
+               this.model.particleAtom.neutronCountProperty.value < this.model.neutronNumberRange.max ) {
             this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
           }
           if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons &&
-               this.model.particleAtom.protonCountProperty.value < this.model.protonCountRange.max ) {
+               this.model.particleAtom.protonCountProperty.value < this.model.protonNumberRange.max ) {
             this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
           }
         } );
@@ -552,7 +552,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Get information for a specific particle type.
    */
   private getInfoForParticleType( particleType: ParticleType ): ParticleTypeInfo {
-    const maxCount = particleType === ParticleType.PROTON ? this.model.protonCountRange.max : this.model.neutronCountRange.max;
+    const maxNumber = particleType === ParticleType.PROTON ? this.model.protonNumberRange.max : this.model.neutronNumberRange.max;
     const creatorNode = particleType === ParticleType.PROTON ? this.protonsCreatorNode : this.neutronsCreatorNode;
     const numberOfNucleons = [ ...this.model.particles ]
       .filter( particle => particle.type === particleType.particleTypeString ).length;
@@ -560,7 +560,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       .filter( particle => particle.type === particleType.particleTypeString ).length;
 
     return {
-      maxCount: maxCount,
+      maxNumber: maxNumber,
       creatorNode: creatorNode,
       numberOfNucleons: numberOfNucleons,
       outgoingNucleons: outgoingNucleons
@@ -573,7 +573,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public checkIfCreatorNodeShouldBeInvisible( particleType: ParticleType ): void {
     const infoForParticleType = this.getInfoForParticleType( particleType );
 
-    if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) >= infoForParticleType.maxCount ) {
+    if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) >= infoForParticleType.maxNumber ) {
       BANScreenView.setCreatorNodeVisibility( infoForParticleType.creatorNode, false );
     }
   }
@@ -584,7 +584,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   private checkIfCreatorNodeShouldBeVisible( particleType: ParticleType ): void {
     const infoForParticleType = this.getInfoForParticleType( particleType );
 
-    if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) < infoForParticleType.maxCount ) {
+    if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) < infoForParticleType.maxNumber ) {
       BANScreenView.setCreatorNodeVisibility( infoForParticleType.creatorNode, true );
     }
   }
@@ -764,8 +764,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * @param dt - time step, in seconds
    */
   public override step( dt: number ): void {
-    const protonCount = this.model.particleAtom.protonCountProperty.value;
-    const neutronCount = this.model.particleAtom.neutronCountProperty.value;
+    const protonNumber = this.model.particleAtom.protonCountProperty.value;
+    const neutronNumber = this.model.particleAtom.neutronCountProperty.value;
 
     if ( !this.model.doesNuclideExistBooleanProperty.value ) {
       this.timeSinceCountdownStarted += dt;
@@ -774,8 +774,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.timeSinceCountdownStarted = 0;
 
       // keep track of the old values of protonCountProperty and neutronCountProperty to know which value increased
-      this.previousProtonCount = protonCount;
-      this.previousNeutronCount = neutronCount;
+      this.previousProtonNumber = protonNumber;
+      this.previousNeutronNumber = neutronNumber;
     }
 
     // show the nuclide that does not exist for one second, then return the necessary particles
@@ -783,20 +783,20 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.timeSinceCountdownStarted = 0;
 
       if ( this.model.doubleArrowButtonClickedBooleanProperty.value &&
-           AtomIdentifier.doesPreviousNuclideExist( protonCount, neutronCount ) ) {
+           AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber ) ) {
         this.returnParticleToStack( ParticleType.NEUTRON );
         this.returnParticleToStack( ParticleType.PROTON );
       }
 
-      // the neutronCount increased to create a nuclide that does not exist, so return a neutron to the stack
-      else if ( this.previousNeutronCount < neutronCount &&
-                AtomIdentifier.doesPreviousIsotopeExist( protonCount, neutronCount ) ) {
+      // the neutronNumber increased to create a nuclide that does not exist, so return a neutron to the stack
+      else if ( this.previousNeutronNumber < neutronNumber &&
+                AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber ) ) {
         this.returnParticleToStack( ParticleType.NEUTRON );
       }
 
-      // the protonCount increased to create a nuclide that does not exist, so return a proton to the stack
-      else if ( this.previousProtonCount < protonCount &&
-                AtomIdentifier.doesPreviousIsotoneExist( protonCount, neutronCount ) ) {
+      // the protonNumber increased to create a nuclide that does not exist, so return a proton to the stack
+      else if ( this.previousProtonNumber < protonNumber &&
+                AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber ) ) {
         this.returnParticleToStack( ParticleType.PROTON );
       }
     }

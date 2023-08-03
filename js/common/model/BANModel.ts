@@ -37,10 +37,10 @@ class BANModel<T extends ParticleAtom> {
   public readonly particleAtom: T;
 
   // the range of the number of protons allowed
-  public readonly protonCountRange: Range;
+  public readonly protonNumberRange: Range;
 
   // the range of the number of neutrons allowed
-  public readonly neutronCountRange: Range;
+  public readonly neutronNumberRange: Range;
 
   // array of particles sent to the nucleus but not there yet
   public readonly incomingProtons: ObservableArray<BANParticle>;
@@ -58,7 +58,7 @@ class BANModel<T extends ParticleAtom> {
   // array of all emitted particles, this helps keep track of particles that are no longer "counted" in the atom
   public readonly outgoingParticles: ObservableArray<BANParticle>;
 
-  protected constructor( maximumProtonCount: number, maximumNeutronCount: number, particleAtom: T ) {
+  protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T ) {
 
     // Create the atom
     this.particleAtom = particleAtom;
@@ -84,17 +84,17 @@ class BANModel<T extends ParticleAtom> {
 
     this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
-    this.protonCountRange = new Range( BANConstants.CHART_MIN, maximumProtonCount );
-    this.neutronCountRange = new Range( BANConstants.CHART_MIN, maximumNeutronCount );
+    this.protonNumberRange = new Range( BANConstants.CHART_MIN, maximumProtonNumber );
+    this.neutronNumberRange = new Range( BANConstants.CHART_MIN, maximumNeutronNumber );
 
     // the stability of the nuclide is determined by the given number of protons and neutrons
     this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => AtomIdentifier.isStable( protonCount, neutronCount )
+      ( protonNumber: number, neutronNumber: number ) => AtomIdentifier.isStable( protonNumber, neutronNumber )
     );
 
     // if a nuclide with a given number of protons and neutrons exists
     this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => AtomIdentifier.doesExist( protonCount, neutronCount )
+      ( protonNumber: number, neutronNumber: number ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
     );
 
     // reconfigure the nucleus when the massNumber changes

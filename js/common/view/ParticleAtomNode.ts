@@ -27,11 +27,11 @@ class ParticleAtomNode extends Node {
   private nucleonLayers: Node[];
   public readonly electronCloud: Circle;
   private readonly atomCenter: Vector2;
-  private protonCountRange: Range;
+  private protonNumberRange: Range;
   private readonly particleViewMap: ParticleViewMap;
   public readonly emptyAtomCircle: Circle;
 
-  public constructor( particleViewMap: ParticleViewMap, atomCenter: Vector2, protonCountRange: Range ) {
+  public constructor( particleViewMap: ParticleViewMap, atomCenter: Vector2, protonNumberRange: Range ) {
 
     // Add the nucleonLayers
     const nucleonLayers: Node[] = [];
@@ -66,7 +66,7 @@ class ParticleAtomNode extends Node {
 
     this.particleViewMap = particleViewMap;
     this.atomCenter = atomCenter;
-    this.protonCountRange = protonCountRange;
+    this.protonNumberRange = protonNumberRange;
     this.electronCloud = electronCloud;
     this.emptyAtomCircle = emptyAtomCircle;
   }
@@ -137,10 +137,10 @@ class ParticleAtomNode extends Node {
    * range and scale to provide values that are usable for our needs on the canvas.
    */
   private getElectronShellDiameter( numElectrons: number, minChangedRadius: number, maxChangedRadius: number ): number {
-    const maxElectrons = this.protonCountRange.max;
+    const maxElectrons = this.protonNumberRange.max;
     const atomicRadius = AtomIdentifier.getAtomicRadius( numElectrons );
     if ( atomicRadius ) {
-      return ParticleAtomNode.reduceRadiusRange( atomicRadius, this.protonCountRange.min + 1, maxElectrons,
+      return ParticleAtomNode.reduceRadiusRange( atomicRadius, this.protonNumberRange.min + 1, maxElectrons,
         minChangedRadius, maxChangedRadius );
     }
     else {
@@ -150,16 +150,16 @@ class ParticleAtomNode extends Node {
   }
 
   /**
-   * Update size of electron cloud based on protonCount since the nuclides created are neutral, meaning the number of
+   * Update size of electron cloud based on protonNumber since the nuclides created are neutral, meaning the number of
    * electrons is the same as the number of protons.
    */
-  public updateCloudSize( protonCount: number, factor: number, minChangedRadius: number, maxChangedRadius: number ): void {
-    if ( protonCount === 0 ) {
+  public updateCloudSize( protonNumber: number, factor: number, minChangedRadius: number, maxChangedRadius: number ): void {
+    if ( protonNumber === 0 ) {
       this.electronCloud.radius = 1E-5; // arbitrary non-zero value
       this.electronCloud.fill = 'transparent';
     }
     else {
-      const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonCount, minChangedRadius, maxChangedRadius ) / 2 );
+      const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonNumber, minChangedRadius, maxChangedRadius ) / 2 );
       this.electronCloud.radius = radius * factor;
       this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
         // TODO: use color.interpolateRGBA() to use the same color property in both https://github.com/phetsims/build-a-nucleus/issues/85

@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Node that represents a number line for nucleons. The current nucleon count is highlighted on the number line.
+ * Node that represents a number line for nucleons. The current nucleon number is highlighted on the number line.
  *
  * @author Luisa Vargas
  */
@@ -30,7 +30,7 @@ type NucleonNumberLineOptions = SelfOptions & StrictOmit<NodeOptions, 'children'
 
 class NucleonNumberLine extends Node {
 
-  public constructor( chartTransform: ChartTransform, particleCountProperty: TReadOnlyProperty<number>,
+  public constructor( chartTransform: ChartTransform, particleNumberProperty: TReadOnlyProperty<number>,
                       orientation: Orientation, providedOptions: NucleonNumberLineOptions ) {
 
     const options = optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
@@ -56,16 +56,16 @@ class NucleonNumberLine extends Node {
       extent: 5,
       createLabel: ( value: number ) => new BackgroundNode( new Text( value, {
           fontSize: 12,
-          fill: new DerivedProperty( [ particleCountProperty, BANColors.highLightedTickLabelColorProperty, BANColors.nucleonNumberLineAndTextFontColorProperty ],
-            ( particleCount, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
-              return particleCount === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
+          fill: new DerivedProperty( [ particleNumberProperty, BANColors.highLightedTickLabelColorProperty, BANColors.nucleonNumberLineAndTextFontColorProperty ],
+            ( particleNumber, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
+              return particleNumber === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
             } )
         } ),
         {
           rectangleOptions: {
-            fill: new DerivedProperty( [ particleCountProperty, options.labelHighlightColorProperty ],
-              ( particleCount, labelHighlightColor ) => {
-                return particleCount === value ? labelHighlightColor : null;
+            fill: new DerivedProperty( [ particleNumberProperty, options.labelHighlightColorProperty ],
+              ( particleNumber, labelHighlightColor ) => {
+                return particleNumber === value ? labelHighlightColor : null;
               } ),
             opacity: 1
           },

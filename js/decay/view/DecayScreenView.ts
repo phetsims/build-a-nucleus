@@ -94,19 +94,19 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.symbolAccordionBox );
 
 
-    // store the current nucleon counts
-    let oldProtonCount: number;
-    let oldNeutronCount: number;
-    const storeNucleonCounts = () => {
-      oldProtonCount = this.model.particleAtom.protonCountProperty.value;
-      oldNeutronCount = this.model.particleAtom.neutronCountProperty.value;
+    // store the current nucleon numbers
+    let oldProtonNumber: number;
+    let oldNeutronNumber: number;
+    const storeNucleonNumbers = () => {
+      oldProtonNumber = this.model.particleAtom.protonCountProperty.value;
+      oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
     };
 
     // create the undo decay button
     const undoDecayButton = new ReturnButton( () => {
       undoDecayButton.visible = false;
-      restorePreviousNucleonCount( ParticleType.PROTON, oldProtonCount );
-      restorePreviousNucleonCount( ParticleType.NEUTRON, oldNeutronCount );
+      restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
+      restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
 
       // remove all particles in the outgoingParticles array from the particles array
       this.model.outgoingParticles.forEach( particle => {
@@ -120,18 +120,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
 
-    // restore the particleAtom to have the nucleon counts before a decay occurred
-    const restorePreviousNucleonCount = ( particleType: ParticleType, oldNucleonCount: number ) => {
-      const newNucleonCount = particleType === ParticleType.PROTON ?
+    // restore the particleAtom to have the nucleon numbers before a decay occurred
+    const restorePreviousNucleonNumber = ( particleType: ParticleType, oldNucleonNumber: number ) => {
+      const newNucleonNumber = particleType === ParticleType.PROTON ?
                               this.model.particleAtom.protonCountProperty.value :
                               this.model.particleAtom.neutronCountProperty.value;
-      const nucleonCountDifference = oldNucleonCount - newNucleonCount;
+      const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
 
-      for ( let i = 0; i < Math.abs( nucleonCountDifference ); i++ ) {
-        if ( nucleonCountDifference > 0 ) {
+      for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
+        if ( nucleonNumberDifference > 0 ) {
           this.addNucleonImmediatelyToAtom( particleType );
         }
-        else if ( nucleonCountDifference < 0 ) {
+        else if ( nucleonNumberDifference < 0 ) {
           removeNucleonImmediatelyFromAtom( particleType );
         }
       }
@@ -160,7 +160,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( model, {
       decayAtom: this.decayAtom.bind( this ),
-      storeNucleonCounts: storeNucleonCounts.bind( this ),
+      storeNucleonNumbers: storeNucleonNumbers.bind( this ),
       showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
     } );
     availableDecaysPanel.right = this.symbolAccordionBox.right;
@@ -220,9 +220,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.particleAtomNode );
 
     // Define the update function for the stability indicator.
-    const updateStabilityIndicator = ( protonCount: number, neutronCount: number ) => {
-      if ( protonCount > 0 ) {
-        if ( AtomIdentifier.isStable( protonCount, neutronCount ) ) {
+    const updateStabilityIndicator = ( protonNumber: number, neutronNumber: number ) => {
+      if ( protonNumber > 0 ) {
+        if ( AtomIdentifier.isStable( protonNumber, neutronNumber ) ) {
           this.stabilityIndicator.stringProperty = BuildANucleusStrings.stableStringProperty;
         }
         else {
@@ -236,7 +236,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // Add the listeners that control the label content
     Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => updateStabilityIndicator( protonCount, neutronCount )
+      ( protonNumber: number, neutronNumber: number ) => updateStabilityIndicator( protonNumber, neutronNumber )
     );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
       this.stabilityIndicator.visible = visible;
@@ -246,14 +246,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.elementName.boundsProperty.link( () => {
       this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
     } );
-    this.nucleonCountPanel.left = availableDecaysPanel.left;
+    this.nucleonNumberPanel.left = availableDecaysPanel.left;
 
     // Only show the emptyAtomCircle if there are zero particles in the atom.
     Multilink.multilink( [
       this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty
-    ], ( protonCount, neutronCount ) => {
-      this.particleAtomNode.emptyAtomCircle.visible = protonCount + neutronCount === 0;
+    ], ( protonNumber, neutronNumber ) => {
+      this.particleAtomNode.emptyAtomCircle.visible = protonNumber + neutronNumber === 0;
     } );
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [

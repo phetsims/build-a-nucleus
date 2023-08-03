@@ -81,23 +81,23 @@ class ParticleNucleus extends ParticleAtom {
     this.protonsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
     this.neutronsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
 
-    // update bound levels based on nucleon counts
-    this.protonCountProperty.link( protonCount => {
-      if ( protonCount >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
+    // update bound levels based on nucleon numbers
+    this.protonCountProperty.link( protonNumber => {
+      if ( protonNumber >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
         this.protonsLevelProperty.value = EnergyLevelType.SECOND;
       }
-      else if ( protonCount > FIRST_LEVEL_CAPACITY ) {
+      else if ( protonNumber > FIRST_LEVEL_CAPACITY ) {
         this.protonsLevelProperty.value = EnergyLevelType.FIRST;
       }
       else {
         this.protonsLevelProperty.value = EnergyLevelType.NONE;
       }
     } );
-    this.neutronCountProperty.link( neutronCount => {
-      if ( neutronCount >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
+    this.neutronCountProperty.link( neutronNumber => {
+      if ( neutronNumber >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
         this.neutronsLevelProperty.value = EnergyLevelType.SECOND;
       }
-      else if ( neutronCount > FIRST_LEVEL_CAPACITY ) {
+      else if ( neutronNumber > FIRST_LEVEL_CAPACITY ) {
         this.neutronsLevelProperty.value = EnergyLevelType.FIRST;
       }
       else {

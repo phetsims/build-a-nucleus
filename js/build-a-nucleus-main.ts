@@ -46,8 +46,8 @@ simLauncher.launch( () => {
     if ( !_.some( QueryStringMachine.warnings, warning => warning.key === 'neutrons' ) && QueryStringMachine.containsKey( 'neutrons' ) ) {
       QueryStringMachine.addWarning( 'neutrons', BANQueryParameters.neutrons, errorMessage );
     }
-    BANQueryParameters.protons = BANConstants.DEFAULT_INITIAL_PROTON_COUNT;
-    BANQueryParameters.neutrons = BANConstants.DEFAULT_INITIAL_NEUTRON_COUNT;
+    BANQueryParameters.protons = BANConstants.DEFAULT_INITIAL_PROTON_NUMBER;
+    BANQueryParameters.neutrons = BANConstants.DEFAULT_INITIAL_NEUTRON_NUMBER;
   }
 
   const sim = new Sim( buildANucleusTitleStringProperty, [

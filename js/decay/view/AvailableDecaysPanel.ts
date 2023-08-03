@@ -39,8 +39,8 @@ type SelfOptions = {
 
   decayAtom: ( decayType: DecayType ) => void;
 
-  // function to store current nucleon counts
-  storeNucleonCounts: () => void;
+  // function to store current nucleon numbers
+  storeNucleonNumbers: () => void;
 
   // function to show and reposition the undo decay button
   showAndRepositionUndoDecayButton: ( decayType: string ) => void;
@@ -96,7 +96,7 @@ class AvailableDecaysPanel extends Panel {
 
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
-      options.storeNucleonCounts();
+      options.storeNucleonNumbers();
       options.decayAtom( decayType );
       options.showAndRepositionUndoDecayButton( decayType.name.toString() );
     };

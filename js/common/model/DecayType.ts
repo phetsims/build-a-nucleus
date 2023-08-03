@@ -32,7 +32,7 @@ class DecayType extends EnumerationValue {
     public readonly labelStringProperty: TReadOnlyProperty<string>,
     public readonly colorProperty: ProfileColorProperty,
     public readonly massNumber: number,
-    public readonly protonCount: number,
+    public readonly protonNumber: number,
     public readonly decaySymbol: string ) {
     super();
   }

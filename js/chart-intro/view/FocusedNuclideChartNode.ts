@@ -43,10 +43,10 @@ class FocusedNuclideChartNode extends NuclideChartNode {
     this.addChild( highlightRectangle );
 
     // update the box position to current nuclide
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonCount, neutronCount ) => {
-      const cellX = neutronCount;
-      const cellY = protonCount;
-      if ( AtomIdentifier.doesExist( protonCount, neutronCount ) ) {
+    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
+      const cellX = neutronNumber;
+      const cellY = protonNumber;
+      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
 
         // constrain the bounds of the highlightRectangle
         const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
@@ -79,9 +79,9 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         nuclideChartCellRow.forEach( nuclideChartCell => {
           if ( nuclideChartCell ) {
             const protonDelta = Math.abs( chartTransform.viewToModelY( highlightRectangle.center.y )
-                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.protonCount );
+                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.protonNumber );
             const neutronDelta = Math.abs( chartTransform.viewToModelX( highlightRectangle.center.x )
-                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.neutronCount );
+                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.neutronNumber );
             nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
           }
         } );

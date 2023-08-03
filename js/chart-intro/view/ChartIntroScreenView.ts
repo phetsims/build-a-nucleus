@@ -75,13 +75,13 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
 
     // update nucleons in mini-particle as the particleAtom's nucleon changes. This listener keeps the mini-particle in sync.
-    const nucleonCountListener = ( nucleonCount: number, particleType: ParticleType ) => {
-      const currentMiniAtomNucleonCount = particleType === ParticleType.PROTON ?
+    const nucleonNumberListener = ( nucleonNumber: number, particleType: ParticleType ) => {
+      const currentMiniAtomNucleonNumber = particleType === ParticleType.PROTON ?
                                           model.miniParticleAtom.protonCountProperty.value :
                                           model.miniParticleAtom.neutronCountProperty.value;
 
-      // difference between particleAtom's nucleon count and miniAtom's nucleon count
-      const nucleonDelta = currentMiniAtomNucleonCount - nucleonCount;
+      // difference between particleAtom's nucleon number and miniAtom's nucleon number
+      const nucleonDelta = currentMiniAtomNucleonNumber - nucleonNumber;
 
       // add nucleons to miniAtom
       if ( nucleonDelta < 0 ) {
@@ -111,8 +111,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         } );
       }
     };
-    model.particleAtom.protonCountProperty.link( protonCount => nucleonCountListener( protonCount, ParticleType.PROTON ) );
-    model.particleAtom.neutronCountProperty.link( neutronCount => nucleonCountListener( neutronCount, ParticleType.NEUTRON ) );
+    model.particleAtom.protonCountProperty.link( protonNumber => nucleonNumberListener( protonNumber, ParticleType.PROTON ) );
+    model.particleAtom.neutronCountProperty.link( neutronNumber => nucleonNumberListener( neutronNumber, ParticleType.NEUTRON ) );
     const particleAtomNodeCenter = this.particleAtomNode.center;
 
     // scale down to make nucleus 'mini' sized
@@ -121,16 +121,16 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // create and add the periodic table and symbol
     this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
-    this.periodicTableAndIsotopeSymbol.top = this.nucleonCountPanel.top;
+    this.periodicTableAndIsotopeSymbol.top = this.nucleonNumberPanel.top;
     this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
     this.addChild( this.periodicTableAndIsotopeSymbol );
 
     this.elementName.boundsProperty.link( () => {
       this.elementName.centerX = this.doubleArrowButtons.centerX;
-      this.elementName.top = this.nucleonCountPanel.top;
+      this.elementName.top = this.nucleonNumberPanel.top;
     } );
 
-    this.nucleonCountPanel.left = this.layoutBounds.left + 20;
+    this.nucleonNumberPanel.left = this.layoutBounds.left + 20;
 
     // create and add the 'Nuclear Shell Model' title
     const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, {
@@ -159,7 +159,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     } );
     energyText.rotate( -Math.PI / 2 );
     energyText.boundsProperty.link( () => {
-      energyText.left = this.nucleonCountPanel.left;
+      energyText.left = this.nucleonNumberPanel.left;
       energyText.centerY = this.layoutBounds.centerY + 20;
     } );
     this.addChild( energyText );
@@ -246,8 +246,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // only show the emptyAtomCircle when there are zero nucleons
     Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],
-      ( protonCount: number, neutronCount: number ) => {
-        this.particleAtomNode.emptyAtomCircle.visible = ( protonCount + neutronCount ) === 0;
+      ( protonNumber: number, neutronNumber: number ) => {
+        this.particleAtomNode.emptyAtomCircle.visible = ( protonNumber + neutronNumber ) === 0;
       } );
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [

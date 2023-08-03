@@ -65,21 +65,21 @@ class DecayEquationNode extends VBox {
           font: BANConstants.LEGEND_FONT
         } );
 
-        const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonCount, currentCellModel.protonCount + currentCellModel.neutronCount );
+        const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber, currentCellModel.protonNumber + currentCellModel.neutronNumber );
         assert && assert( currentNuclideSymbol.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT,
           `Min content height must be a max so the space is consistent across all equation forms. Current nuclide symbol height is ${currentNuclideSymbol.height}` );
 
         // Choose a length of the arrow that works well for the equation look, and matches the look of the chart arrow
         const decayEquationArrow = new ArrowNode( 0, 0, 25, 0, BANConstants.DECAY_ARROW_OPTIONS );
 
-        const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonCountProperty.value, decayEquationModel.finalMassNumberProperty.value );
+        const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonNumberProperty.value, decayEquationModel.finalMassNumberProperty.value );
 
         const plusNode = IconFactory.createPlusNode( BANColors.decayEquationArrowAndPlusNodeColorProperty );
 
         if ( currentCellModel.decayType ) {
 
           const decaySymbol = new DecaySymbolNode(
-            currentCellModel.decayType.protonCount,
+            currentCellModel.decayType.protonNumber,
             currentCellModel.decayType.massNumber, {
               symbolString: currentCellModel.decayType.decaySymbol
             } );
