@@ -87,10 +87,7 @@ class NucleonShellView extends Node {
           energyLevelNumber = FIRST_LEVEL_CAPACITY;
         }
         nucleonNumber -= FIRST_LEVEL_CAPACITY; // REVIEW: instead of mutating the listener variable, it is better to name a new one (less confusing that way)
-        const stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonNumber / SECOND_LEVEL_CAPACITY );
-
-        console.log( nucleonNumber / SECOND_LEVEL_CAPACITY );
-        energyLevels[ energyLevelNumber ].stroke = stroke;
+        energyLevels[ energyLevelNumber ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonNumber / SECOND_LEVEL_CAPACITY );
 
         // if the energy level is full (6 particles on the upper and middle energy levels), double the lineWidth
         energyLevels[ energyLevelNumber ].lineWidth = nucleonNumber === SECOND_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;

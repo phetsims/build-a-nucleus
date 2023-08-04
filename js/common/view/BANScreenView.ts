@@ -799,6 +799,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
                 AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber ) ) {
         this.returnParticleToStack( ParticleType.PROTON );
       }
+      else {
+        assert && assert( false, 'a particle should be removed in one of the above cases');
+      }
     }
   }
 
