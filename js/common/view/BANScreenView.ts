@@ -936,7 +936,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // animate the particle to a random destination outside the model
     const alphaParticleEmissionAnimation = alphaParticle.animateAndRemoveParticle(
-      this.getRandomExternalModelPosition(), () => this.removeParticle );
+      this.getRandomExternalModelPosition(), this.removeParticle.bind( this ) );
     this.model.particleAnimations.push( alphaParticleEmissionAnimation );
 
     return alphaParticle;
