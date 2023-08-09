@@ -38,6 +38,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
       particle.setPositionAndDestination(
+        // TODO: should this use the particleTransform or is this manual calculation okay? https://github.com/phetsims/build-a-nucleus/issues/108
         viewPosition.minus( particleViewPositionVector ).minus( particle.positionProperty.value )
       );
 
