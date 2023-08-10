@@ -59,7 +59,8 @@ class DecayEquationNode extends VBox {
         const decayLikelihoodPercentText = new Text( new PatternStringProperty( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
           decayLikelihoodPercent: new DerivedStringProperty( [
             unknownSpacePatternStringProperty
-          ], unknownText => `${currentCellModel.decayTypeLikelihoodPercent}` || unknownText )
+          ], unknownText => currentCellModel.decayTypeLikelihoodPercent === null ?
+                            unknownText : `${currentCellModel.decayTypeLikelihoodPercent}` )
         } ), {
           maxWidth: 100,
           font: BANConstants.LEGEND_FONT
