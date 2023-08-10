@@ -20,7 +20,6 @@ for protons and neutrons.
   stability.
 - (Subatomic) particle: a particle smaller than an atom. Such as a proton, neutron, electron, or positron.
 
-
 ## Overview
 
 In the Build a Nucleus simulation, a user can build a nuclide from protons and neutrons. The nuclide is assumed to be
@@ -33,9 +32,9 @@ levels play area in the **Chart Intro screen**. If a nucleon particle is placed 
 its stack.
 
 As the number of nucleons in the nucleus changes, the sim updates the nuclide species name (eg. Helium-5) and the
-readout of nucleon numbers. Only nuclides that exist on Earth can be built, this is done through the disabling of arrows,
-as well through briefly displaying "{{nuclide name}} does not form" when a nuclide that does not exist is built, then
-the nucleus rearranges itself back to the last formed nuclide.
+readout of nucleon numbers. Only nuclides that exist on Earth can be built, this is done through the disabling of
+arrows, as well through briefly displaying "{{nuclide name}} does not form" when a nuclide that does not exist is built,
+then the nucleus rearranges itself back to the last formed nuclide.
 
 Five decay types are represented within the simulation: α decay, β<sup>+</sup> decay, β<sup>-</sup> decay, proton
 emission, and neutron emission. Unstable nuclides decay into stable nuclides through one of these decay paths.
@@ -59,13 +58,12 @@ Pressing the “info” button near the half-life readout will bring up a dialog
 timescale is overall static, but the half-life readout is dynamic and will correspond to the current nuclide species
 half-life.
 
-
 ## Chart Intro screen
 
 The Chart Intro screen allows building of nuclides up to 10 protons and 12 neutrons but a full chart with all the
 nuclides is also linked here.
 
-A mini-atom is displayed at the top of the screen, similar to the main atom in the **Decay screen**, however this
+A _mini-atom_ is displayed at the top of the screen, similar to the main atom in the **Decay screen**, however this
 mini-atom is not interactive. Rather, nucleons in this screen are placed on the energy levels that make up the nucleus.
 (Hence, the 'zoom-in' dashed lines on the nucleus.) The color of the energy level demonstrates an energy level filling
 up to its alloted amount through changing shades closer to its respective nucleon color.
@@ -81,8 +79,8 @@ highlighting the current nuclide position using the respective nucleon colors. F
 for position '1' on the proton axis is highlighted in orange while the label for position '0' is highlighted in gray
 on the neutron axis.
 
-The zoomed in view of the chart shows the decay equation of the most likely decay to occur for the current nuclide built.
-It also shows the percent likelihood of this decay happening. There is also a decay button beside the equation to
+The zoomed in view of the chart shows the decay equation of the most likely decay to occur for the current nuclide
+built. It also shows the percent likelihood of this decay happening. There is also a decay button beside the equation to
 visibly see the decay occur on the nucleus. In the shell model however, particles only fade in / fade out of the energy
 levels for simplification purposes. The decay direction is also seen in the zoomed-in chart through a white arrow.
 
