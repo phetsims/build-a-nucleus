@@ -43,6 +43,19 @@ is not considered as a part of the ParticleAtom particles.
 The ParticleView's of the model particles are kept track of in the _particleViewMap_, a lookup map which uses the
 particle's id as a key. All ParticleView's are stored in the map, including the mini-atom ParticleView's.
 
+#### Chart Intro screen
+
+The Chart Intro screen features a main nuclide chart, the NuclideChartNode which has two subtypes.
+
+- NuclideChartNode: The main nuclide chart node which goes up to 10 protons and 12 neutrons. Chart is made of
+  NuclideChartCell's.
+  - Visible by default in the first scene of the Partial Nuclide Chart accordion box.
+- ZoomInChartNode: Subtype of NuclideChartNode which shows a chart of 5x5 NuclideChartCell's
+  - Visible on the left side of the 'zoom-in' scene in the Partial Nuclide Chart accordion box.
+- FocusedNuclideChartNode: Subtype of NuclideChartNode which also goes up to 10 protons and 12 neutrons, however, it 
+  highlights the current nuclide through 'graying out' cells too far away from the current nuclide.
+  - Visible on the right side of the 'zoom-in' scene in the Partial Nuclide Chart accordion box.
+
 ## General functioning
 
 #### General particle lifespan

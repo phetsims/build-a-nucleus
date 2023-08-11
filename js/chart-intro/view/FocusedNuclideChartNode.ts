@@ -1,7 +1,8 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Node that focuses on current nuclide in NuclideChartNode.
+ * Node that focuses on current nuclide in NuclideChartNode by drawing a square box outline with an area of 5x5 cells
+ * around the current nuclide. All cells outside this area are 'grayed out'.
  *
  * @author Luisa Vargas
  * @author Marla Schulz (PhET Interactive Simulations)
