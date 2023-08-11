@@ -37,7 +37,7 @@ class FullChartDialog extends Dialog {
     const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
       links: { url: linkText } // RichText must fill in URL for link
     }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) );
-    fullChartImage.setMaxWidth( fullChartInfoText.width - 100 ); // determined empirically so image is a bit smaller than text length
+    fullChartImage.setMaxWidth( 481.5 ); // determined empirically so image is a bit smaller than text length
     const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ), { stroke: Color.BLACK } );
 
     // create and add the full chart info dialog and button
