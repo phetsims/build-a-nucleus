@@ -27,7 +27,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
   public constructor( providedOptions?: DecayScreenOptions ) {
 
     const options = optionize<DecayScreenOptions, EmptySelfOptions, ScreenOptions>()( {
-      name: BuildANucleusStrings.decayStringProperty,
+      name: BuildANucleusStrings.screen.decayStringProperty,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
       homeScreenIcon: createScreenIcon()

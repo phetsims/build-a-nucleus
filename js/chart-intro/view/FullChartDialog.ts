@@ -26,10 +26,10 @@ class FullChartDialog extends Dialog {
     const stringProperty = new DerivedStringProperty( [
       allowLinksProperty,
       BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty,
-      BuildANucleusStrings.fullChartStringProperty
-    ], ( allowLinks, fullChartInfoText, fullChartText ) => {
+      BuildANucleusStrings.fullChartLowercaseStringProperty
+    ], ( allowLinks, fullChartInfoText, fullChartLowercaseText ) => {
       return allowLinks ?
-             StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartText}</a>` } ) :
+             StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartLowercaseText}</a>` } ) :
              StringUtils.fillIn( fullChartInfoText, { link: linkText } );
     } );
 

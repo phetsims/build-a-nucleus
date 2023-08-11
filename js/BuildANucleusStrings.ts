@@ -12,7 +12,10 @@ type StringsType = {
   'build-a-nucleus': {
     'titleStringProperty': LocalizedStringProperty;
   };
-  'decayStringProperty': LocalizedStringProperty;
+  'screen': {
+    'decayStringProperty': LocalizedStringProperty;
+    'chartIntroStringProperty': LocalizedStringProperty;
+  };
   'protonsColonStringProperty': LocalizedStringProperty;
   'neutronsColonStringProperty': LocalizedStringProperty;
   'secondsStringProperty': LocalizedStringProperty;
@@ -67,7 +70,6 @@ type StringsType = {
   'electronCloudStringProperty': LocalizedStringProperty;
   'clusterOfNeutronsPatternStringProperty': LocalizedStringProperty;
   'availableDecaysInfoPanelTextStringProperty': LocalizedStringProperty;
-  'chartIntroStringProperty': LocalizedStringProperty;
   'energyStringProperty': LocalizedStringProperty;
   'nuclearShellModelStringProperty': LocalizedStringProperty;
   'partialNuclideChartStringProperty': LocalizedStringProperty;
@@ -79,7 +81,7 @@ type StringsType = {
   'percentageInParenthesesPatternStringProperty': LocalizedStringProperty;
   'magicNumbersStringProperty': LocalizedStringProperty;
   'fullChartInfoPanelTextPatternStringProperty': LocalizedStringProperty;
-  'fullChartStringProperty': LocalizedStringProperty;
+  'fullChartLowercaseStringProperty': LocalizedStringProperty;
   'fullNuclideChartStringProperty': LocalizedStringProperty;
   'fullChartCapitalizedStringProperty': LocalizedStringProperty;
 };

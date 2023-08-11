@@ -25,7 +25,7 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
   public constructor( providedOptions?: NuclideChartIntroScreenOptions ) {
 
     const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
-      name: BuildANucleusStrings.chartIntroStringProperty,
+      name: BuildANucleusStrings.screen.chartIntroStringProperty,
 
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
 

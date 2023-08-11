@@ -53,7 +53,7 @@ class NuclideChartAccordionBox extends AccordionBox {
 
     const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.width / 2 );
 
-    const decayPushButton = new TextPushButton( BuildANucleusStrings.decayStringProperty, {
+    const decayPushButton = new TextPushButton( BuildANucleusStrings.screen.decayStringProperty, {
       enabledProperty: new DerivedProperty( [ decayEquationModel.currentCellModelProperty ], currentCellModel => !!currentCellModel?.decayType ),
       baseColor: BANColors.decayButtonColorProperty,
       textNodeOptions: {
