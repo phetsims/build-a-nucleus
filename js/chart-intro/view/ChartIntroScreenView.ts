@@ -218,7 +218,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersProperty,
       new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ), {
-        boxWidth: 15
+        boxWidth: 15,
+        touchAreaYDilation: 4
       } );
     showMagicNumbersCheckbox.left = partialChartRadioButton.right + CHART_VERTICAL_MARGINS;
     showMagicNumbersCheckbox.top = nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
