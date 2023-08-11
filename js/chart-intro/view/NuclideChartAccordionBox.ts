@@ -60,6 +60,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         fontSize: 14
       },
       minWidth: 80,
+      maxWidth: 150,
       listener: () => {
         const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
         decayAtom( decayType || null );
