@@ -44,6 +44,9 @@ const BANConstants = {
   CHART_MAX_NUMBER_OF_PROTONS: 10,
   CHART_MAX_NUMBER_OF_NEUTRONS: 12,
 
+  // the side length of the number of cells the zoom-in chart node and focused chart node should highlight
+  ZOOM_IN_CHART_SQUARE_LENGTH: 5,
+
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
   TIME_TO_SHOW_DOES_NOT_EXIST: 1,
 

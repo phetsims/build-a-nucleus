@@ -13,11 +13,10 @@ import buildANucleus from '../../buildANucleus.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import BANConstants from '../../common/BANConstants.js';
-import Property from '../../../../axon/js/Property.js';
 import { Color, Rectangle } from '../../../../scenery/js/imports.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 const HIGHLIGHT_RECTANGLE_LINE_WIDTH = 1.5;
 
@@ -32,31 +31,34 @@ class FocusedNuclideChartNode extends NuclideChartNode {
     } );
 
     // keep track of the current center of the highlight rectangle
-    const viewHighlightRectangleCenterProperty = new Property(
-      chartTransform.modelToViewXY( 1 + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE, 1 + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE ) );
+    const viewHighlightRectangleCenterProperty = new DerivedProperty(
+      [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
+        const cellX = neutronNumber;
+        const cellY = protonNumber;
+        if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
+
+          // constrain the bounds of the highlightRectangle
+          const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+            cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+          return new Vector2( constrainedCenter.x, constrainedCenter.y );
+        }
+        else {
+
+          // keep the current center if the cell built does not exist
+          return highlightRectangle.center;
+        }
+      } );
+
     const nuclideChartBounds = this.bounds.copy();
     const backgroundRectangle = new Rectangle( this.bounds.dilated( 2 ), { stroke: 'white' } );
+    this.addChild( backgroundRectangle );
 
     // create and add a box around current nuclide
-    const squareLength = chartTransform.modelToViewDeltaX( 5 );
+    const squareLength = chartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH );
     const highlightRectangle = new Rectangle( 0, 0,
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: HIGHLIGHT_RECTANGLE_LINE_WIDTH } );
     this.addChild( highlightRectangle );
 
-    // update the box position to current nuclide
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
-      const cellX = neutronNumber;
-      const cellY = protonNumber;
-      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
-
-        // constrain the bounds of the highlightRectangle
-        const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-          cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
-        viewHighlightRectangleCenterProperty.value = new Vector2( constrainedCenter.x, constrainedCenter.y );
-      }
-    } );
-
-    this.addChild( backgroundRectangle );
     const updateHighlightRectangleCenter = () => {
       highlightRectangle.center = viewHighlightRectangleCenterProperty.value;
       const shift = ( HIGHLIGHT_RECTANGLE_LINE_WIDTH -
