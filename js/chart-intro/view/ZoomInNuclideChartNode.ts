@@ -18,7 +18,7 @@ import { Color, Path } from '../../../../scenery/js/imports.js';
 import Utils from '../../../../dot/js/Utils.js';
 import BANConstants from '../../common/BANConstants.js';
 
-class ZoomInChartNode extends NuclideChartNode {
+class ZoomInNuclideChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform, showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
@@ -38,7 +38,7 @@ class ZoomInChartNode extends NuclideChartNode {
       const cellY = protonNumber;
       if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
 
-        // limit the bounds of the ZoomInChartNode to avoid showing white space
+        // limit the bounds of the ZoomInNuclideChartNode to avoid showing white space
         const clampedCellX = Utils.clamp( cellX, 2, 10 );
         const clampedCellY = Utils.clamp( cellY, 2, 8 );
 
@@ -54,5 +54,5 @@ class ZoomInChartNode extends NuclideChartNode {
   }
 }
 
-buildANucleus.register( 'ZoomInChartNode', ZoomInChartNode );
-export default ZoomInChartNode;
+buildANucleus.register( 'ZoomInNuclideChartNode', ZoomInNuclideChartNode );
+export default ZoomInNuclideChartNode;

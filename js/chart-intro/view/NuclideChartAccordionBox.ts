@@ -18,7 +18,7 @@ import BANConstants from '../../common/BANConstants.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Range from '../../../../dot/js/Range.js';
 import FocusedNuclideChartNode from './FocusedNuclideChartNode.js';
-import ZoomInChartNode from './ZoomInChartNode.js';
+import ZoomInNuclideChartNode from './ZoomInNuclideChartNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import DecayEquationNode from './DecayEquationNode.js';
 import DecayEquationModel from '../model/DecayEquationModel.js';
@@ -47,7 +47,7 @@ class NuclideChartAccordionBox extends AccordionBox {
 
     const focusedNuclideChartNode = new FocusedNuclideChartNode( protonCountProperty, neutronCountProperty,
       focusedChartTransform, showMagicNumbersProperty );
-    const zoomInNuclideChartNode = new ZoomInChartNode( protonCountProperty, neutronCountProperty,
+    const zoomInNuclideChartNode = new ZoomInNuclideChartNode( protonCountProperty, neutronCountProperty,
       zoomInChartTransform, showMagicNumbersProperty );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 

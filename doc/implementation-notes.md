@@ -50,7 +50,7 @@ The Chart Intro screen features a main nuclide chart, the NuclideChartNode which
 - NuclideChartNode: The main nuclide chart node which goes up to 10 protons and 12 neutrons. Chart is made of
   NuclideChartCell's.
   - Visible by default in the first scene of the Partial Nuclide Chart accordion box.
-- ZoomInChartNode: Subtype of NuclideChartNode which shows a chart of 5x5 NuclideChartCell's
+- ZoomInNuclideChartNode: Subtype of NuclideChartNode which shows a chart of 5x5 NuclideChartCell's
   - Visible on the left side of the 'zoom-in' scene in the Partial Nuclide Chart accordion box.
 - FocusedNuclideChartNode: Subtype of NuclideChartNode which also goes up to 10 protons and 12 neutrons, however, it 
   highlights the current nuclide through 'graying out' cells too far away from the current nuclide.
