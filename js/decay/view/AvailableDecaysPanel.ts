@@ -21,7 +21,7 @@ import DecayModel from '../model/DecayModel.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
-import IconFactory from './IconFactory.js';
+import IconFactory from '../../common/view/IconFactory.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants

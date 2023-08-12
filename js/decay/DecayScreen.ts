@@ -15,7 +15,7 @@ import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js'
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import IconFactory from './view/IconFactory.js';
+import IconFactory from '../common/view/IconFactory.js';
 import DecayType from '../common/model/DecayType.js';
 import { FlowBox } from '../../../scenery/js/imports.js';
 

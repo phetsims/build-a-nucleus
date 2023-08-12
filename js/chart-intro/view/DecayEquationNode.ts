@@ -13,7 +13,7 @@ import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DecaySymbolNode from './DecaySymbolNode.js';
-import IconFactory from '../../decay/view/IconFactory.js';
+import IconFactory from '../../common/view/IconFactory.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';

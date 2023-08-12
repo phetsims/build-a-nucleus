@@ -8,15 +8,15 @@
  */
 
 import buildANucleus from '../../buildANucleus.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleType from '../model/ParticleType.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import BANColors from '../../common/BANColors.js';
+import BANColors from '../BANColors.js';
 import { HBox, Line, Node, TColor, VBox } from '../../../../scenery/js/imports.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import DecayType from '../../common/model/DecayType.js';
-import BANConstants from '../../common/BANConstants.js';
+import DecayType from '../model/DecayType.js';
+import BANConstants from '../BANConstants.js';
 
 const ALPHA_PARTICLE_SPACING = -5;
 const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
