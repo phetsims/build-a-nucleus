@@ -18,6 +18,7 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Range from '../../../../dot/js/Range.js';
+import BANColors from '../BANColors.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -44,8 +45,8 @@ class ParticleAtomNode extends Node {
     const electronCloud = new Circle( {
       radius: MIN_ELECTRON_CLOUD_RADIUS,
       fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_ELECTRON_CLOUD_RADIUS )
-        .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
+        .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
+        .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) )
     } );
     electronCloud.center = atomCenter;
 
@@ -163,8 +164,8 @@ class ParticleAtomNode extends Node {
       this.electronCloud.radius = radius * factor;
       this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
         // TODO: use color.interpolateRGBA() to use the same color property in both https://github.com/phetsims/build-a-nucleus/issues/85
-        .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-        .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' ); // Color.withAlpha()
+        .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
+        .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
     }
   }
 

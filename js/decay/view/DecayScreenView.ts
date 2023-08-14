@@ -194,8 +194,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         new Circle( {
           radius: 18,
           fill: new RadialGradient( 0, 0, 0, 0, 0, 18 )
-            .addColorStop( 0, 'rgba( 0, 0, 255, 200 )' )
-            .addColorStop( 0.9, 'rgba( 0, 0, 255, 0 )' )
+            .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
+            .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) )
         } )
       ],
       spacing: 5
