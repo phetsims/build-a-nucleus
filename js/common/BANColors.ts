@@ -31,7 +31,7 @@ const BANColors = {
     default: PARTICLE_COLORS.positron
   } ),
 
-  // decay colors
+  // decay colors in the nuclide chart
   protonEmissionColorProperty: new ProfileColorProperty( buildANucleus, 'protonEmissionColor', {
     default: new Color( 247, 2, 93 )
   } ),
@@ -51,7 +51,7 @@ const BANColors = {
     default: new Color( 27, 20, 100 )
   } ),
   unknownColorProperty: new ProfileColorProperty( buildANucleus, 'unknownColor', {
-    default: new Color( 255, 255, 255 )
+    default: Color.WHITE
   } ),
 
   // background color for panels in this sim
@@ -99,7 +99,7 @@ const BANColors = {
   } ),
 
   availableDecaysPanelBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'availableDecaysPanelBackground', {
-    default: '#F2F2F2'
+    default: new Color( 242, 242, 242 )
   } ),
 
   chartAccordionBoxBackgroundColorProperty: new ProfileColorProperty( buildANucleus, 'chartAccordionBoxBackgroundColor', {
@@ -153,11 +153,11 @@ const BANColors = {
   } ),
 
   availableDecaysInfoButtonColorProperty: new ProfileColorProperty( buildANucleus, 'availableDecaysInfoButtonColor', {
-    default: new Color( 255, 255, 255 )
+    default: Color.WHITE
   } ),
 
   fullChartButtonColorProperty: new ProfileColorProperty( buildANucleus, 'fullChartButtonColor', {
-    default: new Color( 255, 255, 255 )
+    default: Color.WHITE
   } )
 };
 
