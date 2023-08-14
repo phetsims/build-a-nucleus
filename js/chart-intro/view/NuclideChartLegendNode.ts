@@ -38,7 +38,6 @@ class NuclideChartLegendNode extends Node {
           } )
         ],
         spacing: 5
-        // TODO: add maxWidth https://github.com/phetsims/build-a-nucleus/issues/90
       } );
     };
 
