@@ -320,6 +320,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   public override reset(): void {
     this.symbolAccordionBox.reset();
     this.showElectronCloudBooleanProperty.reset();
+    super.reset();
   }
 }
 

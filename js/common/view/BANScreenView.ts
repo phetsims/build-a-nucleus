@@ -443,6 +443,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         model.reset();
         this.reset();
+        assert && assert( Object.keys( this.particleViewMap ).length === 0, 'all views should be cleaned up on reset' );
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
@@ -757,7 +758,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   public reset(): void {
-    // Overridden by subtypes if needed
+    this.previousProtonNumber = 0;
+    this.previousNeutronNumber = 0;
+    this.timeSinceCountdownStarted = 0;
   }
 
   /**
@@ -971,8 +974,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.model.outgoingParticles.add( particleToEmit );
 
+    // TODO: Remove this once https://github.com/phetsims/build-a-nucleus/issues/115 is solved
+    let called = false;
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     particleAtom.changeNucleonType( closestParticle, () => {
+      assert && assert( !called, 'completion callback should only be called once' );
+      assert && assert( !particleToEmit.isDisposed, 'cannot animate a removedParticle' );
+      called = true;
       this.animateAndRemoveParticle( particleToEmit, destination );
       this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
     } );
