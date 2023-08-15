@@ -46,7 +46,7 @@ const TOUCH_AREA_Y_DILATION = 3;
 // types
 type SelfOptions = {
 
-  // position of the center of the atom in the DecayScreen and the top left corner of the energy levels in the Chart Intro screen
+  // position of the center of the atom in the Decay screen and the top left corner of the energy levels in the Chart Intro screen
   particleViewPosition?: Vector2;
 };
 export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
@@ -89,7 +89,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
   protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
   private readonly atomCenter: Vector2;
-  private readonly particleViewPosition: Vector2;
   protected readonly particleAtomNode: ParticleAtomNode;
   protected readonly particleTransform: ModelViewTransform2;
 
@@ -102,7 +101,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     super( options );
 
-    this.particleViewPosition = options.particleViewPosition;
     this.model = model;
     this.timeSinceCountdownStarted = 0;
     this.previousProtonNumber = 0;
