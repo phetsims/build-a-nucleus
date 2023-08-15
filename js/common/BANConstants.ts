@@ -12,8 +12,16 @@ import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../dot/js/Bounds2.js';
 import { Color } from '../../../scenery/js/imports.js';
+import { SECOND_LEVEL_CAPACITY } from '../chart-intro/model/ParticleNucleus.js';
 
+// have one less space than there are particles
+const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = SECOND_LEVEL_CAPACITY - 1;
 const PARTICLE_RADIUS = ShredConstants.NUCLEON_RADIUS;
+const PARTICLE_DIAMETER = PARTICLE_RADIUS * 2;
+const PARTICLE_X_SPACING = PARTICLE_RADIUS;
+const NUMBER_OF_ENERGY_LEVELS = 3;
+const NUMBER_OF_Y_SPACINGS = NUMBER_OF_ENERGY_LEVELS - 1;
+const PARTICLE_Y_SPACING = PARTICLE_DIAMETER * 4;
 
 const BANConstants = {
 
@@ -22,6 +30,8 @@ const BANConstants = {
 
   // radius of the particle node used on the NucleonNumberPanel and AvailableDecaysPanel
   PARTICLE_RADIUS: PARTICLE_RADIUS,
+
+  PARTICLE_DIAMETER: PARTICLE_DIAMETER,
 
   // CSS pixels per second
   PARTICLE_ANIMATION_SPEED: 300,
@@ -76,8 +86,10 @@ const BANConstants = {
   X_DISTANCE_BETWEEN_ENERGY_LEVELS: 255,
 
   // the MVT that places nucleons in their individual spaced apart array positions
-  NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping( new Bounds2( 0, 0, 5, 2 ),
-    new Bounds2( 0, 0, ( PARTICLE_RADIUS * 3 ) * 5, ( PARTICLE_RADIUS * 2 ) * 10 ) ),
+  NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping(
+    new Bounds2( 0, 0, NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES, 2 ),
+    new Bounds2( 0, 0, ( PARTICLE_DIAMETER + PARTICLE_X_SPACING ) * NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES,
+      ( PARTICLE_DIAMETER + PARTICLE_Y_SPACING ) * NUMBER_OF_Y_SPACINGS ) ),
 
   // shift highlight rectangle to be aligned on the chart
   X_SHIFT_HIGHLIGHT_RECTANGLE: 0.5,

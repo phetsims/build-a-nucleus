@@ -14,31 +14,22 @@ import BANColors from '../../common/BANColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import { FIRST_LEVEL_CAPACITY, ParticleShellPosition, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
 
-type SelfOptions = {
-  xOffset?: number;
-};
-type EnergyLevelNodeOptions = SelfOptions & NodeOptions;
+type EnergyLevelNodeOptions = EmptySelfOptions & NodeOptions;
 
 class NucleonShellView extends Node {
   private modelViewTransform: ModelViewTransform2;
 
   public constructor( particleType: ParticleType, nucleonShellPositions: ParticleShellPosition[][],
-                      nucleonCountProperty: TReadOnlyProperty<number>, particleViewPositionVector: Vector2,
-                      providedOptions?: EnergyLevelNodeOptions ) {
+                      nucleonCountProperty: TReadOnlyProperty<number>, providedOptions?: EnergyLevelNodeOptions ) {
 
     assert && assert( particleType === ParticleType.NEUTRON || particleType === ParticleType.PROTON,
       'only protons and neutrons supported in NucleonShellView' );
 
-    const options = optionize<EnergyLevelNodeOptions, SelfOptions, NodeOptions>()( {
-      xOffset: 0
-    }, providedOptions );
+    const options = optionize<EnergyLevelNodeOptions, EmptySelfOptions, NodeOptions>()( {}, providedOptions );
     super( options );
-
-    this.y = particleViewPositionVector.y + BANConstants.PARTICLE_RADIUS;
-    this.x = particleViewPositionVector.x + options.xOffset - BANConstants.PARTICLE_RADIUS;
 
     this.modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
@@ -53,19 +44,21 @@ class NucleonShellView extends Node {
     // create and add the nucleon energy levels
     const energyLevels: Line[] = [];
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
-      const particleLength = 2 * BANConstants.PARTICLE_RADIUS;
-      energyLevels.push(
-        new Line(
-          this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
-          this.modelViewTransform.modelToViewY( energyLevel ),
 
-          // extend the energyLevel to the outer edge of the last particle
-          this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + particleLength,
-          this.modelViewTransform.modelToViewY( energyLevel ),
-          {
-            stroke: 'black'
-          }
-        )
+      const lineStartingPoint = new Vector2(
+
+        // draw the line to start at the left edge of the first particle, so move the line a 'particle radius' length left
+        this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ) - BANConstants.PARTICLE_RADIUS,
+
+        // draw the line to sit below the particles, so move the line a 'particle radius' length down
+        this.modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS );
+
+      const lineEndingPoint = new Vector2(
+
+        // add the particle diameter to extend the energyLevel to the right edge of the last particle
+        this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_DIAMETER - BANConstants.PARTICLE_RADIUS,
+        this.modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS );
+      energyLevels.push( new Line( lineStartingPoint, lineEndingPoint, { stroke: 'black' } )
       );
     } );
     energyLevels.forEach( energyLevel => this.addChild( energyLevel ) );

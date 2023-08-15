@@ -15,12 +15,12 @@ import ParticleType from '../model/ParticleType.js';
 import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import BANParticle from '../model/BANParticle.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
-  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleViewPositionVector: Vector2 ) {
+  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleTransform: ModelViewTransform2 ) {
     super();
 
     const targetNode = new ParticleNode( particleType.particleTypeString, BANConstants.PARTICLE_RADIUS );
@@ -38,8 +38,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
       particle.setPositionAndDestination(
-        // TODO: should this use the particleTransform or is this manual calculation okay? https://github.com/phetsims/build-a-nucleus/issues/108
-        viewPosition.minus( particleViewPositionVector ).minus( particle.positionProperty.value )
+        particleTransform.viewToModelPosition( viewPosition ).minus( particle.positionProperty.value )
       );
 
       // Create and start dragging the new particle
