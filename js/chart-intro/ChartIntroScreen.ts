@@ -16,6 +16,7 @@ import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import CompleteNuclideChartIconNode from './view/CompleteNuclideChartIconNode.js';
 import { FlowBox } from '../../../scenery/js/imports.js';
+import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 
 // types
 export type NuclideChartIntroScreenOptions = ScreenOptions;
@@ -26,10 +27,12 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
     const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       name: BuildANucleusStrings.screen.chartIntroStringProperty,
-
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
+      homeScreenIcon: createScreenIcon(),
 
-      homeScreenIcon: createScreenIcon()
+      createKeyboardHelpNode: () => new BasicActionsKeyboardHelpSection( {
+        withCheckboxContent: true
+      } )
     }, providedOptions );
 
     super(

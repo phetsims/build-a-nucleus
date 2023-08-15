@@ -18,6 +18,7 @@ import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import IconFactory from '../common/view/IconFactory.js';
 import DecayType from '../common/model/DecayType.js';
 import { FlowBox } from '../../../scenery/js/imports.js';
+import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 
 // types
 export type DecayScreenOptions = ScreenOptions;
@@ -28,9 +29,11 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
     const options = optionize<DecayScreenOptions, EmptySelfOptions, ScreenOptions>()( {
       name: BuildANucleusStrings.screen.decayStringProperty,
-
       backgroundColorProperty: BANColors.screenBackgroundColorProperty,
-      homeScreenIcon: createScreenIcon()
+      homeScreenIcon: createScreenIcon(),
+      createKeyboardHelpNode: () => new BasicActionsKeyboardHelpSection( {
+        withCheckboxContent: true
+      } )
     }, providedOptions );
 
     super(
