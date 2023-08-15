@@ -32,7 +32,8 @@ class NuclideChartAccordionBox extends AccordionBox {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
                       decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
-                      showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
+                      showMagicNumbersProperty: TReadOnlyProperty<boolean>,
+                      hasIncomingParticlesProperty: TReadOnlyProperty<boolean> ) {
 
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
@@ -54,7 +55,10 @@ class NuclideChartAccordionBox extends AccordionBox {
     const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.width / 2 );
 
     const decayPushButton = new TextPushButton( BuildANucleusStrings.screen.decayStringProperty, {
-      enabledProperty: new DerivedProperty( [ decayEquationModel.currentCellModelProperty ], currentCellModel => !!currentCellModel?.decayType ),
+      enabledProperty: new DerivedProperty( [
+        decayEquationModel.currentCellModelProperty,
+        hasIncomingParticlesProperty
+      ], ( currentCellModel, hasIncomingParticles ) => !!currentCellModel?.decayType && !hasIncomingParticles ),
       baseColor: BANColors.decayButtonColorProperty,
       textNodeOptions: {
         fontSize: 14

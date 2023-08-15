@@ -46,6 +46,9 @@ class BANModel<T extends ParticleAtom> {
   public readonly incomingProtons: ObservableArray<BANParticle>;
   public readonly incomingNeutrons: ObservableArray<BANParticle>;
 
+  // If there are any incoming particles currently
+  public readonly hasIncomingParticlesProperty: TReadOnlyProperty<boolean>;
+
   // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
   public readonly doubleArrowButtonClickedBooleanProperty: TProperty<boolean>;
 
@@ -71,6 +74,11 @@ class BANModel<T extends ParticleAtom> {
 
     this.incomingProtons = createObservableArray();
     this.incomingNeutrons = createObservableArray();
+
+    this.hasIncomingParticlesProperty = new DerivedProperty( [
+      this.incomingProtons.lengthProperty,
+      this.incomingNeutrons.lengthProperty
+    ], ( protonsLength, neutronsLength ) => protonsLength > 0 || neutronsLength > 0 );
 
     this.userControlledProtons = createObservableArray();
     this.userControlledNeutrons = createObservableArray();

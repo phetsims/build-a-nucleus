@@ -63,7 +63,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
       // centers particle atoms on energy levels
-      particleViewPositionVector: new Vector2( 135, 245 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
+      particleViewPosition: new Vector2( 135, 245 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
 
     }, providedOptions );
 
@@ -77,8 +77,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // update nucleons in mini-particle as the particleAtom's nucleon changes. This listener keeps the mini-particle in sync.
     const nucleonNumberListener = ( nucleonNumber: number, particleType: ParticleType ) => {
       const currentMiniAtomNucleonNumber = particleType === ParticleType.PROTON ?
-                                          model.miniParticleAtom.protonCountProperty.value :
-                                          model.miniParticleAtom.neutronCountProperty.value;
+                                           model.miniParticleAtom.protonCountProperty.value :
+                                           model.miniParticleAtom.neutronCountProperty.value;
 
       // difference between particleAtom's nucleon number and miniAtom's nucleon number
       const nucleonDelta = currentMiniAtomNucleonNumber - nucleonNumber;
@@ -172,12 +172,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // add energy level node
     this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
-      model.particleAtom.protonCountProperty, options.particleViewPositionVector );
+      model.particleAtom.protonCountProperty );
+    this.protonEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( -BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
     this.addChild( this.protonEnergyLevelNode );
     this.neutronEnergyLevelNode = new NucleonShellView( ParticleType.NEUTRON, model.particleAtom.neutronShellPositions,
-      model.particleAtom.neutronCountProperty, options.particleViewPositionVector, {
-        xOffset: BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS
-      } );
+      model.particleAtom.neutronCountProperty );
+    this.neutronEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS - BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
     this.addChild( this.neutronEnergyLevelNode );
 
     // create and add dashed 'zoom' lines
@@ -198,7 +198,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
-      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ), showMagicNumbersProperty );
+      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ),
+      showMagicNumbersProperty, this.model.hasIncomingParticlesProperty );
 
     nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;

@@ -45,7 +45,9 @@ const TOUCH_AREA_Y_DILATION = 3;
 
 // types
 type SelfOptions = {
-  particleViewPositionVector?: Vector2;
+
+  // position of the center of the atom in the Decay screen and the top left corner of the energy levels in the Chart Intro screen
+  particleViewPosition?: Vector2;
 };
 export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
 export type ParticleViewMap = Record<number, ParticleView>;
@@ -87,7 +89,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
   protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
   private readonly atomCenter: Vector2;
-  private readonly particleViewPositionVector: Vector2;
   protected readonly particleAtomNode: ParticleAtomNode;
   protected readonly particleTransform: ModelViewTransform2;
 
@@ -95,12 +96,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      particleViewPositionVector: atomCenter
+      particleViewPosition: atomCenter
     }, providedOptions );
 
     super( options );
 
-    this.particleViewPositionVector = options.particleViewPositionVector;
     this.model = model;
     this.timeSinceCountdownStarted = 0;
     this.previousProtonNumber = 0;
@@ -422,19 +422,20 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
     this.addChild( neutronsLabel );
 
+    this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPosition, 1 );
+
     // create and add the NucleonCreatorNode for the protons
-    this.protonsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.PROTON, this, options.particleViewPositionVector );
+    this.protonsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.PROTON, this, this.particleTransform );
     this.protonsCreatorNode.top = doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
     // create and add the NucleonCreatorNode for the neutrons
-    this.neutronsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.NEUTRON, this, options.particleViewPositionVector );
+    this.neutronsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.NEUTRON, this, this.particleTransform );
     this.neutronsCreatorNode.top = doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
-    this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPositionVector, 1 );
     this.protonsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.protonsCreatorNode.center );
     this.neutronsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.neutronsCreatorNode.center );
 
@@ -443,6 +444,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         model.reset();
         this.reset();
+        assert && assert( Object.keys( this.particleViewMap ).length === 0, 'all views should be cleaned up on reset' );
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
@@ -757,7 +759,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   public reset(): void {
-    // Overridden by subtypes if needed
+    this.previousProtonNumber = 0;
+    this.previousNeutronNumber = 0;
+    this.timeSinceCountdownStarted = 0;
   }
 
   /**
@@ -850,6 +854,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Given a decayType, conduct that decay on the model's ParticleAtom.
    */
   public decayAtom( decayType: DecayType | null ): void {
+    const protons = this.model.particleAtom.protonCountProperty.value;
+    const neutrons = this.model.particleAtom.neutronCountProperty.value;
+    assert && assert( AtomIdentifier.doesExist( protons, neutrons ),
+      `Decaying for a non existent atom with ${protons} protons and ${neutrons} neutrons.` );
+
     switch( decayType ) {
       case DecayType.NEUTRON_EMISSION:
         this.emitNucleon( ParticleType.NEUTRON );
@@ -971,8 +980,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.model.outgoingParticles.add( particleToEmit );
 
+    // TODO: Remove this once https://github.com/phetsims/build-a-nucleus/issues/115 is solved
+    let called = false;
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     particleAtom.changeNucleonType( closestParticle, () => {
+      assert && assert( !called, 'completion callback should only be called once' );
+      assert && assert( !particleToEmit.isDisposed, 'cannot animate a removedParticle' );
+      called = true;
       this.animateAndRemoveParticle( particleToEmit, destination );
       this.checkIfCreatorNodesShouldBeVisibleOrInvisible();
     } );
