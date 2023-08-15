@@ -11,8 +11,9 @@ import ShredConstants from '../../../shred/js/ShredConstants.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../dot/js/Bounds2.js';
-import { Color } from '../../../scenery/js/imports.js';
+import { Color, RadialGradient } from '../../../scenery/js/imports.js';
 import { SECOND_LEVEL_CAPACITY } from '../chart-intro/model/ParticleNucleus.js';
+import BANColors from './BANColors.js';
 
 // have one less space than there are particles
 const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = SECOND_LEVEL_CAPACITY - 1;
@@ -114,7 +115,14 @@ const BANConstants = {
   },
 
   // the minimum number where the nuclide chart always begins
-  CHART_MIN: 0
+  CHART_MIN: 0,
+
+  // function to create a gradient fill based on a given radius
+  ELECTRON_CLOUD_FILL_GRADIENT: function( radius: number ): RadialGradient {
+    return new RadialGradient( 0, 0, 0, 0, 0, radius )
+      .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
+      .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
+  }
 };
 
 buildANucleus.register( 'BANConstants', BANConstants );

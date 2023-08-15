@@ -15,7 +15,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, HBox, ManualConstraint, Node, RadialGradient, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
@@ -186,16 +186,15 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.particleAtomNode.electronCloud.visible = showElectronCloud; } );
 
     // create and add the electronCloud checkbox
+    const electronCloudRadius = 18; // empirically determined to be close in size to the 'Electron Cloud' text height
     const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
       children: [
         new Text( BuildANucleusStrings.electronCloudStringProperty, { font: BANConstants.REGULAR_FONT, maxWidth: 210 } ),
 
         // electron cloud icon
         new Circle( {
-          radius: 18,
-          fill: new RadialGradient( 0, 0, 0, 0, 0, 18 )
-            .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
-            .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) )
+          radius: electronCloudRadius,
+          fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( electronCloudRadius )
         } )
       ],
       spacing: 5

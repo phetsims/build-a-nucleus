@@ -9,7 +9,7 @@
  */
 
 import buildANucleus from '../../buildANucleus.js';
-import { Circle, Color, Node, RadialGradient } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node } from '../../../../scenery/js/imports.js';
 import { ParticleViewMap } from './BANScreenView.js';
 import BANConstants from '../BANConstants.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
@@ -18,7 +18,6 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Range from '../../../../dot/js/Range.js';
-import BANColors from '../BANColors.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -44,9 +43,7 @@ class ParticleAtomNode extends Node {
     // create and add the electron cloud
     const electronCloud = new Circle( {
       radius: MIN_ELECTRON_CLOUD_RADIUS,
-      fill: new RadialGradient( 0, 0, 0, 0, 0, MIN_ELECTRON_CLOUD_RADIUS )
-        .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
-        .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) )
+      fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( MIN_ELECTRON_CLOUD_RADIUS )
     } );
     electronCloud.center = atomCenter;
 
@@ -162,10 +159,7 @@ class ParticleAtomNode extends Node {
     else {
       const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonNumber, minChangedRadius, maxChangedRadius ) / 2 );
       this.electronCloud.radius = radius * factor;
-      this.electronCloud.fill = new RadialGradient( 0, 0, 0, 0, 0, radius * factor )
-        // TODO: use color.interpolateRGBA() to use the same color property in both https://github.com/phetsims/build-a-nucleus/issues/85
-        .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
-        .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
+      this.electronCloud.fill = BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( radius * factor );
     }
   }
 
