@@ -78,38 +78,46 @@ class DecayModel extends BANModel<ParticleAtom> {
 
     // function which would return whether a given nuclide (defined by the number of protons and neutrons) has a certain
     // available decay type
-    const createDecayEnabledListener = ( protonNumber: number, neutronNumber: number, decayType: DecayType ): boolean => {
+    const createDecayEnabledListener = ( protonNumber: number, neutronNumber: number, decayType: DecayType,
+                                         hasIncomingParticles: boolean ): boolean => {
       const decays = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
+      // TODO: remove with https://github.com/phetsims/build-a-nucleus/issues/42
       // Disallow having more protons that Uranium. Though this is not scientifically accurate, it keeps the model in
       // the confines of 92 protons. See https://github.com/phetsims/build-a-nucleus/issues/42
       // if ( protonNumber === 92 && neutronNumber === 145 && decayType === DecayType.BETA_MINUS_DECAY ) {
       //   return false;
       // }
 
-      return decays.find( decay => Object.keys( decay ).includes( decayType.name ) ) !== undefined;
+      return !hasIncomingParticles && !!decays.find( decay => Object.keys( decay ).includes( decayType.name ) );
     };
 
+    const dependencies = [
+      this.particleAtom.protonCountProperty,
+      this.particleAtom.neutronCountProperty,
+      this.hasIncomingParticlesProperty
+    ] as const;
+
     // create the decay enabled properties
-    this.protonEmissionEnabledProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.PROTON_EMISSION )
+    this.protonEmissionEnabledProperty = new DerivedProperty( dependencies,
+      ( protonNumber, neutronNumber, hasIncomingParticles ) =>
+        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.PROTON_EMISSION, hasIncomingParticles )
     );
-    this.neutronEmissionEnabledProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.NEUTRON_EMISSION )
+    this.neutronEmissionEnabledProperty = new DerivedProperty( dependencies,
+      ( protonNumber, neutronNumber, hasIncomingParticles ) =>
+        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.NEUTRON_EMISSION, hasIncomingParticles )
     );
-    this.betaMinusDecayEnabledProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_MINUS_DECAY )
+    this.betaMinusDecayEnabledProperty = new DerivedProperty( dependencies,
+      ( protonNumber, neutronNumber, hasIncomingParticles ) =>
+        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_MINUS_DECAY, hasIncomingParticles )
     );
-    this.betaPlusDecayEnabledProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_PLUS_DECAY )
+    this.betaPlusDecayEnabledProperty = new DerivedProperty( dependencies,
+      ( protonNumber, neutronNumber, hasIncomingParticles ) =>
+        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_PLUS_DECAY, hasIncomingParticles )
     );
-    this.alphaDecayEnabledProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.ALPHA_DECAY )
+    this.alphaDecayEnabledProperty = new DerivedProperty( dependencies,
+      ( protonNumber, neutronNumber, hasIncomingParticles ) =>
+        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.ALPHA_DECAY, hasIncomingParticles )
     );
   }
 

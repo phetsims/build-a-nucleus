@@ -856,6 +856,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Given a decayType, conduct that decay on the model's ParticleAtom.
    */
   public decayAtom( decayType: DecayType | null ): void {
+    const protons = this.model.particleAtom.protonCountProperty.value;
+    const neutrons = this.model.particleAtom.neutronCountProperty.value;
+    assert && assert( AtomIdentifier.doesExist( protons, neutrons ),
+      `Decaying for a non existent atom with ${protons} protons and ${neutrons} neutrons.` );
+
     switch( decayType ) {
       case DecayType.NEUTRON_EMISSION:
         this.emitNucleon( ParticleType.NEUTRON );

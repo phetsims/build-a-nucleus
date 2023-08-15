@@ -77,8 +77,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // update nucleons in mini-particle as the particleAtom's nucleon changes. This listener keeps the mini-particle in sync.
     const nucleonNumberListener = ( nucleonNumber: number, particleType: ParticleType ) => {
       const currentMiniAtomNucleonNumber = particleType === ParticleType.PROTON ?
-                                          model.miniParticleAtom.protonCountProperty.value :
-                                          model.miniParticleAtom.neutronCountProperty.value;
+                                           model.miniParticleAtom.protonCountProperty.value :
+                                           model.miniParticleAtom.neutronCountProperty.value;
 
       // difference between particleAtom's nucleon number and miniAtom's nucleon number
       const nucleonDelta = currentMiniAtomNucleonNumber - nucleonNumber;
@@ -198,7 +198,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
-      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ), showMagicNumbersProperty );
+      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ),
+      showMagicNumbersProperty, this.model.hasIncomingParticlesProperty );
 
     nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
