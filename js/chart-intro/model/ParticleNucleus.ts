@@ -48,7 +48,7 @@ class ParticleNucleus extends ParticleAtom {
   // allowed neutron positions
   public readonly neutronShellPositions: ParticleShellPosition[][];
 
-  public readonly modelViewTransform: ModelViewTransform2;
+  private readonly modelViewTransform: ModelViewTransform2;
   private readonly protonsLevelProperty: EnumerationProperty<EnergyLevelType>;
   private readonly neutronsLevelProperty: EnumerationProperty<EnergyLevelType>;
 

@@ -77,3 +77,39 @@ nucleon type of a nucleon particle.
 
 It's important to note that in the Chart Intro screen, an _incoming_ particle holds a position in the _ShellPositions_
 before it reaches its destination to become a part of the ParticleNucleus' particles.
+
+#### ModelViewTransform's
+
+There are various MVT uses throughout the model to help in positioning of the particle's, the particle atom and the
+energy levels.
+- ParticleTransform is a single point scaling transformation that defines (0,0) as the center of the atom in the Decay
+  screen, and the top left corner of the proton energy levels in the Chart Intro screen. Also used in:
+  - the creation of ParticleView's to determine their corresponding ParticleNode's radius
+  - centering the pointer in the center of draggable particles
+  - setting the destination for particles when animating them
+  - NUCLEON_ENERGY_LEVEL_ARRAY_MVT is a constant and used in positioning the energy level Line's and the particles in the
+  Chart Intro screen.
+- miniAtomMVT also is a single point scaling transformation defining (0,0) as the center of the miniParticleAtom in the 
+  Chart Intro screen. As such, it is only used in positioning mini-atom particles.
+
+#### ChartTransform's
+
+The simulation has various charts and number lines throughout both screens. Though the Decay screen only has number
+lines. ChartTransform's were used to aid in the creation of these.
+
+*Decay screen*
+- HalfLifeNumberLineNode uses a ChartTransform to create the number line. Visually, this looks like a log scale number
+  line. However, this was done by mapping the number line width to the range of the *exponents* in the number line.
+
+*Chart Intro screen*
+
+There is a function *getChartTransform* in the NuclideChartAccordionBox that creates individual ChartTransform's to be
+used in all three NuclideChartNode's and both nuclide chart icon nodes.
+- partialChartTransform: used in creating the PartialNuclideChart and its NucleonNumberLine's.
+  - responsible for the cell's position and size, and for the decay arrow's position and direction.
+- focusedChartTransform: used in creating the FocusedNuclideChart.
+  - responsible for the highlightRectangle position and movement, and opaquing of cells too far away from current
+    nuclide
+- zoomInChartTransform: used in creating the ZoomInNuclideChart. No additional responsibilities.
+- smallChartTransform's: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the radio
+  buttons.
