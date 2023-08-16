@@ -319,11 +319,19 @@ class HalfLifeNumberLineNode extends Node {
       sentenceHBox.boundsProperty
     ], xPosition => {
       const numberLineCenterY = this.numberLineNode.localToParentPoint( this.tickMarkSet.center ).y;
+
       halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         numberLineCenterY - options.halfLifeArrowLength );
 
-      // Translate the half life text also
-      if ( !options.isHalfLifeLabelFixed ) {
+
+      // Static positioning
+      if ( options.isHalfLifeLabelFixed ) {
+        this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
+        this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
+      }
+      else {
+
+        // Translate the half life text also
         this.halfLifeDisplayNode.centerBottom =
           new Vector2( this.chartTransform.modelToViewX( xPosition ),
             halfLifeArrow.top - ARROW_TOP_MARGIN );
@@ -343,14 +351,6 @@ class HalfLifeNumberLineNode extends Node {
         }
       }
     } );
-
-    if ( options.isHalfLifeLabelFixed ) {
-
-      // TODO: if/else on whether we are fixed https://github.com/phetsims/build-a-nucleus/issues/102
-      this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
-      this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
-    }
-
   }
 
   /**

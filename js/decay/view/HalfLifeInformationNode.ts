@@ -41,7 +41,7 @@ class HalfLifeInformationNode extends Node {
 
     // create and add the halfLifeNumberLineNode
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
-      tickMarkExtent: 18, // TODO: but isn't it 24 actually? https://github.com/phetsims/build-a-nucleus/issues/102
+      tickMarkExtent: 18,
       numberLineLabelFont: new PhetFont( 15 ),
       numberLineWidth: 550,
       halfLifeArrowLength: 30,
