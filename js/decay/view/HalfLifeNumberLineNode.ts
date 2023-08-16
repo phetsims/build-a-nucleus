@@ -220,10 +220,6 @@ class HalfLifeNumberLineNode extends Node {
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       } );
       this.halfLifeDisplayNode.insertChild( 0, elementName );
-      const desiredCenterX = this.halfLifeDisplayNode.centerX;
-      this.halfLifeDisplayNode.boundsProperty.link( () => {
-        this.halfLifeDisplayNode.centerX = desiredCenterX;
-      } );
     }
 
     this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
@@ -315,9 +311,13 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeDisplayNode,
       halfLifeArrow
     ];
-//
 
-    this.arrowXPositionProperty.link( xPosition => {
+    Multilink.multilink( [ this.arrowXPositionProperty,
+
+      // Cannot listen to the bounds of halfLifeDisplayNode to prevent reentrancy, so instead listen to all potential children changes
+      options.elementNameStringProperty,
+      sentenceHBox.boundsProperty
+    ], xPosition => {
       const numberLineCenterY = this.numberLineNode.localToParentPoint( this.tickMarkSet.center ).y;
       halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         numberLineCenterY - options.halfLifeArrowLength );
