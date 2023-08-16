@@ -29,7 +29,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import DecayType from '../../common/model/DecayType.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
-import UndoButton from '../../../../scenery-phet/js/buttons/UndoButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -103,7 +103,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // create the undo decay button
-    const undoDecayButton = new UndoButton( {
+    const undoDecayButton = new ReturnButton( {
       iconOptions: { scale: 0.7 },
       listener: () => {
         undoDecayButton.visible = false;
