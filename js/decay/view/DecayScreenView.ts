@@ -15,7 +15,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, Color, HBox, ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
+import { Circle, HBox, ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
@@ -27,9 +27,9 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import DecayType from '../../common/model/DecayType.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
+import UndoButton from '../../../../scenery-phet/js/buttons/UndoButton.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -103,19 +103,20 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
 
     // create the undo decay button
-    const undoDecayButton = new ReturnButton( () => {
-      undoDecayButton.visible = false;
-      restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
-      restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
+    const undoDecayButton = new UndoButton( {
+      iconOptions: { scale: 0.7 },
+      listener: () => {
+        undoDecayButton.visible = false;
+        restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
+        restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
 
-      // remove all particles in the outgoingParticles array from the particles array
-      this.model.outgoingParticles.forEach( particle => {
-        this.model.removeParticle( particle );
-      } );
-      this.model.outgoingParticles.clear();
-      this.model.particleAnimations.clear();
-    }, {
-      baseColor: Color.YELLOW.darkerColor( 0.95 )
+        // remove all particles in the outgoingParticles array from the particles array
+        this.model.outgoingParticles.forEach( particle => {
+          this.model.removeParticle( particle );
+        } );
+        this.model.outgoingParticles.clear();
+        this.model.particleAnimations.clear();
+      }
     } );
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
@@ -123,8 +124,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // restore the particleAtom to have the nucleon numbers before a decay occurred
     const restorePreviousNucleonNumber = ( particleType: ParticleType, oldNucleonNumber: number ) => {
       const newNucleonNumber = particleType === ParticleType.PROTON ?
-                              this.model.particleAtom.protonCountProperty.value :
-                              this.model.particleAtom.neutronCountProperty.value;
+                               this.model.particleAtom.protonCountProperty.value :
+                               this.model.particleAtom.neutronCountProperty.value;
       const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
 
       for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
