@@ -87,7 +87,7 @@ energy levels.
   - the creation of ParticleView's to determine their corresponding ParticleNode's radius
   - centering the pointer in the center of draggable particles
   - setting the destination for particles when animating them
-  - NUCLEON_ENERGY_LEVEL_ARRAY_MVT is a constant and used in positioning the energy level Line's and the particles in the
+- NUCLEON_ENERGY_LEVEL_ARRAY_MVT is a constant and used in positioning the energy level Line's and the particles in the
   Chart Intro screen.
 - miniAtomMVT also is a single point scaling transformation defining (0,0) as the center of the miniParticleAtom in the 
   Chart Intro screen. As such, it is only used in positioning mini-atom particles.

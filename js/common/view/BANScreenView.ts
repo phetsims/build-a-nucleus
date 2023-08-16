@@ -89,6 +89,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
   protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
   private readonly atomCenter: Vector2;
+
+  // The view for the ParticleAtom, the cluster of nucleons in Decay screen and the mini-atom in the Chart Intro screen.
   protected readonly particleAtomNode: ParticleAtomNode;
   protected readonly particleTransform: ModelViewTransform2;
 
@@ -846,6 +848,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     return false;
   }
 
+  /**
+   * Add particleView to correct layer in particleAtomNode.
+   */
   protected addParticleView( particle: Particle ): void {
     this.particleAtomNode.addParticleView( particle );
   }

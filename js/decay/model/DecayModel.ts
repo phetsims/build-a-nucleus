@@ -31,7 +31,7 @@ class DecayModel extends BANModel<ParticleAtom> {
 
     const particleAtom = new ParticleAtom();
 
-    // empirically determined, the last nuclide the Decay screen goes up to is Uranium-238 (92 protons and 146 neutrons)
+    // empirically determined, the last nuclide the Decay screen goes up to is Plutonium-240 (94 protons and 146 neutrons)
     super( BANConstants.DECAY_MAX_NUMBER_OF_PROTONS, BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.halfLifeNumberProperty = new DerivedProperty(

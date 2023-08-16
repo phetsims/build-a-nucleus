@@ -71,7 +71,7 @@ class ParticleAtomNode extends Node {
 
 
   /**
-   * Add ParticleView to the correct nucleonLayer.
+   * Add ParticleView for a given particle to the correct nucleonLayer.
    */
   public addParticleView( particle: Particle ): void {
     const particleView = this.particleViewMap[ particle.id ];

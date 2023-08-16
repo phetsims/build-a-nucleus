@@ -29,7 +29,8 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
       showMagicNumbersProperty: showMagicNumbersProperty
     } );
 
-    const squareLength = chartTransform.modelToViewDeltaX( 5 + ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
+    const squareLength = chartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH +
+                                                           ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
 
     const borderPath = new Path( null, { stroke: Color.BLACK, lineWidth: 1.5 } );
     this.addChild( borderPath );

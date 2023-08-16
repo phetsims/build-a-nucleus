@@ -24,6 +24,8 @@ import ChartIntroModel from '../model/ChartIntroModel.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
+import { FIRST_LEVEL_CAPACITY, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
+import AlphaParticle from '../../common/model/AlphaParticle.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -34,7 +36,7 @@ type SelfOptions = {
 export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 
 // Applies to both proton and neutron numbers see showMagicNumbersProperty for details.
-const MAGIC_NUMBERS = [ 2, 8 ];
+const MAGIC_NUMBERS = [ FIRST_LEVEL_CAPACITY, FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ];
 
 // 2D array that defines the table structure.
 // The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
@@ -118,11 +120,16 @@ class NuclideChartNode extends Node {
 
           const decayType = highlightedCell.cellModel.decayType;
           if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
+
+            // direction determined based on how the DecayType changes the current nuclide, see DecayType for more details
             const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
                               decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
                               decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
                               decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
-                              new Vector2( neutronNumber - 2, protonNumber - 2 );
+
+                              // alpha decay
+                              new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
+                                protonNumber - AlphaParticle.NUMBER_OF_ALLOWED_PROTONS );
             const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
               direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
             arrowNode.setTailAndTip( currentCellCenter.x, currentCellCenter.y, arrowTip.x, arrowTip.y );

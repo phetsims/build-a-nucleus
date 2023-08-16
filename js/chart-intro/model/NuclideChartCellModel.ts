@@ -27,12 +27,13 @@ class NuclideChartCellModel {
   public constructor( protonNumber: number, neutronNumber: number ) {
 
     // get first decay in available decays to color the cell according to that decay type
-    const decayTypeAndPercent = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber )[ 0 ];
+    const decayAndPercentIndex = 0;
+    const decayTypeAndPercent = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber )[ decayAndPercentIndex ];
 
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
     this.isStable = AtomIdentifier.isStable( protonNumber, neutronNumber );
-    this.decayType = decayTypeAndPercent ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ 0 ] ) : null;
+    this.decayType = decayTypeAndPercent ? DecayType.enumeration.getValue( Object.keys( decayTypeAndPercent )[ decayAndPercentIndex ] ) : null;
     this.decayTypeLikelihoodPercent = this.decayType === null ? null : decayTypeAndPercent[ this.decayType.name as DecayTypeStrings ]!;
     this.colorProperty = this.isStable ? BANColors.stableColorProperty :
                          this.decayType === null ? BANColors.unknownColorProperty : // no available decays, unknown decay type

@@ -67,7 +67,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     }, providedOptions );
 
-    super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options );
+    super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options ); // center of the mini-atom
 
     this.model = model;
     this.energyLevelLayer = new Node();
@@ -115,7 +115,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     model.particleAtom.neutronCountProperty.link( neutronNumber => nucleonNumberListener( neutronNumber, ParticleType.NEUTRON ) );
     const particleAtomNodeCenter = this.particleAtomNode.center;
 
-    // scale down to make nucleus 'mini' sized
+    // scale down to make nucleus 'mini' sized and keep the same center after scaling
     this.particleAtomNode.scale( 0.75 );
     this.particleAtomNode.center = particleAtomNodeCenter;
 
@@ -188,8 +188,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // create and add dashed 'zoom' lines
     const dashedLineOptions = { stroke: BANColors.zoomInDashedLineStrokeColorProperty, lineDash: [ 6, 3 ] };
 
-    const endLeft = this.particleAtomNode.emptyAtomCircle.center.x - ( BANConstants.PARTICLE_RADIUS * 2 );
-    const endRight = this.particleAtomNode.emptyAtomCircle.center.x + ( BANConstants.PARTICLE_RADIUS * 2 );
+    const endLeft = this.particleAtomNode.emptyAtomCircle.center.x - ( BANConstants.PARTICLE_DIAMETER );
+    const endRight = this.particleAtomNode.emptyAtomCircle.center.x + ( BANConstants.PARTICLE_DIAMETER );
 
     const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, endLeft,
       this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
@@ -247,7 +247,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     fullChartTextButton.bottom = partialChartRadioButton.bottom;
     this.addChild( fullChartTextButton );
 
-    // add the particleViewLayerNode after everything else so particles are in the top layer
+    // add the particleView layer nodes after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );
     this.addChild( this.energyLevelLayer );
 
@@ -273,10 +273,13 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const nucleonViewPosition = nucleon.positionProperty.value.plus(
       new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
     );
-    return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition ) ||
-           this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 2 ).containsPoint( nucleonViewPosition );
+    return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition ) ||
+           this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition );
   }
 
+  /**
+   * Add ParticleView for the given particle to the energyLevelLayer.
+   */
   protected override addParticleView( particle: Particle ): void {
     this.energyLevelLayer.addChild( this.findParticleView( particle ) );
   }

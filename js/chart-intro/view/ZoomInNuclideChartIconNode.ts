@@ -22,7 +22,10 @@ class ZoomInNuclideChartIconNode extends Node {
     const smallChartTransform = NuclideChartAccordionBox.getChartTransform( 7 );
     NuclideChartNode.createNuclideChart( cellLayerNode, smallChartTransform, smallChartTransform.modelToViewDeltaX( 1 ) );
 
-    const squareLength = smallChartTransform.modelToViewDeltaX( 5 + ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
+    const squareLength = smallChartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH +
+                                                                ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
+
+    // model position 4 so that the zoom-in square is centered on cell with protons = 2 and neutrons = 2
     const zoomInShape = Shape.rectangle( smallChartTransform.modelToViewX( 0 - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
       smallChartTransform.modelToViewY( 4 + BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
       squareLength, squareLength );

@@ -46,6 +46,8 @@ class NucleonShellView extends Node {
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
 
       const lineStartingPoint = new Vector2(
+
+        // the first energy level begins at xPosition 2 instead of 0, for more information see ALLOWED_PARTICLE_POSITIONS
         this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
         this.modelViewTransform.modelToViewY( energyLevel ) );
 

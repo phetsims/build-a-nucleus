@@ -14,20 +14,20 @@ class EnergyLevelType extends EnumerationValue {
 
   public static readonly NONE = new EnergyLevelType( 0, 0 );
 
-  public static readonly FIRST = new EnergyLevelType( 1, 0 );
+  public static readonly FIRST = new EnergyLevelType( 0, 1 );
 
-  public static readonly SECOND = new EnergyLevelType( 2, 0 );
+  public static readonly SECOND = new EnergyLevelType( 0, 2 );
 
   public static readonly enumeration = new Enumeration( EnergyLevelType );
 
-  public readonly yPosition: number;
   public readonly xPosition: number;
+  public readonly yPosition: number;
 
-  public constructor( yPosition: number, xPosition: number ) {
+  public constructor( xPosition: number, yPosition: number ) {
     super();
 
-    this.yPosition = yPosition;
     this.xPosition = xPosition;
+    this.yPosition = yPosition;
   }
 }
 
