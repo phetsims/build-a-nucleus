@@ -244,6 +244,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
     this.elementName.boundsProperty.link( () => {
+
+      // place the elementName a bit below the stabilityIndicator
       this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
     } );
     this.nucleonNumberPanel.left = availableDecaysPanel.left;

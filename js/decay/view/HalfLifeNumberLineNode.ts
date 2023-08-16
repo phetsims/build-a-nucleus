@@ -60,6 +60,7 @@ const ARROW_TOP_MARGIN = 14;
 const TITLE_FONT = new PhetFont( 24 );
 const NUMBER_LINE_START_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_START_EXPONENT;
 const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT;
+const POWER_OF_10 = 10; // the base power of the half-life numbers in AtomIdentifier
 
 class HalfLifeNumberLineNode extends Node {
 
@@ -280,8 +281,8 @@ class HalfLifeNumberLineNode extends Node {
           halfLifeNumberText.bottom = halfLifeColonText.bottom;
 
           // peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
-          if ( halfLifeNumber > Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
-            this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ),
+          if ( halfLifeNumber > Math.pow( POWER_OF_10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
+            this.moveHalfLifePointerSet( Math.pow( POWER_OF_10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ),
               options.isHalfLifeLabelFixed );
           }
           else {
@@ -422,7 +423,7 @@ class HalfLifeNumberLineNode extends Node {
   }
 
   /**
-   * Add an arrow with a label to the number line.
+   * Add a label with an arrow, pointing down and away from the label, to the number line.
    */
   public addArrowAndLabel( label: TReadOnlyProperty<string>, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );

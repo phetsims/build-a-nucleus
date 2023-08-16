@@ -132,7 +132,7 @@ class AvailableDecaysPanel extends Panel {
           createDecayButton( decayType ),
           IconFactory.createDecayIcon( decayType )!
         ],
-        spacing: SPACING * 1.5,
+        spacing: SPACING * 1.5, // empirically determined
         align: 'center'
       } );
     };

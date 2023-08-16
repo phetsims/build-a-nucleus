@@ -99,7 +99,8 @@ lines. ChartTransform's were used to aid in the creation of these.
 
 *Decay screen*
 - HalfLifeNumberLineNode uses a ChartTransform to create the number line. Visually, this looks like a log scale number
-  line. However, this was done by mapping the number line width to the range of the *exponents* in the number line.
+  line of values with the base power of 10. However, this was done by mapping the number line width to the range of the
+  *exponents* in the number line.
 
 *Chart Intro screen*
 

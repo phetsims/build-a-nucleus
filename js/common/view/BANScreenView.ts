@@ -885,7 +885,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Returns a random position, in view coordinates, outside the screen view's visible bounds.
    */
   protected getRandomEscapePosition(): Vector2 {
-    const visibleBounds = this.visibleBoundsProperty.value.dilated( BANConstants.PARTICLE_RADIUS * 20 ); // 10 particles wide
+    const visibleBounds = this.visibleBoundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER * 10 ); // 10 particles wide
     const destinationBounds = visibleBounds.dilated( 300 );
 
     let randomVector = Vector2.ZERO;
@@ -919,8 +919,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
   protected emitAlphaParticle(): AlphaParticle {
     const particleAtom = this.getParticleAtom();
-    assert && assert( this.model.particleAtom.protonCountProperty.value >= 2 &&
-    this.model.particleAtom.neutronCountProperty.value >= 2,
+    assert && assert( this.model.particleAtom.protonCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_PROTONS &&
+    this.model.particleAtom.neutronCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
     // create and add the alpha particle node
@@ -964,6 +964,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
     }
 
+    // get a random particle from the particleArray to determine the particleType
     const particleTypeString = ParticleType.enumeration.getValue( particleArray.get( 0 ).type.toUpperCase() ).name;
     assert && assert( particleArray.lengthProperty.value >= 1,
       'The particleAtom needs a ' + particleTypeString + ' for a ' + betaDecayType.name );
