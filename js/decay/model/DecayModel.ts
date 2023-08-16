@@ -38,7 +38,7 @@ class DecayModel extends BANModel<ParticleAtom> {
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],
       ( protonNumber: number, neutronNumber: number, doesNuclideExist: boolean, isStable: boolean ) => {
 
-        let halfLife: number | undefined | null;
+        let halfLife: number | null;
 
         // a nuclide of 0 protons and 0 neutrons does not exist
         if ( doesNuclideExist && !( protonNumber === 0 && neutronNumber === 0 ) ) {
@@ -62,7 +62,7 @@ class DecayModel extends BANModel<ParticleAtom> {
         // Since this sim relies on two Properties (one for protons and one for neutrons), it is possible to have an
         // intermediate state where there is an unexpected "no half life". Be graceful in this case, knowing that
         // listeners are going to soon fire that will bring this nuclide back into an actual substance.
-        if ( halfLife === undefined || halfLife === null ) {
+        if ( halfLife === null ) {
           return 0;
         }
         else {

@@ -25,6 +25,7 @@ class DecayEquationModel {
 
     this.currentCellModelProperty = new Property( this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value ) );
 
+    // initialize to -1
     this.finalProtonNumberProperty = new NumberProperty( -1 );
     this.finalMassNumberProperty = new NumberProperty( -1 );
 
