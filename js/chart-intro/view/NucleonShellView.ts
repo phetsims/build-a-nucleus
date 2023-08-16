@@ -46,18 +46,14 @@ class NucleonShellView extends Node {
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
 
       const lineStartingPoint = new Vector2(
-
-        // draw the line to start at the left edge of the first particle, so move the line a 'particle radius' length left
-        this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ) - BANConstants.PARTICLE_RADIUS,
-
-        // draw the line to sit below the particles, so move the line a 'particle radius' length down
-        this.modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS );
+        this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
+        this.modelViewTransform.modelToViewY( energyLevel ) );
 
       const lineEndingPoint = new Vector2(
 
         // add the particle diameter to extend the energyLevel to the right edge of the last particle
-        this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_DIAMETER - BANConstants.PARTICLE_RADIUS,
-        this.modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS );
+        this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_DIAMETER,
+        this.modelViewTransform.modelToViewY( energyLevel ) );
       energyLevels.push( new Line( lineStartingPoint, lineEndingPoint, { stroke: 'black' } )
       );
     } );

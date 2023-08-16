@@ -173,10 +173,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // add energy level node
     this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
       model.particleAtom.protonCountProperty );
+
+    // energy level's start at the left edge of the first particle in the row, so move the lines a 'particle radius' length left
+    // energy level's sit below the particles, so move the lines a 'particle radius' length down
     this.protonEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( -BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
     this.addChild( this.protonEnergyLevelNode );
     this.neutronEnergyLevelNode = new NucleonShellView( ParticleType.NEUTRON, model.particleAtom.neutronShellPositions,
       model.particleAtom.neutronCountProperty );
+
+    // neutron energy levels are further to the right than the proton energy levels
     this.neutronEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS - BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
     this.addChild( this.neutronEnergyLevelNode );
 
