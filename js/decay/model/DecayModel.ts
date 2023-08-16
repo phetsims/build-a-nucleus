@@ -48,12 +48,7 @@ class DecayModel extends BANModel<ParticleAtom> {
             halfLife = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT );
           }
 
-          // the nuclide is unstable and its half-life data is missing, set -1 as the half-life as a placeholder
-          else if ( AtomIdentifier.getNuclideHalfLife( protonNumber, neutronNumber ) === null ) {
-            halfLife = -1;
-          }
-
-          // the nuclide is unstable and its half-life data is not missing, update its half-life
+          // the nuclide is unstable, update its half-life
           else {
             halfLife = AtomIdentifier.getNuclideHalfLife( protonNumber, neutronNumber );
           }
