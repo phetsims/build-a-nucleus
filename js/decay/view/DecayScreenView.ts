@@ -116,6 +116,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         } );
         this.model.outgoingParticles.clear();
         this.model.particleAnimations.clear();
+
+        // clear all active animations
+        this.model.particleAtom.clearAnimations();
       }
     } );
     undoDecayButton.visible = false;
