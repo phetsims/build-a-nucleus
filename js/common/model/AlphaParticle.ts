@@ -43,7 +43,7 @@ class AlphaParticle extends ParticleAtom {
       easing: Easing.LINEAR
     } );
 
-    alphaParticleEmissionAnimation.endedEmitter.addListener( () => {
+    alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       this.neutrons.forEach( neutron => {
         removeParticle( neutron );
       } );
