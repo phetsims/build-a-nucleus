@@ -37,6 +37,7 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
+import TinyProperty from '../../../../axon/js/TinyProperty.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -310,15 +311,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model.outgoingParticles.add( shellNucleusNucleon );
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;
+    this.fadeAnimation( 0, particleView.opacityProperty, () => {
+      this.removeParticle( shellNucleusNucleon );
+    } );
+  }
+
+  private fadeAnimation( fadeToNumber: number, particleViewOpacityProperty: TinyProperty<number>, endedEmitterListener?: () => void ): void {
     const fadeAnimation = new Animation( {
-      property: particleView.opacityProperty,
-      to: 0,
+      property: particleViewOpacityProperty,
+      to: fadeToNumber,
       duration: FADE_ANINIMATION_DURATION,
       easing: Easing.LINEAR
     } );
-    fadeAnimation.endedEmitter.addListener( () => {
-      this.removeParticle( shellNucleusNucleon );
-    } );
+    endedEmitterListener && fadeAnimation.endedEmitter.addListener( endedEmitterListener );
     this.model.particleAnimations.push( fadeAnimation );
     fadeAnimation.start();
   }
@@ -368,14 +373,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     particle.positionProperty.value = particle.destinationProperty.value.plusXY( 0.000001, 0.000001 );
     const particleView = this.findParticleView( particle );
     particleView.opacityProperty.value = 0;
-    const fadeAnimation = new Animation( {
-      property: particleView.opacityProperty,
-      to: 1,
-      duration: FADE_ANINIMATION_DURATION,
-      easing: Easing.LINEAR
-    } );
-    this.model.particleAnimations.push( fadeAnimation );
-    fadeAnimation.start();
+    this.fadeAnimation( 1, particleView.opacityProperty );
 
     this.isMiniAtomConnected = true;
 

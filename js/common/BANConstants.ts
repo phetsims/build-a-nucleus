@@ -14,6 +14,8 @@ import Bounds2 from '../../../dot/js/Bounds2.js';
 import { Color, RadialGradient } from '../../../scenery/js/imports.js';
 import { SECOND_LEVEL_CAPACITY } from '../chart-intro/model/ParticleNucleus.js';
 import BANColors from './BANColors.js';
+import BANParticle from './model/BANParticle.js';
+import ParticleType from './model/ParticleType.js';
 
 // have one less space than there are particles
 const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = SECOND_LEVEL_CAPACITY - 1;
@@ -125,13 +127,19 @@ const BANConstants = {
       .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
   },
 
+  // options for the panel
   PANEL_OPTIONS: {
-
-    // options for the panel
     fill: BANColors.panelBackgroundColorProperty,
     xMargin: 10,
     stroke: BANColors.panelStrokeColorProperty,
     cornerRadius: PANEL_CORNER_RADIUS
+  },
+
+  // function to create a BANParticle based on a particleType
+  BAN_PARTICLE: function( particleType: ParticleType ): BANParticle {
+    return new BANParticle( particleType.particleTypeString, {
+      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
+    } );
   }
 };
 

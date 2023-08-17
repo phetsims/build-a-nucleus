@@ -605,9 +605,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * the particleAtom.
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
-    const particle = new BANParticle( particleType.particleTypeString, {
-      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
-    } );
+    const particle = BANConstants.BAN_PARTICLE( particleType );
 
     // place the particle the center of the particleAtom and add it to the model and particleAtom
     particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
@@ -649,9 +647,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   public createParticleFromStack( particleType: ParticleType ): Particle {
 
     // create a particle at the center of its creator node
-    const particle = new BANParticle( particleType.particleTypeString, {
-      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
-    } );
+    const particle = BANConstants.BAN_PARTICLE( particleType );
     const origin = particleType === ParticleType.PROTON ?
                    this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );
