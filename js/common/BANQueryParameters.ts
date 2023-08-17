@@ -10,26 +10,78 @@
 
 import buildANucleus from '../buildANucleus.js';
 import BANConstants from './BANConstants.js';
+import AtomIdentifier from '../../../shred/js/AtomIdentifier.js';
+import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
+
+// Acceptable nucleon counts should be an integer greater than zero, and less than the available max per screen
+const getValidationFunctionForMaximum = ( max: number ) => {
+  return ( value: number ) => Number.isInteger( value ) && value >= 0 && value <= max;
+};
 
 const BANQueryParameters = QueryStringMachine.getAll( {
 
-  // the number of neutrons in the atom that the sim starts up with
-  neutrons: {
+  // The number of neutrons in the atom on the Decay Screen that the sim starts up with.
+  decayScreenNeutrons: {
     public: true,
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_NEUTRON_NUMBER,
-    isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS
+    isValidValue: getValidationFunctionForMaximum( BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS )
   },
 
-  // the number of protons in the atom that the sim starts up with
-  protons: {
+  // The number of protons in the atom on the Decay Screen that the sim starts up with.
+  decayScreenProtons: {
     public: true,
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_PROTON_NUMBER,
-    isValidValue: ( number: number ) => Number.isInteger( number ) && number >= 0 && number <= BANConstants.DECAY_MAX_NUMBER_OF_PROTONS
-  }
+    isValidValue: getValidationFunctionForMaximum( BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS )
+  },
 
+  // The number of neutrons in the atom on the Chart Intro Screen that the sim starts up with.
+  chartIntroScreenNeutrons: {
+    public: true,
+    type: 'number',
+    defaultValue: BANConstants.DEFAULT_INITIAL_NEUTRON_NUMBER,
+    isValidValue: getValidationFunctionForMaximum( BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
+  },
+
+  // The number of protons in the atom on the Chart Intro Screen that the sim starts up with.
+  chartIntroScreenProtons: {
+    public: true,
+    type: 'number',
+    defaultValue: BANConstants.DEFAULT_INITIAL_PROTON_NUMBER,
+    isValidValue: getValidationFunctionForMaximum( BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
+  }
 } );
+
+type QueryParamsWeCareAbout = keyof StrictOmit<typeof BANQueryParameters, 'SCHEMA_MAP'>;
+
+// use QSM's warning logic for these public parameters if trying to create an Atom that doesn't exist.
+function warnForNonExistentAtom( protonsKeyString: QueryParamsWeCareAbout, neutronsKeyString: QueryParamsWeCareAbout ): void {
+
+// check if a nuclide with the given query parameters exists and reset to default values if not
+  const numberOfNeutrons = BANQueryParameters[ neutronsKeyString ];
+  const numberOfProtons = BANQueryParameters[ protonsKeyString ];
+
+  if ( !AtomIdentifier.doesExist( numberOfProtons, numberOfNeutrons ) ) {
+    const errorMessage = `A nuclide with ${numberOfProtons} protons and ${numberOfNeutrons} neutrons does not exist`;
+
+    // add a warning if the protons or neutrons query parameter was part of an invalid combo (atom doesn't exist)
+    // there may have already been a warning added if the query parameter value is outside the valid range, so check first
+    if ( QueryStringMachine.containsKey( protonsKeyString ) &&
+         !_.some( QueryStringMachine.warnings, warning => warning.key === protonsKeyString ) ) {
+      QueryStringMachine.addWarning( protonsKeyString, numberOfProtons, errorMessage );
+    }
+    if ( QueryStringMachine.containsKey( neutronsKeyString ) &&
+         !_.some( QueryStringMachine.warnings, warning => warning.key === neutronsKeyString ) ) {
+      QueryStringMachine.addWarning( neutronsKeyString, numberOfNeutrons, errorMessage );
+    }
+    BANQueryParameters[ protonsKeyString ] = BANConstants.DEFAULT_INITIAL_PROTON_NUMBER;
+    BANQueryParameters[ neutronsKeyString ] = BANConstants.DEFAULT_INITIAL_NEUTRON_NUMBER;
+  }
+}
+
+warnForNonExistentAtom( 'decayScreenProtons', 'decayScreenNeutrons' );
+warnForNonExistentAtom( 'chartIntroScreenProtons', 'chartIntroScreenNeutrons' );
 
 buildANucleus.register( 'BANQueryParameters', BANQueryParameters );
 export default BANQueryParameters;

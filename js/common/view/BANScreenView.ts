@@ -30,7 +30,6 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import BANQueryParameters from '../BANQueryParameters.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from './ParticleAtomNode.js';
 import DecayType from '../model/DecayType.js';
@@ -535,22 +534,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.particleAtomNode.emptyAtomCircle.visible = ( protonNumber + neutronNumber ) === 0;
       } );
 
-    phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
-      if ( complete ) {
-        // add initial neutrons and protons specified by the query parameters to the atom
-        _.times( Math.max( BANQueryParameters.neutrons, BANQueryParameters.protons ), () => {
-          if ( this.model.particleAtom.neutronCountProperty.value < BANQueryParameters.neutrons &&
-               this.model.particleAtom.neutronCountProperty.value < this.model.neutronNumberRange.max ) {
-            this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
-          }
-          if ( this.model.particleAtom.protonCountProperty.value < BANQueryParameters.protons &&
-               this.model.particleAtom.protonCountProperty.value < this.model.protonNumberRange.max ) {
-            this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
-          }
-        } );
-      }
-    } );
-
     this.pdomPlayAreaNode.pdomOrder = [
       protonArrowButtons,
       doubleArrowButtons,
@@ -618,7 +601,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Create and add a nucleon of particleType immediately to the particleAtom.
+   * Create and add a nucleon of particleType immediately to the particleAtom. Will set the position to the position of
+   * the particleAtom.
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
     const particle = new BANParticle( particleType.particleTypeString, {
@@ -629,6 +613,24 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
     this.model.addParticle( particle );
     this.model.particleAtom.addParticle( particle );
+  }
+
+  /**
+   * Populate the ParticleAtom with the desired number of nucleons.
+   */
+  public populateAtom( numberOfProtons: number, numberOfNeutrons: number ): void {
+
+    // add initial neutrons and protons specified by the query parameters to the atom
+    _.times( Math.max( numberOfNeutrons, numberOfProtons ), () => {
+      if ( this.model.particleAtom.neutronCountProperty.value < numberOfNeutrons &&
+           this.model.particleAtom.neutronCountProperty.value < this.model.neutronNumberRange.max ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+      }
+      if ( this.model.particleAtom.protonCountProperty.value < numberOfProtons &&
+           this.model.particleAtom.protonCountProperty.value < this.model.protonNumberRange.max ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+      }
+    } );
   }
 
   /**

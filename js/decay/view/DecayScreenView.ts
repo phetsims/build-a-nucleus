@@ -30,6 +30,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import DecayType from '../../common/model/DecayType.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import BANQueryParameters from '../../common/BANQueryParameters.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -260,6 +261,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       availableDecaysPanel
     ] );
     this.pdomControlAreaNode.pdomOrder = [ showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
+
+    phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
+      complete && this.populateAtom( BANQueryParameters.decayScreenProtons, BANQueryParameters.decayScreenNeutrons );
+    } );
   }
 
   public getRandomExternalModelPosition(): Vector2 {

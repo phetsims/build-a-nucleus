@@ -36,6 +36,7 @@ import FullChartDialog from './FullChartDialog.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
+import BANQueryParameters from '../../common/BANQueryParameters.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -256,6 +257,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       showMagicNumbersCheckbox,
       fullChartTextButton
     ] );
+
+    phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
+      complete && this.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
+    } );
   }
 
   /**
