@@ -12,7 +12,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import { Line, Node, RichText, Text } from '../../../../scenery/js/imports.js';
@@ -250,12 +249,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // add the particleView layer nodes after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );
     this.addChild( this.energyLevelLayer );
-
-    // only show the emptyAtomCircle when there are zero nucleons
-    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) => {
-        this.particleAtomNode.emptyAtomCircle.visible = ( protonNumber + neutronNumber ) === 0;
-      } );
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
       nuclideChartAccordionBox,

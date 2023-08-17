@@ -23,6 +23,7 @@ const PARTICLE_X_SPACING = PARTICLE_RADIUS;
 const NUMBER_OF_ENERGY_LEVELS = 3;
 const NUMBER_OF_Y_SPACINGS = NUMBER_OF_ENERGY_LEVELS - 1;
 const PARTICLE_Y_SPACING = PARTICLE_DIAMETER * 4;
+const PANEL_CORNER_RADIUS = 6;
 
 const BANConstants = {
 
@@ -61,7 +62,7 @@ const BANConstants = {
   // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
   TIME_TO_SHOW_DOES_NOT_EXIST: 1,
 
-  PANEL_CORNER_RADIUS: 6,
+  PANEL_CORNER_RADIUS: PANEL_CORNER_RADIUS,
 
   ELEMENT_NAME_MAX_WIDTH: 300,
   INFO_BUTTON_INDENT_DISTANCE: 124,
@@ -122,6 +123,15 @@ const BANConstants = {
     return new RadialGradient( 0, 0, 0, 0, 0, radius )
       .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
       .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
+  },
+
+  PANEL_OPTIONS: {
+
+    // options for the panel
+    fill: BANColors.panelBackgroundColorProperty,
+    xMargin: 10,
+    stroke: BANColors.panelStrokeColorProperty,
+    cornerRadius: PANEL_CORNER_RADIUS
   }
 };
 

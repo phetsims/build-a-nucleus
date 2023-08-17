@@ -8,7 +8,6 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
-import BANColors from '../BANColors.js';
 import { HBox, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
@@ -39,15 +38,6 @@ class NucleonNumberPanel extends Panel {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, protonNumberRange: Range,
                neutronCountProperty: TReadOnlyProperty<number>, neutronNumberRange: Range ) {
-
-    const options = {
-
-      // options for the panel
-      fill: BANColors.panelBackgroundColorProperty,
-      xMargin: 10,
-      stroke: BANColors.panelStrokeColorProperty,
-      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
-    };
 
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
 
@@ -149,7 +139,7 @@ class NucleonNumberPanel extends Panel {
       numberDisplay.centerY = neutronLabel.contents.centerY;
     } );
 
-    super( panelContents, options );
+    super( panelContents, BANConstants.PANEL_OPTIONS );
   }
 }
 

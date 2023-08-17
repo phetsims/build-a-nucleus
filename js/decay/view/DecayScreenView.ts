@@ -253,14 +253,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
     this.nucleonNumberPanel.left = availableDecaysPanel.left;
 
-    // Only show the emptyAtomCircle if there are zero particles in the atom.
-    Multilink.multilink( [
-      this.model.particleAtom.protonCountProperty,
-      this.model.particleAtom.neutronCountProperty
-    ], ( protonNumber, neutronNumber ) => {
-      this.particleAtomNode.emptyAtomCircle.visible = protonNumber + neutronNumber === 0;
-    } );
-
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
       halfLifeInformationNode,
       undoDecayButton,

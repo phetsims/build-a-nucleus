@@ -11,7 +11,6 @@ import buildANucleus from '../../buildANucleus.js';
 import { HBox, HSeparator, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import DecayType from '../../common/model/DecayType.js';
@@ -28,8 +27,6 @@ import { combineOptions } from '../../../../phet-core/js/optionize.js';
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );
 const TITLE_FONT = new PhetFont( 24 );
 const SPACING = 10;
-const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
-const ELECTRON_PARTICLE_RADIUS = NUCLEON_PARTICLE_RADIUS * 0.8;
 const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
 const BUTTON_CONTENT_WIDTH = 145;
@@ -164,7 +161,7 @@ class AvailableDecaysPanel extends Panel {
     const createParticleLabel = ( particleType: ParticleType ): Node => {
       return new HBox( {
         children: [
-          new ParticleNode( particleType.particleTypeString, particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS ),
+          IconFactory.createParticleNode( particleType ),
           new Text( particleType.labelStringProperty, { font: LABEL_FONT, maxWidth: 110 } )
         ],
         spacing: SPACING

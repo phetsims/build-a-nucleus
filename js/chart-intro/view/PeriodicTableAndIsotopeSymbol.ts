@@ -21,15 +21,6 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
 
     const panelContents = new Rectangle( 0, 0, 150, 100 ); // empirically determined
 
-    const options = {
-
-      // options for the panel
-      fill: BANColors.panelBackgroundColorProperty,
-      xMargin: 10,
-      stroke: BANColors.panelStrokeColorProperty,
-      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
-    };
-
     // Create and add the periodic table.
     const periodicTable = new PeriodicTableNode( particleAtom, {
       interactiveMax: 0,
@@ -55,7 +46,7 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
     periodicTable.top = symbolNode.bottom - ( periodicTable.height / 7 * 2.5 );
     periodicTable.left = 0;
 
-    super( panelContents, options );
+    super( panelContents, BANConstants.PANEL_OPTIONS );
   }
 }
 

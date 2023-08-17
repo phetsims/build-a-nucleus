@@ -28,7 +28,7 @@ class IconFactory {
   /**
    * Function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon
    */
-  private static createParticleNode( particleType: ParticleType ): ParticleNode {
+  public static createParticleNode( particleType: ParticleType ): ParticleNode {
     return new ParticleNode( particleType.particleTypeString,
       particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS : ELECTRON_PARTICLE_RADIUS
     );
