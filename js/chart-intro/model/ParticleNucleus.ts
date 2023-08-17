@@ -225,8 +225,8 @@ class ParticleNucleus extends ParticleAtom {
                         // the second level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
                         yPosition === EnergyLevelType.FIRST.yPosition ? index - FIRST_LEVEL_CAPACITY :
 
-                        // the second level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-                        index - FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY;
+                        // the third level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
+                        index - ( FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY );
 
       // last level (yPosition === 2) never bound so don't need levelIndex condition for it
       const levelIndex = yPosition === EnergyLevelType.NONE.yPosition ? index : index - FIRST_LEVEL_CAPACITY;
