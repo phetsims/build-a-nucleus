@@ -68,8 +68,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   private timeSinceCountdownStarted: number;
   private previousProtonNumber: number;
   private previousNeutronNumber: number;
-  public readonly resetAllButton: Node;
-  public readonly nucleonNumberPanel: Node;
+  protected readonly resetAllButton: Node;
+  protected readonly nucleonNumberPanel: Node;
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
   protected readonly particleViewMap: ParticleViewMap;
@@ -78,17 +78,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly protonsCreatorNode: Node;
   protected readonly neutronsCreatorNode: Node;
 
-  public readonly protonsCreatorNodeModelCenter: Vector2;
-  public readonly neutronsCreatorNodeModelCenter: Vector2;
+  private readonly protonsCreatorNodeModelCenter: Vector2;
+  private readonly neutronsCreatorNodeModelCenter: Vector2;
 
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
-  protected readonly neutronArrowButtons: Node;
   protected readonly elementName: Text;
 
   // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
   protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
-  private readonly atomCenter: Vector2;
 
   // The view for the ParticleAtom, the cluster of nucleons in Decay screen and the mini-atom in the Chart Intro screen.
   protected readonly particleAtomNode: ParticleAtomNode;
@@ -107,8 +105,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.timeSinceCountdownStarted = 0;
     this.previousProtonNumber = 0;
     this.previousNeutronNumber = 0;
-
-    this.atomCenter = atomCenter;
 
     this.particleViewMap = {};
 
@@ -343,7 +339,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       spacing: arrowButtonSpacing
     } );
     doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    doubleArrowButtons.centerX = this.atomCenter.x;
+    doubleArrowButtons.centerX = atomCenter.x;
     this.addChild( doubleArrowButtons );
 
     // functions to create the listeners that create or remove a particle
@@ -518,12 +514,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.dispose();
     } );
 
-    this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, this.atomCenter, this.model.protonNumberRange );
+    this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, atomCenter, this.model.protonNumberRange );
 
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
     this.protonArrowButtons = protonArrowButtons;
-    this.neutronArrowButtons = neutronArrowButtons;
 
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
