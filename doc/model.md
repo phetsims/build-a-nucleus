@@ -9,16 +9,28 @@ This document describes the model for the Build a Nucleus simulation.<br>
 An atom is made up of protons, neutrons, and electrons. A nucleus is made up of _nucleons_, which is the general term
 for protons and neutrons.
 
-- Nuclide: an atomic species defined by the number of protons and neutrons it has in its nucleus.
-- Half-life: the amount of time it takes for one-half of the radioactive isotope to decay.
-- Decay: is the process by which an unstable atomic nucleus loses energy by radiation. A material containing unstable
-  nuclei is considered radioactive.
-- Chart of the nuclides: chart of all isotopes of all elements color coded based on the decay a nuclide would most
+- __Nuclide__: an atomic species defined by the number of protons and neutrons it has in its nucleus.
+- __Half-life__: the amount of time it takes for one-half of the radioactive isotope to decay.
+- __Decay__: is the process by which an unstable atomic nucleus loses energy by radiation. A material containing
+  unstable nuclei is considered radioactive.
+- __Chart of the nuclides__: chart of all isotopes of all elements color coded based on the decay a nuclide would most
   likely undergo.
-- Nuclear Shell Model: model describing the nucleus using energy levels.
-- Magic number: a number of nucleons that completes a nucleon energy level. Nuclides with magic numbers have increased
-  stability.
-- (Subatomic) particle: a particle smaller than an atom. Such as a proton, neutron, electron, or positron.
+- __Nuclear Shell Model__: model describing the nucleus using energy levels.
+- __Energy level / shell__: a definite fixed energy that a particle or atom can have. 
+  - _Lowest energy level / shell_ has lowest amount of energy and vice versa.
+  - __Energy levels__ can hold a certain *even*
+    number of nucleons before they fill up. For example,
+    - the first energy level can hold a maximum of 2 nucleons
+    - the second energy level can hold a maximum of 6 nucleons
+    - the third energy level can hold a maximum of 12 nucleons
+- __Magic number__: a number of nucleons that completes a nucleon energy level. Nuclides with magic numbers have
+  increased stability. For example, the first couple magic numbers are:
+  - 2
+  - 8 ( 2 + 6 )
+  - 20 ( 2 + 6 + 12 )
+- __Singly magic__: a nuclide where only their proton or neutron number is magic. Ex. Helium-3 (2p, 1n)
+- __Doubly magic__: a nuclide where both the proton and neutron number is magic. Ex. Helium-4 (2p, 2n)
+- __(Subatomic) particle__: a particle smaller than an atom. Such as a proton, neutron, electron, or positron.
 
 ## Overview
 
