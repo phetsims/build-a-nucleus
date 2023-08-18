@@ -799,10 +799,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     }
   }
 
-  protected isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
-    // Please see subclass implementations
-    return false;
-  }
+  protected abstract isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean;
 
   /**
    * Add particleView to correct layer.
