@@ -12,6 +12,8 @@ import NuclideChartCellModel from './NuclideChartCellModel.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import BANConstants from '../../common/BANConstants.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 class DecayEquationModel {
 
@@ -25,9 +27,11 @@ class DecayEquationModel {
 
     this.currentCellModelProperty = new Property( this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value ) );
 
-    // initialize to -1
-    this.finalProtonNumberProperty = new NumberProperty( -1 );
-    this.finalMassNumberProperty = new NumberProperty( -1 );
+    // initialize to 0
+    this.finalProtonNumberProperty = new NumberProperty( 0,
+      { validValues: Utils.rangeInclusive( 0, BANConstants.CHART_MAX_NUMBER_OF_PROTONS ) } );
+    this.finalMassNumberProperty = new NumberProperty( 0,
+      { validValues: Utils.rangeInclusive( 0, BANConstants.CHART_MAX_NUMBER_OF_PROTONS + BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ) } );
 
     massNumberProperty.link( () => {
       const currentCell = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
