@@ -17,6 +17,8 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Range from '../../../../dot/js/Range.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -33,7 +35,7 @@ class ParticleAtomNode extends Node {
   private readonly atomCenter: Vector2;
   private readonly protonNumberRange: Range;
 
-  public constructor( atomCenter: Vector2, protonNumberRange: Range ) {
+  public constructor( particleAtom: ParticleAtom, atomCenter: Vector2, protonNumberRange: Range ) {
 
     // Add the nucleonLayers
     const nucleonLayers: Node[] = [];
@@ -68,6 +70,12 @@ class ParticleAtomNode extends Node {
     this.protonNumberRange = protonNumberRange;
     this.electronCloud = electronCloud;
     this.emptyAtomCircle = emptyAtomCircle;
+
+    // only show the emptyAtomCircle when there are zero nucleons
+    Multilink.multilink( [ particleAtom.protonCountProperty, particleAtom.neutronCountProperty ],
+      ( protonNumber: number, neutronNumber: number ) => {
+        this.emptyAtomCircle.visible = ( protonNumber + neutronNumber ) === 0;
+      } );
   }
 
 

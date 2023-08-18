@@ -39,7 +39,6 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import AlphaParticle from '../model/AlphaParticle.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -486,7 +485,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.dispose();
     } );
 
-    this.particleAtomNode = new ParticleAtomNode( atomCenter, this.model.protonNumberRange );
+    this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
 
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
@@ -494,12 +493,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // update the cloud size as the massNumber changes
     model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
-
-    // only show the emptyAtomCircle when there are zero nucleons
-    Multilink.multilink( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) => {
-        this.particleAtomNode.emptyAtomCircle.visible = ( protonNumber + neutronNumber ) === 0;
-      } );
 
     this.pdomPlayAreaNode.pdomOrder = [
       protonArrowButtons,
