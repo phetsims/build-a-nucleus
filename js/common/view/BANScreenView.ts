@@ -662,12 +662,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
 
-        // must remove incoming particles before adding it to particleAtom so incoming count is accurate
-        arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particle );
+        this.clearIncomingParticle( particle, particleType );
 
         this.model.particleAtom.addParticle( particle );
         particleView.inputEnabled = true;
-        particle.animationEndedEmitter.removeAllListeners();
       }
     } );
 
@@ -707,6 +705,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * (animating it back to the stack).
    */
   protected clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
+    assert && assert( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON,
+      'only proton and neutron types support for clearing' );
     arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particle );
     particle.animationEndedEmitter.removeAllListeners();
   }
