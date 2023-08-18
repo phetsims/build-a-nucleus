@@ -15,22 +15,20 @@ import BANConstants from '../../common/BANConstants.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { Circle, HBox, ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
+import { ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Property from '../../../../axon/js/Property.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from '../../common/model/ParticleType.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import DecayType from '../../common/model/DecayType.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
+import ShowElectronCloudCheckbox from './ShowElectronCloudCheckbox.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -43,8 +41,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   // the symbol node in an accordion box
   private readonly symbolAccordionBox: AccordionBox;
 
-  // show or hide the electron cloud
-  private readonly showElectronCloudBooleanProperty: Property<boolean>;
+  // For resetting
+  private readonly showElectronCloudCheckbox: ShowElectronCloudCheckbox;
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
@@ -183,28 +181,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         } );
     };
     undoDecayButton.right = availableDecaysPanel.left - 10;
-
-    // show the electron cloud by default
-    this.showElectronCloudBooleanProperty = new BooleanProperty( true );
-    this.showElectronCloudBooleanProperty.link( showElectronCloud => { this.particleAtomNode.electronCloud.visible = showElectronCloud; } );
-
-    // create and add the electronCloud checkbox
-    const electronCloudRadius = 18; // empirically determined to be close in size to the 'Electron Cloud' text height
-    const showElectronCloudCheckbox = new Checkbox( this.showElectronCloudBooleanProperty, new HBox( {
-      children: [
-        new Text( BuildANucleusStrings.electronCloudStringProperty, { font: BANConstants.REGULAR_FONT, maxWidth: 210 } ),
-
-        // electron cloud icon
-        new Circle( {
-          radius: electronCloudRadius,
-          fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( electronCloudRadius )
-        } )
-      ],
-      spacing: 5
-    } ) );
-    showElectronCloudCheckbox.left = availableDecaysPanel.left;
-    showElectronCloudCheckbox.bottom = this.resetAllButton.bottom;
-    this.addChild( showElectronCloudCheckbox );
+    this.showElectronCloudCheckbox = new ShowElectronCloudCheckbox( this.particleAtomNode.electronCloud );
+    this.showElectronCloudCheckbox.left = availableDecaysPanel.left;
+    this.showElectronCloudCheckbox.bottom = this.resetAllButton.bottom;
+    this.addChild( this.showElectronCloudCheckbox );
 
     // create and add stability indicator
     const stabilityIndicator = new Text( '', {
@@ -258,7 +238,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       this.symbolAccordionBox,
       availableDecaysPanel
     ] );
-    this.pdomControlAreaNode.pdomOrder = [ showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
+    this.pdomControlAreaNode.pdomOrder = [ this.showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
       complete && this.populateAtom( BANQueryParameters.decayScreenProtons, BANQueryParameters.decayScreenNeutrons );
@@ -326,7 +306,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
   protected override reset(): void {
     this.symbolAccordionBox.reset();
-    this.showElectronCloudBooleanProperty.reset();
+    this.showElectronCloudCheckbox.reset();
     super.reset();
   }
 }
