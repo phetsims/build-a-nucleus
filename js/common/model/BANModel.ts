@@ -135,14 +135,14 @@ class BANModel<T extends ParticleAtom> {
   }
 
   /**
-   * Return the destination of a particle when it's added to the particle atom
+   * Return the destination of a particle when it's added to the particleAtom.
    */
   public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     return this.particleAtom.positionProperty.value;
   }
 
   /**
-   * Add a Particle to the model
+   * Add a Particle to the model.
    */
   public addParticle( particle: Particle ): void {
     assert && assert( _.some( ParticleType.enumeration.values, particleType => {

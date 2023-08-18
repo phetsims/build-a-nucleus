@@ -113,6 +113,10 @@ class ParticleNucleus extends ParticleAtom {
         BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS ) );
   }
 
+  /**
+   * Return the right-most particle from the highest energy level that contains particles, if there is one.
+   * Otherwise, return undefined.
+   */
   public getLastParticleInShell( particleType: ParticleType ): Particle | undefined {
     const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
     for ( let i = nucleonShellPositions.length - 1; i >= 0; i-- ) {
@@ -132,7 +136,7 @@ class ParticleNucleus extends ParticleAtom {
    */
   public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
-    let yPosition = 0;
+    let yPosition = EnergyLevelType.NONE.yPosition; // initialize to the lowest shell where yPosition = 0
 
     const openNucleonShellPositions = nucleonShellPositions.map( particleShellRow => {
 
@@ -159,6 +163,9 @@ class ParticleNucleus extends ParticleAtom {
     return viewDestination;
   }
 
+  /**
+   * Update all proton and neutron positions in their energy levels.
+   */
   public override reconfigureNucleus(): void {
     this.updateNucleonPositions( this.protons, this.protonShellPositions, this.protonsLevelProperty, 0 );
     this.updateNucleonPositions( this.neutrons, this.neutronShellPositions, this.neutronsLevelProperty,
@@ -184,6 +191,9 @@ class ParticleNucleus extends ParticleAtom {
     } );
   }
 
+  /**
+   * Remove all nucleons from their shell positions and from the particleAtom without reconfiguring the nucleus.
+   */
   public override clear(): void {
     this.protonsLevelProperty.reset();
     this.neutronsLevelProperty.reset();
@@ -205,13 +215,13 @@ class ParticleNucleus extends ParticleAtom {
   }
 
   /**
-   * Fill all nucleons in open positions from bottom to top, left to right
+   * Fill all nucleons in open positions from bottom to top, left to right.
    */
   private updateNucleonPositions( particleArray: ObservableArray<BANParticle>, particleShellPositions: ParticleShellPosition[][],
                                   levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
 
     // width in view coordinates of the second energy level, which is the same as the other two levels (though the first
-    // energy level line is drawn shorter - see NucleonShellView)
+    // energy level line is drawn shorter - see NucleonShellView for details)
     const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 5 ] ) -
                        this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
     particleArray.forEach( ( particle, index ) => {

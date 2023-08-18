@@ -74,6 +74,7 @@ class NuclideChartNode extends Node {
 
     this.addChild( cellLayerNode );
 
+    // add the arrowNode indicating the decay direction first so that it appears behind the cell's label
     const arrowNode = new ArrowNode( 0, 0, 0, 0, combineOptions<ArrowNodeOptions>( {
       visible: false
     }, BANConstants.DECAY_ARROW_OPTIONS ) );
@@ -119,6 +120,8 @@ class NuclideChartNode extends Node {
                                              ' neutronRowIndex = ' + neutronRowIndex );
 
           const decayType = highlightedCell.cellModel.decayType;
+
+          // draw the decay direction with the arrowNode if there is a known decay for this nuclide cell
           if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
 
             // direction determined based on how the DecayType changes the current nuclide, see DecayType for more details
@@ -164,7 +167,7 @@ class NuclideChartNode extends Node {
   }
 
   /**
-   * Public for icon creation.
+   * Create a nuclide chart given a node to contain the cells and a chartTransform. Public for icon creation.
    */
   public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number,
                                     showMagicNumbersProperty: TReadOnlyProperty<boolean> = new BooleanProperty( false ) ): NuclideChartCell[][] {

@@ -24,12 +24,16 @@ const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 
 class ParticleAtomNode extends Node {
 
-  private nucleonLayers: Node[];
+  // public to set its visibility
   public readonly electronCloud: Circle;
-  private readonly atomCenter: Vector2;
-  private protonNumberRange: Range;
-  private readonly particleViewMap: ParticleViewMap;
+
+  // public to set its visibility and for positioning
   public readonly emptyAtomCircle: Circle;
+
+  private readonly nucleonLayers: Node[];
+  private readonly atomCenter: Vector2;
+  private readonly protonNumberRange: Range;
+  private readonly particleViewMap: ParticleViewMap;
 
   public constructor( particleViewMap: ParticleViewMap, atomCenter: Vector2, protonNumberRange: Range ) {
 
@@ -130,7 +134,7 @@ class ParticleAtomNode extends Node {
   }
 
   /**
-   * Maps a number of electrons to a diameter in screen coordinates for the electron shell.  This mapping function is
+   * Maps a number of electrons to a diameter in screen coordinates for the electron shell. This mapping function is
    * based on the real size relationships between the various atoms, but has some tweakable parameters to reduce the
    * range and scale to provide values that are usable for our needs on the canvas.
    */

@@ -94,6 +94,9 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     return particleToReturn!;
   }
 
+  /**
+   * Return the next open shell position for the given particleType and add it to that shell position.
+   */
   public override getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     return this.particleNucleus.getParticleDestination( particleType, particle );
   }
