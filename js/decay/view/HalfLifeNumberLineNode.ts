@@ -244,7 +244,7 @@ class HalfLifeNumberLineNode extends Node {
         halfLifeNumberText.visible = false;
 
         // peg the indicator to the right when stable
-        this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+        this.moveHalfLifePointerSet( halfLifeNumber );
       }
 
       // the nuclide is unstable or does not exist
@@ -258,7 +258,7 @@ class HalfLifeNumberLineNode extends Node {
           halfLifeUnknownText.visible = false;
           halfLifeNumberText.visible = false;
 
-          this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+          this.moveHalfLifePointerSet( halfLifeNumber );
         }
 
         // the nuclide is unstable but the half-life data is unknown
@@ -268,7 +268,7 @@ class HalfLifeNumberLineNode extends Node {
           halfLifeUnknownText.visible = true;
           halfLifeNumberText.visible = false;
 
-          this.moveHalfLifePointerSet( 0, options.isHalfLifeLabelFixed );
+          this.moveHalfLifePointerSet( 0 );
         }
 
         // the nuclide is unstable and the half-life data is known
@@ -281,11 +281,10 @@ class HalfLifeNumberLineNode extends Node {
 
           // peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
           if ( halfLifeNumber > Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
-            this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ),
-              options.isHalfLifeLabelFixed );
+            this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) );
           }
           else {
-            this.moveHalfLifePointerSet( halfLifeNumber, options.isHalfLifeLabelFixed );
+            this.moveHalfLifePointerSet( halfLifeNumber );
           }
         }
       }
@@ -357,7 +356,7 @@ class HalfLifeNumberLineNode extends Node {
    * Animate the half-life arrow to the new half-life position along the number line. If the half-life text is a label
    * to the half-life arrow, animate it to its new half-life position too.
    */
-  private moveHalfLifePointerSet( halfLife: number, isHalfLifeLabelFixed: boolean ): void {
+  private moveHalfLifePointerSet( halfLife: number ): void {
     const newXPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
 
     const arrowXPositionAnimationDuration = 0.7; // in seconds
