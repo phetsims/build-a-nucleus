@@ -42,6 +42,7 @@ class HalfLifeInfoDialog extends Dialog {
       BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS
     ];
 
+    // use a GridBox to create the left adn right side nodes of the HalfLifeInfoDialog legend
     const createGridBox = ( timescalePoints: BANTimescalePoints[] ): Node => {
 
       const grid = new GridBox( {
@@ -78,6 +79,7 @@ class HalfLifeInfoDialog extends Dialog {
       return grid;
     };
 
+    // create the legend node
     const legend = new HBox( {
       children: [
         createGridBox( leftSideTimescalePoints ),
@@ -88,7 +90,7 @@ class HalfLifeInfoDialog extends Dialog {
       maxWidth: 870
     } );
 
-    // create and add the halfLifeNumberLineNode
+    // create the halfLifeNumberLineNode
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
@@ -99,6 +101,7 @@ class HalfLifeInfoDialog extends Dialog {
       elementNameStringProperty: elementNameStringProperty
     } );
 
+    // add the legend and halfLifeNumberLineNode
     const numberLineNodeAndLegend = new VBox( {
       children: [ legend, halfLifeNumberLineNode ],
       spacing: 30,

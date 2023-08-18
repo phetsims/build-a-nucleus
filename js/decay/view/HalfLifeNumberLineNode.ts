@@ -11,7 +11,7 @@ import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Range from '../../../../dot/js/Range.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Line, Node, NodeOptions, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Line, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -36,8 +36,10 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 
 // types
 type SelfOptions = {
-  numberLineWidth: number;
+
+  // the length of the tick marks
   tickMarkExtent: number;
+  numberLineWidth: number;
   numberLineLabelFont: PhetFont;
   halfLifeArrowLength: number;
 
@@ -53,19 +55,23 @@ type SelfOptions = {
 };
 export type HalfLifeNumberLineNodeOptions = SelfOptions & NodeOptions;
 
-// Distance between the moving arrow and the half life and element name that travel with it.
-const ARROW_TOP_MARGIN = 14;
-
 // constants
 const TITLE_FONT = new PhetFont( 24 );
 const NUMBER_LINE_START_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_START_EXPONENT;
 const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT;
 
+// Distance between the moving arrow and the half life and element name that travel with it.
+const ARROW_TOP_MARGIN = 14;
+
+// the number in radians for the halfLifeArrow rotation to be pointing in a certain direction
+const ROTATION_POINTING_DOWN_RADIANS = 0;
+const ROTATION_POINTING_RIGHT_RADIANS = -Math.PI / 2;
+
 class HalfLifeNumberLineNode extends Node {
 
   private readonly numberLineLabelFont: PhetFont | undefined;
   private readonly chartTransform: ChartTransform;
-  private readonly tickMarkSet: Path;
+  private readonly tickMarkSetCenterY = 0;
   private readonly halfLifeArrowRotationNumberProperty: TProperty<number>;
   private arrowXPositionAnimation: null | Animation;
   private arrowRotationAnimation: null | Animation;
@@ -101,7 +107,7 @@ class HalfLifeNumberLineNode extends Node {
       } );
     };
 
-    // create and add numberLineNode
+    // create the numberLineNode
     this.numberLineNode = new Node();
 
     this.chartTransform = new ChartTransform( {
@@ -109,28 +115,29 @@ class HalfLifeNumberLineNode extends Node {
       modelXRange: new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT )
     } );
 
+    // create and add all the number line components
     const tickXSpacing = 3;
-    this.tickMarkSet = new TickMarkSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
+    const tickMarkSet = new TickMarkSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       stroke: Color.BLACK,
       extent: options.tickMarkExtent,
       lineWidth: 2
     } );
-    this.tickMarkSet.centerY = 0;
-    this.numberLineNode.addChild( this.tickMarkSet );
+    tickMarkSet.centerY = this.tickMarkSetCenterY;
+    this.numberLineNode.addChild( tickMarkSet );
     const tickLabelSet = new TickLabelSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       extent: 0,
       createLabel: ( value: number ) => createExponentialLabel( value )
     } );
-    tickLabelSet.top = this.tickMarkSet.bottom;
+    tickLabelSet.top = tickMarkSet.bottom;
     this.numberLineNode.addChild( tickLabelSet );
     const numberLine = new Line( {
-      x1: this.chartTransform.modelToViewX( NUMBER_LINE_START_EXPONENT ), y1: this.tickMarkSet.centerY,
-      x2: this.chartTransform.modelToViewX( NUMBER_LINE_END_EXPONENT ), y2: this.tickMarkSet.centerY,
+      x1: this.chartTransform.modelToViewX( NUMBER_LINE_START_EXPONENT ), y1: tickMarkSet.centerY,
+      x2: this.chartTransform.modelToViewX( NUMBER_LINE_END_EXPONENT ), y2: tickMarkSet.centerY,
       stroke: Color.BLACK
     } );
     this.numberLineNode.addChild( numberLine );
 
-    // create and add the halfLifeArrow
+    // create and add the halfLifeArrow pointing down
     const arrowNode = new ArrowNode( 0, 0, 0, options.halfLifeArrowLength, {
       fill: BANColors.halfLifeColorProperty,
       stroke: null,
@@ -138,9 +145,11 @@ class HalfLifeNumberLineNode extends Node {
       headWidth: 12
     } );
 
+    // use a different node for the halfLifeArrow to allow for easy rotation and position animation
     const halfLifeArrow = new Node();
     halfLifeArrow.addChild( arrowNode );
 
+    // all valid values are based on the halfLifeNumberProperty, for more information see its implementation
     this.arrowXPositionNumberProperty = new NumberProperty( 0 );
 
     this.arrowXPositionAnimation = null;
@@ -153,7 +162,6 @@ class HalfLifeNumberLineNode extends Node {
       excludeInvisibleChildrenFromBounds: true,
       spacing: 4
     } );
-
     const sentenceHBox = new HBox( {
       spacing: 8,
       align: 'bottom'
@@ -222,10 +230,10 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeDisplayNode.insertChild( 0, elementName );
     }
 
-    this.halfLifeArrowRotationNumberProperty = new NumberProperty( 0 );
-    Multilink.multilink( [ this.halfLifeArrowRotationNumberProperty ], rotation => {
-      halfLifeArrow.rotation = rotation;
-    } );
+    // animate the rotation of the halfLifeArrow through the halfLifeArrowRotationNumberProperty
+    this.halfLifeArrowRotationNumberProperty = new NumberProperty( 0,
+      { isValidValue: value => value >= ROTATION_POINTING_RIGHT_RADIANS && value <= ROTATION_POINTING_DOWN_RADIANS } );
+    this.halfLifeArrowRotationNumberProperty.link( rotation => { halfLifeArrow.rotation = rotation; } );
 
     // function to show or hide the halfLifeArrow
     const showHalfLifeArrow = ( show: boolean ) => {
@@ -296,7 +304,7 @@ class HalfLifeNumberLineNode extends Node {
       maxWidth: 150
     } );
 
-    // Add the units to the number line
+    // Add the units to the number line and add the numberLineNode
     const numberLineVBox = new VBox( {
       spacing: 5,
       children: [
@@ -317,7 +325,7 @@ class HalfLifeNumberLineNode extends Node {
       options.elementNameStringProperty,
       sentenceHBox.boundsProperty
     ], xPosition => {
-      const numberLineCenterY = this.numberLineNode.localToParentPoint( this.tickMarkSet.center ).y;
+      const numberLineCenterY = this.numberLineNode.localToParentPoint( tickMarkSet.center ).y;
 
       halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         numberLineCenterY - options.halfLifeArrowLength );
@@ -386,7 +394,7 @@ class HalfLifeNumberLineNode extends Node {
 
       // rotate arrow horizontally, pointing right
       this.arrowRotationAnimation = new Animation( {
-        to: -Math.PI / 2,
+        to: ROTATION_POINTING_RIGHT_RADIANS,
         property: this.halfLifeArrowRotationNumberProperty,
         duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
@@ -404,7 +412,7 @@ class HalfLifeNumberLineNode extends Node {
 
       // rotate arrow back vertically, pointing down
       this.arrowRotationAnimation = new Animation( {
-        to: 0,
+        to: ROTATION_POINTING_DOWN_RADIANS,
         property: this.halfLifeArrowRotationNumberProperty,
         duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
@@ -426,7 +434,7 @@ class HalfLifeNumberLineNode extends Node {
   public addArrowAndLabel( label: TReadOnlyProperty<string>, halfLife: number ): void {
     const xPosition = HalfLifeNumberLineNode.logScaleNumberToLinearScaleNumber( halfLife );
     const arrow = new ArrowNode( this.chartTransform.modelToViewX( xPosition ), -17.5,
-      this.chartTransform.modelToViewX( xPosition ), this.tickMarkSet.centerY, {
+      this.chartTransform.modelToViewX( xPosition ), this.tickMarkSetCenterY, {
         fill: BANColors.legendArrowColorProperty,
         stroke: null,
         tailWidth: 1.5,

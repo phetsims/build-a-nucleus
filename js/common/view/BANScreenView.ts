@@ -672,7 +672,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Animate particle to the given destination and then remove it.
+   * Animate particle to the given destination, if there is one, and then remove it.
    */
   protected animateAndRemoveParticle( particle: Particle, destination?: Vector2 ): void {
     const particleView = this.findParticleView( particle );

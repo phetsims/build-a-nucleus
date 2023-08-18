@@ -65,18 +65,21 @@ class HalfLifeInformationNode extends Node {
     infoButton.left = halfLifeNumberLineNode.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE;
     this.addChild( infoButton );
 
+    // create the left arrow and its label
     const leftArrow = new ArrowNode( STABLE_ARROW_LENGTHS, 0, 0,
       0, ARROW_OPTIONS );
     const leftArrowText = new Text( BuildANucleusStrings.lessStableStringProperty, TEXT_OPTIONS );
     const leftArrowAndLabelHBox = new HBox( HBOX_OPTIONS );
     leftArrowAndLabelHBox.children = [ leftArrow, leftArrowText ];
 
+    // create the right arrow and its label
     const rightArrow = new ArrowNode( 0, 0, STABLE_ARROW_LENGTHS,
       0, ARROW_OPTIONS );
     const rightArrowText = new Text( BuildANucleusStrings.moreStableStringProperty, TEXT_OPTIONS );
     const rightArrowAndLabelHBox = new HBox( HBOX_OPTIONS );
     rightArrowAndLabelHBox.children = [ rightArrowText, rightArrow ];
 
+    // add the arrow and label pairs
     this.addChild( new HBox( {
       children: [ leftArrowAndLabelHBox, rightArrowAndLabelHBox ],
       preferredWidth: halfLifeNumberLineNode.width,

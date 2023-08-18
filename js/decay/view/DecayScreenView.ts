@@ -90,7 +90,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.symbolAccordionBox );
 
-
     // store the current nucleon numbers
     let oldProtonNumber: number;
     let oldNeutronNumber: number;
@@ -99,7 +98,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
     };
 
-    // create the undo decay button
+    // create and add the undo decay button
     const undoDecayButton = new ReturnButton( {
       iconOptions: { scale: 0.7 },
       listener: () => {
@@ -140,7 +139,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // remove a nucleon of a given particleType from the atom immediately
     const removeNucleonImmediatelyFromAtom = ( particleType: ParticleType ) => {
-
       const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
       this.animateAndRemoveParticle( particleToRemove );
     };
@@ -230,6 +228,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
+    // positioning
     this.elementName.boundsProperty.link( () => {
 
       // place the elementName a bit below the stabilityIndicator
@@ -257,10 +256,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.particleAtomNode.addParticleView( particle, this.particleViewMap[ particle.id ] );
   }
 
+  /**
+   * Returns a random position, in model coordinates, outside the screen view's visible bounds.
+   */
   protected override getRandomExternalModelPosition(): Vector2 {
     return this.particleTransform.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
+  /**
+   * Return the model of the cluster of nucleons.
+   */
   protected override getParticleAtom(): ParticleAtom {
     return this.model.particleAtom;
   }

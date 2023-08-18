@@ -36,26 +36,26 @@ class DecayModel extends BANModel<ParticleAtom> {
 
     this.halfLifeNumberProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],
-      ( protonNumber: number, neutronNumber: number, doesNuclideExist: boolean, isStable: boolean ) => {
+      ( protonNumber, neutronNumber, doesNuclideExist, isStable ) => {
 
         let halfLife: number | null;
 
-        // a nuclide of 0 protons and 0 neutrons does not exist
         if ( doesNuclideExist && !( protonNumber === 0 && neutronNumber === 0 ) ) {
+          // a nuclide of 0 protons and 0 neutrons does not exist
 
-          // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
           if ( isStable ) {
+
+            // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
             halfLife = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT );
           }
-
-          // the nuclide is unstable, update its half-life
           else {
+
+            // the nuclide is unstable, update its half-life
             halfLife = AtomIdentifier.getNuclideHalfLife( protonNumber, neutronNumber );
           }
         }
-
-        // the nuclide does not exist
         else {
+          // the nuclide does not exist
           halfLife = 0;
         }
 

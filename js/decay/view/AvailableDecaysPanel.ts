@@ -151,13 +151,10 @@ class AvailableDecaysPanel extends Panel {
       spacing: SPACING,
       align: 'left'
     } );
-
-    // add the decay buttons and icons
     arrangedDecayButtonsAndIcons.top = titleNode.bottom + SPACING;
 
-    // create and add the separator
+    // create the separator
     const separator = new HSeparator( { stroke: '#CACACA' } );
-
     separator.top = arrangedDecayButtonsAndIcons.bottom + SPACING;
 
     // create and add the particle labels
