@@ -6,10 +6,9 @@
  * @author Luisa Vargas
  */
 
-import Particle, { ParticleOptions } from '../../../../shred/js/model/Particle.js';
+import Particle, { ParticleOptions, ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 import BANConstants from '../BANConstants.js';
 import buildANucleus from '../../buildANucleus.js';
-import { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 export type BANParticleOptions = ParticleOptions;

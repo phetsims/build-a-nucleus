@@ -473,24 +473,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       }
     };
 
-    // convert string particle type to a ParticleType
-    const getParticleTypeFromStringType = ( particleTypeString: string ) => {
-      const particleType = particleTypeString === ParticleType.PROTON.particleTypeString ? ParticleType.PROTON :
-                           particleTypeString === ParticleType.NEUTRON.particleTypeString ? ParticleType.NEUTRON :
-                           particleTypeString === ParticleType.ELECTRON.particleTypeString ? ParticleType.ELECTRON :
-                           particleTypeString === ParticleType.POSITRON.particleTypeString ? ParticleType.POSITRON :
-                           null;
-      assert && assert( particleType !== null, `Particle type ${particleTypeString} is not a valid particle type.` );
-      return particleType;
-    };
-
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
       const particleView = new ParticleView( particle, this.particleTransform );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle );
-      const particleType = getParticleTypeFromStringType( particle.type );
+      const particleType = ParticleType.getParticleTypeFromStringType( particle.type );
 
       if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
 
@@ -506,7 +495,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
         particleView.dispose();
 
-        const particleType = getParticleTypeFromStringType( particle.type );
+        const particleType = ParticleType.getParticleTypeFromStringType( particle.type );
 
         if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
           this.checkIfCreatorNodeShouldBeVisible( particleType );

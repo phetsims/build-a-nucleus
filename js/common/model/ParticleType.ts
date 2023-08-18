@@ -32,6 +32,17 @@ class ParticleType extends EnumerationValue {
                       public readonly colorProperty: ProfileColorProperty ) {
     super();
   }
+
+  // convert string particle type to a ParticleType
+  public static getParticleTypeFromStringType( particleTypeString: ParticleTypeString ): ParticleType {
+    const particleType = particleTypeString === ParticleType.PROTON.particleTypeString ? ParticleType.PROTON :
+                         particleTypeString === ParticleType.NEUTRON.particleTypeString ? ParticleType.NEUTRON :
+                         particleTypeString === ParticleType.ELECTRON.particleTypeString ? ParticleType.ELECTRON :
+                         particleTypeString === ParticleType.POSITRON.particleTypeString ? ParticleType.POSITRON :
+                         null;
+    assert && assert( particleType !== null, `Particle type ${particleTypeString} is not a valid particle type.` );
+    return particleType!;
+  }
 }
 
 buildANucleus.register( 'ParticleType', ParticleType );
