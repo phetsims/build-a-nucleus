@@ -16,6 +16,7 @@ import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import BANParticle from '../model/BANParticle.js';
 
 class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
@@ -30,7 +31,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
 
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
-      const particle = BANConstants.BAN_PARTICLE( particleType );
+      const particle = new BANParticle( particleType.particleTypeString );
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.

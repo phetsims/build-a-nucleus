@@ -286,7 +286,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   /**
    * In this screen, particles are only emitted from the miniAtom so use the miniAtomMVT to return an external position in model coordinates.
    */
-  public override getRandomExternalModelPosition(): Vector2 {
+  protected override getRandomExternalModelPosition(): Vector2 {
     return this.miniAtomMVT.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
@@ -328,7 +328,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     fadeAnimation.start();
   }
 
-  public override getParticleAtom(): ParticleAtom {
+  protected override getParticleAtom(): ParticleAtom {
     return this.model.miniParticleAtom;
   }
 
@@ -395,7 +395,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * We need to make sure that the shell position spots reserved for the incoming, animating particles, are cleared out
    * since the particle is no longer coming into the atom.
    */
-  public override clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
+  protected override clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
     super.clearIncomingParticle( particle, particleType );
 
     // Not a full removeParticle() call because we never completed the animation into the particleAtom (but we did

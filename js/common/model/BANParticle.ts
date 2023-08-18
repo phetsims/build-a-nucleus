@@ -10,12 +10,16 @@ import Particle, { ParticleOptions } from '../../../../shred/js/model/Particle.j
 import BANConstants from '../BANConstants.js';
 import buildANucleus from '../../buildANucleus.js';
 import { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 
 export type BANParticleOptions = ParticleOptions;
 export default class BANParticle extends Particle {
 
   public constructor( type: ParticleTypeString, providedOptions?: BANParticleOptions ) {
-    super( type, providedOptions );
+    const options = optionize<BANParticleOptions, EmptySelfOptions, BANParticleOptions>()( {
+      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
+    }, providedOptions );
+    super( type, options );
     this.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
   }
 }

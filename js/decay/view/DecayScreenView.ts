@@ -267,11 +267,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
   }
 
-  public getRandomExternalModelPosition(): Vector2 {
+  /**
+   * Add particleView to correct layer in particleAtomNode.
+   */
+  protected override addParticleView( particle: Particle ): void {
+    this.particleAtomNode.addParticleView( particle );
+  }
+
+  protected override getRandomExternalModelPosition(): Vector2 {
     return this.particleTransform.viewToModelPosition( this.getRandomEscapePosition() );
   }
 
-  public override getParticleAtom(): ParticleAtom {
+  protected override getParticleAtom(): ParticleAtom {
     return this.model.particleAtom;
   }
 
@@ -279,7 +286,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
    */
-  public override emitAlphaParticle(): AlphaParticle {
+  protected override emitAlphaParticle(): AlphaParticle {
     const alphaParticle = super.emitAlphaParticle();
 
     // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
@@ -306,7 +313,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  public override betaDecay( betaDecayType: DecayType ): Particle {
+  protected override betaDecay( betaDecayType: DecayType ): Particle {
     const particleToEmit = super.betaDecay( betaDecayType );
     this.model.addParticle( particleToEmit );
     return particleToEmit;
@@ -319,7 +326,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     return nucleon.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
   }
 
-  public override reset(): void {
+  protected override reset(): void {
     this.symbolAccordionBox.reset();
     this.showElectronCloudBooleanProperty.reset();
     super.reset();
