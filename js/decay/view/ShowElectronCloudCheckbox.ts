@@ -16,29 +16,31 @@ import BANConstants from '../../common/BANConstants.js';
 import Property from '../../../../axon/js/Property.js';
 
 
-const ELECTRON_CLOUD_RADIUS = 18; // empirically determined to be close in size to the 'Electron Cloud' text height
-
 class ShowElectronCloudCheckbox extends Checkbox {
 
   private readonly showElectronCloudBooleanProperty: Property<boolean>;
 
   public constructor( electronCloud: Node ) {
 
-
     // show the electron cloud by default
     const showElectronCloudBooleanProperty = new BooleanProperty( true );
 
     // create and add the electronCloud checkbox
+    const electronCloudText = new Text( BuildANucleusStrings.electronCloudStringProperty, {
+      font: BANConstants.REGULAR_FONT, maxWidth: 210
+    } );
+
+    // Empirically determined ratio based on the text, to give the electron cloud a bit of "umph" as an icon.
+    const electronCloudIconRadius = electronCloudText.height * 0.82;
+
     const content = new HBox( {
       children: [
-        new Text( BuildANucleusStrings.electronCloudStringProperty, {
-          font: BANConstants.REGULAR_FONT, maxWidth: 210
-        } ),
+        electronCloudText,
 
         // electron cloud icon
         new Circle( {
-          radius: ELECTRON_CLOUD_RADIUS,
-          fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( ELECTRON_CLOUD_RADIUS )
+          radius: electronCloudIconRadius,
+          fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( electronCloudIconRadius )
         } )
       ],
       spacing: 5
