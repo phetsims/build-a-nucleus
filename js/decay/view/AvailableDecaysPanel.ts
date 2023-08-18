@@ -72,7 +72,7 @@ class AvailableDecaysPanel extends Panel {
       baseColor: BANColors.availableDecaysInfoButtonColorProperty
     } );
 
-    // function to return the correct enabled derived property for each type of decay
+    // function to return the correct enabled DerivedProperty for each type of decay
     const returnEnabledDecayButtonProperty = ( decayType: DecayType ): TReadOnlyProperty<boolean> => {
       switch( decayType ) {
         case DecayType.NEUTRON_EMISSION:

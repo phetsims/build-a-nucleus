@@ -195,13 +195,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
     this.addChild( this.elementName );
 
-    const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
-    const arrowButtonOptions = {
-      arrowWidth: 14,
-      arrowHeight: 14,
-      fireOnHold: false
-    };
-
     // return if any nuclides exist above, below, or to the left or right of a given nuclide
     const getNextOrPreviousIso = ( direction: string, particleType: ParticleType, protonNumber: number, neutronNumber: number ) => {
 
@@ -318,6 +311,14 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const neutronDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
     const doubleDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
 
+    const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
+    const arrowButtonOptions = {
+      arrowWidth: 14,
+      arrowHeight: 14,
+      fireOnHold: false,
+      touchAreaYDilation: TOUCH_AREA_Y_DILATION
+    };
+
     // function to create the double arrow buttons
     const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): Node => {
       return new DoubleArrowButton( direction,
@@ -327,8 +328,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         merge( {
           leftArrowFill: BANColors.protonColorProperty,
           rightArrowFill: BANColors.neutronColorProperty,
-          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty,
-          touchAreaYDilation: TOUCH_AREA_Y_DILATION
+          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty
         }, arrowButtonOptions )
       );
     };
@@ -361,15 +361,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
       const upArrowButton = new ArrowButton( 'up', () => increaseNucleonNumberListener( nucleonType ),
         merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty,
-            touchAreaYDilation: TOUCH_AREA_Y_DILATION
+            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
           },
           singleArrowButtonOptions )
       );
       const downArrowButton = new ArrowButton( 'down', () => decreaseNucleonNumberListener( nucleonType ),
         merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty,
-            touchAreaYDilation: TOUCH_AREA_Y_DILATION
+            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty
           },
           singleArrowButtonOptions )
       );
