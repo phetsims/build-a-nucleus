@@ -66,12 +66,12 @@ class HalfLifeNumberLineNode extends Node {
   private readonly numberLineLabelFont: PhetFont | undefined;
   private readonly chartTransform: ChartTransform;
   private readonly tickMarkSet: Path;
-  private readonly halfLifeArrowRotationProperty: TProperty<number>;
+  private readonly halfLifeArrowRotationNumberProperty: TProperty<number>;
   private arrowXPositionAnimation: null | Animation;
   private arrowRotationAnimation: null | Animation;
 
   // x position of half-life arrow in model coordinates
-  private readonly arrowXPositionProperty: TProperty<number>;
+  private readonly arrowXPositionNumberProperty: TProperty<number>;
 
   // the half life display node, public for positioning the infoButton
   public readonly halfLifeDisplayNode: VBox;
@@ -141,7 +141,7 @@ class HalfLifeNumberLineNode extends Node {
     const halfLifeArrow = new Node();
     halfLifeArrow.addChild( arrowNode );
 
-    this.arrowXPositionProperty = new NumberProperty( 0 );
+    this.arrowXPositionNumberProperty = new NumberProperty( 0 );
 
     this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
@@ -222,8 +222,8 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeDisplayNode.insertChild( 0, elementName );
     }
 
-    this.halfLifeArrowRotationProperty = new NumberProperty( 0 );
-    Multilink.multilink( [ this.halfLifeArrowRotationProperty ], rotation => {
+    this.halfLifeArrowRotationNumberProperty = new NumberProperty( 0 );
+    Multilink.multilink( [ this.halfLifeArrowRotationNumberProperty ], rotation => {
       halfLifeArrow.rotation = rotation;
     } );
 
@@ -311,7 +311,7 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow
     ];
 
-    Multilink.multilink( [ this.arrowXPositionProperty,
+    Multilink.multilink( [ this.arrowXPositionNumberProperty,
 
       // Cannot listen to the bounds of halfLifeDisplayNode to prevent reentrancy, so instead listen to all potential children changes
       options.elementNameStringProperty,
@@ -369,7 +369,7 @@ class HalfLifeNumberLineNode extends Node {
 
     this.arrowXPositionAnimation = new Animation( {
       to: newXPosition,
-      property: this.arrowXPositionProperty,
+      property: this.arrowXPositionNumberProperty,
       duration: arrowXPositionAnimationDuration,
       easing: Easing.QUADRATIC_IN_OUT
     } );
@@ -387,7 +387,7 @@ class HalfLifeNumberLineNode extends Node {
       // rotate arrow horizontally, pointing right
       this.arrowRotationAnimation = new Animation( {
         to: -Math.PI / 2,
-        property: this.halfLifeArrowRotationProperty,
+        property: this.halfLifeArrowRotationNumberProperty,
         duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );
@@ -405,7 +405,7 @@ class HalfLifeNumberLineNode extends Node {
       // rotate arrow back vertically, pointing down
       this.arrowRotationAnimation = new Animation( {
         to: 0,
-        property: this.halfLifeArrowRotationProperty,
+        property: this.halfLifeArrowRotationNumberProperty,
         duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );

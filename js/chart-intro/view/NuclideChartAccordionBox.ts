@@ -32,7 +32,7 @@ class NuclideChartAccordionBox extends AccordionBox {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
                       decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
-                      showMagicNumbersProperty: TReadOnlyProperty<boolean>,
+                      showMagicNumbersBooleanProperty: TReadOnlyProperty<boolean>,
                       hasIncomingParticlesProperty: TReadOnlyProperty<boolean> ) {
 
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
@@ -42,14 +42,14 @@ class NuclideChartAccordionBox extends AccordionBox {
     const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( protonCountProperty, neutronCountProperty,
       partialChartTransform, {
         nuclideChartNodeOptions: {
-          showMagicNumbersProperty: showMagicNumbersProperty
+          showMagicNumbersBooleanProperty: showMagicNumbersBooleanProperty
         }
       } );
 
     const focusedNuclideChartNode = new FocusedNuclideChartNode( protonCountProperty, neutronCountProperty,
-      focusedChartTransform, showMagicNumbersProperty );
+      focusedChartTransform, showMagicNumbersBooleanProperty );
     const zoomInNuclideChartNode = new ZoomInNuclideChartNode( protonCountProperty, neutronCountProperty,
-      zoomInChartTransform, showMagicNumbersProperty );
+      zoomInChartTransform, showMagicNumbersBooleanProperty );
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
     const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.width / 2 );

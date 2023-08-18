@@ -199,19 +199,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // Whether to show a special highlight for magic-numbered nuclides in the charts
-    const showMagicNumbersProperty = new BooleanProperty( false );
+    const showMagicNumbersBooleanProperty = new BooleanProperty( false );
 
-    const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
-      this.model.particleAtom.neutronCountProperty, periodicTableAndIsotopeSymbol.width,
-      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ),
-      showMagicNumbersProperty, this.model.hasIncomingParticlesProperty );
+    const nuclideChartAccordionBox = new NuclideChartAccordionBox(
+      this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
+      periodicTableAndIsotopeSymbol.width, this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
+      this.decayAtom.bind( this ), showMagicNumbersBooleanProperty, this.model.hasIncomingParticlesProperty );
 
     nuclideChartAccordionBox.top = periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
 
-    const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>( this.model.selectedNuclideChartProperty,
-      [
+    const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>(
+      this.model.selectedNuclideChartProperty, [
         { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() },
         { value: 'zoom', createNode: () => new ZoomInNuclideChartIconNode() }
       ], {
@@ -222,7 +222,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       } );
     this.addChild( partialChartRadioButton );
 
-    const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersProperty,
+    const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersBooleanProperty,
       new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ), {
         boxWidth: 15,
         touchAreaYDilation: 4
