@@ -382,7 +382,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   private createMiniParticleView( particle: Particle ): void {
     const particleView = new ParticleView( particle, this.miniAtomMVT, { inputEnabled: false } );
     this.particleViewMap[ particle.id ] = particleView;
-    this.particleAtomNode.addParticleView( particle, this.particleViewMap );
+    this.particleAtomNode.addParticleView( particle, this.particleViewMap[ particle.id ] );
     particle.disposeEmitter.addListener( () => {
       delete this.particleViewMap[ particle.id ];
 

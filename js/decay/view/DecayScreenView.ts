@@ -269,7 +269,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    * Add particleView to correct layer in particleAtomNode.
    */
   protected override addParticleView( particle: Particle ): void {
-    this.particleAtomNode.addParticleView( particle, this.particleViewMap );
+    this.particleAtomNode.addParticleView( particle, this.particleViewMap[ particle.id ] );
   }
 
   protected override getRandomExternalModelPosition(): Vector2 {

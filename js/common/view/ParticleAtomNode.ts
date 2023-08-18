@@ -17,7 +17,6 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Range from '../../../../dot/js/Range.js';
-import { ParticleViewMap } from './BANScreenView.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -75,8 +74,7 @@ class ParticleAtomNode extends Node {
   /**
    * Add ParticleView for a given particle to the correct nucleonLayer.
    */
-  public addParticleView( particle: Particle, particleViewMap: ParticleViewMap ): void {
-    const particleView = particleViewMap[ particle.id ];
+  public addParticleView( particle: Particle, particleView: ParticleView ): void {
     this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
 
     // Add a listener that adjusts a nucleon's z-order layering.
