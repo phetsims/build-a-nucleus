@@ -454,24 +454,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     } );
     this.addChild( this.resetAllButton );
 
-    const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
-      if ( isUserControlled && this.model.particleAtom.containsParticle( particle ) ) {
-        this.model.particleAtom.removeParticle( particle );
-      }
-
-      if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && !this.model.userControlledProtons.includes( particle ) ) {
-        this.model.userControlledProtons.add( particle );
-      }
-      else if ( !isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && this.model.userControlledProtons.includes( particle ) ) {
-        this.model.userControlledProtons.remove( particle );
-      }
-      else if ( isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString && !this.model.userControlledNeutrons.includes( particle ) ) {
-        this.model.userControlledNeutrons.add( particle );
-      }
-      else if ( !isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString && this.model.userControlledNeutrons.includes( particle ) ) {
-        this.model.userControlledNeutrons.remove( particle );
-      }
-    };
 
     // add ParticleView's to match the model
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
@@ -487,8 +469,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         particle.dragEndedEmitter.addListener( () => { this.dragEndedListener( particle, this.model.particleAtom ); } );
         this.checkIfCreatorNodeShouldBeInvisible( particleType );
       }
-
-      particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
 
       particle.disposeEmitter.addListener( () => {
         delete this.particleViewMap[ particle.id ];

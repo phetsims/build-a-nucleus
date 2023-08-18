@@ -105,6 +105,29 @@ class BANModel<T extends ParticleAtom> {
       ( protonNumber: number, neutronNumber: number ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
     );
 
+    const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
+      if ( isUserControlled && this.particleAtom.containsParticle( particle ) ) {
+        this.particleAtom.removeParticle( particle );
+      }
+
+      if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && !this.userControlledProtons.includes( particle ) ) {
+        this.userControlledProtons.add( particle );
+      }
+      else if ( !isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && this.userControlledProtons.includes( particle ) ) {
+        this.userControlledProtons.remove( particle );
+      }
+      else if ( isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString && !this.userControlledNeutrons.includes( particle ) ) {
+        this.userControlledNeutrons.add( particle );
+      }
+      else if ( !isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString && this.userControlledNeutrons.includes( particle ) ) {
+        this.userControlledNeutrons.remove( particle );
+      }
+    };
+
+    this.particles.addItemAddedListener( particle => {
+      particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
+    } );
+
     // reconfigure the nucleus when the massNumber changes
     this.particleAtom.massNumberProperty.link( () => this.particleAtom.reconfigureNucleus() );
   }
