@@ -7,20 +7,21 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import { DragListener, Node } from '../../../../scenery/js/imports.js';
+import { DragListener, Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import BANScreenView from './BANScreenView.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../model/ParticleType.js';
-import BANModel from '../model/BANModel.js';
 import BANConstants from '../BANConstants.js';
-import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import BANParticle from '../model/BANParticle.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Particle from '../../../../shred/js/model/Particle.js';
 
-class NucleonCreatorNode<T extends ParticleAtom> extends Node {
+class NucleonCreatorNode extends Node {
 
-  public constructor( particleType: ParticleType, screenView: BANScreenView<BANModel<T>>, particleTransform: ModelViewTransform2 ) {
+  public constructor( particleType: ParticleType, getLocalPoint: ( point: Vector2 ) => Vector2,
+                      addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
+                      particleTransform: ModelViewTransform2 ) {
     super();
 
     const targetNode = new ParticleNode( particleType.particleTypeString, BANConstants.PARTICLE_RADIUS );
@@ -30,7 +31,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
     this.addInputListener( DragListener.createForwardingListener( event => {
 
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
-      const viewPosition = screenView.globalToLocalPoint( event.pointer.point );
+      const viewPosition = getLocalPoint( event.pointer.point );
       const particle = new BANParticle( particleType.particleTypeString );
       particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 
@@ -40,7 +41,7 @@ class NucleonCreatorNode<T extends ParticleAtom> extends Node {
       );
 
       // Create and start dragging the new particle
-      screenView.addAndDragParticle( event, particle );
+      addAndDragParticle( event, particle );
     } ) );
   }
 }

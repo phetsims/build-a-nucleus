@@ -422,14 +422,19 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPosition, 1 );
 
+    const addAndDragParticle = this.addAndDragParticle.bind( this );
+    const getLocalPoint = this.globalToLocalPoint.bind( this );
+
     // create and add the NucleonCreatorNode for the protons
-    this.protonsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.PROTON, this, this.particleTransform );
+    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
+      this.particleTransform );
     this.protonsCreatorNode.top = doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
     // create and add the NucleonCreatorNode for the neutrons
-    this.neutronsCreatorNode = new NucleonCreatorNode<ParticleAtom | ParticleNucleus>( ParticleType.NEUTRON, this, this.particleTransform );
+    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
+      this.particleTransform );
     this.neutronsCreatorNode.top = doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
