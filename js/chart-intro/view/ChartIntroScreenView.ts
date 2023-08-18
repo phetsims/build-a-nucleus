@@ -48,7 +48,6 @@ const FADE_ANINIMATION_DURATION = 1; // in seconds
 
 class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
-  private readonly periodicTableAndIsotopeSymbol: PeriodicTableAndIsotopeSymbol;
   private readonly protonEnergyLevelNode: NucleonShellView;
   private readonly neutronEnergyLevelNode: NucleonShellView;
   private readonly energyLevelLayer: Node;
@@ -121,10 +120,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.particleAtomNode.center = particleAtomNodeCenter;
 
     // create and add the periodic table and symbol
-    this.periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
-    this.periodicTableAndIsotopeSymbol.top = this.nucleonNumberPanel.top;
-    this.periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
-    this.addChild( this.periodicTableAndIsotopeSymbol );
+    const periodicTableAndIsotopeSymbol = new PeriodicTableAndIsotopeSymbol( model.particleAtom );
+    periodicTableAndIsotopeSymbol.top = this.nucleonNumberPanel.top;
+    periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
+    this.addChild( periodicTableAndIsotopeSymbol );
 
     this.elementName.boundsProperty.link( () => {
       this.elementName.centerX = this.doubleArrowButtons.centerX;
@@ -149,7 +148,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     textBackground.boundsProperty.link( () => {
       textBackground.centerX = this.doubleArrowButtons.centerX;
-      textBackground.centerY = this.periodicTableAndIsotopeSymbol.bottom + 20;
+      textBackground.centerY = periodicTableAndIsotopeSymbol.bottom + 20;
     } );
     this.addChild( textBackground );
 
@@ -168,7 +167,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // create and add the 'Energy' arrow
     const energyTextDistanceFromArrow = 10;
     const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow, this.protonArrowButtons.top - 30,
-      energyText.right + energyTextDistanceFromArrow, this.periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
+      energyText.right + energyTextDistanceFromArrow, periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
     this.addChild( arrow );
 
     // add energy level node
@@ -193,22 +192,22 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const endRight = this.particleAtomNode.emptyAtomCircle.center.x + ( BANConstants.PARTICLE_DIAMETER );
 
     const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, endLeft,
-      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
+      periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( leftDashedLine );
     const rightDashedLine = new Line( this.neutronEnergyLevelNode.right, arrow.top, endRight,
-      this.periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
+      periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
     // Whether to show a special highlight for magic-numbered nuclides in the charts
     const showMagicNumbersProperty = new BooleanProperty( false );
 
     const nuclideChartAccordionBox = new NuclideChartAccordionBox( this.model.particleAtom.protonCountProperty,
-      this.model.particleAtom.neutronCountProperty, this.periodicTableAndIsotopeSymbol.width,
+      this.model.particleAtom.neutronCountProperty, periodicTableAndIsotopeSymbol.width,
       this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ),
       showMagicNumbersProperty, this.model.hasIncomingParticlesProperty );
 
-    nuclideChartAccordionBox.top = this.periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
-    nuclideChartAccordionBox.left = this.periodicTableAndIsotopeSymbol.left;
+    nuclideChartAccordionBox.top = periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
+    nuclideChartAccordionBox.left = periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
 
     const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>( this.model.selectedNuclideChartProperty,
