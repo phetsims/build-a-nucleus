@@ -159,11 +159,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
 
     // create and add the available decays panel at the center right of the decay screen
-    const availableDecaysPanel = new AvailableDecaysPanel( model, {
-      decayAtom: this.decayAtom.bind( this ),
-      storeNucleonNumbers: storeNucleonNumbers.bind( this ),
-      showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
-    } );
+    const availableDecaysPanel = new AvailableDecaysPanel(
+      model.neutronEmissionEnabledProperty,
+      model.protonEmissionEnabledProperty,
+      model.betaPlusDecayEnabledProperty,
+      model.betaMinusDecayEnabledProperty,
+      model.alphaDecayEnabledProperty, {
+        decayAtom: this.decayAtom.bind( this ),
+        storeNucleonNumbers: storeNucleonNumbers.bind( this ),
+        showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
+      } );
     availableDecaysPanel.right = this.symbolAccordionBox.right;
     availableDecaysPanel.top = this.symbolAccordionBox.bottom + 10;
     this.addChild( availableDecaysPanel );

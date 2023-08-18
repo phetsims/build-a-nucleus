@@ -16,7 +16,6 @@ import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushBut
 import DecayType from '../../common/model/DecayType.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import DecayModel from '../model/DecayModel.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
@@ -52,7 +51,12 @@ class AvailableDecaysPanel extends Panel {
   // map of decayType => {arrayIndex}
   public decayTypeButtonIndexMap: decayTypeButtonIndexType;
 
-  public constructor( model: DecayModel, options: AvailableDecaysPanelOptions ) {
+  public constructor( neutronEmissionEnabledProperty: TReadOnlyProperty<boolean>,
+                      protonEmissionEnabledProperty: TReadOnlyProperty<boolean>,
+                      betaPlusDecayEnabledProperty: TReadOnlyProperty<boolean>,
+                      betaMinusDecayEnabledProperty: TReadOnlyProperty<boolean>,
+                      alphaDecayEnabledProperty: TReadOnlyProperty<boolean>,
+                      options: AvailableDecaysPanelOptions ) {
 
     // create and add the title
     const titleNode = new Text( BuildANucleusStrings.availableDecaysStringProperty, {
@@ -76,18 +80,18 @@ class AvailableDecaysPanel extends Panel {
     const returnEnabledDecayButtonProperty = ( decayType: DecayType ): TReadOnlyProperty<boolean> => {
       switch( decayType ) {
         case DecayType.NEUTRON_EMISSION:
-          return model.neutronEmissionEnabledProperty;
+          return neutronEmissionEnabledProperty;
         case DecayType.PROTON_EMISSION:
-          return model.protonEmissionEnabledProperty;
+          return protonEmissionEnabledProperty;
         case DecayType.BETA_PLUS_DECAY:
-          return model.betaPlusDecayEnabledProperty;
+          return betaPlusDecayEnabledProperty;
         case DecayType.BETA_MINUS_DECAY:
-          return model.betaMinusDecayEnabledProperty;
+          return betaMinusDecayEnabledProperty;
         case DecayType.ALPHA_DECAY:
-          return model.alphaDecayEnabledProperty;
+          return alphaDecayEnabledProperty;
         default:
           assert && assert( false, 'No valid decay type found: ' + decayType );
-          return model.protonEmissionEnabledProperty;
+          return protonEmissionEnabledProperty;
       }
     };
 
