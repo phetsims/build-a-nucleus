@@ -10,7 +10,6 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import { Circle, Color, Node } from '../../../../scenery/js/imports.js';
-import { ParticleViewMap } from './BANScreenView.js';
 import BANConstants from '../BANConstants.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -18,6 +17,7 @@ import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Range from '../../../../dot/js/Range.js';
+import { ParticleViewMap } from './BANScreenView.js';
 
 // empirically determined, from the ElectronCloudView radius
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
@@ -33,9 +33,8 @@ class ParticleAtomNode extends Node {
   private readonly nucleonLayers: Node[];
   private readonly atomCenter: Vector2;
   private readonly protonNumberRange: Range;
-  private readonly particleViewMap: ParticleViewMap;
 
-  public constructor( particleViewMap: ParticleViewMap, atomCenter: Vector2, protonNumberRange: Range ) {
+  public constructor( atomCenter: Vector2, protonNumberRange: Range ) {
 
     // Add the nucleonLayers
     const nucleonLayers: Node[] = [];
@@ -66,7 +65,6 @@ class ParticleAtomNode extends Node {
     this.nucleonLayers = nucleonLayers;
     this.nucleonLayers.reverse(); // Set up the nucleon layers so that layer 0 is in front.
 
-    this.particleViewMap = particleViewMap;
     this.atomCenter = atomCenter;
     this.protonNumberRange = protonNumberRange;
     this.electronCloud = electronCloud;
@@ -77,8 +75,8 @@ class ParticleAtomNode extends Node {
   /**
    * Add ParticleView for a given particle to the correct nucleonLayer.
    */
-  public addParticleView( particle: Particle ): void {
-    const particleView = this.particleViewMap[ particle.id ];
+  public addParticleView( particle: Particle, particleViewMap: ParticleViewMap ): void {
+    const particleView = particleViewMap[ particle.id ];
     this.nucleonLayers[ particle.zLayerProperty.get() ].addChild( particleView );
 
     // Add a listener that adjusts a nucleon's z-order layering.

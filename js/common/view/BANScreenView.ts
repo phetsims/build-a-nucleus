@@ -514,7 +514,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.dispose();
     } );
 
-    this.particleAtomNode = new ParticleAtomNode( this.particleViewMap, atomCenter, this.model.protonNumberRange );
+    this.particleAtomNode = new ParticleAtomNode( atomCenter, this.model.protonNumberRange );
 
     // for use in positioning
     this.doubleArrowButtons = doubleArrowButtons;
