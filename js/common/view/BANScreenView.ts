@@ -107,15 +107,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.particleViewMap = {};
 
-    this.nucleonNumberPanel = new NucleonNumberPanel( model.particleAtom.protonCountProperty, model.protonNumberRange,
-      model.particleAtom.neutronCountProperty, model.neutronNumberRange );
+    this.nucleonNumberPanel = new NucleonNumberPanel( this.model.particleAtom.protonCountProperty, this.model.protonNumberRange,
+      this.model.particleAtom.neutronCountProperty, this.model.neutronNumberRange );
     this.nucleonNumberPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.nucleonNumberPanel );
 
     this.elementNameStringProperty = new DerivedStringProperty( [
-      model.particleAtom.protonCountProperty,
-      model.particleAtom.neutronCountProperty,
-      model.doesNuclideExistBooleanProperty,
+      this.model.particleAtom.protonCountProperty,
+      this.model.particleAtom.neutronCountProperty,
+      this.model.doesNuclideExistBooleanProperty,
 
       // We need to update whenever any of these strings change, to support Dynamic Locale
       BuildANucleusStrings.nameMassPatternStringProperty,
@@ -223,20 +223,20 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
         // proton up arrow
         if ( particleType === ParticleType.PROTON ) {
-          return protonNumber !== model.protonNumberRange.max;
+          return protonNumber !== this.model.protonNumberRange.max;
         }
 
         // neutron up arrow
-        return neutronNumber !== model.neutronNumberRange.max;
+        return neutronNumber !== this.model.neutronNumberRange.max;
       }
 
       // proton down arrow
       if ( particleType === ParticleType.PROTON ) {
-        return protonNumber !== model.protonNumberRange.min;
+        return protonNumber !== this.model.protonNumberRange.min;
       }
 
       // neutron down arrow
-      return neutronNumber !== model.neutronNumberRange.min;
+      return neutronNumber !== this.model.neutronNumberRange.min;
     };
 
     // enable or disable the creator node and adjust the opacity accordingly
@@ -249,9 +249,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // function to create the arrow enabled properties
     const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
-      return new DerivedProperty( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty,
-          model.incomingProtons.lengthProperty, model.incomingNeutrons.lengthProperty, model.userControlledProtons.lengthProperty,
-          model.userControlledNeutrons.lengthProperty ],
+      return new DerivedProperty( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
+          this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty, this.model.userControlledProtons.lengthProperty,
+          this.model.userControlledNeutrons.lengthProperty ],
         ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
           userControlledProtonNumber, userControlledNeutronNumber ) => {
 
@@ -261,7 +261,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
           // disable all arrow buttons if the nuclide does not exist
           if ( !AtomIdentifier.doesExist( protonNumber, neutronNumber ) &&
-               ( model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonNumber !== 0 ) ) {
+               ( this.model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonNumber !== 0 ) ) {
             toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
             toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
             return false;
@@ -391,7 +391,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       const arrowButtonsChildren = arrowButtons.getChildren() as ArrowButton[];
       arrowButtonsChildren.forEach( arrowButton => {
         arrowButton.addListener( () => {
-          model.doubleArrowButtonClickedBooleanProperty.value = isDoubleArrowButton;
+          this.model.doubleArrowButtonClickedBooleanProperty.value = isDoubleArrowButton;
         } );
       } );
     };
@@ -442,7 +442,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
-        model.reset();
+        this.model.reset();
         this.reset();
         assert && assert( Object.keys( this.particleViewMap ).length === 0, 'all views should be cleaned up on reset' );
       },
@@ -492,7 +492,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.protonArrowButtons = protonArrowButtons;
 
     // update the cloud size as the massNumber changes
-    model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
+    this.model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
 
     this.pdomPlayAreaNode.pdomOrder = [
       protonArrowButtons,
