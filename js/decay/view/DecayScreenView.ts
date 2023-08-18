@@ -40,8 +40,6 @@ export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView<DecayModel> {
 
-  private readonly stabilityIndicator: Text;
-
   // the symbol node in an accordion box
   private readonly symbolAccordionBox: AccordionBox;
 
@@ -209,16 +207,16 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( showElectronCloudCheckbox );
 
     // create and add stability indicator
-    this.stabilityIndicator = new Text( '', {
+    const stabilityIndicator = new Text( '', {
       font: BANConstants.REGULAR_FONT,
       fill: 'black',
       visible: true,
       maxWidth: 225
     } );
-    this.stabilityIndicator.boundsProperty.link( () => {
-      this.stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
+    stabilityIndicator.boundsProperty.link( () => {
+      stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
     } );
-    this.addChild( this.stabilityIndicator );
+    this.addChild( stabilityIndicator );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );
@@ -227,14 +225,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     const updateStabilityIndicator = ( protonNumber: number, neutronNumber: number ) => {
       if ( protonNumber > 0 ) {
         if ( AtomIdentifier.isStable( protonNumber, neutronNumber ) ) {
-          this.stabilityIndicator.stringProperty = BuildANucleusStrings.stableStringProperty;
+          stabilityIndicator.stringProperty = BuildANucleusStrings.stableStringProperty;
         }
         else {
-          this.stabilityIndicator.stringProperty = BuildANucleusStrings.unstableStringProperty;
+          stabilityIndicator.stringProperty = BuildANucleusStrings.unstableStringProperty;
         }
       }
       else {
-        this.stabilityIndicator.string = '';
+        stabilityIndicator.string = '';
       }
     };
 
@@ -243,14 +241,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       ( protonNumber: number, neutronNumber: number ) => updateStabilityIndicator( protonNumber, neutronNumber )
     );
     const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
-      this.stabilityIndicator.visible = visible;
+      stabilityIndicator.visible = visible;
     };
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
     this.elementName.boundsProperty.link( () => {
 
       // place the elementName a bit below the stabilityIndicator
-      this.elementName.center = this.stabilityIndicator.center.plusXY( 0, 60 );
+      this.elementName.center = stabilityIndicator.center.plusXY( 0, 60 );
     } );
     this.nucleonNumberPanel.left = availableDecaysPanel.left;
 
