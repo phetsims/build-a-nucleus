@@ -48,6 +48,8 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
  * Creates the icon for this screen.
  */
 function createScreenIcon(): ScreenIcon {
+
+  // We know the ALPHA_DECAY type is a valid decay so null won't be returned
   const iconNode = new FlowBox( { children: [ IconFactory.createDecayIcon( DecayType.ALPHA_DECAY )! ], margin: 3 } );
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,

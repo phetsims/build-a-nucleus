@@ -131,6 +131,8 @@ class AvailableDecaysPanel extends Panel {
       return new HBox( {
         children: [
           createDecayButton( decayType ),
+
+          // createDecayButtonAndIcon is called when looping through the DecayType enumeration values so null won't be returned
           IconFactory.createDecayIcon( decayType )!
         ],
         spacing: SPACING * 1.5, // empirically determined

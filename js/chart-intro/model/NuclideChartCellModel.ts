@@ -20,8 +20,9 @@ class NuclideChartCellModel {
 
   // Null could be that it is stable or has an unknown decay type, see NuclideChartCellModel.isStable to differentiate.
   public readonly decayType: DecayType | null;
-  public readonly colorProperty: ColorProperty;
   public readonly decayTypeLikelihoodPercent: number | null;
+
+  public readonly colorProperty: ColorProperty;
   public readonly isStable: boolean;
 
   public constructor( protonNumber: number, neutronNumber: number ) {

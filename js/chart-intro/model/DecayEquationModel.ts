@@ -17,6 +17,7 @@ import Utils from '../../../../dot/js/Utils.js';
 
 class DecayEquationModel {
 
+  // the final mass and final proton number of a nuclide after a decay is done
   public readonly finalProtonNumberProperty: Property<number>;
   public readonly finalMassNumberProperty: Property<number>;
 
@@ -33,6 +34,7 @@ class DecayEquationModel {
     this.finalMassNumberProperty = new NumberProperty( 0,
       { validValues: Utils.rangeInclusive( 0, BANConstants.CHART_MAX_NUMBER_OF_PROTONS + BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ) } );
 
+    // update the finalProtonNumber, finalMassNumber, and the currentCellModel
     massNumberProperty.link( () => {
       const currentCell = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
 

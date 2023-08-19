@@ -40,13 +40,17 @@ const POPULATED_CELLS = [
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
+  // the atom that the user will build, modify, and generally play with.
   public readonly particleNucleus: ParticleNucleus;
+
+  // the non-interactive mini-nucleus at the top of the screen
   public readonly miniParticleAtom: ParticleAtom;
-  public readonly selectedNuclideChartProperty: Property<SelectedChartType>;
 
   // There's not an entry for all the neutron values, see POPULATED_CELLS
   public static cellModelArray = POPULATED_CELLS.map( ( neutronNumberList, protonNumber ) => neutronNumberList.map( neutronNumber => new NuclideChartCellModel( protonNumber, neutronNumber ) ) );
+
   public readonly decayEquationModel: DecayEquationModel;
+  public readonly selectedNuclideChartProperty: Property<SelectedChartType>;
 
   public constructor() {
 
@@ -66,7 +70,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   }
 
   /**
-   * Create model for particle in mini-nucleus.
+   * Create model for particle in mini-nucleus and add it to the miniParticleAtom.
    */
   public createMiniParticleModel( particleType: ParticleType ): Particle {
     const particle = new BANParticle( particleType.particleTypeString );
@@ -120,6 +124,8 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    */
   public override step( dt: number ): void {
     super.step( dt );
+
+    // step the miniParticleAtom nucleons
     this.miniParticleAtom.protons.forEach( particle => {
       assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
       assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
