@@ -49,8 +49,8 @@ type SelfOptions = {
   particleViewPosition?: Vector2;
 };
 export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
-export type ParticleViewMap = Record<number, ParticleView>;
 
+export type ParticleViewMap = Record<number, ParticleView>;
 type ParticleTypeInfo = {
   maxNumber: number;
   creatorNode: Node;
@@ -64,14 +64,16 @@ const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
 abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>> extends ScreenView {
 
   protected model: M;
-  private timeSinceCountdownStarted: number;
-  private previousProtonNumber: number;
-  private previousNeutronNumber: number;
+  private previousProtonNumber = 0;
+  private previousNeutronNumber = 0;
   protected readonly resetAllButton: Node;
   protected readonly nucleonNumberPanel: Node;
 
+  // the time since the step() count has started
+  private timeSinceCountdownStarted = 0;
+
   // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
-  protected readonly particleViewMap: ParticleViewMap;
+  protected readonly particleViewMap: ParticleViewMap = {};
 
   // the NucleonCreatorNode for the protons and neutrons
   protected readonly protonsCreatorNode: Node;
@@ -80,8 +82,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   private readonly protonsCreatorNodeModelCenter: Vector2;
   private readonly neutronsCreatorNodeModelCenter: Vector2;
 
+  // the spinner buttons
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
+
   protected readonly elementName: Text;
 
   // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
@@ -89,6 +93,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
   // The view for the ParticleAtom, the cluster of nucleons in Decay screen and the mini-atom in the Chart Intro screen.
   protected readonly particleAtomNode: ParticleAtomNode;
+
+  // MVT for dragging particle's, setting particle's positions, and positioning energy levels and DecayScreen particleAtom center
   protected readonly particleTransform: ModelViewTransform2;
 
   protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
@@ -101,12 +107,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     super( options );
 
     this.model = model;
-    this.timeSinceCountdownStarted = 0;
-    this.previousProtonNumber = 0;
-    this.previousNeutronNumber = 0;
 
-    this.particleViewMap = {};
-
+    // create and add the NucleonNumberPanel
     this.nucleonNumberPanel = new NucleonNumberPanel( this.model.particleAtom.protonCountProperty, this.model.protonNumberRange,
       this.model.particleAtom.neutronCountProperty, this.model.neutronNumberRange );
     this.nucleonNumberPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
@@ -131,7 +133,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       const massNumberString = massNumber.toString();
 
-      const nameMass = StringUtils.fillIn( BuildANucleusStrings.nameMassPatternStringProperty, {
+      const nameMassString = StringUtils.fillIn( BuildANucleusStrings.nameMassPatternStringProperty, {
         name: name,
         mass: massNumberString
       } );
@@ -139,8 +141,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
       if ( !doesNuclideExist && massNumber !== 0 ) {
 
-        // no protons
         if ( name.length === 0 ) {
+          // no protons
           name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
             mass: massNumberString,
             particleType: BuildANucleusStrings.neutronsLowercaseStringProperty,
@@ -149,31 +151,28 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         }
         else {
           name = StringUtils.fillIn( BuildANucleusStrings.elementDoesNotFormPatternStringProperty, {
-            nameMass: nameMass,
+            nameMass: nameMassString,
             doesNotForm: BuildANucleusStrings.doesNotFormStringProperty
           } );
         }
       }
-
-      // no protons
       else if ( name.length === 0 ) {
+        // no protons
 
-        // no neutrons
         if ( neutronNumber === 0 ) {
+          // no neutrons
           name = '';
         }
-
-        // only one neutron
         else if ( neutronNumber === 1 ) {
+          // only one neutron
           name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
             mass: neutronNumber,
             particleType: BuildANucleusStrings.neutronLowercaseStringProperty,
             doesNotForm: ''
           } );
         }
-
-        // multiple neutrons
         else {
+          // multiple neutrons
           name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
             neutronNumber: neutronNumber
           } );
@@ -181,12 +180,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       }
       else {
-        name = nameMass;
+        name = nameMassString;
       }
       return name;
     } );
 
-    // Create the textual readout for the element name.
+    // Create and add the textual readout for the element name.
     this.elementName = new Text( this.elementNameStringProperty, {
       font: BANConstants.REGULAR_FONT,
       fill: Color.RED,
@@ -250,23 +249,24 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // function to create the arrow enabled properties
     const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
       return new DerivedProperty( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-          this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty, this.model.userControlledProtons.lengthProperty,
-          this.model.userControlledNeutrons.lengthProperty ],
+          this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
+          this.model.userControlledProtons.lengthProperty, this.model.userControlledNeutrons.lengthProperty ],
         ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
           userControlledProtonNumber, userControlledNeutronNumber ) => {
 
           const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
           const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
           const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
+          const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
 
-          // disable all arrow buttons if the nuclide does not exist
-          if ( !AtomIdentifier.doesExist( protonNumber, neutronNumber ) &&
+          if ( !doesNuclideExist &&
                ( this.model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonNumber !== 0 ) ) {
+
+            // disable all arrow buttons if the nuclide does not exist
             toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
             toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
             return false;
           }
-
           else {
             toggleCreatorNodeEnabled( this.protonsCreatorNode, true );
             toggleCreatorNodeEnabled( this.neutronsCreatorNode, true );
@@ -310,6 +310,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const neutronDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
     const doubleDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
 
+    // arrow buttons spacing and size options
     const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
     const arrowButtonOptions = {
       arrowWidth: 14,
@@ -332,7 +333,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       );
     };
 
-    // create the double arrow buttons
+    // create and add the double arrow buttons
     const doubleArrowButtons = new VBox( {
       children: [ createDoubleArrowButtons( 'up' ), createDoubleArrowButtons( 'down' ) ],
       spacing: arrowButtonSpacing
@@ -376,7 +377,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       } );
     };
 
-    // create the single arrow buttons
+    // create and add the single arrow buttons
     const protonArrowButtons = createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
     protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     protonArrowButtons.right = doubleArrowButtons.left - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
@@ -409,7 +410,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
     } );
     this.addChild( protonsLabel );
-
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, nucleonLabelTextOptions );
     neutronsLabel.boundsProperty.link( () => {
       neutronsLabel.bottom = doubleArrowButtons.bottom;
@@ -480,11 +480,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       } );
     } );
 
-    // remove ParticleView's to match the model
+    // remove ParticleView's to match the model. Dispose emitter deals with the view portion.
     this.model.particles.addItemRemovedListener( ( particle: Particle ) => {
       particle.dispose();
     } );
 
+    // create the particleAtomNode but add it in subclasses so particles are in top layer
     this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
 
     // for use in positioning
@@ -730,6 +731,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const neutronNumber = this.model.particleAtom.neutronCountProperty.value;
 
     if ( !this.model.doesNuclideExistBooleanProperty.value ) {
+
+      // start countdown to show the nuclide that does not exist for {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
       this.timeSinceCountdownStarted += dt;
     }
     else {
@@ -749,16 +752,16 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.returnParticleToStack( ParticleType.NEUTRON );
         this.returnParticleToStack( ParticleType.PROTON );
       }
-
-      // the neutronNumber increased to create a nuclide that does not exist, so return a neutron to the stack
       else if ( this.previousNeutronNumber < neutronNumber &&
                 AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber ) ) {
+
+        // the neutronNumber increased to create a nuclide that does not exist, so return a neutron to the stack
         this.returnParticleToStack( ParticleType.NEUTRON );
       }
-
-      // the protonNumber increased to create a nuclide that does not exist, so return a proton to the stack
       else if ( this.previousProtonNumber < protonNumber &&
                 AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber ) ) {
+
+        // the protonNumber increased to create a nuclide that does not exist, so return a proton to the stack
         this.returnParticleToStack( ParticleType.PROTON );
       }
       else {
@@ -792,13 +795,17 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     ) {
       atom.addParticle( nucleon );
     }
-
-    // only animate the removal of a nucleon if it was dragged out of the creator node
     else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
+
+      // only animate the removal of a nucleon if it was dragged out of the creator node
       this.animateAndRemoveParticle( nucleon, this.particleTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
 
+  /**
+   * Returns if a nucleon is in the capture area which is in a certain radius around the atom in the Decay Screen, and
+   * the energy level area in the Chart Screen.
+   */
   protected abstract isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean;
 
   /**
@@ -873,6 +880,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   protected abstract getRandomExternalModelPosition(): Vector2;
 
+  /**
+   * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
+   * particle out of view.
+   */
   protected emitAlphaParticle(): AlphaParticle {
     const particleAtom = this.getParticleAtom();
     assert && assert( this.model.particleAtom.protonCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_PROTONS &&
@@ -907,6 +918,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     return alphaParticle;
   }
 
+  /**
+   * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
+   */
   protected betaDecay( betaDecayType: DecayType ): Particle {
     const particleAtom = this.getParticleAtom();
     let particleArray;

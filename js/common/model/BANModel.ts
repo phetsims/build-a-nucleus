@@ -13,7 +13,6 @@ import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import TProperty from '../../../../axon/js/TProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from './ParticleType.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -43,23 +42,23 @@ class BANModel<T extends ParticleAtom> {
   public readonly neutronNumberRange: Range;
 
   // array of particles sent to the nucleus but not there yet
-  public readonly incomingProtons: ObservableArray<BANParticle>;
-  public readonly incomingNeutrons: ObservableArray<BANParticle>;
+  public readonly incomingProtons = createObservableArray<BANParticle>();
+  public readonly incomingNeutrons = createObservableArray<BANParticle>();
 
   // If there are any incoming particles currently
   public readonly hasIncomingParticlesProperty: TReadOnlyProperty<boolean>;
 
   // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
-  public readonly doubleArrowButtonClickedBooleanProperty: TProperty<boolean>;
+  public readonly doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
   // keep track of any particle related animations that may need to be cancelled at some point
-  public readonly particleAnimations: ObservableArray<Animation | null>;
+  public readonly particleAnimations = createObservableArray<Animation | null>();
 
-  public readonly userControlledProtons: ObservableArray<BANParticle>;
-  public readonly userControlledNeutrons: ObservableArray<BANParticle>;
+  public readonly userControlledProtons = createObservableArray<BANParticle>();
+  public readonly userControlledNeutrons = createObservableArray<BANParticle>();
 
   // array of all emitted particles, this helps keep track of particles that are no longer "counted" in the atom
-  public readonly outgoingParticles: ObservableArray<BANParticle>;
+  public readonly outgoingParticles = createObservableArray<BANParticle>();
 
   protected constructor( maximumProtonNumber: number, maximumNeutronNumber: number, particleAtom: T ) {
 
@@ -72,37 +71,26 @@ class BANModel<T extends ParticleAtom> {
       hasListenerOrderDependencies: true
     } );
 
-    this.incomingProtons = createObservableArray();
-    this.incomingNeutrons = createObservableArray();
-
     this.hasIncomingParticlesProperty = new DerivedProperty( [
       this.incomingProtons.lengthProperty,
       this.incomingNeutrons.lengthProperty
     ], ( protonsLength, neutronsLength ) => protonsLength > 0 || neutronsLength > 0 );
 
-    this.userControlledProtons = createObservableArray();
-    this.userControlledNeutrons = createObservableArray();
-
-    this.outgoingParticles = createObservableArray();
-
-    this.particleAnimations = createObservableArray();
     this.particleAnimations.addItemRemovedListener( animation => {
       animation && animation.stop();
     } );
-
-    this.doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
     this.protonNumberRange = new Range( BANConstants.CHART_MIN, maximumProtonNumber );
     this.neutronNumberRange = new Range( BANConstants.CHART_MIN, maximumNeutronNumber );
 
     // the stability of the nuclide is determined by the given number of protons and neutrons
     this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) => AtomIdentifier.isStable( protonNumber, neutronNumber )
+      ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber )
     );
 
     // if a nuclide with a given number of protons and neutrons exists
     this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
+      ( protonNumber, neutronNumber ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
     );
 
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {

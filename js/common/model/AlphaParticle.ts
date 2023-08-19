@@ -15,14 +15,15 @@ import Easing from '../../../../twixt/js/Easing.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 
 class AlphaParticle extends ParticleAtom {
-  public velocity: number;
+
+  // for use in distance calculations
+  public velocity = 0;
+
   public static readonly NUMBER_OF_ALLOWED_PROTONS = 2;
   public static readonly NUMBER_OF_ALLOWED_NEUTRONS = 2;
 
   public constructor() {
     super();
-
-    this.velocity = 0;
   }
 
   /**
@@ -43,6 +44,7 @@ class AlphaParticle extends ParticleAtom {
       easing: Easing.LINEAR
     } );
 
+    // remove all particles individually from the model
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       this.neutrons.forEach( neutron => {
         removeParticle( neutron );

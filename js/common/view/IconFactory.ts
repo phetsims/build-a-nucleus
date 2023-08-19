@@ -75,7 +75,7 @@ class IconFactory {
   }
 
   /**
-   * Function to create a right-pointing arrow.
+   * Function to create a right-pointing arrow
    */
   public static createDecayArrowNode( fillColor: TColor ): Node {
     return new ArrowNode( 0, 0, 20, 0, {
@@ -86,6 +86,9 @@ class IconFactory {
     } );
   }
 
+  /**
+   * Function to create a plus '+' symbol node
+   */
   public static createPlusNode( fillColor: TColor ): Node {
     return new PlusNode( { fill: fillColor, size: new Dimension2( 9, 2 ) } );
   }

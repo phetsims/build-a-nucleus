@@ -333,7 +333,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   /**
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
-   * particle out of view.
+   * particle out of view. Also animates the decay in the NucleonShellView (fading out the nucleons).
    */
   protected override emitAlphaParticle(): AlphaParticle {
     this.isMiniAtomConnected = false;

@@ -20,6 +20,7 @@ import Range from '../../../../dot/js/Range.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 // types
 type NucleonLabel = {
@@ -45,6 +46,7 @@ class NucleonNumberPanel extends Panel {
     const nucleonLabel = ( nucleonStringProperty: TReadOnlyProperty<string>, nucleonType: ParticleType,
                            nucleonCountProperty: TReadOnlyProperty<number>, nucleonNumberRange: Range ): NucleonLabel => {
 
+      // nucleon title and icon pair
       const nucleonTitle = new Text( nucleonStringProperty, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
       const nucleonParticleNode = new ParticleNode( nucleonType.particleTypeString, NUCLEON_PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
@@ -65,7 +67,9 @@ class NucleonNumberPanel extends Panel {
       newNucleonNumberDisplay.right = panelContents.right;
       panelContents.addChild( newNucleonNumberDisplay );
 
-      const oldNucleonNumberProperty = new NumberProperty( nucleonCountProperty.value );
+      const oldNucleonNumberProperty = new NumberProperty( nucleonCountProperty.value, {
+        validValues: Utils.rangeInclusive( nucleonNumberRange.min, nucleonNumberRange.max )
+      } );
 
       // shows the old value of nucleonCountProperty
       const oldNucleonNumberDisplay = new NumberDisplay( oldNucleonNumberProperty, nucleonNumberRange, {
