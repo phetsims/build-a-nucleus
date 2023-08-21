@@ -9,7 +9,6 @@
 import { Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import BANColors from '../../common/BANColors.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/model/ParticleType.js';
@@ -17,22 +16,21 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import { FIRST_LEVEL_CAPACITY, ParticleShellPosition, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
 import EnergyLevelType from '../model/EnergyLevelType.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 type EnergyLevelNodeOptions = EmptySelfOptions & NodeOptions;
 
 class NucleonShellView extends Node {
-  private modelViewTransform: ModelViewTransform2;
 
   public constructor( particleType: ParticleType, nucleonShellPositions: ParticleShellPosition[][],
-                      nucleonCountProperty: TReadOnlyProperty<number>, providedOptions?: EnergyLevelNodeOptions ) {
+                      nucleonCountProperty: TReadOnlyProperty<number>, modelViewTransform: ModelViewTransform2,
+                      providedOptions?: EnergyLevelNodeOptions ) {
 
     assert && assert( particleType === ParticleType.NEUTRON || particleType === ParticleType.PROTON,
       'only protons and neutrons supported in NucleonShellView' );
 
     const options = optionize<EnergyLevelNodeOptions, EmptySelfOptions, NodeOptions>()( {}, providedOptions );
     super( options );
-
-    this.modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
     // Color when the layer is completely empty
     const emptyLayerColor = BANColors.zeroNucleonsEnergyLevelColorProperty.value;
@@ -46,17 +44,15 @@ class NucleonShellView extends Node {
     const energyLevels: Line[] = [];
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
 
+      // the first energy level begins at xPosition 2 instead of 0, for more information see ALLOWED_PARTICLE_POSITIONS
       const lineStartingPoint = new Vector2(
+        modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
+        modelViewTransform.modelToViewY( energyLevel ) );
 
-        // the first energy level begins at xPosition 2 instead of 0, for more information see ALLOWED_PARTICLE_POSITIONS
-        this.modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
-        this.modelViewTransform.modelToViewY( energyLevel ) );
-
+      // add the particle diameter to extend the energyLevel to the right edge of the last particle
       const lineEndingPoint = new Vector2(
-
-        // add the particle diameter to extend the energyLevel to the right edge of the last particle
-        this.modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_DIAMETER,
-        this.modelViewTransform.modelToViewY( energyLevel ) );
+        modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_DIAMETER,
+        modelViewTransform.modelToViewY( energyLevel ) );
       energyLevels.push( new Line( lineStartingPoint, lineEndingPoint, { stroke: 'black' } )
       );
     } );

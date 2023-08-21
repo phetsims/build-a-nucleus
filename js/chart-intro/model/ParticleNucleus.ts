@@ -49,7 +49,7 @@ class ParticleNucleus extends ParticleAtom {
   public readonly neutronShellPositions: ParticleShellPosition[][] = [ [], [], [] ];
 
   // positions particles on the energy levels
-  private readonly modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
+  public readonly modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
   // keep track of bound levels
   private readonly protonsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
@@ -222,14 +222,16 @@ class ParticleNucleus extends ParticleAtom {
                         index < ( FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) ? EnergyLevelType.FIRST.yPosition :
                         EnergyLevelType.SECOND.yPosition;
 
-                                // the first level begins at xPosition 2, see ALLOWED_PARTICLE_POSITIONS
-      const xPosition = yPosition === EnergyLevelType.NONE.yPosition ? index + 2 :
+      const xPosition =
 
-                        // the second level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-                        yPosition === EnergyLevelType.FIRST.yPosition ? index - FIRST_LEVEL_CAPACITY :
+        // the first level begins at xPosition 2, see ALLOWED_PARTICLE_POSITIONS
+        yPosition === EnergyLevelType.NONE.yPosition ? index + 2 :
 
-                        // the third level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-                        index - ( FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY );
+          // the second level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
+        yPosition === EnergyLevelType.FIRST.yPosition ? index - FIRST_LEVEL_CAPACITY :
+
+          // the third level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
+        index - ( FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY );
 
       // last level (yPosition === 2) never bounds so don't need levelIndex condition for it
       const levelIndex = yPosition === EnergyLevelType.NONE.yPosition ? index : index - FIRST_LEVEL_CAPACITY;
