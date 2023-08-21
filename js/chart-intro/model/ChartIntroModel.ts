@@ -140,13 +140,6 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     // count it in a shell position).
     this.particleAtom.removeParticleFromShell && this.particleAtom.removeParticleFromShell( particle );
   }
-
-  /**
-   * Return the model of the cluster of mini-particles.
-   */
-  public override getParticleAtom(): ParticleAtom {
-    return this.miniParticleAtom;
-  }
 }
 
 buildANucleus.register( 'ChartIntroModel', ChartIntroModel );

@@ -348,7 +348,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.isMiniAtomConnected = false;
 
     // animate mini particle atom
-    const alphaParticle = super.emitAlphaParticle();
+    const alphaParticle = super.emitAlphaParticle( this.model.miniParticleAtom );
     this.model.miniParticleAtom.reconfigureNucleus();
 
     // animate nucleons in NucleonShellView
@@ -368,7 +368,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // animate mini particleAtom
     const nucleonTypeToChange = betaDecayType === DecayType.BETA_MINUS_DECAY ? ParticleType.NEUTRON : ParticleType.PROTON;
-    const particleToEmit = super.betaDecay( betaDecayType );
+    const particleToEmit = super.betaDecay( betaDecayType, this.model.miniParticleAtom );
     this.createMiniParticleView( particleToEmit );
 
     // animate the shell view

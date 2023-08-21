@@ -583,8 +583,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.removeParticle( particle );
     }
     else {
-      // Remove particles flying away from the mini-nucleus. Dispose emitter deals with the view portion.
-      assert && assert( !this.model.getParticleAtom().containsParticle( particle ), 'Particle is a decaying particle so it should not be a part of the miniParticleAtom.' );
       particle.dispose();
     }
   }
@@ -759,8 +757,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
    * particle out of view.
    */
-  protected emitAlphaParticle(): AlphaParticle {
-    const particleAtom = this.model.getParticleAtom();
+  protected emitAlphaParticle( particleAtom: ParticleAtom = this.model.particleAtom ): AlphaParticle {
     assert && assert( this.model.particleAtom.protonCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_PROTONS &&
     this.model.particleAtom.neutronCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
@@ -796,8 +793,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  protected betaDecay( betaDecayType: DecayType ): Particle {
-    const particleAtom = this.model.getParticleAtom();
+  protected betaDecay( betaDecayType: DecayType, particleAtom: ParticleAtom = this.model.particleAtom ): Particle {
+    console.log( particleAtom );
     let particleArray;
     let particleToEmit: Particle;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
