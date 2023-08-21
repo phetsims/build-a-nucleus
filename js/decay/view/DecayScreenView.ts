@@ -104,8 +104,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       iconOptions: { scale: 0.7 },
       listener: () => {
         undoDecayButton.visible = false;
-        restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
-        restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
+        this.restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
+        this.restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
 
         // remove all particles in the outgoingParticles array from the particles array
         this.model.outgoingParticles.forEach( particle => {
@@ -120,29 +120,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     } );
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
-
-    // restore the particleAtom to have the nucleon numbers before a decay occurred
-    const restorePreviousNucleonNumber = ( particleType: ParticleType, oldNucleonNumber: number ) => {
-      const newNucleonNumber = particleType === ParticleType.PROTON ?
-                               this.model.particleAtom.protonCountProperty.value :
-                               this.model.particleAtom.neutronCountProperty.value;
-      const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
-
-      for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
-        if ( nucleonNumberDifference > 0 ) {
-          this.model.addNucleonImmediatelyToAtom( particleType );
-        }
-        else if ( nucleonNumberDifference < 0 ) {
-          removeNucleonImmediatelyFromAtom( particleType );
-        }
-      }
-    };
-
-    // remove a nucleon of a given particleType from the atom immediately
-    const removeNucleonImmediatelyFromAtom = ( particleType: ParticleType ) => {
-      const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
-      this.animateAndRemoveParticle( particleToRemove );
-    };
 
     // show the undoDecayButton
     const showAndRepositionUndoDecayButton = ( decayType: string ) => {
@@ -313,6 +290,29 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   protected override isNucleonInCaptureArea( nucleon: Particle, atomPositionProperty: TReadOnlyProperty<Vector2> ): boolean {
     return nucleon.positionProperty.value.distance( atomPositionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
+  }
+
+  // restore the particleAtom to have the nucleon numbers before a decay occurred
+  private restorePreviousNucleonNumber( particleType: ParticleType, oldNucleonNumber: number ): void {
+    const newNucleonNumber = particleType === ParticleType.PROTON ?
+                             this.model.particleAtom.protonCountProperty.value :
+                             this.model.particleAtom.neutronCountProperty.value;
+    const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
+
+    for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
+      if ( nucleonNumberDifference > 0 ) {
+        this.model.addNucleonImmediatelyToAtom( particleType );
+      }
+      else if ( nucleonNumberDifference < 0 ) {
+        this.removeNucleonImmediatelyFromAtom( particleType );
+      }
+    }
+  }
+
+  // remove a nucleon of a given particleType from the atom immediately
+  private removeNucleonImmediatelyFromAtom( particleType: ParticleType ): void {
+    const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
+    this.animateAndRemoveParticle( particleToRemove );
   }
 
   protected override reset(): void {
