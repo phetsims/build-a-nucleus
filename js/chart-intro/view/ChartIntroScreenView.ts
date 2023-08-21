@@ -34,10 +34,10 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import FullChartDialog from './FullChartDialog.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import TinyProperty from '../../../../axon/js/TinyProperty.js';
+import NuclearShellModelText from './NuclearShellModelText.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -133,24 +133,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     } );
     this.nucleonNumberPanel.left = this.layoutBounds.left + 20;
 
-    // create and add the 'Nuclear Shell Model' title and background
-    const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, {
-      font: BANConstants.REGULAR_FONT,
-      maxWidth: 220
+    const nuclearShellModelText = new NuclearShellModelText();
+    nuclearShellModelText.boundsProperty.link( () => {
+      nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
+      nuclearShellModelText.centerY = periodicTableAndIsotopeSymbol.bottom + 20;
     } );
-    const textBackground = new BackgroundNode( nuclearShellModelText, {
-      xMargin: 15,
-      yMargin: 5,
-      rectangleOptions: {
-        fill: BANColors.shellModelTextHighlightColorProperty,
-        cornerRadius: 10
-      }
-    } );
-    textBackground.boundsProperty.link( () => {
-      textBackground.centerX = this.doubleArrowButtons.centerX;
-      textBackground.centerY = periodicTableAndIsotopeSymbol.bottom + 20;
-    } );
-    this.addChild( textBackground );
+    this.addChild( nuclearShellModelText );
 
     // create and add the 'Energy' label
     const energyText = new RichText( BuildANucleusStrings.energyStringProperty, {
