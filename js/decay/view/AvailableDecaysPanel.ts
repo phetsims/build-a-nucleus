@@ -32,6 +32,7 @@ const BUTTON_CONTENT_WIDTH = 145;
 
 type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
+  decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
 
   decayAtom: ( decayType: DecayType ) => void;
 
@@ -51,12 +52,7 @@ class AvailableDecaysPanel extends Panel {
   // map of decayType => {arrayIndex}
   public decayTypeButtonIndexMap: decayTypeButtonIndexType;
 
-  public constructor( neutronEmissionEnabledProperty: TReadOnlyProperty<boolean>,
-                      protonEmissionEnabledProperty: TReadOnlyProperty<boolean>,
-                      betaPlusDecayEnabledProperty: TReadOnlyProperty<boolean>,
-                      betaMinusDecayEnabledProperty: TReadOnlyProperty<boolean>,
-                      alphaDecayEnabledProperty: TReadOnlyProperty<boolean>,
-                      options: AvailableDecaysPanelOptions ) {
+  public constructor( options: AvailableDecaysPanelOptions ) {
 
     // create and add the title
     const titleNode = new Text( BuildANucleusStrings.availableDecaysStringProperty, {
@@ -75,25 +71,6 @@ class AvailableDecaysPanel extends Panel {
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
       baseColor: BANColors.availableDecaysInfoButtonColorProperty
     } );
-
-    // function to return the correct enabled DerivedProperty for each type of decay
-    const returnEnabledDecayButtonProperty = ( decayType: DecayType ): TReadOnlyProperty<boolean> => {
-      switch( decayType ) {
-        case DecayType.NEUTRON_EMISSION:
-          return neutronEmissionEnabledProperty;
-        case DecayType.PROTON_EMISSION:
-          return protonEmissionEnabledProperty;
-        case DecayType.BETA_PLUS_DECAY:
-          return betaPlusDecayEnabledProperty;
-        case DecayType.BETA_MINUS_DECAY:
-          return betaMinusDecayEnabledProperty;
-        case DecayType.ALPHA_DECAY:
-          return alphaDecayEnabledProperty;
-        default:
-          assert && assert( false, 'No valid decay type found: ' + decayType );
-          return protonEmissionEnabledProperty;
-      }
-    };
 
     // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
     const createDecayButtonListener = ( decayType: DecayType ) => {
@@ -117,11 +94,14 @@ class AvailableDecaysPanel extends Panel {
       } );
       buttonBackgroundRectangle.addChild( buttonText );
 
+      const enabledProperty = options.decayEnabledPropertyMap.get( decayType )!;
+      assert && assert( enabledProperty, 'No enabledProperty found, is your decay type valid? ' + decayType );
+
       return new RectangularPushButton( {
         content: buttonBackgroundRectangle,
         yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
-        enabledProperty: returnEnabledDecayButtonProperty( decayType ),
+        enabledProperty: enabledProperty,
         listener: () => { createDecayButtonListener( decayType ); }
       } );
     };

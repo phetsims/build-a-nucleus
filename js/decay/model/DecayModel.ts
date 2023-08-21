@@ -20,12 +20,7 @@ class DecayModel extends BANModel<ParticleAtom> {
   // the half-life number
   public halfLifeNumberProperty: TReadOnlyProperty<number>;
 
-  // the decay enabled properties for all five decays
-  public protonEmissionEnabledProperty: TReadOnlyProperty<boolean>;
-  public neutronEmissionEnabledProperty: TReadOnlyProperty<boolean>;
-  public betaMinusDecayEnabledProperty: TReadOnlyProperty<boolean>;
-  public betaPlusDecayEnabledProperty: TReadOnlyProperty<boolean>;
-  public alphaDecayEnabledProperty: TReadOnlyProperty<boolean>;
+  public decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
 
   public constructor() {
 
@@ -86,27 +81,28 @@ class DecayModel extends BANModel<ParticleAtom> {
       this.hasIncomingParticlesProperty
     ] as const;
 
+    this.decayEnabledPropertyMap = new Map();
     // create the decay enabled properties
-    this.protonEmissionEnabledProperty = new DerivedProperty( dependencies,
+    this.decayEnabledPropertyMap.set( DecayType.PROTON_EMISSION, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
         createDecayEnabledListener( protonNumber, neutronNumber, DecayType.PROTON_EMISSION, hasIncomingParticles )
-    );
-    this.neutronEmissionEnabledProperty = new DerivedProperty( dependencies,
+    ) );
+    this.decayEnabledPropertyMap.set( DecayType.NEUTRON_EMISSION, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
         createDecayEnabledListener( protonNumber, neutronNumber, DecayType.NEUTRON_EMISSION, hasIncomingParticles )
-    );
-    this.betaMinusDecayEnabledProperty = new DerivedProperty( dependencies,
+    ) );
+    this.decayEnabledPropertyMap.set( DecayType.BETA_MINUS_DECAY, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
         createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_MINUS_DECAY, hasIncomingParticles )
-    );
-    this.betaPlusDecayEnabledProperty = new DerivedProperty( dependencies,
+    ) );
+    this.decayEnabledPropertyMap.set( DecayType.BETA_PLUS_DECAY, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
         createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_PLUS_DECAY, hasIncomingParticles )
-    );
-    this.alphaDecayEnabledProperty = new DerivedProperty( dependencies,
+    ) );
+    this.decayEnabledPropertyMap.set( DecayType.ALPHA_DECAY, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
         createDecayEnabledListener( protonNumber, neutronNumber, DecayType.ALPHA_DECAY, hasIncomingParticles )
-    );
+    ) );
   }
 
   public override reset(): void {
