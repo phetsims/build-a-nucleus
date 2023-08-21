@@ -16,7 +16,7 @@ for protons and neutrons.
 - __Chart of the nuclides__: chart of all isotopes of all elements color coded based on the decay a nuclide would most
   likely undergo.
 - __Nuclear Shell Model__: model describing the nucleus using energy levels.
-- __Energy level / shell__: a definite fixed energy that a particle or atom can have. 
+- __Energy level / shell__: a definite fixed energy that a particle or atom can have.
   - _Lowest energy level / shell_ has lowest amount of energy and vice versa.
   - __Energy levels__ can hold a certain *even*
     number of nucleons before they fill up. For example,
