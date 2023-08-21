@@ -203,9 +203,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // create the nuclideChartAccordionBox
     const nuclideChartAccordionBox = new NuclideChartAccordionBox(
-      this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-      periodicTableAndIsotopeSymbol.width, this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
-      this.decayAtom.bind( this ), showMagicNumbersBooleanProperty, this.model.hasIncomingParticlesProperty );
+      this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty, this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
+      this.decayAtom.bind( this ), showMagicNumbersBooleanProperty, this.model.hasIncomingParticlesProperty, {
+        minWidth: periodicTableAndIsotopeSymbol.width
+      } );
 
     // position and add the nuclideChartAccordionBox
     nuclideChartAccordionBox.top = periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;

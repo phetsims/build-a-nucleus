@@ -8,7 +8,7 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -26,14 +26,34 @@ import BANColors from '../../common/BANColors.js';
 import DecayType from '../../common/model/DecayType.js';
 import buildANucleus from '../../buildANucleus.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+
+type NuclideChartAccordionBoxOptions = AccordionBoxOptions;
 
 class NuclideChartAccordionBox extends AccordionBox {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      minWidth: number, selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
+                      selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
                       decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
                       showMagicNumbersBooleanProperty: TReadOnlyProperty<boolean>,
-                      hasIncomingParticlesProperty: TReadOnlyProperty<boolean> ) {
+                      hasIncomingParticlesProperty: TReadOnlyProperty<boolean>, providedOptions?: NuclideChartAccordionBoxOptions ) {
+
+    const options = optionize<NuclideChartAccordionBoxOptions, EmptySelfOptions, AccordionBoxOptions>()( {
+      titleNode: new Text( BuildANucleusStrings.partialNuclideChartStringProperty, {
+        font: BANConstants.REGULAR_FONT,
+        maxWidth: 200
+      } ),
+      fill: BANColors.chartAccordionBoxBackgroundColorProperty,
+      contentYSpacing: 0,
+      buttonXMargin: 10,
+      buttonYMargin: 10,
+      expandCollapseButtonOptions: {
+        sideLength: 18
+      },
+      titleAlignX: 'left',
+      stroke: BANColors.panelStrokeColorProperty,
+      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
+    }, providedOptions );
 
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
@@ -113,23 +133,7 @@ class NuclideChartAccordionBox extends AccordionBox {
       excludeInvisibleChildrenFromBounds: true
     } );
 
-    super( contentVBox, {
-      titleNode: new Text( BuildANucleusStrings.partialNuclideChartStringProperty, {
-        font: BANConstants.REGULAR_FONT,
-        maxWidth: 200
-      } ),
-      fill: BANColors.chartAccordionBoxBackgroundColorProperty,
-      minWidth: minWidth,
-      contentYSpacing: 0,
-      buttonXMargin: 10,
-      buttonYMargin: 10,
-      expandCollapseButtonOptions: {
-        sideLength: 18
-      },
-      titleAlignX: 'left',
-      stroke: BANColors.panelStrokeColorProperty,
-      cornerRadius: BANConstants.PANEL_CORNER_RADIUS
-    } );
+    super( contentVBox, options );
   }
 
   public static getChartTransform( scaleFactor: number ): ChartTransform {
