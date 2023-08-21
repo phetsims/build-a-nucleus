@@ -794,7 +794,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
   protected betaDecay( betaDecayType: DecayType, particleAtom: ParticleAtom = this.model.particleAtom ): Particle {
-    console.log( particleAtom );
     let particleArray;
     let particleToEmit: Particle;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
