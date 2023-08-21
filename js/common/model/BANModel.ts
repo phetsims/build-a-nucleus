@@ -226,7 +226,7 @@ class BANModel<T extends ParticleAtom> {
 
     // In the chart screen view, animation is done through reconfiguring the nucleus, so immediately send all to their
     // destinations instead of relying on animations for the particle's position.
-    this.particleAtom.moveAllParticlesToDestination();
+    this.particleAtom.moveAllToDestination();
   }
 
   /**
