@@ -194,6 +194,22 @@ class BANModel<T extends ParticleAtom> {
       particle.step( dt );
     } );
   }
+
+// 2D array that defines the table structure.
+// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
+  public static readonly POPULATED_CELLS = [
+    [ 1, 4, 6 ],
+    [ 0, 1, 2, 3, 4, 5, 6 ],
+    [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+    [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+    [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+    [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+    [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+    [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+    [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+    [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+    [ 5, 6, 7, 8, 9, 10, 11, 12 ]
+  ];
 }
 
 buildANucleus.register( 'BANModel', BANModel );

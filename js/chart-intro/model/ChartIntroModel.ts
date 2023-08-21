@@ -22,22 +22,6 @@ import BANParticle from '../../common/model/BANParticle.js';
 // types
 export type SelectedChartType = 'partial' | 'zoom';
 
-// 2D array that defines the table structure.
-// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
-const POPULATED_CELLS = [
-  [ 1, 4, 6 ],
-  [ 0, 1, 2, 3, 4, 5, 6 ],
-  [ 1, 2, 3, 4, 5, 6, 7, 8 ],
-  [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 5, 6, 7, 8, 9, 10, 11, 12 ]
-];
-
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   // the atom that the user will build, modify, and generally play with.
@@ -47,7 +31,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   public readonly miniParticleAtom: ParticleAtom;
 
   // There's not an entry for all the neutron values, see POPULATED_CELLS
-  public static cellModelArray = POPULATED_CELLS.map( ( neutronNumberList, protonNumber ) => neutronNumberList.map( neutronNumber => new NuclideChartCellModel( protonNumber, neutronNumber ) ) );
+  public static cellModelArray = BANModel.POPULATED_CELLS.map( ( neutronNumberList, protonNumber ) => neutronNumberList.map( neutronNumber => new NuclideChartCellModel( protonNumber, neutronNumber ) ) );
 
   public readonly decayEquationModel: DecayEquationModel;
   public readonly selectedNuclideChartProperty: Property<SelectedChartType>;

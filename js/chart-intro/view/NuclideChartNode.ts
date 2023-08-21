@@ -26,6 +26,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
 import { FIRST_LEVEL_CAPACITY, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
+import BANModel from '../../common/model/BANModel.js';
 
 type SelfOptions = {
   cellTextFontSize: number;
@@ -37,22 +38,6 @@ export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 
 // Applies to both proton and neutron numbers see showMagicNumbersBooleanProperty for details.
 const MAGIC_NUMBERS = [ FIRST_LEVEL_CAPACITY, FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ];
-
-// 2D array that defines the table structure.
-// The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
-const POPULATED_CELLS = [
-  [ 1, 4, 6 ],
-  [ 0, 1, 2, 3, 4, 5, 6 ],
-  [ 1, 2, 3, 4, 5, 6, 7, 8 ],
-  [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-  [ 5, 6, 7, 8, 9, 10, 11, 12 ]
-];
 
 class NuclideChartNode extends Node {
   protected readonly cells: NuclideChartCell[][];
@@ -114,7 +99,7 @@ class NuclideChartNode extends Node {
         // highlight the cell if it exists
         if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) && ( protonNumber !== 0 || neutronNumber !== 0 ) ) {
           const protonRowIndex = protonNumber;
-          const neutronRowIndex = POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
+          const neutronRowIndex = BANModel.POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
           highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
           assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
                                              ' neutronRowIndex = ' + neutronRowIndex );
@@ -130,7 +115,7 @@ class NuclideChartNode extends Node {
                               decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
                               decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
 
-                              // alpha decay
+                                // alpha decay
                               new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
                                 protonNumber - AlphaParticle.NUMBER_OF_ALLOWED_PROTONS );
             const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
@@ -175,7 +160,7 @@ class NuclideChartNode extends Node {
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
     chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( protonNumber, viewPosition ) => {
-      const populatedCellsInRow = POPULATED_CELLS[ protonNumber ];
+      const populatedCellsInRow = BANModel.POPULATED_CELLS[ protonNumber ];
       const rowCells: NuclideChartCell[] = [];
       populatedCellsInRow.forEach( ( neutronNumber, columnIndex ) => {
 
