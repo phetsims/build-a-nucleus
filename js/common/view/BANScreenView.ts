@@ -584,7 +584,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     }
     else {
       // Remove particles flying away from the mini-nucleus. Dispose emitter deals with the view portion.
-      assert && assert( !this.getParticleAtom().containsParticle( particle ), 'Particle is a decaying particle so it should not be a part of the miniParticleAtom.' );
+      assert && assert( !this.model.getParticleAtom().containsParticle( particle ), 'Particle is a decaying particle so it should not be a part of the miniParticleAtom.' );
       particle.dispose();
     }
   }
@@ -751,12 +751,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Return the model of the cluster of nucleons, which is the main model in the Decay Screen and the mini nucleus in
-   * the Chart Screen.
-   */
-  protected abstract getParticleAtom(): ParticleAtom;
-
-  /**
    * Return a random position, in model coordinates, that is outside the visible bounds.
    */
   protected abstract getRandomExternalModelPosition(): Vector2;
@@ -766,7 +760,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * particle out of view.
    */
   protected emitAlphaParticle(): AlphaParticle {
-    const particleAtom = this.getParticleAtom();
+    const particleAtom = this.model.getParticleAtom();
     assert && assert( this.model.particleAtom.protonCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_PROTONS &&
     this.model.particleAtom.neutronCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
@@ -803,7 +797,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
   protected betaDecay( betaDecayType: DecayType ): Particle {
-    const particleAtom = this.getParticleAtom();
+    const particleAtom = this.model.getParticleAtom();
     let particleArray;
     let particleToEmit: Particle;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {

@@ -240,6 +240,15 @@ class BANModel<T extends ParticleAtom> {
     particle.animationEndedEmitter.removeAllListeners();
   }
 
+  /**
+   * Return the model of the cluster of nucleons, which is the main model in the Decay Screen and the mini nucleus in
+   * the Chart Screen.
+   */
+  public getParticleAtom(): ParticleAtom {
+    return this.particleAtom;
+  }
+
+
 // 2D array that defines the table structure.
 // The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
   public static readonly POPULATED_CELLS = [

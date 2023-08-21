@@ -21,7 +21,6 @@ import BANColors from '../../common/BANColors.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
-import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import DecayType from '../../common/model/DecayType.js';
@@ -229,13 +228,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   protected override getRandomExternalModelPosition(): Vector2 {
     return this.particleTransform.viewToModelPosition( this.getRandomEscapePosition() );
-  }
-
-  /**
-   * Return the model of the cluster of nucleons.
-   */
-  protected override getParticleAtom(): ParticleAtom {
-    return this.model.particleAtom;
   }
 
   /**

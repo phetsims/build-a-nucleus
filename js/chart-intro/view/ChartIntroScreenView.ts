@@ -339,12 +339,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     fadeAnimation.start();
   }
 
-  /**
-   * Return the model of the cluster of mini-particles.
-   */
-  protected override getParticleAtom(): ParticleAtom {
-    return this.model.miniParticleAtom;
-  }
 
   /**
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
