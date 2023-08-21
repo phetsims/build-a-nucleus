@@ -50,12 +50,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   private readonly protonEnergyLevelNode: NucleonShellView;
   private readonly neutronEnergyLevelNode: NucleonShellView;
-  private readonly energyLevelLayer: Node;
+  private readonly energyLevelLayer = new Node();
 
   // If the miniAtom is connected to the main particleAtom (ParticleNucleus in the Chart Intro screen). When true the
   // mini ParticleAtom is kept in sync (false only for when decaying particles cause behavior differences in each
   // representation).
   private isMiniAtomConnected = true;
+
+  // positions and sizes particles in the miniParticleAtom
   private readonly miniAtomMVT: ModelViewTransform2;
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
@@ -70,8 +72,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options ); // center of the mini-atom
 
     this.model = model;
-    this.energyLevelLayer = new Node();
 
+    // the center of the particleAtomNode is the (0,0) point
     this.miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
 
     // update nucleons in mini-particle as the particleAtom's nucleon changes. This listener keeps the mini-particle in sync.
@@ -125,14 +127,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     periodicTableAndIsotopeSymbol.right = this.resetAllButton.right;
     this.addChild( periodicTableAndIsotopeSymbol );
 
+    // positioning
     this.elementName.boundsProperty.link( () => {
       this.elementName.centerX = this.doubleArrowButtons.centerX;
       this.elementName.top = this.nucleonNumberPanel.top;
     } );
-
     this.nucleonNumberPanel.left = this.layoutBounds.left + 20;
 
-    // create and add the 'Nuclear Shell Model' title
+    // create and add the 'Nuclear Shell Model' title and background
     const nuclearShellModelText = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, {
       font: BANConstants.REGULAR_FONT,
       maxWidth: 220
@@ -145,7 +147,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
         cornerRadius: 10
       }
     } );
-
     textBackground.boundsProperty.link( () => {
       textBackground.centerX = this.doubleArrowButtons.centerX;
       textBackground.centerY = periodicTableAndIsotopeSymbol.bottom + 20;
@@ -170,7 +171,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       energyText.right + energyTextDistanceFromArrow, periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
     this.addChild( arrow );
 
-    // add energy level node
+    // add proton and neutron energy level nodes
     this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
       model.particleAtom.protonCountProperty );
 
@@ -185,12 +186,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.neutronEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS - BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
     this.addChild( this.neutronEnergyLevelNode );
 
-    // create and add dashed 'zoom' lines
+    // dashed 'zoom' lines options and positioning
     const dashedLineOptions = { stroke: BANColors.zoomInDashedLineStrokeColorProperty, lineDash: [ 6, 3 ] };
-
     const endLeft = this.particleAtomNode.emptyAtomCircle.center.x - ( BANConstants.PARTICLE_DIAMETER );
     const endRight = this.particleAtomNode.emptyAtomCircle.center.x + ( BANConstants.PARTICLE_DIAMETER );
 
+    // create and add dashed 'zoom' lines
     const leftDashedLine = new Line( this.protonEnergyLevelNode.left, arrow.top, endLeft,
       periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( leftDashedLine );
@@ -201,15 +202,18 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // Whether to show a special highlight for magic-numbered nuclides in the charts
     const showMagicNumbersBooleanProperty = new BooleanProperty( false );
 
+    // create the nuclideChartAccordionBox
     const nuclideChartAccordionBox = new NuclideChartAccordionBox(
       this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       periodicTableAndIsotopeSymbol.width, this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
       this.decayAtom.bind( this ), showMagicNumbersBooleanProperty, this.model.hasIncomingParticlesProperty );
 
+    // position and add the nuclideChartAccordionBox
     nuclideChartAccordionBox.top = periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
     nuclideChartAccordionBox.left = periodicTableAndIsotopeSymbol.left;
     this.addChild( nuclideChartAccordionBox );
 
+    // create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox
     const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>(
       this.model.selectedNuclideChartProperty, [
         { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() },
@@ -222,6 +226,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       } );
     this.addChild( partialChartRadioButton );
 
+    // create and add the checkbox to show special highlight for magic-numbered nuclides in the charts
     const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersBooleanProperty,
       new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ), {
         boxWidth: 15,
@@ -231,6 +236,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     showMagicNumbersCheckbox.top = nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
     this.addChild( showMagicNumbersCheckbox );
 
+    // create and add the fullChartDialog and 'Full Chart' button
     const fullChartDialog = new FullChartDialog();
     const fullChartTextButton = new TextPushButton( BuildANucleusStrings.fullChartCapitalizedStringProperty, {
       baseColor: BANColors.fullChartButtonColorProperty,
@@ -305,6 +311,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.isMiniAtomConnected = true;
   }
 
+  /**
+   * Fade away and remove a nucleon of a given particleType from the energy levels.
+   */
   private fadeOutShellNucleon( particleType: ParticleType ): void {
     const shellNucleusNucleon = this.model.particleNucleus.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( shellNucleusNucleon );
@@ -315,6 +324,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     } );
   }
 
+  /**
+   * Given an opacity property, fade a particle to a given opacity property value. Fire an endedEmitter at the end of
+   * the animation if a listener is passed in.
+   */
   private fadeAnimation( fadeToNumber: number, particleViewOpacityProperty: TinyProperty<number>, endedEmitterListener?: () => void ): void {
     const fadeAnimation = new Animation( {
       property: particleViewOpacityProperty,
@@ -327,13 +340,16 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     fadeAnimation.start();
   }
 
+  /**
+   * Return the model of the cluster of mini-particles.
+   */
   protected override getParticleAtom(): ParticleAtom {
     return this.model.miniParticleAtom;
   }
 
   /**
    * Creates an alpha particle by removing the needed nucleons from the nucleus, arranging them, and then animates the
-   * particle out of view. Also animates the decay in the NucleonShellView (fading out the nucleons).
+   * particle out of view. Also fades out the required particles in the energy levels.
    */
   protected override emitAlphaParticle(): AlphaParticle {
     this.isMiniAtomConnected = false;
@@ -366,6 +382,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ? ParticleType.NEUTRON : ParticleType.PROTON;
     this.fadeOutShellNucleon( nucleonTypeToChange );
 
+    // create new nucleon particle
     const particle = this.createParticleFromStack( newNucleonType );
 
     // place particle right beside its destination so that animationEndedEmitter fires
@@ -379,6 +396,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     return particleToEmit;
   }
 
+  /**
+   * Create ParticleView for a given particle and add it to the particleAtomNode. Also adds a listener to the
+   * disposeEmitter for when the given particle is disposed.
+   */
   private createMiniParticleView( particle: Particle ): void {
     const particleView = new ParticleView( particle, this.miniAtomMVT, { inputEnabled: false } );
     this.particleViewMap[ particle.id ] = particleView;

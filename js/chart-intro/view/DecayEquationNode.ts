@@ -1,7 +1,9 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Node that represents the view of a decay equation.
+ * Node that represents the view of a decay equation. It is a VBox with the 'Most likely decay' portion at the top and
+ * the decay equation at the bottom. It is made of various Text and icon node components that are visible/invisible and
+ * added/removed, appropriately.
  *
  * @author Luisa Vargas
  * @author Marla Schulz (PhET Interactive Simulations)
@@ -46,6 +48,8 @@ class DecayEquationNode extends VBox {
       font: BANConstants.LEGEND_FONT,
       maxWidth: 150
     } );
+
+    // create the two text container nodes
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
@@ -56,6 +60,8 @@ class DecayEquationNode extends VBox {
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       equationHBox.visible = true;
       if ( currentCellModel ) {
+        // There exists a cell model, you are a nuclide that exists, so create all the necessary Text and node components
+
         const decayLikelihoodPercentText = new Text( new PatternStringProperty( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
           decayLikelihoodPercent: new DerivedStringProperty( [
             unknownSpacePatternStringProperty
@@ -78,6 +84,7 @@ class DecayEquationNode extends VBox {
         const plusNode = IconFactory.createPlusNode( BANColors.decayEquationArrowAndPlusNodeColorProperty );
 
         if ( currentCellModel.decayType ) {
+          // you are unstable and your decay is known so create a decay symbol and set the components for the decay equation
 
           const decaySymbol = new DecaySymbolNode(
             currentCellModel.decayType.protonNumber,
@@ -87,6 +94,8 @@ class DecayEquationNode extends VBox {
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
         }
         else if ( currentCellModel.isStable ) {
+          // if you are stable, there is no decay type so hide the decayLikelihoodPercentText and show 'Stable'
+
           equationHBox.setChildren( [ stableText ] );
           decayLikelihoodPercentText.visible = false;
 
@@ -97,6 +106,9 @@ class DecayEquationNode extends VBox {
           } );
         }
         else {
+          // nuclide cell unstable but with no known decay type so hide the decayLikelihoodPercentText, and show the
+          // nuclide decays into an 'Unknown'
+
           const unknownText = new Text( BuildANucleusStrings.unknownStringProperty, TEXT_OPTIONS );
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, unknownText ] );
           decayLikelihoodPercentText.visible = false;
@@ -105,11 +117,15 @@ class DecayEquationNode extends VBox {
         mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText, decayLikelihoodPercentText ] );
       }
       else {
+        // if there does not exist a cell model, then a nuclide that does not exist formed, hide the equation but set
+        // the stableText as a child so equationHBox has the right height
 
         equationHBox.setChildren( [ stableText ] );
         equationHBox.visible = false;
         mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText ] );
       }
+
+      // add the two container nodes
       this.children = [
         mostLikelyDecayHBox,
         equationHBox

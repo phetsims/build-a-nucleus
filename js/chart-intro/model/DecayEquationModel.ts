@@ -26,6 +26,7 @@ class DecayEquationModel {
 
   public constructor( cellModelArray: NuclideChartCellModel[][], protonCountProperty: TReadOnlyProperty<number>, massNumberProperty: TReadOnlyProperty<number> ) {
 
+    // keep track of the current nuclide cell to update the decay equation
     this.currentCellModelProperty = new Property( this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value ) );
 
     // initialize to 0
