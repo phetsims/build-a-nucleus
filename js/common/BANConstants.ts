@@ -14,6 +14,7 @@ import Bounds2 from '../../../dot/js/Bounds2.js';
 import { Color, RadialGradient } from '../../../scenery/js/imports.js';
 import { SECOND_LEVEL_CAPACITY } from '../chart-intro/model/ParticleNucleus.js';
 import BANColors from './BANColors.js';
+import ScreenView from '../../../joist/js/ScreenView.js';
 
 // have one less space than there are particles
 const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = SECOND_LEVEL_CAPACITY - 1;
@@ -25,7 +26,11 @@ const NUMBER_OF_Y_SPACINGS = NUMBER_OF_ENERGY_LEVELS - 1;
 const PARTICLE_Y_SPACING = PARTICLE_DIAMETER * 4;
 const PANEL_CORNER_RADIUS = 6;
 
+// constants
+const LAYOUT_BOUNDS = ScreenView.DEFAULT_LAYOUT_BOUNDS;
+
 const BANConstants = {
+  LAYOUT_BOUNDS: LAYOUT_BOUNDS,
 
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
@@ -82,11 +87,11 @@ const BANConstants = {
   DEFAULT_INITIAL_NEUTRON_NUMBER: 0,
 
   // center of the atom in view coordinates
-  SCREEN_VIEW_ATOM_CENTER_X: 335,
-  SCREEN_VIEW_ATOM_CENTER_Y: 339,
+  SCREEN_VIEW_ATOM_CENTER_X: LAYOUT_BOUNDS.width / 3,
+  SCREEN_VIEW_ATOM_CENTER_Y: LAYOUT_BOUNDS.height * 0.55,
 
   // the x distance between the left side of the nucleon energy levels
-  X_DISTANCE_BETWEEN_ENERGY_LEVELS: 255,
+  X_DISTANCE_BETWEEN_ENERGY_LEVELS: LAYOUT_BOUNDS.width / 4,
 
   // the MVT that places nucleons in their individual spaced apart array positions
   NUCLEON_ENERGY_LEVEL_ARRAY_MVT: ModelViewTransform2.createRectangleInvertedYMapping(

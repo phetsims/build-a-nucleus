@@ -101,7 +101,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      particleViewPosition: atomCenter
+      particleViewPosition: atomCenter,
+      layoutBounds: BANConstants.LAYOUT_BOUNDS
     }, providedOptions );
 
     super( options );
