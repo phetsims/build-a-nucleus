@@ -64,9 +64,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     const options = optionize<NuclideChartIntroScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {
 
-      // centers particle atoms on energy levels
-      particleViewPosition: new Vector2( 135, 245 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
-
+      // Position of the particle nucleus (top left corner-ish)
+      particleViewPosition: new Vector2( 135, 245 )
     }, providedOptions );
 
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, 87 ), options ); // center of the mini-atom
@@ -175,16 +174,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
       model.particleAtom.protonCountProperty, this.model.particleAtom.modelViewTransform );
 
-    // energy level's start at the left edge of the first particle in the row, so move the lines a 'particle radius' length left
-    // energy level's sit below the particles, so move the lines a 'particle radius' length down
-    this.protonEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( -BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
+    // We don't want to effect the origin of this, so just translate
+    this.protonEnergyLevelNode.setTranslation( options.particleViewPosition );
     this.addChild( this.protonEnergyLevelNode );
 
     this.neutronEnergyLevelNode = new NucleonShellView( ParticleType.NEUTRON, model.particleAtom.neutronShellPositions,
       model.particleAtom.neutronCountProperty, this.model.particleAtom.modelViewTransform );
 
     // neutron energy levels are further to the right than the proton energy levels
-    this.neutronEnergyLevelNode.leftTop = options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS - BANConstants.PARTICLE_RADIUS, BANConstants.PARTICLE_RADIUS );
+    this.neutronEnergyLevelNode.setTranslation( options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, 0 ) );
     this.addChild( this.neutronEnergyLevelNode );
 
     // dashed 'zoom' lines options and positioning
@@ -275,9 +273,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * buttons, the right edge of the neutron arrow buttons, below the periodic table, and above the arrow buttons.
    */
   protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
-    const nucleonViewPosition = nucleon.positionProperty.value.plus(
-      new Vector2( 135, 193 - BANConstants.PARTICLE_RADIUS ) // top left corner of proton energy levels
-    );
+    const nucleonViewPosition = this.particleTransform.modelToViewPosition( nucleon.positionProperty.value );
+
     return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition ) ||
            this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition );
   }

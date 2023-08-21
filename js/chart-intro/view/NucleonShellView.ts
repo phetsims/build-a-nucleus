@@ -3,6 +3,9 @@
 /**
  * Node that represents the nucleon shells, aka straight horizontal lines above the buckets, in the view.
  *
+ * This view Node assumes a lot of ParticleView, and how its position is based on its center (note usages of
+ * BANConstants.PARTICLE_RADIUS).
+ *
  * @author Luisa Vargas
  */
 
@@ -44,15 +47,17 @@ class NucleonShellView extends Node {
     const energyLevels: Line[] = [];
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
 
+      // energy level's start at the left edge of the first particle in the row, so move the lines a 'particle radius' length left
+      // energy level's sit below the particles, so move the lines a 'particle radius' length down
       // the first energy level begins at xPosition 2 instead of 0, for more information see ALLOWED_PARTICLE_POSITIONS
       const lineStartingPoint = new Vector2(
-        modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ),
-        modelViewTransform.modelToViewY( energyLevel ) );
+        modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition ) - BANConstants.PARTICLE_RADIUS,
+        modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS );
 
-      // add the particle diameter to extend the energyLevel to the right edge of the last particle
+      // add the particle radius to extend the energyLevel to the right edge of the last particle
       const lineEndingPoint = new Vector2(
-        modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_DIAMETER,
-        modelViewTransform.modelToViewY( energyLevel ) );
+        modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition ) + BANConstants.PARTICLE_RADIUS,
+        modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS );
       energyLevels.push( new Line( lineStartingPoint, lineEndingPoint, { stroke: 'black' } )
       );
     } );
