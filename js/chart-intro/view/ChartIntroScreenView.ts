@@ -272,7 +272,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Returns whether the nucleon is within a rectangular capture radius defined by the left edge of the proton arrow
    * buttons, the right edge of the neutron arrow buttons, below the periodic table, and above the arrow buttons.
    */
-  protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
+  protected override isNucleonInCaptureArea( nucleon: Particle ): boolean {
     const nucleonViewPosition = this.particleTransform.modelToViewPosition( nucleon.positionProperty.value );
 
     return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition ) ||

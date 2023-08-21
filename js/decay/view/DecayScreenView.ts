@@ -29,6 +29,7 @@ import AlphaParticle from '../../common/model/AlphaParticle.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import ShowElectronCloudCheckbox from './ShowElectronCloudCheckbox.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -310,8 +311,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Returns whether the nucleon is within the circular capture radius around the atom.
    */
-  protected override isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean {
-    return nucleon.positionProperty.value.distance( atom.positionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
+  protected override isNucleonInCaptureArea( nucleon: Particle, atomPositionProperty: TReadOnlyProperty<Vector2> ): boolean {
+    return nucleon.positionProperty.value.distance( atomPositionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
   }
 
   protected override reset(): void {

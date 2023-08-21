@@ -786,7 +786,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
-    if ( this.isNucleonInCaptureArea( nucleon, atom ) ||
+    if ( this.isNucleonInCaptureArea( nucleon, atom.positionProperty ) ||
 
          // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
          ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
@@ -806,7 +806,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Returns if a nucleon is in the capture area which is in a certain radius around the atom in the Decay Screen, and
    * the energy level area in the Chart Screen.
    */
-  protected abstract isNucleonInCaptureArea( nucleon: Particle, atom: ParticleAtom ): boolean;
+  protected abstract isNucleonInCaptureArea( nucleon: Particle, atomPositionProperty: TReadOnlyProperty<Vector2> ): boolean;
 
   /**
    * Add particleView to correct layer.
