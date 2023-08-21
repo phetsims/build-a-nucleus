@@ -127,7 +127,7 @@ const BANConstants = {
   // function to create a gradient fill based on a given radius
   ELECTRON_CLOUD_FILL_GRADIENT: function( radius: number ): RadialGradient {
     return new RadialGradient( 0, 0, 0, 0, 0, radius )
-      .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 200 ) )
+      .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 1 ) )
       .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
   },
 
