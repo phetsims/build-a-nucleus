@@ -202,9 +202,6 @@ class BANModel<T extends ParticleAtom> {
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
     const particle = new BANParticle( particleType.particleTypeString );
-
-    // place the particle the center of the particleAtom and add it to the model and particleAtom
-    particle.setPositionAndDestination( this.particleAtom.positionProperty.value );
     this.addParticle( particle );
     this.particleAtom.addParticle( particle );
   }
@@ -225,6 +222,10 @@ class BANModel<T extends ParticleAtom> {
         this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
       }
     } );
+
+    // In the chart screen view, animation is done through reconfiguring the nucleus, so immediately send all to their
+    // destinations instead of relying on animations fro the particle's position.
+    this.particleAtom.moveAllToDestination();
   }
 
 
