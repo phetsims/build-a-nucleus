@@ -128,6 +128,18 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
       }
     } );
   }
+
+  /**
+   * We need to make sure that the shell position spots reserved for the incoming, animating particles, are cleared out
+   * since the particle is no longer coming into the atom.
+   */
+  public override clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
+    super.clearIncomingParticle( particle, particleType );
+
+    // Not a full removeParticle() call because we never completed the animation into the particleAtom (but we did
+    // count it in a shell position).
+    this.particleAtom.removeParticleFromShell && this.particleAtom.removeParticleFromShell( particle );
+  }
 }
 
 buildANucleus.register( 'ChartIntroModel', ChartIntroModel );

@@ -29,7 +29,6 @@ import ParticleType from '../model/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from './ParticleAtomNode.js';
 import DecayType from '../model/DecayType.js';
@@ -593,7 +592,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
 
-        this.clearIncomingParticle( particle, particleType );
+        this.model.clearIncomingParticle( particle, particleType );
 
         this.model.particleAtom.addParticle( particle );
         particleView.inputEnabled = true;
@@ -618,7 +617,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.particleAtom.removeParticle( particleToReturn );
     }
     else if ( this.model.incomingNeutrons.includes( particleToReturn ) || this.model.incomingProtons.includes( particleToReturn ) ) {
-      this.clearIncomingParticle( particleToReturn, particleType );
+      this.model.clearIncomingParticle( particleToReturn, particleType );
     }
     else {
       assert && assert( false, 'The above cases should cover all possibilities' );
@@ -629,17 +628,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // send particle back to its creator node position
     this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
-  }
-
-  /**
-   * Don't finish the animation towards to the particle atom, because now it is time to remove this particle
-   * (animating it back to the stack).
-   */
-  protected clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
-    assert && assert( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON,
-      'only proton and neutron types support for clearing' );
-    arrayRemove( particleType === ParticleType.PROTON ? this.model.incomingProtons : this.model.incomingNeutrons, particle );
-    particle.animationEndedEmitter.removeAllListeners();
   }
 
   /**

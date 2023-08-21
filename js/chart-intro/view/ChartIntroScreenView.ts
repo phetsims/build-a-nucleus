@@ -408,18 +408,6 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       particleView.dispose();
     } );
   }
-
-  /**
-   * We need to make sure that the shell position spots reserved for the incoming, animating particles, are cleared out
-   * since the particle is no longer coming into the atom.
-   */
-  protected override clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
-    super.clearIncomingParticle( particle, particleType );
-
-    // Not a full removeParticle() call because we never completed the animation into the particleAtom (but we did
-    // count it in a shell position).
-    this.model.particleAtom.removeParticleFromShell && this.model.particleAtom.removeParticleFromShell( particle );
-  }
 }
 
 buildANucleus.register( 'ChartIntroScreenView', ChartIntroScreenView );

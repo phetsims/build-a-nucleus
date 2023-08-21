@@ -20,6 +20,7 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import BANParticle from './BANParticle.js';
 import BANConstants from '../BANConstants.js';
+import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 
 class BANModel<T extends ParticleAtom> {
 
@@ -228,6 +229,16 @@ class BANModel<T extends ParticleAtom> {
     this.particleAtom.moveAllToDestination();
   }
 
+  /**
+   * Don't finish the animation towards to the particle atom, because now it is time to remove this particle
+   * (animating it back to the stack).
+   */
+  public clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
+    assert && assert( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON,
+      'only proton and neutron types support for clearing' );
+    arrayRemove( particleType === ParticleType.PROTON ? this.incomingProtons : this.incomingNeutrons, particle );
+    particle.animationEndedEmitter.removeAllListeners();
+  }
 
 // 2D array that defines the table structure.
 // The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
