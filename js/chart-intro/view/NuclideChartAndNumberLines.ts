@@ -35,7 +35,7 @@ class NuclideChartAndNumberLines extends Node {
       nuclideChartNodeOptions: {}
     }, providedOptions );
 
-    // create and add the nuclideChartNode
+    // create the nuclideChartNode
     const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform,
       combineOptions<NuclideChartNodeOptions>( {
         cellTextFontSize: 11,
@@ -43,13 +43,13 @@ class NuclideChartAndNumberLines extends Node {
       }, options.nuclideChartNodeOptions )
     );
 
+    // create and position the number lines
     const tickSpacing = 1;
     const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
       labelHighlightColorProperty: BANColors.protonColorProperty,
       axisLabelStringProperty: BuildANucleusStrings.axis.protonNumberStringProperty,
       tickSpacing: tickSpacing
     } );
-
     const neutronNumberLine = new NucleonNumberLine( chartTransform, neutronCountProperty, Orientation.HORIZONTAL, {
       labelHighlightColorProperty: BANColors.neutronColorProperty,
       axisLabelStringProperty: BuildANucleusStrings.axis.neutronNumberStringProperty,

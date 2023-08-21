@@ -40,6 +40,8 @@ export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 const MAGIC_NUMBERS = [ FIRST_LEVEL_CAPACITY, FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ];
 
 class NuclideChartNode extends Node {
+
+  // keep track of the cells of the chart
   protected readonly cells: NuclideChartCell[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
@@ -51,12 +53,10 @@ class NuclideChartNode extends Node {
     }, providedOptions );
     super( options );
 
+    // create and add the cells
     const cellLength = chartTransform.modelToViewDeltaX( 1 );
     const cellLayerNode = new Node();
-
-    // keep track of the cells of the chart
     this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength, options.showMagicNumbersBooleanProperty );
-
     this.addChild( cellLayerNode );
 
     // add the arrowNode indicating the decay direction first so that it appears behind the cell's label
@@ -67,7 +67,6 @@ class NuclideChartNode extends Node {
       this.addChild( arrowNode );
     }
 
-    // labels the cell with the elementSymbol
     const labelDimension = cellLength * 0.75;
 
     // make the labelTextBackground an octagon shape
@@ -75,6 +74,8 @@ class NuclideChartNode extends Node {
       return new Vector2( Math.cos( ( 2 * side * Math.PI ) / 8 ), Math.sin( ( 2 * side * Math.PI ) / 8 ) ).times( labelDimension * 0.6 );
     } );
     const octagonShape = Shape.polygon( vertices );
+
+    // create and add the label which labels the cell with the elementSymbol
     const labelTextBackground = new Path( octagonShape, { rotation: Math.PI / 8 } );
     const labelText = new Text( '', {
       fontSize: options.cellTextFontSize,
@@ -91,19 +92,22 @@ class NuclideChartNode extends Node {
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) => {
+      ( protonNumber, neutronNumber ) => {
 
         const currentCellCenter = chartTransform.modelToViewXY( neutronNumber + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
           protonNumber + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
 
         // highlight the cell if it exists
         if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) && ( protonNumber !== 0 || neutronNumber !== 0 ) ) {
+
+          // get the highlightedCell
           const protonRowIndex = protonNumber;
           const neutronRowIndex = BANModel.POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
           highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
           assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
                                              ' neutronRowIndex = ' + neutronRowIndex );
 
+          // get the decayType from the highlightedCell
           const decayType = highlightedCell.cellModel.decayType;
 
           // draw the decay direction with the arrowNode if there is a known decay for this nuclide cell
@@ -124,23 +128,32 @@ class NuclideChartNode extends Node {
             arrowNode.visible = true;
           }
           else {
+
+            // stable cell or no known decay so hide the arrow
             arrowNode.visible = false;
           }
 
+          // show the cell's label
           labelContainer.visible = true;
           labelText.string = AtomIdentifier.getSymbol( protonNumber );
           labelContainer.center = currentCellCenter;
           labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
+
+          // cover the tail of the arrow that's in this cell's center
           labelTextBackground.fill = highlightedCell.decayBackgroundColor;
         }
         else {
+
+          // no cell exists so hide the label and arrow
           arrowNode.visible = false;
           labelContainer.visible = false;
         }
       } );
   }
 
-  // Based on the fill of the cell (which is based on the decay type), choose a light or dark text fill.
+  /**
+   * Based on the fill of the cell (which is based on the decay type), choose a light or dark text fill.
+   */
   private getCellLabelFill( cellModel?: NuclideChartCellModel ): Color {
     if ( !cellModel ) {
       return Color.WHITE;
@@ -175,6 +188,8 @@ class NuclideChartNode extends Node {
 
         const cellIsMagic = MAGIC_NUMBERS.includes( protonNumber ) || MAGIC_NUMBERS.includes( neutronNumber );
         if ( cellIsMagic ) {
+
+          // highlight the cell with a special colored stroke if the cell has a magic number of protons or neutrons
           showMagicNumbersBooleanProperty.link( showMagic => {
             showMagic && cell.moveToFront();
             cell.lineWidth = showMagic ? defaultLineWidth + 2 : defaultLineWidth;

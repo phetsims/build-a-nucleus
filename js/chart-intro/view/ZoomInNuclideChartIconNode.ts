@@ -18,10 +18,12 @@ class ZoomInNuclideChartIconNode extends Node {
 
   public constructor() {
 
+    // create and add teh complete nuclide chart
     const cellLayerNode = new Node();
     const smallChartTransform = NuclideChartAccordionBox.getChartTransform( 7 );
     NuclideChartNode.createNuclideChart( cellLayerNode, smallChartTransform, smallChartTransform.modelToViewDeltaX( 1 ) );
 
+    // length to clip the chart to
     const squareLength = smallChartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH +
                                                                 ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
 
@@ -31,6 +33,7 @@ class ZoomInNuclideChartIconNode extends Node {
       squareLength, squareLength );
     cellLayerNode.clipArea = zoomInShape;
 
+    // add the border outline to the chart
     const borderPath = new Path( zoomInShape, { stroke: Color.BLACK, lineWidth: 0.5 } );
 
     super( { children: [ cellLayerNode, borderPath ] } );

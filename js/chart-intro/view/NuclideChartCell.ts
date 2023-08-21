@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * Node that represents the background of a single cell in the nuclide chart.
+ * Node that represents the background of a single cell in the nuclide chart. The view of the NuclideChartCellModel.
  *
  * @author Luisa Vargas
  */
@@ -18,7 +18,9 @@ type NuclideChartCellOptions = SelfOptions & RectangleOptions;
 
 class NuclideChartCell extends Rectangle {
 
+  // public to help color the cell's label text background color
   public readonly decayBackgroundColor: TPaint;
+
   public readonly cellModel: NuclideChartCellModel;
 
   public constructor( cellLength: number, cellModel: NuclideChartCellModel, providedOptions?: NuclideChartCellOptions ) {

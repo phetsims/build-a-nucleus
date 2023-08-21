@@ -38,9 +38,8 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
     } );
     panelContents.addChild( symbolNode );
 
-    // Do the layout.  This positions the symbol to fit into the top portion
-    // of the table.  The periodic table is 18 cells wide, and this needs
-    // to be centered over the 8th column to be in the right place.
+    // Do the layout. This positions the symbol to fit into the top portion of the table. The periodic table is 18 cells
+    // wide, and this needs to be centered over the 8th column to be in the right place.
     symbolNode.centerX = ( 7.5 / 18 ) * periodicTable.width;
     symbolNode.top = 0;
     periodicTable.top = symbolNode.bottom - ( periodicTable.height / 7 * 2.5 );

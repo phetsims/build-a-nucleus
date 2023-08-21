@@ -29,11 +29,15 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
       showMagicNumbersBooleanProperty: showMagicNumbersBooleanProperty
     } );
 
+    // create and add the border outline to the chart
+    const borderPath = new Path( null, { stroke: Color.BLACK, lineWidth: 1.5 } );
+    this.addChild( borderPath );
+
+    // length to clip the chart to
     const squareLength = chartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH +
                                                            ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
 
-    const borderPath = new Path( null, { stroke: Color.BLACK, lineWidth: 1.5 } );
-    this.addChild( borderPath );
+    // update the clip area of the chart whenever the proton or neutron number change
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
       const cellX = neutronNumber;
       const cellY = protonNumber;
