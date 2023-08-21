@@ -7,7 +7,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import { DragListener, Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
+import { DragListener, InteractiveHighlightingNode, PressListenerEvent } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import ParticleType from '../model/ParticleType.js';
@@ -17,7 +17,7 @@ import BANParticle from '../model/BANParticle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 
-class NucleonCreatorNode extends Node {
+class NucleonCreatorNode extends InteractiveHighlightingNode {
 
   public constructor( particleType: ParticleType, getLocalPoint: ( point: Vector2 ) => Vector2,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
