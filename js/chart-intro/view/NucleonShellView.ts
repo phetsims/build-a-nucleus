@@ -1,7 +1,7 @@
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
- * Node that represents the nucleon shells, aka straight horizontal lines above the buckets, in the view.
+ * Node that represents the nucleon shells, meaning the straight horizontal lines above the buckets, in the view.
  *
  * This view Node assumes a lot of ParticleView, and how its position is based on its center (note usages of
  * BANConstants.PARTICLE_RADIUS).

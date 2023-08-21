@@ -23,6 +23,8 @@ class FullChartDialog extends Dialog {
 
     // If links are allowed, use hyperlinks. Otherwise, just output the URL. This doesn't need to be internationalized.
     const linkText = 'https://energyeducation.ca/simulations/nuclear/nuclidechart.html';
+
+    // create the chart information text
     const stringProperty = new DerivedStringProperty( [
       allowLinksProperty,
       BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty,
@@ -32,12 +34,13 @@ class FullChartDialog extends Dialog {
              StringUtils.fillIn( fullChartInfoText, { link: `<a href="{{url}}">${fullChartLowercaseText}</a>` } ) :
              StringUtils.fillIn( fullChartInfoText, { link: linkText } );
     } );
-
-    const fullChartImage = new Image( fullNuclideChart_png );
     const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
       links: { url: linkText } // RichText must fill in URL for link
     }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) );
-    fullChartImage.setMaxWidth( 481.5 ); // determined empirically so image is a bit smaller than text length
+
+    // create the chart image
+    const fullChartImage = new Image( fullNuclideChart_png );
+    fullChartImage.setMaxWidth( 481.5 ); // determined empirically
     const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ), { stroke: Color.BLACK } );
 
     // create and add the full chart info dialog and button

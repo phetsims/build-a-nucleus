@@ -49,7 +49,10 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         }
       } );
 
+    // use current bounds to place and update highlightRectangle
     const nuclideChartBounds = this.bounds.copy();
+
+    // to keep the chart from shifting when the highlight rectangle updates
     const backgroundRectangle = new Rectangle( this.bounds.dilated( 2 ), { stroke: 'white' } );
     this.addChild( backgroundRectangle );
 
@@ -59,8 +62,13 @@ class FocusedNuclideChartNode extends NuclideChartNode {
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: HIGHLIGHT_RECTANGLE_LINE_WIDTH } );
     this.addChild( highlightRectangle );
 
+    // create listener to update highLightRectangle center, and opacity of cells around
     const updateHighlightRectangleCenter = () => {
+
+      // update center of highlightRectangle
       highlightRectangle.center = viewHighlightRectangleCenterProperty.value;
+
+      // update edges of highlight rectangle to match bounds and account for the rectangle stroke width and cell line width
       const shift = ( HIGHLIGHT_RECTANGLE_LINE_WIDTH -
                       chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) ) / 2;
       if ( highlightRectangle.left < nuclideChartBounds.left ) {
@@ -82,16 +90,16 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         nuclideChartCellRow.forEach( nuclideChartCell => {
           if ( nuclideChartCell ) {
             const protonDelta = Math.abs( chartTransform.viewToModelY( highlightRectangle.center.y )
-                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.protonNumber );
+                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell.cellModel.protonNumber );
             const neutronDelta = Math.abs( chartTransform.viewToModelX( highlightRectangle.center.x )
-                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell?.cellModel.neutronNumber );
-            nuclideChartCell?.makeOpaque( protonDelta, neutronDelta );
+                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell.cellModel.neutronNumber );
+            nuclideChartCell.makeOpaque( protonDelta, neutronDelta );
           }
         } );
       } );
     };
 
-    // update the center of the highLightRectangle
+    // add listener to update the center of the highLightRectangle
     viewHighlightRectangleCenterProperty.link( updateHighlightRectangleCenter );
   }
 }

@@ -30,7 +30,7 @@ type NucleonNumberLineOptions = SelfOptions & StrictOmit<NodeOptions, 'children'
 
 class NucleonNumberLine extends Node {
 
-  public constructor( chartTransform: ChartTransform, particleNumberProperty: TReadOnlyProperty<number>,
+  public constructor( chartTransform: ChartTransform, nucleonNumberProperty: TReadOnlyProperty<number>,
                       orientation: Orientation, providedOptions: NucleonNumberLineOptions ) {
 
     const options = optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
@@ -54,17 +54,22 @@ class NucleonNumberLine extends Node {
     // create and add the tick labels
     const tickLabelSet = new TickLabelSet( chartTransform, orientation, options.tickSpacing, {
       extent: 5,
-      createLabel: ( value: number ) => new BackgroundNode( new Text( value, {
+      createLabel: ( value: number ) =>
+        new BackgroundNode( new Text( value, {
           fontSize: 12,
-          fill: new DerivedProperty( [ particleNumberProperty, BANColors.highLightedTickLabelColorProperty, BANColors.nucleonNumberLineAndTextFontColorProperty ],
+          fill: new DerivedProperty( [ nucleonNumberProperty, BANColors.highLightedTickLabelColorProperty, BANColors.nucleonNumberLineAndTextFontColorProperty ],
             ( particleNumber, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
+
+              // color the label text a different color if it is the current nucleon number
               return particleNumber === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
             } )
         } ),
         {
           rectangleOptions: {
-            fill: new DerivedProperty( [ particleNumberProperty, options.labelHighlightColorProperty ],
+            fill: new DerivedProperty( [ nucleonNumberProperty, options.labelHighlightColorProperty ],
               ( particleNumber, labelHighlightColor ) => {
+
+                // add a 'highlight' to the label text if it is the current nucleon number
                 return particleNumber === value ? labelHighlightColor : null;
               } ),
             opacity: 1

@@ -55,30 +55,38 @@ class NuclideChartAccordionBox extends AccordionBox {
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     }, providedOptions );
 
+    // create the ChartTransform's for all 3 charts
     const partialChartTransform = NuclideChartAccordionBox.getChartTransform( 18 );
     const focusedChartTransform = NuclideChartAccordionBox.getChartTransform( 10 );
     const zoomInChartTransform = NuclideChartAccordionBox.getChartTransform( 30 );
 
+    // create the 3 charts
     const nuclideChartAndNumberLines = new NuclideChartAndNumberLines( protonCountProperty, neutronCountProperty,
       partialChartTransform, {
         nuclideChartNodeOptions: {
           showMagicNumbersBooleanProperty: showMagicNumbersBooleanProperty
         }
       } );
-
     const focusedNuclideChartNode = new FocusedNuclideChartNode( protonCountProperty, neutronCountProperty,
       focusedChartTransform, showMagicNumbersBooleanProperty );
     const zoomInNuclideChartNode = new ZoomInNuclideChartNode( protonCountProperty, neutronCountProperty,
       zoomInChartTransform, showMagicNumbersBooleanProperty );
+
+    // create the legend node
     const nuclideChartLegendNode = new NuclideChartLegendNode();
 
+    // create the DecayEquationNode
     const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.width / 2 );
 
+    // create the 'Decay' button
     const decayPushButton = new TextPushButton( BuildANucleusStrings.screen.decayStringProperty, {
       enabledProperty: new DerivedProperty( [
         decayEquationModel.currentCellModelProperty,
         hasIncomingParticlesProperty
-      ], ( currentCellModel, hasIncomingParticles ) => !!currentCellModel?.decayType && !hasIncomingParticles ),
+      ], ( currentCellModel, hasIncomingParticles ) =>
+
+        // enable the decay button is there is a decay type for the given cell and there are no incoming particles
+        !!currentCellModel?.decayType && !hasIncomingParticles ),
       baseColor: BANColors.decayButtonColorProperty,
       textNodeOptions: {
         fontSize: 14
@@ -86,11 +94,14 @@ class NuclideChartAccordionBox extends AccordionBox {
       minWidth: 80,
       maxWidth: 150,
       listener: () => {
+
+        // do the given decay on the atom, if there is a decay
         const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
         decayAtom( decayType || null );
       }
     } );
 
+    // position the focused chart and the decay button together
     const focusedChartAndButtonVBox = new VBox( {
       children: [
         decayPushButton,
@@ -100,10 +111,13 @@ class NuclideChartAccordionBox extends AccordionBox {
       align: 'center'
     } );
 
+    // update the view in the accordion box depending on the selectedNuclideChartProperty
     selectedNuclideChartProperty.link( selectedNuclideChart => {
+
       zoomInNuclideChartNode.visible = selectedNuclideChart === 'zoom';
       focusedChartAndButtonVBox.visible = selectedNuclideChart === 'zoom';
       decayEquationNode.visible = selectedNuclideChart === 'zoom';
+
       nuclideChartAndNumberLines.visible = selectedNuclideChart === 'partial';
     } );
 
@@ -136,6 +150,9 @@ class NuclideChartAccordionBox extends AccordionBox {
     super( contentVBox, options );
   }
 
+  /**
+   * Create and return a ChartTransform and scale its view using the given scaleFactor.
+   */
   public static getChartTransform( scaleFactor: number ): ChartTransform {
     const modelXRange = new Range( BANConstants.CHART_MIN, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS );
     const modelYRange = new Range( BANConstants.CHART_MIN, BANConstants.CHART_MAX_NUMBER_OF_PROTONS );
