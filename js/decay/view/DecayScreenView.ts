@@ -55,7 +55,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add the half-life information node at the top half of the decay screen
     const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
-      this.elementNameStringProperty );
+      this.elementNameText.elementNameStringProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 30;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
@@ -207,10 +207,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
 
     // positioning
-    this.elementName.boundsProperty.link( () => {
+    this.elementNameText.boundsProperty.link( () => {
 
-      // place the elementName a bit below the stabilityIndicator
-      this.elementName.center = stabilityIndicator.center.plusXY( 0, 60 );
+      // place the elementNameText a bit below the stabilityIndicator
+      this.elementNameText.center = stabilityIndicator.center.plusXY( 0, 60 );
     } );
     this.nucleonNumberPanel.left = availableDecaysPanel.left;
 

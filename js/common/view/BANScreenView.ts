@@ -13,7 +13,7 @@ import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { Color, Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
 import BANColors from '../BANColors.js';
 import NucleonNumberPanel from './NucleonNumberPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
@@ -34,10 +34,9 @@ import ParticleAtomNode from './ParticleAtomNode.js';
 import DecayType from '../model/DecayType.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import BANParticle from '../model/BANParticle.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import AlphaParticle from '../model/AlphaParticle.js';
+import ElementNameText from './ElementNameText.js';
 
 const TOUCH_AREA_Y_DILATION = 3;
 
@@ -85,10 +84,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly doubleArrowButtons: Node;
   protected readonly protonArrowButtons: Node;
 
-  protected readonly elementName: Text;
-
-  // The contents of the formatted display string for the current Element of the atom. Including if it does not form.
-  protected readonly elementNameStringProperty: TReadOnlyProperty<string>;
+  protected readonly elementNameText: ElementNameText;
 
   // The view for the ParticleAtom, the cluster of nucleons in Decay screen and the mini-atom in the Chart Intro screen.
   protected readonly particleAtomNode: ParticleAtomNode;
@@ -114,84 +110,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.nucleonNumberPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.nucleonNumberPanel );
 
-    this.elementNameStringProperty = new DerivedStringProperty( [
-      this.model.particleAtom.protonCountProperty,
-      this.model.particleAtom.neutronCountProperty,
-      this.model.doesNuclideExistBooleanProperty,
-
-      // We need to update whenever any of these strings change, to support Dynamic Locale
-      BuildANucleusStrings.nameMassPatternStringProperty,
-      BuildANucleusStrings.neutronsLowercaseStringProperty,
-      BuildANucleusStrings.elementDoesNotFormPatternStringProperty,
-      BuildANucleusStrings.doesNotFormStringProperty,
-      BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty,
-      BuildANucleusStrings.neutronLowercaseStringProperty,
-      BuildANucleusStrings.clusterOfNeutronsPatternStringProperty
-    ], ( protonNumber, neutronNumber, doesNuclideExist ) => {
-      let name = AtomIdentifier.getName( protonNumber );
-      const massNumber = protonNumber + neutronNumber;
-
-      const massNumberString = massNumber.toString();
-
-      const nameMassString = StringUtils.fillIn( BuildANucleusStrings.nameMassPatternStringProperty, {
-        name: name,
-        mass: massNumberString
-      } );
-
-      // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
-      if ( !doesNuclideExist && massNumber !== 0 ) {
-
-        if ( name.length === 0 ) {
-          // no protons
-          name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
-            mass: massNumberString,
-            particleType: BuildANucleusStrings.neutronsLowercaseStringProperty,
-            doesNotForm: BuildANucleusStrings.doesNotFormStringProperty
-          } );
-        }
-        else {
-          name = StringUtils.fillIn( BuildANucleusStrings.elementDoesNotFormPatternStringProperty, {
-            nameMass: nameMassString,
-            doesNotForm: BuildANucleusStrings.doesNotFormStringProperty
-          } );
-        }
-      }
-      else if ( name.length === 0 ) {
-        // no protons
-
-        if ( neutronNumber === 0 ) {
-          // no neutrons
-          name = '';
-        }
-        else if ( neutronNumber === 1 ) {
-          // only one neutron
-          name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
-            mass: neutronNumber,
-            particleType: BuildANucleusStrings.neutronLowercaseStringProperty,
-            doesNotForm: ''
-          } );
-        }
-        else {
-          // multiple neutrons
-          name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
-            neutronNumber: neutronNumber
-          } );
-        }
-
-      }
-      else {
-        name = nameMassString;
-      }
-      return name;
-    } );
-
     // Create and add the textual readout for the element name.
-    this.elementName = new Text( this.elementNameStringProperty, {
-      font: BANConstants.REGULAR_FONT,
-      fill: Color.RED,
-      maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
-    } );
-    this.addChild( this.elementName );
+    this.elementNameText = new ElementNameText( this.model.particleAtom.protonCountProperty,
+      this.model.particleAtom.neutronCountProperty,
+      this.model.doesNuclideExistBooleanProperty );
+    this.addChild( this.elementNameText );
 
     // return if any nuclides exist above, below, or to the left or right of a given nuclide
     const getNextOrPreviousIso = ( direction: string, particleType: ParticleType, protonNumber: number, neutronNumber: number ) => {

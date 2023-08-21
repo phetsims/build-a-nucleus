@@ -127,9 +127,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( periodicTableAndIsotopeSymbol );
 
     // positioning
-    this.elementName.boundsProperty.link( () => {
-      this.elementName.centerX = this.doubleArrowButtons.centerX;
-      this.elementName.top = this.nucleonNumberPanel.top;
+    this.elementNameText.boundsProperty.link( () => {
+      this.elementNameText.centerX = this.doubleArrowButtons.centerX;
+      this.elementNameText.top = this.nucleonNumberPanel.top;
     } );
     this.nucleonNumberPanel.left = this.layoutBounds.left + 20;
 

@@ -330,7 +330,6 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         numberLineCenterY - options.halfLifeArrowLength );
 
-
       // Static positioning
       if ( options.isHalfLifeLabelFixed ) {
         this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
