@@ -94,10 +94,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // store the current nucleon numbers
     let oldProtonNumber: number;
     let oldNeutronNumber: number;
-    const storeNucleonNumbers = () => {
-      oldProtonNumber = this.model.particleAtom.protonCountProperty.value;
-      oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
-    };
 
     // create and add the undo decay button
     const undoDecayButton = new ReturnButton( {
@@ -121,12 +117,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
 
-    // show the undoDecayButton
-    const showAndRepositionUndoDecayButton = ( decayType: string ) => {
-      repositionUndoDecayButton( decayType );
-      undoDecayButton.visible = true;
-    };
-
     // hide the undo decay button if anything in the nucleus changes
     Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
       this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
@@ -137,9 +127,13 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // create and add the available decays panel at the center right of the decay screen
     const availableDecaysPanel = new AvailableDecaysPanel( {
       decayEnabledPropertyMap: model.decayEnabledPropertyMap,
-      decayAtom: this.decayAtom.bind( this ),
-      storeNucleonNumbers: storeNucleonNumbers.bind( this ),
-      showAndRepositionUndoDecayButton: showAndRepositionUndoDecayButton.bind( this )
+      handleDecayListener: decayType => {
+        oldProtonNumber = this.model.particleAtom.protonCountProperty.value;
+        oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
+        this.decayAtom( decayType );
+        repositionUndoDecayButton( decayType.name.toString() );
+        undoDecayButton.visible = true;
+      }
     } );
     availableDecaysPanel.right = this.symbolAccordionBox.right;
     availableDecaysPanel.top = this.symbolAccordionBox.bottom + 10;

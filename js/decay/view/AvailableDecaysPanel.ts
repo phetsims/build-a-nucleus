@@ -34,13 +34,8 @@ type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
   decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
 
-  decayAtom: ( decayType: DecayType ) => void;
-
-  // function to store current nucleon numbers
-  storeNucleonNumbers: () => void;
-
-  // function to show and reposition the undo decay button
-  showAndRepositionUndoDecayButton: ( decayType: string ) => void;
+  // Upon any decay button firing, this listener fires with the given decay type
+  handleDecayListener: ( decayType: DecayType ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
 
@@ -72,16 +67,9 @@ class AvailableDecaysPanel extends Panel {
       baseColor: BANColors.availableDecaysInfoButtonColorProperty
     } );
 
-    // function that creates the listeners for the decay buttons. Emits the specified particle depending on the decay type
-    const createDecayButtonListener = ( decayType: DecayType ) => {
-      options.storeNucleonNumbers();
-      options.decayAtom( decayType );
-      options.showAndRepositionUndoDecayButton( decayType.name.toString() );
-    };
+    // function to create the decay button and corresponding decay icon pair
+    const createDecayButtonAndIcon = ( decayType: DecayType ): Node => {
 
-    // function to create the decay buttons
-    // manually layout the button text due to the superscripts causing the normal layout to look out of place
-    const createDecayButton = ( decayType: DecayType ): Node => {
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
       const buttonText = new RichText( decayType.labelStringProperty, {
         font: LABEL_FONT,
@@ -90,27 +78,25 @@ class AvailableDecaysPanel extends Panel {
 
       buttonText.boundsProperty.link( () => {
         assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
+
+        // manually layout the button text due to the superscripts causing the normal layout to look out of place
         buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
       } );
       buttonBackgroundRectangle.addChild( buttonText );
 
       const enabledProperty = options.decayEnabledPropertyMap.get( decayType )!;
       assert && assert( enabledProperty, 'No enabledProperty found, is your decay type valid? ' + decayType );
-
-      return new RectangularPushButton( {
+      const decayButton = new RectangularPushButton( {
         content: buttonBackgroundRectangle,
         yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
         enabledProperty: enabledProperty,
-        listener: () => { createDecayButtonListener( decayType ); }
+        listener: () => options.handleDecayListener( decayType )
       } );
-    };
 
-    // function to create the decay button and corresponding decay icon pair
-    const createDecayButtonAndIcon = ( decayType: DecayType ): Node => {
       return new HBox( {
         children: [
-          createDecayButton( decayType ),
+          decayButton,
 
           // createDecayButtonAndIcon is called when looping through the DecayType enumeration values so null won't be returned
           IconFactory.createDecayIcon( decayType )!
@@ -141,7 +127,7 @@ class AvailableDecaysPanel extends Panel {
 
     // create and add the particle labels
     // a particle label is a particle node on the left with its corresponding particle name on the right
-    const createParticleLabel = ( particleType: ParticleType ): Node => {
+    const particleLabels = ParticleType.enumeration.values.map( particleType => {
       return new HBox( {
         children: [
           IconFactory.createParticleNode( particleType ),
@@ -149,8 +135,8 @@ class AvailableDecaysPanel extends Panel {
         ],
         spacing: SPACING
       } );
-    };
-    const particleLabels = ParticleType.enumeration.values.map( particleType => createParticleLabel( particleType ) );
+    } );
+
     const createParticleLabelsVBox = ( particleLabels: Node[] ) => {
       return new VBox( {
         children: particleLabels,
