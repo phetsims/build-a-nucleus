@@ -130,7 +130,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
       for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
         if ( nucleonNumberDifference > 0 ) {
-          this.addNucleonImmediatelyToAtom( particleType );
+          this.model.addNucleonImmediatelyToAtom( particleType );
         }
         else if ( nucleonNumberDifference < 0 ) {
           removeNucleonImmediatelyFromAtom( particleType );
@@ -246,7 +246,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.pdomControlAreaNode.pdomOrder = [ this.showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
-      complete && this.populateAtom( BANQueryParameters.decayScreenProtons, BANQueryParameters.decayScreenNeutrons );
+      complete && this.model.populateAtom( BANQueryParameters.decayScreenProtons, BANQueryParameters.decayScreenNeutrons );
     } );
   }
 

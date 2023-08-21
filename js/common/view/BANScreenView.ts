@@ -554,37 +554,6 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Create and add a nucleon of particleType immediately to the particleAtom. Will set the position to the position of
-   * the particleAtom.
-   */
-  protected addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
-    const particle = new BANParticle( particleType.particleTypeString );
-
-    // place the particle the center of the particleAtom and add it to the model and particleAtom
-    particle.setPositionAndDestination( this.model.particleAtom.positionProperty.value );
-    this.model.addParticle( particle );
-    this.model.particleAtom.addParticle( particle );
-  }
-
-  /**
-   * Populate the ParticleAtom with the desired number of nucleons.
-   */
-  protected populateAtom( numberOfProtons: number, numberOfNeutrons: number ): void {
-
-    // add initial neutrons and protons specified by the query parameters to the atom
-    _.times( Math.max( numberOfNeutrons, numberOfProtons ), () => {
-      if ( this.model.particleAtom.neutronCountProperty.value < numberOfNeutrons &&
-           this.model.particleAtom.neutronCountProperty.value < this.model.neutronNumberRange.max ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
-      }
-      if ( this.model.particleAtom.protonCountProperty.value < numberOfProtons &&
-           this.model.particleAtom.protonCountProperty.value < this.model.protonNumberRange.max ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
-      }
-    } );
-  }
-
-  /**
    * Set the input enabled and visibility of a creator node.
    */
   private static setCreatorNodeVisibility( creatorNode: Node, visible: boolean ): void {

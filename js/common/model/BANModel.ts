@@ -195,6 +195,39 @@ class BANModel<T extends ParticleAtom> {
     } );
   }
 
+
+  /**
+   * Create and add a nucleon of particleType immediately to the particleAtom. Will set the position to the position of
+   * the particleAtom.
+   */
+  public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
+    const particle = new BANParticle( particleType.particleTypeString );
+
+    // place the particle the center of the particleAtom and add it to the model and particleAtom
+    particle.setPositionAndDestination( this.particleAtom.positionProperty.value );
+    this.addParticle( particle );
+    this.particleAtom.addParticle( particle );
+  }
+
+  /**
+   * Populate the ParticleAtom with the desired number of nucleons.
+   */
+  public populateAtom( numberOfProtons: number, numberOfNeutrons: number ): void {
+
+    // add initial neutrons and protons specified by the query parameters to the atom
+    _.times( Math.max( numberOfNeutrons, numberOfProtons ), () => {
+      if ( this.particleAtom.neutronCountProperty.value < numberOfNeutrons &&
+           this.particleAtom.neutronCountProperty.value < this.neutronNumberRange.max ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+      }
+      if ( this.particleAtom.protonCountProperty.value < numberOfProtons &&
+           this.particleAtom.protonCountProperty.value < this.protonNumberRange.max ) {
+        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+      }
+    } );
+  }
+
+
 // 2D array that defines the table structure.
 // The rows are the proton number, for example the first row is protonNumber = 0. The numbers in the rows are the neutron number.
   public static readonly POPULATED_CELLS = [

@@ -264,7 +264,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     ] );
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
-      complete && this.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
+      complete && this.model.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
     } );
   }
 
