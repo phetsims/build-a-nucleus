@@ -18,7 +18,6 @@ import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import { ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleType from '../../common/model/ParticleType.js';
@@ -29,6 +28,7 @@ import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import ShowElectronCloudCheckbox from './ShowElectronCloudCheckbox.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import StabilityIndicatorText from './StabilityIndicatorText.js';
 
 // constants
 const NUCLEON_CAPTURE_RADIUS = 100;
@@ -157,51 +157,23 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.addChild( this.showElectronCloudCheckbox );
 
     // create and add stability indicator
-    const stabilityIndicator = new Text( '', {
-      font: BANConstants.REGULAR_FONT,
-      fill: 'black',
-      visible: true,
-      maxWidth: 225
-    } );
-    stabilityIndicator.boundsProperty.link( () => {
-      stabilityIndicator.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
-    } );
-    this.addChild( stabilityIndicator );
+    const stabilityIndicatorText = new StabilityIndicatorText( model.particleAtom.protonCountProperty,
+      model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty );
+    this.addChild( stabilityIndicatorText );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer
     this.addChild( this.particleAtomNode );
 
-    // Define the update function for the stability indicator.
-    const updateStabilityIndicator = ( protonNumber: number, neutronNumber: number ) => {
-      if ( protonNumber > 0 ) {
-        if ( AtomIdentifier.isStable( protonNumber, neutronNumber ) ) {
-          stabilityIndicator.stringProperty = BuildANucleusStrings.stableStringProperty;
-        }
-        else {
-          stabilityIndicator.stringProperty = BuildANucleusStrings.unstableStringProperty;
-        }
-      }
-      else {
-        stabilityIndicator.string = '';
-      }
-    };
-
-    // Add the listeners that control the label content
-    Multilink.multilink( [ model.particleAtom.protonCountProperty, model.particleAtom.neutronCountProperty ],
-      ( protonNumber: number, neutronNumber: number ) => updateStabilityIndicator( protonNumber, neutronNumber )
-    );
-    const updateStabilityIndicatorVisibility = ( visible: boolean ) => {
-      stabilityIndicator.visible = visible;
-    };
-    model.doesNuclideExistBooleanProperty.link( updateStabilityIndicatorVisibility );
-
     // positioning
     this.elementNameText.boundsProperty.link( () => {
 
-      // place the elementNameText a bit below the stabilityIndicator
-      this.elementNameText.center = stabilityIndicator.center.plusXY( 0, 60 );
+      // place the elementNameText a bit below the stabilityIndicatorText
+      this.elementNameText.center = stabilityIndicatorText.center.plusXY( 0, 60 );
     } );
     this.nucleonNumberPanel.left = availableDecaysPanel.left;
+    stabilityIndicatorText.boundsProperty.link( () => {
+      stabilityIndicatorText.center = new Vector2( halfLifeInformationNodeCenterX, availableDecaysPanel.top );
+    } );
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
       halfLifeInformationNode,
