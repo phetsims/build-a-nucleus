@@ -128,14 +128,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // positioning
     this.elementNameText.boundsProperty.link( () => {
-      this.elementNameText.centerX = this.doubleArrowButtons.centerX;
+      this.elementNameText.centerX = this.nucleonArrowButtons.doubleArrowButtons.centerX;
       this.elementNameText.top = this.nucleonNumberPanel.top;
     } );
     this.nucleonNumberPanel.left = this.layoutBounds.left + 20;
 
     const nuclearShellModelText = new NuclearShellModelText();
     nuclearShellModelText.boundsProperty.link( () => {
-      nuclearShellModelText.centerX = this.doubleArrowButtons.centerX;
+      nuclearShellModelText.centerX = this.nucleonArrowButtons.doubleArrowButtons.centerX;
       nuclearShellModelText.centerY = periodicTableAndIsotopeSymbol.bottom + 20;
     } );
     this.addChild( nuclearShellModelText );
@@ -154,8 +154,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // create and add the 'Energy' arrow
     const energyTextDistanceFromArrow = 10;
-    const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow, this.protonArrowButtons.top - 30,
-      energyText.right + energyTextDistanceFromArrow, periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
+    const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow,
+      this.nucleonArrowButtons.protonArrowButtons.top - 30, energyText.right + energyTextDistanceFromArrow,
+      periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
     this.addChild( arrow );
 
     // add proton and neutron energy level nodes

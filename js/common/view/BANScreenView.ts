@@ -12,13 +12,9 @@ import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
-import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import { Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
-import BANColors from '../BANColors.js';
+import { Node, PressListenerEvent, Text } from '../../../../scenery/js/imports.js';
 import NucleonNumberPanel from './NucleonNumberPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import DoubleArrowButton, { DoubleArrowButtonDirection } from './DoubleArrowButton.js';
-import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
@@ -28,7 +24,6 @@ import NucleonCreatorNode from './NucleonCreatorNode.js';
 import ParticleType from '../model/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
 import ParticleAtomNode from './ParticleAtomNode.js';
 import DecayType from '../model/DecayType.js';
@@ -37,8 +32,7 @@ import BANParticle from '../model/BANParticle.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AlphaParticle from '../model/AlphaParticle.js';
 import ElementNameText from './ElementNameText.js';
-
-const TOUCH_AREA_Y_DILATION = 3;
+import NucleonArrowButtons from './NucleonArrowButtons.js';
 
 // types
 type SelfOptions = {
@@ -81,8 +75,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   private readonly neutronsCreatorNodeModelCenter: Vector2;
 
   // the spinner buttons
-  protected readonly doubleArrowButtons: Node;
-  protected readonly protonArrowButtons: Node;
+  protected readonly nucleonArrowButtons: NucleonArrowButtons;
 
   protected readonly elementNameText: ElementNameText;
 
@@ -116,228 +109,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.doesNuclideExistBooleanProperty );
     this.addChild( this.elementNameText );
 
-    // return if any nuclides exist above, below, or to the left or right of a given nuclide
-    const getNextOrPreviousIso = ( direction: string, particleType: ParticleType, protonNumber: number, neutronNumber: number ) => {
-
-      if ( direction === 'up' ) {
-
-        // proton up arrow
-        if ( particleType === ParticleType.PROTON ) {
-          return AtomIdentifier.doesNextIsotoneExist( protonNumber, neutronNumber );
-        }
-
-        // neutron up arrow
-        return AtomIdentifier.doesNextIsotopeExist( protonNumber, neutronNumber );
-      }
-
-      // proton down arrow
-      if ( particleType === ParticleType.PROTON ) {
-        return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber );
-      }
-
-      // neutron down arrow
-      return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber );
-    };
-
-    // function returns whether the protonNumber or neutronNumber is at its min or max range
-    const isNucleonNumberAtRangeBounds = ( direction: string, particleType: ParticleType, protonNumber: number, neutronNumber: number ) => {
-      if ( direction === 'up' ) {
-
-        // proton up arrow
-        if ( particleType === ParticleType.PROTON ) {
-          return protonNumber !== this.model.protonNumberRange.max;
-        }
-
-        // neutron up arrow
-        return neutronNumber !== this.model.neutronNumberRange.max;
-      }
-
-      // proton down arrow
-      if ( particleType === ParticleType.PROTON ) {
-        return protonNumber !== this.model.protonNumberRange.min;
-      }
-
-      // neutron down arrow
-      return neutronNumber !== this.model.neutronNumberRange.min;
-    };
-
-    // enable or disable the creator node and adjust the opacity accordingly
-    const toggleCreatorNodeEnabled = ( creatorNode: Node, enable: boolean ) => {
-      if ( creatorNode ) {
-        creatorNode.inputEnabled = enable;
-        creatorNode.opacity = enable ? 1 : 0.5;
-      }
-    };
-
-    // function to create the arrow enabled properties
-    const createArrowEnabledProperty = ( direction: string, firstParticleType: ParticleType, secondParticleType?: ParticleType ) => {
-      return new DerivedProperty( [ this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-          this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
-          this.model.userControlledProtons.lengthProperty, this.model.userControlledNeutrons.lengthProperty ],
-        ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
-          userControlledProtonNumber, userControlledNeutronNumber ) => {
-
-          const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
-          const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
-          const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
-          const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
-
-          if ( !doesNuclideExist &&
-               ( this.model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonNumber !== 0 ) ) {
-
-            // disable all arrow buttons if the nuclide does not exist
-            toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
-            toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
-            return false;
-          }
-          else {
-            toggleCreatorNodeEnabled( this.protonsCreatorNode, true );
-            toggleCreatorNodeEnabled( this.neutronsCreatorNode, true );
-
-            const nextOrPreviousIsoExists = secondParticleType ?
-                                            !getNextOrPreviousIso( direction, firstParticleType, protonNumber, neutronNumber ) ||
-                                            !getNextOrPreviousIso( direction, secondParticleType, protonNumber, neutronNumber ) :
-                                            !getNextOrPreviousIso( direction, firstParticleType, protonNumber, neutronNumber );
-
-            const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
-            const nuclideExistsBoolean = direction === 'up' ? !doesNuclideExist : doesNuclideExist;
-
-            const doesPreviousNuclideExist = secondParticleType && direction === 'down' ?
-                                             !AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber ) :
-                                             nextOrPreviousIsoExists;
-
-            if ( nuclideExistsBoolean && doesPreviousNuclideExist ) {
-              return false;
-            }
-
-            // If there are no atoms actually in the atom (only potentially animating to the atom), see https://github.com/phetsims/build-a-nucleus/issues/74
-            if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
-              return ( particleType === ParticleType.NEUTRON && atomNeutronNumber === 0 ) ||
-                     ( particleType === ParticleType.PROTON && atomProtonNumber === 0 );
-            } ) ) {
-              return false;
-            }
-
-            return secondParticleType ? isNucleonNumberAtRangeBounds( direction, firstParticleType, protonNumber, neutronNumber ) &&
-                                        isNucleonNumberAtRangeBounds( direction, secondParticleType, protonNumber, neutronNumber ) :
-                   isNucleonNumberAtRangeBounds( direction, firstParticleType, protonNumber, neutronNumber );
-          }
-        } );
-    };
-
-    // create the arrow enabled properties
-    const protonUpArrowEnabledProperty = createArrowEnabledProperty( 'up', ParticleType.PROTON );
-    const neutronUpArrowEnabledProperty = createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
-    const doubleUpArrowEnabledProperty = createArrowEnabledProperty( 'up', ParticleType.PROTON, ParticleType.NEUTRON );
-    const protonDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON );
-    const neutronDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
-    const doubleDownArrowEnabledProperty = createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
-
-    // arrow buttons spacing and size options
-    const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
-    const arrowButtonOptions = {
-      arrowWidth: 14,
-      arrowHeight: 14,
-      fireOnHold: false,
-      touchAreaYDilation: TOUCH_AREA_Y_DILATION
-    };
-
-    // function to create the double arrow buttons
-    const createDoubleArrowButtons = ( direction: DoubleArrowButtonDirection ): Node => {
-      return new DoubleArrowButton( direction,
-        direction === 'up' ?
-        () => increaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
-        () => decreaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ),
-        merge( {
-          leftArrowFill: BANColors.protonColorProperty,
-          rightArrowFill: BANColors.neutronColorProperty,
-          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty
-        }, arrowButtonOptions )
-      );
-    };
-
-    // create and add the double arrow buttons
-    const doubleArrowButtons = new VBox( {
-      children: [ createDoubleArrowButtons( 'up' ), createDoubleArrowButtons( 'down' ) ],
-      spacing: arrowButtonSpacing
-    } );
-    doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    doubleArrowButtons.centerX = atomCenter.x;
-    this.addChild( doubleArrowButtons );
-
-    // functions to create the listeners that create or remove a particle
-    const increaseNucleonNumberListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
-      this.createParticleFromStack( firstNucleonType );
-      if ( secondNucleonType ) {
-        this.createParticleFromStack( secondNucleonType );
-      }
-    };
-    const decreaseNucleonNumberListener = ( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ) => {
-      this.returnParticleToStack( firstNucleonType );
-      if ( secondNucleonType ) {
-        this.returnParticleToStack( secondNucleonType );
-      }
-    };
-
-    // function to create the single arrow buttons
-    const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): Node => {
-      const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
-      const upArrowButton = new ArrowButton( 'up', () => increaseNucleonNumberListener( nucleonType ),
-        merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
-          },
-          singleArrowButtonOptions )
-      );
-      const downArrowButton = new ArrowButton( 'down', () => decreaseNucleonNumberListener( nucleonType ),
-        merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty
-          },
-          singleArrowButtonOptions )
-      );
-      return new VBox( {
-        children: [ upArrowButton, downArrowButton ],
-        spacing: arrowButtonSpacing
-      } );
-    };
-
-    // create and add the single arrow buttons
-    const protonArrowButtons = createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
-    protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    protonArrowButtons.right = doubleArrowButtons.left - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
-    this.addChild( protonArrowButtons );
-    const neutronArrowButtons = createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
-    neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    neutronArrowButtons.left = doubleArrowButtons.right + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
-    this.addChild( neutronArrowButtons );
-
-    // function to keep track of when a double arrow button was clicked
-    const createSingleOrDoubleArrowButtonClickedListener = ( isDoubleArrowButton: boolean, arrowButtons: Node ) => {
-      const arrowButtonsChildren = arrowButtons.getChildren() as ArrowButton[];
-      arrowButtonsChildren.forEach( arrowButton => {
-        arrowButton.addListener( () => {
-          this.model.doubleArrowButtonClickedBooleanProperty.value = isDoubleArrowButton;
-        } );
-      } );
-    };
-
-    createSingleOrDoubleArrowButtonClickedListener( true, doubleArrowButtons );
-    createSingleOrDoubleArrowButtonClickedListener( false, protonArrowButtons );
-    createSingleOrDoubleArrowButtonClickedListener( false, neutronArrowButtons );
-
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
 
     // create and add the Protons and Neutrons label
     const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, nucleonLabelTextOptions );
-    protonsLabel.boundsProperty.link( () => {
-      protonsLabel.bottom = doubleArrowButtons.bottom;
-      protonsLabel.centerX = ( doubleArrowButtons.left - protonArrowButtons.right ) / 2 + protonArrowButtons.right;
-    } );
     this.addChild( protonsLabel );
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, nucleonLabelTextOptions );
-    neutronsLabel.boundsProperty.link( () => {
-      neutronsLabel.bottom = doubleArrowButtons.bottom;
-      neutronsLabel.centerX = ( neutronArrowButtons.left - doubleArrowButtons.right ) / 2 + doubleArrowButtons.right;
-    } );
     this.addChild( neutronsLabel );
 
     this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPosition, 1 );
@@ -348,17 +125,40 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // create and add the NucleonCreatorNode for the protons
     this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
       this.particleTransform );
-    this.protonsCreatorNode.top = doubleArrowButtons.top;
-    this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.addChild( this.protonsCreatorNode );
 
     // create and add the NucleonCreatorNode for the neutrons
     this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
       this.particleTransform );
-    this.neutronsCreatorNode.top = doubleArrowButtons.top;
-    this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
     this.addChild( this.neutronsCreatorNode );
 
+    const nucleonArrowButtons = new NucleonArrowButtons( this.model, this.protonsCreatorNode,
+      this.neutronsCreatorNode, this.createParticleFromStack.bind( this ), this.returnParticleToStack.bind( this ) );
+    this.addChild( nucleonArrowButtons );
+
+    // positioning
+    // nucleonArrowButtons positioning must be first since others depend on them
+    nucleonArrowButtons.doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
+    nucleonArrowButtons.doubleArrowButtons.centerX = atomCenter.x;
+    nucleonArrowButtons.protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
+    nucleonArrowButtons.protonArrowButtons.right = nucleonArrowButtons.doubleArrowButtons.left - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
+    nucleonArrowButtons.neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
+    nucleonArrowButtons.neutronArrowButtons.left = nucleonArrowButtons.doubleArrowButtons.right + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
+    protonsLabel.boundsProperty.link( () => {
+      protonsLabel.bottom = nucleonArrowButtons.doubleArrowButtons.bottom;
+      protonsLabel.centerX = ( nucleonArrowButtons.doubleArrowButtons.left - nucleonArrowButtons.protonArrowButtons.right ) / 2 + nucleonArrowButtons.protonArrowButtons.right;
+    } );
+    neutronsLabel.boundsProperty.link( () => {
+      neutronsLabel.bottom = nucleonArrowButtons.doubleArrowButtons.bottom;
+      neutronsLabel.centerX = ( nucleonArrowButtons.neutronArrowButtons.left - nucleonArrowButtons.doubleArrowButtons.right ) / 2 + nucleonArrowButtons.doubleArrowButtons.right;
+    } );
+    // position creator nodes last since dependent on nucleonArrowButtons and nucleon labels
+    this.protonsCreatorNode.top = nucleonArrowButtons.doubleArrowButtons.top;
+    this.protonsCreatorNode.centerX = protonsLabel.centerX;
+    this.neutronsCreatorNode.top = nucleonArrowButtons.doubleArrowButtons.top;
+    this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
+
+    // store to know origin when creating / returning particles from stack
     this.protonsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.protonsCreatorNode.center );
     this.neutronsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.neutronsCreatorNode.center );
 
@@ -412,16 +212,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
 
     // for use in positioning
-    this.doubleArrowButtons = doubleArrowButtons;
-    this.protonArrowButtons = protonArrowButtons;
+    this.nucleonArrowButtons = nucleonArrowButtons;
 
     // update the cloud size as the massNumber changes
     this.model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
 
     this.pdomPlayAreaNode.pdomOrder = [
-      protonArrowButtons,
-      doubleArrowButtons,
-      neutronArrowButtons
+      nucleonArrowButtons.protonArrowButtons,
+      nucleonArrowButtons.doubleArrowButtons,
+      nucleonArrowButtons.neutronArrowButtons
     ];
     this.pdomControlAreaNode.pdomOrder = [ this.resetAllButton ];
   }
