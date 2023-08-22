@@ -416,34 +416,42 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     else {
       this.timeSinceCountdownStarted = 0;
 
-      // keep track of the old values of protonCountProperty and neutronCountProperty to know which value increased
+      // Store the last valid atom configuration to go back to after a certain amount of time.
       this.previousProtonNumber = protonNumber;
       this.previousNeutronNumber = neutronNumber;
     }
 
     // show the nuclide that does not exist for one second, then return the necessary particles
-    if ( this.timeSinceCountdownStarted >= BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST ) {
+    if ( this.timeSinceCountdownStarted >= BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST &&
+
+         // User controlled particles get another behavior because we want that specific particle to go back to
+         // the atom, see this.dragEndedListener()
+         this.model.userControlledNeutrons.length === 0 &&
+         this.model.userControlledProtons.length === 0 ) {
       this.timeSinceCountdownStarted = 0;
 
-      if ( this.model.doubleArrowButtonClickedBooleanProperty.value &&
-           AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber ) ) {
-        this.returnParticleToStack( ParticleType.NEUTRON );
-        this.returnParticleToStack( ParticleType.PROTON );
-      }
-      else if ( this.previousNeutronNumber < neutronNumber &&
-                AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber ) ) {
+      assert && assert( AtomIdentifier.doesExist( this.previousProtonNumber, this.previousNeutronNumber ),
+        `cannot set back to a non existent previous: p${this.previousProtonNumber}, n${this.previousNeutronNumber}` );
 
-        // the neutronNumber increased to create a nuclide that does not exist, so return a neutron to the stack
-        this.returnParticleToStack( ParticleType.NEUTRON );
+      if ( this.previousProtonNumber < protonNumber ) {
+        _.times( protonNumber - this.previousProtonNumber, () => {
+          this.returnParticleToStack( ParticleType.PROTON );
+        } );
       }
-      else if ( this.previousProtonNumber < protonNumber &&
-                AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber ) ) {
-
-        // the protonNumber increased to create a nuclide that does not exist, so return a proton to the stack
-        this.returnParticleToStack( ParticleType.PROTON );
+      else if ( this.previousProtonNumber > protonNumber ) {
+        _.times( this.previousProtonNumber - protonNumber, () => {
+          this.createParticleFromStack( ParticleType.PROTON );
+        } );
       }
-      else {
-        assert && assert( false, 'a particle should be removed in one of the above cases' );
+      if ( this.previousNeutronNumber < neutronNumber ) {
+        _.times( neutronNumber - this.previousNeutronNumber, () => {
+          this.returnParticleToStack( ParticleType.NEUTRON );
+        } );
+      }
+      else if ( this.previousNeutronNumber > neutronNumber ) {
+        _.times( this.previousNeutronNumber - neutronNumber, () => {
+          this.createParticleFromStack( ParticleType.NEUTRON );
+        } );
       }
     }
   }
@@ -464,13 +472,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
-    if ( this.isNucleonInCaptureArea( nucleon, atom.positionProperty ) ||
+    // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
+    const currentlyNonExistentAtom =
+      this.model.particleAtom.massNumberProperty.value !== 0 &&
+      !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value );
 
-         // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
-         ( ( this.model.particleAtom.protonCountProperty.value + this.model.particleAtom.neutronCountProperty.value ) !== 0 &&
-           !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value )
-         )
-    ) {
+
+    if ( this.isNucleonInCaptureArea( nucleon, atom.positionProperty ) || currentlyNonExistentAtom ) {
       atom.addParticle( nucleon );
     }
     else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
