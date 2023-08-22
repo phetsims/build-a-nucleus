@@ -363,26 +363,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particle.destinationProperty.value = destination;
 
       particle.animationEndedEmitter.addListener( () => {
-        this.removeParticle( particle );
+        this.model.removeParticle( particle );
       } );
     }
     else {
-      this.removeParticle( particle );
-    }
-  }
-
-  /**
-   * Remove the given particle from the model.
-   */
-  protected removeParticle( particle: Particle ): void {
-    assert && assert( !particle.isDisposed, 'cannot remove a particle that is already disposed' );
-
-    this.model.outgoingParticles.includes( particle ) && this.model.outgoingParticles.remove( particle );
-    if ( this.model.particles.includes( particle ) ) {
       this.model.removeParticle( particle );
-    }
-    else {
-      particle.dispose();
     }
   }
 
@@ -591,7 +576,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // animate the particle to a random destination outside the model
     const alphaParticleEmissionAnimation = alphaParticle.animateAndRemoveParticle(
-      this.getRandomExternalModelPosition(), this.removeParticle.bind( this ) );
+      this.getRandomExternalModelPosition(), this.model.removeParticle.bind( this.model ) );
     this.model.particleAnimations.push( alphaParticleEmissionAnimation );
 
     return alphaParticle;

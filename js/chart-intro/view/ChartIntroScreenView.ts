@@ -308,7 +308,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;
     this.fadeAnimation( 0, particleView.opacityProperty, () => {
-      this.removeParticle( shellNucleusNucleon );
+      this.model.removeParticle( shellNucleusNucleon );
     } );
   }
 

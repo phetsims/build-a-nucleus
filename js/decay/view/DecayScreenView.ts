@@ -103,7 +103,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         this.restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
 
         // remove all particles in the outgoingParticles array from the particles array
-        this.model.outgoingParticles.forEach( particle => {
+        [ ...this.model.outgoingParticles ].forEach( particle => {
           this.model.removeParticle( particle );
         } );
         this.model.outgoingParticles.clear();

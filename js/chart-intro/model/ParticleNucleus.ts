@@ -160,6 +160,8 @@ class ParticleNucleus extends ParticleAtom {
 
   /**
    * Remove the particle's placement in the shell and from the ParticleAtom.
+   * We need to remove from the shell here too since sometimes a particle is not a part of the ParticleAtom, but it does
+   * have a shell position here in the ParticleNucleus.
    */
   public override removeParticle( particle: Particle ): void {
     this.removeParticleFromShell( particle );

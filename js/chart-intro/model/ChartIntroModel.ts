@@ -138,7 +138,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     // Not a full removeParticle() call because we never completed the animation into the particleAtom (but we did
     // count it in a shell position).
-    this.particleAtom.removeParticleFromShell && this.particleAtom.removeParticleFromShell( particle );
+    this.particleAtom.removeParticleFromShell( particle );
   }
 }
 

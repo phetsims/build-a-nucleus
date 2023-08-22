@@ -164,7 +164,16 @@ class BANModel<T extends ParticleAtom> {
    * Remove a Particle from the model (from the particles array).
    */
   public removeParticle( particle: Particle ): void {
-    this.particles.remove( particle );
+    assert && assert( !particle.isDisposed, 'cannot remove a particle that is already disposed' );
+
+    this.particleAtom.containsParticle( particle ) && this.particleAtom.removeParticle( particle );
+    this.outgoingParticles.includes( particle ) && this.outgoingParticles.remove( particle );
+    if ( this.particles.includes( particle ) ) {
+      this.particles.remove( particle );
+    }
+    else {
+      particle.dispose();
+    }
   }
 
   public reset(): void {
