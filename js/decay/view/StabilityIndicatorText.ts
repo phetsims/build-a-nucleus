@@ -48,6 +48,8 @@ class StabilityIndicatorText extends Text {
           }
         }
         else {
+
+          // don't show stability for neutrons // TODO: why? https://github.com/phetsims/build-a-nucleus/issues/163
           return '';
         }
       } );
