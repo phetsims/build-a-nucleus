@@ -36,9 +36,12 @@ const ALLOWED_PARTICLE_POSITIONS = [
   [ 0, 1, 2, 3, 4, 5 ],
   [ 0, 1, 2, 3, 4, 5 ]
 ];
-assert && assert( ALLOWED_PARTICLE_POSITIONS[ 0 ].length === N_ZERO_CAPACITY, 'n0 spots check' );
-assert && assert( ALLOWED_PARTICLE_POSITIONS[ 1 ].length === N_ONE_CAPACITY, 'n1 spots check' );
-assert && assert( ALLOWED_PARTICLE_POSITIONS[ 2 ].length === N_ONE_CAPACITY, 'n2 spots check' );
+assert && assert( ALLOWED_PARTICLE_POSITIONS.length === EnergyLevelType.ENERGY_LEVELS.length, 'Energy levels should match' );
+
+for ( let i = 0; i < EnergyLevelType.ENERGY_LEVELS.length; i++ ) {
+  const energyLevel = EnergyLevelType.ENERGY_LEVELS[ i ];
+  assert && assert( ALLOWED_PARTICLE_POSITIONS[ i ].length === energyLevel.capacity, `n${i} capacity spots check` );
+}
 
 class ParticleNucleus extends ParticleAtom {
 
@@ -215,25 +218,15 @@ class ParticleNucleus extends ParticleAtom {
   private updateNucleonPositions( particleArray: ObservableArray<BANParticle>, particleShellPositions: ParticleShellPosition[][],
                                   levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
 
-    // width in view coordinates of the second energy level, which is the same as the other two levels (though the first
+    // width in view coordinates of the n1/n2 energy level, which is the same as the other two levels (though the n0
     // energy level line is drawn shorter - see NucleonShellView for details)
-    const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] ) -
-                       this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
+    const n1levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] ) -
+                         this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
+
+
     particleArray.forEach( ( particle, index ) => {
-      const yPosition = index < N_ZERO_CAPACITY ? EnergyLevelType.N_ZERO.yPosition :
-                        index < ( N_ZERO_CAPACITY + N_ONE_CAPACITY ) ? EnergyLevelType.N_ONE.yPosition :
-                        EnergyLevelType.N_TWO.yPosition;
-
-      const xPosition =
-
-        // the first level begins at xPosition which is the first entry in ALLOWED_PARTICLE_POSITIONS.
-        yPosition === EnergyLevelType.N_ZERO.yPosition ? index + ALLOWED_PARTICLE_POSITIONS[ 0 ][ 0 ] :
-
-          // the second level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-        yPosition === EnergyLevelType.N_ONE.yPosition ? index - N_ZERO_CAPACITY :
-
-          // the third level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-        index - ( N_ZERO_CAPACITY + N_ONE_CAPACITY );
+      const yPosition = EnergyLevelType.getForIndex( index ).yPosition;
+      const xPosition = this.getLocalXIndex( index, yPosition );
 
       // last level (yPosition === 2) never bounds so don't need levelIndex condition for it
       const levelIndex = yPosition === EnergyLevelType.N_ZERO.yPosition ? index : index - N_ZERO_CAPACITY;
@@ -254,7 +247,7 @@ class ParticleNucleus extends ParticleAtom {
         const numberOfRadiusSpaces = yPosition === EnergyLevelType.N_ZERO.yPosition ? N_ZERO_CAPACITY - 1 : N_ONE_CAPACITY - 1;
 
         // amount each particle moves so the space between it and the particle on its left is removed
-        const boundOffset = levelWidth * ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
+        const boundOffset = n1levelWidth * ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
 
         // amount each particle has to move for all particles to be centered in middle of energy level
         const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;
@@ -273,6 +266,17 @@ class ParticleNucleus extends ParticleAtom {
       particle.destinationProperty.set( viewDestination );
       particle.inputEnabledProperty.value = inputEnabled;
     } );
+  }
+
+  // Get the "local" position for x placement on the yPosition EnergyLevel the index belongs to.
+  private getLocalXIndex( index: number, yPosition: number ): number {
+    let indexForLevel = index;
+    let nextLowerYIndex = yPosition - 1;
+    while ( nextLowerYIndex >= 0 ) {
+      indexForLevel -= ALLOWED_PARTICLE_POSITIONS[ nextLowerYIndex ].length;
+      nextLowerYIndex -= 1;
+    }
+    return ALLOWED_PARTICLE_POSITIONS[ yPosition ][ indexForLevel ];
   }
 }
 
