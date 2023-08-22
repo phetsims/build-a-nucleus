@@ -822,13 +822,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.model.outgoingParticles.add( particleToEmit );
 
-    // TODO: Remove this once https://github.com/phetsims/build-a-nucleus/issues/115 is solved
-    let called = false;
     // add the particle to the model to emit it, then change the nucleon type and remove the particle
     particleAtom.changeNucleonType( closestParticle, () => {
-      assert && assert( !called, 'completion callback should only be called once' );
       assert && assert( !particleToEmit.isDisposed, 'cannot animate a removedParticle' );
-      called = true;
       this.animateAndRemoveParticle( particleToEmit, destination );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
