@@ -39,18 +39,14 @@ class StabilityIndicatorText extends Text {
         BuildANucleusStrings.unstableStringProperty
       ],
       ( protonNumber, neutronNumber ) => {
-        if ( protonNumber > 0 ) {
-          if ( AtomIdentifier.isStable( protonNumber, neutronNumber ) ) {
-            return BuildANucleusStrings.stableStringProperty.value;
-          }
-          else {
-            return BuildANucleusStrings.unstableStringProperty.value;
-          }
+        if ( protonNumber === 0 && neutronNumber === 0 ) {
+          return '';
+        }
+        else if ( AtomIdentifier.isStable( protonNumber, neutronNumber ) ) {
+          return BuildANucleusStrings.stableStringProperty.value;
         }
         else {
-
-          // don't show stability for neutrons // TODO: why? https://github.com/phetsims/build-a-nucleus/issues/163
-          return '';
+          return BuildANucleusStrings.unstableStringProperty.value;
         }
       } );
 
