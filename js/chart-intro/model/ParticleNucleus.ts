@@ -75,7 +75,7 @@ class ParticleNucleus extends ParticleAtom {
     // update bound levels based on nucleon numbers
     const createLevelPropertyListener = ( nucleonCountProperty: TReadOnlyProperty<number>, nucleonLevelProperty: EnumerationProperty<EnergyLevelType> ) => {
       nucleonCountProperty.link( nucleonNumber => {
-        if ( nucleonNumber >= N_ZERO_CAPACITY + N_ONE_CAPACITY ) {
+        if ( nucleonNumber > N_ZERO_CAPACITY + N_ONE_CAPACITY ) {
           nucleonLevelProperty.value = EnergyLevelType.N_TWO;
         }
         else if ( nucleonNumber > N_ZERO_CAPACITY ) {
