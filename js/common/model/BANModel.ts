@@ -15,7 +15,6 @@ import createObservableArray, { ObservableArray } from '../../../../axon/js/crea
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ParticleType from './ParticleType.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import BANParticle from './BANParticle.js';
@@ -48,9 +47,6 @@ class BANModel<T extends ParticleAtom> {
 
   // If there are any incoming particles currently
   public readonly hasIncomingParticlesProperty: TReadOnlyProperty<boolean>;
-
-  // keep track of when the double arrow buttons are clicked or when the single arrow buttons are clicked
-  public readonly doubleArrowButtonClickedBooleanProperty = new BooleanProperty( false );
 
   // keep track of any particle related animations that may need to be cancelled at some point
   public readonly particleAnimations = createObservableArray<Animation | null>();

@@ -21,7 +21,6 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import Range from '../../../../dot/js/Range.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 
 // constants
 const TOUCH_AREA_Y_DILATION = 3;
@@ -36,7 +35,6 @@ class NucleonArrowButtons extends Node {
   // for use in methods
   private readonly protonNumberRange: Range;
   private readonly neutronNumberRange: Range;
-  private readonly doubleArrowButtonClickedBooleanProperty: BooleanProperty;
   private readonly createParticleFromStack: ( particleType: ParticleType ) => Particle;
   private readonly returnParticleToStack: ( particleType: ParticleType ) => void;
 
@@ -48,7 +46,6 @@ class NucleonArrowButtons extends Node {
 
     this.protonNumberRange = model.protonNumberRange;
     this.neutronNumberRange = model.neutronNumberRange;
-    this.doubleArrowButtonClickedBooleanProperty = model.doubleArrowButtonClickedBooleanProperty;
     this.createParticleFromStack = createParticleFromStack;
     this.returnParticleToStack = returnParticleToStack;
 
@@ -238,12 +235,7 @@ class NucleonArrowButtons extends Node {
    */
   private increaseNucleonNumberListener( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ): void {
     this.createParticleFromStack( firstNucleonType );
-    if ( secondNucleonType ) {
-      this.createParticleFromStack( secondNucleonType );
-    }
-
-    // keep track of when a double arrow button was clicked
-    this.doubleArrowButtonClickedBooleanProperty.value = !!secondNucleonType;
+    secondNucleonType && this.createParticleFromStack( secondNucleonType );
   }
 
   /**
@@ -251,12 +243,7 @@ class NucleonArrowButtons extends Node {
    */
   private decreaseNucleonNumberListener( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ): void {
     this.returnParticleToStack( firstNucleonType );
-    if ( secondNucleonType ) {
-      this.returnParticleToStack( secondNucleonType );
-    }
-
-    // keep track of when a double arrow button was clicked
-    this.doubleArrowButtonClickedBooleanProperty.value = !!secondNucleonType;
+    secondNucleonType && this.returnParticleToStack( secondNucleonType );
   }
 }
 
