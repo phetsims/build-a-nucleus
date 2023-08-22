@@ -17,7 +17,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { FIRST_LEVEL_CAPACITY, ParticleShellPosition, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
+import { N_ZERO_CAPACITY, ParticleShellPosition, N_ONE_CAPACITY } from '../model/ParticleNucleus.js';
 import EnergyLevelType from '../model/EnergyLevelType.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
@@ -68,25 +68,25 @@ class NucleonShellView extends Node {
     const defaultEnergyLevelWidth = 1;
     let xPositionIndex; // the xPosition from 1 to 5 for the second and third energy levels
     nucleonCountProperty.link( nucleonNumber => {
-      if ( nucleonNumber <= FIRST_LEVEL_CAPACITY ) {
-        const firstEnergyLevel = EnergyLevelType.NONE.yPosition; // set to first energy level where yPosition = 0
-        energyLevels[ firstEnergyLevel ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonNumber / FIRST_LEVEL_CAPACITY );
+      if ( nucleonNumber <= N_ZERO_CAPACITY ) {
+        const firstEnergyLevel = EnergyLevelType.N_ZERO.yPosition; // set to first energy level where yPosition = 0
+        energyLevels[ firstEnergyLevel ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, nucleonNumber / N_ZERO_CAPACITY );
 
         // if the energy level is full (2 particles on the lower energy level), double the lineWidth
-        energyLevels[ firstEnergyLevel ].lineWidth = nucleonNumber === FIRST_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
+        energyLevels[ firstEnergyLevel ].lineWidth = nucleonNumber === N_ZERO_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
       else {
-        let energyLevelNumber = EnergyLevelType.FIRST.yPosition; // initialize to second energy level where yPosition = 1
+        let energyLevelNumber = EnergyLevelType.N_ONE.yPosition; // initialize to second energy level where yPosition = 1
         xPositionIndex = nucleonNumber; // initialize to the current nucleonNumber
-        if ( nucleonNumber > ( SECOND_LEVEL_CAPACITY + FIRST_LEVEL_CAPACITY ) ) {
-          xPositionIndex = nucleonNumber - SECOND_LEVEL_CAPACITY;
-          energyLevelNumber = EnergyLevelType.SECOND.yPosition;
+        if ( nucleonNumber > ( N_ONE_CAPACITY + N_ZERO_CAPACITY ) ) {
+          xPositionIndex = nucleonNumber - N_ONE_CAPACITY;
+          energyLevelNumber = EnergyLevelType.N_TWO.yPosition;
         }
-        xPositionIndex = xPositionIndex - FIRST_LEVEL_CAPACITY;
-        energyLevels[ energyLevelNumber ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, xPositionIndex / SECOND_LEVEL_CAPACITY );
+        xPositionIndex = xPositionIndex - N_ZERO_CAPACITY;
+        energyLevels[ energyLevelNumber ].stroke = Color.interpolateRGBA( emptyLayerColor, fullLayerColor, xPositionIndex / N_ONE_CAPACITY );
 
         // if the energy level is full (6 particles on the upper and middle energy levels), double the lineWidth
-        energyLevels[ energyLevelNumber ].lineWidth = xPositionIndex === SECOND_LEVEL_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
+        energyLevels[ energyLevelNumber ].lineWidth = xPositionIndex === N_ONE_CAPACITY ? boldEnergyLevelWidth : defaultEnergyLevelWidth;
       }
     } );
   }

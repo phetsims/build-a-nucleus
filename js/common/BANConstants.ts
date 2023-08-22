@@ -12,12 +12,12 @@ import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../dot/js/Bounds2.js';
 import { Color, RadialGradient } from '../../../scenery/js/imports.js';
-import { SECOND_LEVEL_CAPACITY } from '../chart-intro/model/ParticleNucleus.js';
+import { N_ONE_CAPACITY } from '../chart-intro/model/ParticleNucleus.js';
 import BANColors from './BANColors.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 
 // have one less space than there are particles
-const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = SECOND_LEVEL_CAPACITY - 1;
+const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = N_ONE_CAPACITY - 1;
 const PARTICLE_RADIUS = ShredConstants.NUCLEON_RADIUS;
 const PARTICLE_DIAMETER = PARTICLE_RADIUS * 2;
 const PARTICLE_X_SPACING = PARTICLE_RADIUS;

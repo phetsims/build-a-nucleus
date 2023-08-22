@@ -24,7 +24,7 @@ import ChartIntroModel from '../model/ChartIntroModel.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
-import { FIRST_LEVEL_CAPACITY, SECOND_LEVEL_CAPACITY } from '../model/ParticleNucleus.js';
+import { N_ZERO_CAPACITY, N_ONE_CAPACITY } from '../model/ParticleNucleus.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANModel from '../../common/model/BANModel.js';
 
@@ -37,7 +37,7 @@ type SelfOptions = {
 export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 
 // Applies to both proton and neutron numbers see showMagicNumbersBooleanProperty for details.
-const MAGIC_NUMBERS = [ FIRST_LEVEL_CAPACITY, FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ];
+const MAGIC_NUMBERS = [ N_ZERO_CAPACITY, N_ZERO_CAPACITY + N_ONE_CAPACITY ];
 
 class NuclideChartNode extends Node {
 

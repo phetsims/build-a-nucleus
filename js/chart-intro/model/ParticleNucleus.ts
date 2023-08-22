@@ -27,8 +27,8 @@ export type ParticleShellPosition = {
 };
 
 // constants
-export const FIRST_LEVEL_CAPACITY = 2; // Number of particles available on the first energy level of a nucleus.
-export const SECOND_LEVEL_CAPACITY = 6; // Number of particles available on the second and third energy levels of a nucleus.
+export const N_ZERO_CAPACITY = EnergyLevelType.N_ZERO.capacity;
+export const N_ONE_CAPACITY = EnergyLevelType.N_ONE.capacity;
 
 // row is yPosition, number is xPosition
 const ALLOWED_PARTICLE_POSITIONS = [
@@ -36,9 +36,9 @@ const ALLOWED_PARTICLE_POSITIONS = [
   [ 0, 1, 2, 3, 4, 5 ],
   [ 0, 1, 2, 3, 4, 5 ]
 ];
-assert && assert( ALLOWED_PARTICLE_POSITIONS[ 1 ].length === SECOND_LEVEL_CAPACITY, 'second level spots check' );
-assert && assert( ALLOWED_PARTICLE_POSITIONS[ 2 ].length === SECOND_LEVEL_CAPACITY, 'third level spots check' );
-assert && assert( ALLOWED_PARTICLE_POSITIONS[ 0 ].length === FIRST_LEVEL_CAPACITY, 'first level spots check' );
+assert && assert( ALLOWED_PARTICLE_POSITIONS[ 0 ].length === N_ZERO_CAPACITY, 'n0 spots check' );
+assert && assert( ALLOWED_PARTICLE_POSITIONS[ 1 ].length === N_ONE_CAPACITY, 'n1 spots check' );
+assert && assert( ALLOWED_PARTICLE_POSITIONS[ 2 ].length === N_ONE_CAPACITY, 'n2 spots check' );
 
 class ParticleNucleus extends ParticleAtom {
 
@@ -52,8 +52,8 @@ class ParticleNucleus extends ParticleAtom {
   public readonly modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
 
   // keep track of bound levels
-  private readonly protonsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
-  private readonly neutronsLevelProperty = new EnumerationProperty( EnergyLevelType.NONE );
+  private readonly protonsLevelProperty = new EnumerationProperty( EnergyLevelType.N_ZERO );
+  private readonly neutronsLevelProperty = new EnumerationProperty( EnergyLevelType.N_ZERO );
 
   public constructor() {
     super();
@@ -75,14 +75,14 @@ class ParticleNucleus extends ParticleAtom {
     // update bound levels based on nucleon numbers
     const createLevelPropertyListener = ( nucleonCountProperty: TReadOnlyProperty<number>, nucleonLevelProperty: EnumerationProperty<EnergyLevelType> ) => {
       nucleonCountProperty.link( nucleonNumber => {
-        if ( nucleonNumber >= FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) {
-          nucleonLevelProperty.value = EnergyLevelType.SECOND;
+        if ( nucleonNumber >= N_ZERO_CAPACITY + N_ONE_CAPACITY ) {
+          nucleonLevelProperty.value = EnergyLevelType.N_TWO;
         }
-        else if ( nucleonNumber > FIRST_LEVEL_CAPACITY ) {
-          nucleonLevelProperty.value = EnergyLevelType.FIRST;
+        else if ( nucleonNumber > N_ZERO_CAPACITY ) {
+          nucleonLevelProperty.value = EnergyLevelType.N_ONE;
         }
         else {
-          nucleonLevelProperty.value = EnergyLevelType.NONE;
+          nucleonLevelProperty.value = EnergyLevelType.N_ZERO;
         }
       } );
     };
@@ -120,7 +120,7 @@ class ParticleNucleus extends ParticleAtom {
    */
   public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
     const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
-    let yPosition = EnergyLevelType.NONE.yPosition; // initialize to the lowest shell where yPosition = 0
+    let yPosition = EnergyLevelType.N_ZERO.yPosition; // initialize to the lowest shell where yPosition = 0
 
     const openNucleonShellPositions = nucleonShellPositions.map( particleShellRow => {
 
@@ -217,26 +217,26 @@ class ParticleNucleus extends ParticleAtom {
 
     // width in view coordinates of the second energy level, which is the same as the other two levels (though the first
     // energy level line is drawn shorter - see NucleonShellView for details)
-    const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 5 ] ) -
+    const levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] ) -
                        this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
     particleArray.forEach( ( particle, index ) => {
-      const yPosition = index < FIRST_LEVEL_CAPACITY ? EnergyLevelType.NONE.yPosition :
-                        index < ( FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY ) ? EnergyLevelType.FIRST.yPosition :
-                        EnergyLevelType.SECOND.yPosition;
+      const yPosition = index < N_ZERO_CAPACITY ? EnergyLevelType.N_ZERO.yPosition :
+                        index < ( N_ZERO_CAPACITY + N_ONE_CAPACITY ) ? EnergyLevelType.N_ONE.yPosition :
+                        EnergyLevelType.N_TWO.yPosition;
 
       const xPosition =
 
-        // the first level begins at xPosition 2, see ALLOWED_PARTICLE_POSITIONS
-        yPosition === EnergyLevelType.NONE.yPosition ? index + 2 :
+        // the first level begins at xPosition which is the first entry in ALLOWED_PARTICLE_POSITIONS.
+        yPosition === EnergyLevelType.N_ZERO.yPosition ? index + ALLOWED_PARTICLE_POSITIONS[ 0 ][ 0 ] :
 
           // the second level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-        yPosition === EnergyLevelType.FIRST.yPosition ? index - FIRST_LEVEL_CAPACITY :
+        yPosition === EnergyLevelType.N_ONE.yPosition ? index - N_ZERO_CAPACITY :
 
           // the third level has indices xPosition indices 0 to 5, see ALLOWED_PARTICLE_POSITIONS
-        index - ( FIRST_LEVEL_CAPACITY + SECOND_LEVEL_CAPACITY );
+        index - ( N_ZERO_CAPACITY + N_ONE_CAPACITY );
 
       // last level (yPosition === 2) never bounds so don't need levelIndex condition for it
-      const levelIndex = yPosition === EnergyLevelType.NONE.yPosition ? index : index - FIRST_LEVEL_CAPACITY;
+      const levelIndex = yPosition === EnergyLevelType.N_ZERO.yPosition ? index : index - N_ZERO_CAPACITY;
       const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
       const unBoundXPosition = this.modelViewTransform.modelToViewX( nucleonShellPosition.xPosition ) + xOffset;
 
@@ -251,10 +251,10 @@ class ParticleNucleus extends ParticleAtom {
 
         // each particle on the level has one 'particle radius' space except for one.
         // there are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
-        const numberOfRadiusSpaces = yPosition === EnergyLevelType.NONE.yPosition ? FIRST_LEVEL_CAPACITY - 1 : SECOND_LEVEL_CAPACITY - 1;
+        const numberOfRadiusSpaces = yPosition === EnergyLevelType.N_ZERO.yPosition ? N_ZERO_CAPACITY - 1 : N_ONE_CAPACITY - 1;
 
         // amount each particle moves so the space between it and the particle on its left is removed
-        const boundOffset = levelWidth * ( levelIndex / ( 3 * SECOND_LEVEL_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
+        const boundOffset = levelWidth * ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
 
         // amount each particle has to move for all particles to be centered in middle of energy level
         const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;
