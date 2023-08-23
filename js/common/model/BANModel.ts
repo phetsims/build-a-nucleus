@@ -203,7 +203,7 @@ class BANModel<T extends ParticleAtom> {
 
 
   /**
-   * Create and add a nucleon of particleType immediately to the particleAtom. Will set the position to the position of
+   * Create and add a nucleon of particleType immediately to the particleAtom. Position is by default the position of
    * the particleAtom.
    */
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
