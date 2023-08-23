@@ -33,7 +33,7 @@ const BANQueryParameters = QueryStringMachine.getAll( {
     public: true,
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_PROTON_NUMBER,
-    isValidValue: getValidationFunctionForMaximum( BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS )
+    isValidValue: getValidationFunctionForMaximum( BANConstants.DECAY_MAX_NUMBER_OF_PROTONS )
   },
 
   // The number of neutrons in the atom on the Chart Intro Screen that the sim starts up with.
@@ -41,7 +41,7 @@ const BANQueryParameters = QueryStringMachine.getAll( {
     public: true,
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_NEUTRON_NUMBER,
-    isValidValue: getValidationFunctionForMaximum( BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
+    isValidValue: getValidationFunctionForMaximum( BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS )
   },
 
   // The number of protons in the atom on the Chart Intro Screen that the sim starts up with.
