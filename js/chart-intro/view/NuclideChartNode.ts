@@ -24,7 +24,7 @@ import ChartIntroModel from '../model/ChartIntroModel.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
-import { N_ZERO_CAPACITY, N_ONE_CAPACITY } from '../model/ParticleNucleus.js';
+import { N_ONE_CAPACITY, N_ZERO_CAPACITY } from '../model/ParticleNucleus.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANModel from '../../common/model/BANModel.js';
 
@@ -91,64 +91,66 @@ class NuclideChartNode extends Node {
 
     // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
     let highlightedCell: NuclideChartCell | null = null;
-    Multilink.multilink( [ protonCountProperty, neutronCountProperty ],
-      ( protonNumber, neutronNumber ) => {
+    Multilink.multilink( [
+      protonCountProperty,
+      neutronCountProperty
+    ], ( protonNumber, neutronNumber ) => {
 
-        const currentCellCenter = chartTransform.modelToViewXY( neutronNumber + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-          protonNumber + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+      const currentCellCenter = chartTransform.modelToViewXY( neutronNumber + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+        protonNumber + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
 
-        // highlight the cell if it exists
-        if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) && ( protonNumber !== 0 || neutronNumber !== 0 ) ) {
+      // highlight the cell if it exists
+      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
 
-          // get the highlightedCell
-          const protonRowIndex = protonNumber;
-          const neutronRowIndex = BANModel.POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
-          highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
-          assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
-                                             ' neutronRowIndex = ' + neutronRowIndex );
+        // get the highlightedCell
+        const protonRowIndex = protonNumber;
+        const neutronRowIndex = BANModel.POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
+        highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
+        assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
+                                           ' neutronRowIndex = ' + neutronRowIndex );
 
-          // get the decayType from the highlightedCell
-          const decayType = highlightedCell.cellModel.decayType;
+        // get the decayType from the highlightedCell
+        const decayType = highlightedCell.cellModel.decayType;
 
-          // draw the decay direction with the arrowNode if there is a known decay for this nuclide cell
-          if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
+        // draw the decay direction with the arrowNode if there is a known decay for this nuclide cell
+        if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
 
-            // direction determined based on how the DecayType changes the current nuclide, see DecayType for more details
-            const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
-                              decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
-                              decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
-                              decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
+          // direction determined based on how the DecayType changes the current nuclide, see DecayType for more details
+          const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
+                            decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
+                            decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
+                            decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
 
-                                // alpha decay
-                              new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
-                                protonNumber - AlphaParticle.NUMBER_OF_ALLOWED_PROTONS );
-            const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-              direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
-            arrowNode.setTailAndTip( currentCellCenter.x, currentCellCenter.y, arrowTip.x, arrowTip.y );
-            arrowNode.visible = true;
-          }
-          else {
-
-            // stable cell or no known decay so hide the arrow
-            arrowNode.visible = false;
-          }
-
-          // show the cell's label
-          labelContainer.visible = true;
-          labelText.string = AtomIdentifier.getSymbol( protonNumber );
-          labelContainer.center = currentCellCenter;
-          labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
-
-          // cover the tail of the arrow that's in this cell's center
-          labelTextBackground.fill = highlightedCell.decayBackgroundColor;
+                              // alpha decay
+                            new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
+                              protonNumber - AlphaParticle.NUMBER_OF_ALLOWED_PROTONS );
+          const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+            direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+          arrowNode.setTailAndTip( currentCellCenter.x, currentCellCenter.y, arrowTip.x, arrowTip.y );
+          arrowNode.visible = true;
         }
         else {
 
-          // no cell exists so hide the label and arrow
+          // stable cell or no known decay so hide the arrow
           arrowNode.visible = false;
-          labelContainer.visible = false;
         }
-      } );
+
+        // show the cell's label
+        labelContainer.visible = true;
+        labelText.string = AtomIdentifier.getSymbol( protonNumber );
+        labelContainer.center = currentCellCenter;
+        labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
+
+        // cover the tail of the arrow that's in this cell's center
+        labelTextBackground.fill = highlightedCell.decayBackgroundColor;
+      }
+      else {
+
+        // no cell exists so hide the label and arrow
+        arrowNode.visible = false;
+        labelContainer.visible = false;
+      }
+    } );
   }
 
   /**

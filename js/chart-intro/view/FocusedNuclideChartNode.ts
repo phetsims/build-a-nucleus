@@ -30,25 +30,6 @@ class FocusedNuclideChartNode extends NuclideChartNode {
       showMagicNumbersBooleanProperty: showMagicNumbersBooleanProperty
     } );
 
-    // keep track of the current center of the highlight rectangle
-    const viewHighlightRectangleCenterProperty = new DerivedProperty(
-      [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
-        const cellX = neutronNumber;
-        const cellY = protonNumber;
-        if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
-
-          // constrain the bounds of the highlightRectangle
-          const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
-            cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
-          return new Vector2( constrainedCenter.x, constrainedCenter.y );
-        }
-        else {
-
-          // keep the current center if the cell built does not exist
-          return highlightRectangle.center;
-        }
-      } );
-
     // use current bounds to place and update highlightRectangle
     const nuclideChartBounds = this.bounds.copy();
 
@@ -61,6 +42,30 @@ class FocusedNuclideChartNode extends NuclideChartNode {
     const highlightRectangle = new Rectangle( 0, 0,
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: HIGHLIGHT_RECTANGLE_LINE_WIDTH } );
     this.addChild( highlightRectangle );
+
+    let initialized = false;
+
+    // keep track of the current center of the highlight rectangle
+    const viewHighlightRectangleCenterProperty = new DerivedProperty(
+      [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
+        const cellX = neutronNumber;
+        const cellY = protonNumber;
+
+        // The default could very well be p0,n0, which doesn't exist, so eagerly set things up once.
+        if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) || !initialized ) {
+          initialized = true;
+
+          // constrain the bounds of the highlightRectangle
+          const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+            cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
+          return new Vector2( constrainedCenter.x, constrainedCenter.y );
+        }
+        else {
+
+          // keep the current center if the cell built does not exist
+          return highlightRectangle.center;
+        }
+      } );
 
     // create listener to update highLightRectangle center, and opacity of cells around
     const updateHighlightRectangleCenter = () => {

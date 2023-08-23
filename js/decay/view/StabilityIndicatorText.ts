@@ -31,24 +31,17 @@ class StabilityIndicatorText extends Text {
       maxWidth: 225
     }, providedOptions );
 
-    const stabilityStringProperty = new DerivedStringProperty(
-      [ protonCountProperty, neutronCountProperty,
+    const stabilityStringProperty = new DerivedStringProperty( [
+        protonCountProperty,
+        neutronCountProperty,
 
         // We need to update whenever any of these strings change, to support Dynamic Locale
         BuildANucleusStrings.stableStringProperty,
         BuildANucleusStrings.unstableStringProperty
-      ],
-      ( protonNumber, neutronNumber ) => {
-        if ( protonNumber === 0 && neutronNumber === 0 ) {
-          return '';
-        }
-        else if ( AtomIdentifier.isStable( protonNumber, neutronNumber ) ) {
-          return BuildANucleusStrings.stableStringProperty.value;
-        }
-        else {
-          return BuildANucleusStrings.unstableStringProperty.value;
-        }
-      } );
+      ], ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber ) ?
+                                            BuildANucleusStrings.stableStringProperty.value :
+                                            BuildANucleusStrings.unstableStringProperty.value
+    );
 
     super( stabilityStringProperty, options );
 

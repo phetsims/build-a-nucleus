@@ -85,8 +85,9 @@ class BANModel<T extends ParticleAtom> {
       ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber )
     );
 
-    // if a nuclide with a given number of protons and neutrons exists
-    this.doesNuclideExistBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
+    // If a nuclide with a given number of protons and neutrons exists.
+    this.doesNuclideExistBooleanProperty = new DerivedProperty(
+      [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonNumber, neutronNumber ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
     );
 

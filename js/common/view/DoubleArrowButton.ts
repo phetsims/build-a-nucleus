@@ -16,7 +16,7 @@ import { HBox, TPaint, Path } from '../../../../scenery/js/imports.js';
 import RectangularPushButton, { RectangularPushButtonOptions } from '../../../../sun/js/buttons/RectangularPushButton.js';
 import buildANucleus from '../../buildANucleus.js';
 
-export type DoubleArrowButtonDirection = 'up' | 'down';
+export type ArrowButtonDirection = 'up' | 'down';
 
 type SelfOptions = {
 
@@ -34,7 +34,7 @@ export type DoubleArrowButtonOptions = SelfOptions & StrictOmit<RectangularPushB
 
 export default class DoubleArrowButton extends RectangularPushButton {
 
-  public constructor( direction: DoubleArrowButtonDirection, callback: () => void, providedOptions?: DoubleArrowButtonOptions ) {
+  public constructor( direction: ArrowButtonDirection, callback: () => void, providedOptions?: DoubleArrowButtonOptions ) {
 
     const options = optionize<DoubleArrowButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
 
@@ -58,7 +58,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
     arrowShape.moveTo( 0, 0 ).lineTo( options.arrowWidth / 2, options.arrowHeight ).lineTo( -options.arrowWidth / 2, options.arrowHeight ).close();
 
     // function to create a double arrow path
-    const createDoubleArrow = ( direction: DoubleArrowButtonDirection, leftArrowFill: TPaint, rightArrowFill: TPaint ) => {
+    const createDoubleArrow = ( direction: ArrowButtonDirection, leftArrowFill: TPaint, rightArrowFill: TPaint ) => {
       const leftArrowPath = new Path( arrowShape, { fill: leftArrowFill } );
       const rightArrowPath = new Path( arrowShape, { fill: rightArrowFill } );
       const doubleArrow = new HBox( {

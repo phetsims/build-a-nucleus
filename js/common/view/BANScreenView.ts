@@ -393,9 +393,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const protonNumber = this.model.particleAtom.protonCountProperty.value;
     const neutronNumber = this.model.particleAtom.neutronCountProperty.value;
 
-    if ( !this.model.doesNuclideExistBooleanProperty.value ) {
+    // A special case for when there are no particles, since it technically doesn't exist, but it is an acceptable state.
+    const p0n0Case = protonNumber === 0 && neutronNumber === 0;
 
-      // start countdown to show the nuclide that does not exist for {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
+    // We don't want this automatic atom-fixing behavior for the p0,n0 case
+    if ( !this.model.doesNuclideExistBooleanProperty.value && !p0n0Case ) {
+
+      // start countdown to show the nuclide that does not exist for {{BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST}} seconds
       this.timeSinceCountdownStarted += dt;
     }
     else {
@@ -415,7 +419,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
          this.model.userControlledProtons.length === 0 ) {
       this.timeSinceCountdownStarted = 0;
 
-      assert && assert( AtomIdentifier.doesExist( this.previousProtonNumber, this.previousNeutronNumber ),
+      assert && assert( AtomIdentifier.doesExist( this.previousProtonNumber, this.previousNeutronNumber ) ||
+                        ( this.previousProtonNumber === 0 && this.previousNeutronNumber === 0 ),
         `cannot set back to a non existent previous: p${this.previousProtonNumber}, n${this.previousNeutronNumber}` );
 
       if ( this.previousProtonNumber < protonNumber ) {

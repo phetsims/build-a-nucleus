@@ -37,11 +37,16 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
     const squareLength = chartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH +
                                                            ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
 
+    let initialized = false;
+
     // update the clip area of the chart whenever the proton or neutron number change
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
       const cellX = neutronNumber;
       const cellY = protonNumber;
-      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
+
+      // The default could very well be p0,n0, which doesn't exist, so eagerly set things up the first time.
+      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) || !initialized ) {
+        initialized = true;
 
         // limit the bounds of the ZoomInNuclideChartNode to avoid showing white space
         const clampedCellX = Utils.clamp( cellX, 2, 10 );

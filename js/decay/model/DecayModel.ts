@@ -29,15 +29,16 @@ class DecayModel extends BANModel<ParticleAtom> {
     // empirically determined, the last nuclide the Decay screen goes up to is Plutonium-240 (94 protons and 146 neutrons)
     super( BANConstants.DECAY_MAX_NUMBER_OF_PROTONS, BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
-    this.halfLifeNumberProperty = new DerivedProperty(
-      [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty, this.doesNuclideExistBooleanProperty, this.isStableBooleanProperty ],
-      ( protonNumber, neutronNumber, doesNuclideExist, isStable ) => {
+    this.halfLifeNumberProperty = new DerivedProperty( [
+        this.particleAtom.protonCountProperty,
+        this.particleAtom.neutronCountProperty,
+        this.doesNuclideExistBooleanProperty,
+        this.isStableBooleanProperty
+      ], ( protonNumber, neutronNumber, doesNuclideExist, isStable ) => {
 
         let halfLife: number | null;
 
-        if ( doesNuclideExist && !( protonNumber === 0 && neutronNumber === 0 ) ) {
-          // a nuclide of 0 protons and 0 neutrons does not exist
-
+        if ( doesNuclideExist ) {
           if ( isStable ) {
 
             // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
