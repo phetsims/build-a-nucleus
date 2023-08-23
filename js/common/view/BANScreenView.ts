@@ -609,7 +609,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     // the particle that will change its nucleon type will be the one closest to the center of the atom
     const closestParticle = _.sortBy( [ ...particleArray ],
-      closestParticle => closestParticle.positionProperty.value.distance( particleAtom.positionProperty.value ) ).shift()!;
+      closestParticle => closestParticle.positionProperty.value.distance( particleAtom.positionProperty.value )
+    ).shift()!;
 
     // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
     particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
