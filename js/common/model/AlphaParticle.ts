@@ -45,6 +45,9 @@ class AlphaParticle extends ParticleAtom {
     } );
 
     // remove all particles individually from the model
+    // REVIEW: I (jbphet) ran a test where I put a debug statement in this listener and then hit Reset All before the
+    //         animation was complete, and the listener never fired, so the dispose function was never called.  This
+    //         might lead to a minor memory lead.  Perhaps endedEmitter should be used instead?
     alphaParticleEmissionAnimation.finishEmitter.addListener( () => {
       this.neutrons.forEach( neutron => {
         removeParticle( neutron );
