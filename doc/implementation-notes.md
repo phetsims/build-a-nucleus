@@ -1,5 +1,11 @@
 # Build a Nucleus - Implementation notes
 
+<!--- REVIEW: I (jbphet) find the use of apostrophes for plural class names to be a bit hard to read, for example, 
+"Node that holds the ParticleView's from ParticleAtom".  Usually apostrophes are used for contractions or for possessive
+forms.  I'd recommend using "instances", e.g. "Node that holds the ParticleView instances from ParticleAtom", or simply
+tacking on an 's'.  This isn't a big deal, and you're free to ignore it, but it would have made it more readable for me.
+-->
+
 @author Luisa Vargas
 
 This document contains notes related to the implementation of Build a Nucleus.
@@ -23,7 +29,7 @@ counter all depend on these count properties.
 - __ParticleView__: Tracks a particle in the view, the 'view' portion for the Particle model.
 
 Since there are particles located in various parts throughout the sim, on the way to the atom, away from the atom,
-and in the atom, there are various arrays to keep track of the particles. If a particle is not visibly in the
+and in the atom, there are various arrays to keep track of the particles. If a particle is not visible in the
 ParticleAtom, which is in the nucleus in the Decay screen and in the energy levels in the Chart Intro screen, then it
 is not considered as a part of the ParticleAtom particles.
 
@@ -86,7 +92,7 @@ before it reaches its destination to become a part of the ParticleNucleus' parti
 
 #### ModelViewTransform's
 
-There are various MVT uses throughout the model to help in positioning of the particle's, the particle atom and the
+There are various MVT uses throughout the model to help in positioning of the particles, the particle atom and the
 energy levels.
 
 - `particleTransform` is a single point scaling transformation that defines (0,0) as the center of the atom in the Decay
@@ -103,7 +109,7 @@ energy levels.
 
 #### ChartTransform's
 
-The simulation has various charts and number lines throughout both screens. Though the Decay screen only has number
+The simulation has various charts and number lines throughout both screens, though the Decay screen only has number
 lines. ChartTransform's were used to aid in the creation of these.
 
 *Decay screen*
