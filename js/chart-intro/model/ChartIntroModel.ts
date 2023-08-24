@@ -110,6 +110,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     super.step( dt );
 
     // step the miniParticleAtom nucleons
+    // REVIEW - code duplication - the same closure is passed to forEach loops below.
     this.miniParticleAtom.protons.forEach( particle => {
       assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
       assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
