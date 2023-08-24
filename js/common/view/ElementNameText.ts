@@ -16,7 +16,6 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import BANConstants from '../BANConstants.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
-
 export type ElementNameTextOptions = TextOptions;
 
 export default class ElementNameText extends Text {
@@ -98,7 +97,6 @@ export default class ElementNameText extends Text {
             neutronNumber: neutronNumber
           } );
         }
-
       }
       else {
         name = nameMassString;

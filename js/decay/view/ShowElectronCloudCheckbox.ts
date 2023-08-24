@@ -15,7 +15,6 @@ import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../../common/BANConstants.js';
 import Property from '../../../../axon/js/Property.js';
 
-
 class ShowElectronCloudCheckbox extends Checkbox {
 
   private readonly showElectronCloudBooleanProperty: Property<boolean>;

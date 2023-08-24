@@ -20,6 +20,7 @@ class DecayModel extends BANModel<ParticleAtom> {
   // the half-life number
   public halfLifeNumberProperty: TReadOnlyProperty<number>;
 
+  // REVIEW: Some docs about this field would be helpful.
   public decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
 
   public constructor() {
@@ -83,6 +84,7 @@ class DecayModel extends BANModel<ParticleAtom> {
     ] as const;
 
     this.decayEnabledPropertyMap = new Map();
+
     // create the decay enabled properties
     this.decayEnabledPropertyMap.set( DecayType.PROTON_EMISSION, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>

@@ -4,7 +4,7 @@
  * EnergyLevelType identifies constant conditions for the energy levels.
  *
  * Models energy levels for a Nucleon Shell Model, see https://en.wikipedia.org/wiki/Nuclear_shell_model.
- * We only model the first 3 energy levels, signifying n=0, n=1, and n=2
+ * We only model the first 3 energy levels, signifying n=0, n=1, and n=2.
  *
  * @author Luisa Vargas
  */
