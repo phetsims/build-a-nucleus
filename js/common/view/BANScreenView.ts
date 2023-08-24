@@ -167,7 +167,13 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         this.model.reset();
         this.reset();
-        assert && assert( Object.keys( this.particleViewMap ).length === 0, 'all views should be cleaned up on reset' );
+
+        assert && assert( Object.keys( this.particleViewMap ).length === 0,
+          'all views should be cleaned up on reset\n' +
+          Object.keys( this.particleViewMap ).map( ( x: string ) => {
+            const particle = this.particleViewMap[ x as unknown as number ].particle;
+            return particle ? `${particle.id}, ${particle.type}, disposed:${particle.isDisposed}, ${particle.colorProperty.value.toString()}` : '';
+          } ) );
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
