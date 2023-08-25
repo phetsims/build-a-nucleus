@@ -62,12 +62,7 @@ class BANModel<T extends ParticleAtom> {
     // Create the atom
     this.particleAtom = particleAtom;
 
-    this.particles = createObservableArray( {
-
-      // REVIEW - can this to-do be addressed prior to publication?
-      // TODO: Not positive that this is true, but CT will let us know, see https://github.com/phetsims/build-a-nucleus/issues/105
-      hasListenerOrderDependencies: true
-    } );
+    this.particles = createObservableArray();
 
     this.hasIncomingParticlesProperty = new DerivedProperty( [
       this.incomingProtons.lengthProperty,
