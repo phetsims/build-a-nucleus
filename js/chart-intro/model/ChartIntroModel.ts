@@ -98,6 +98,8 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
       }
     } );
     super.reset();
+    this.selectedNuclideChartProperty.reset();
+    this.decayEquationModel.reset();
 
     // Put this last to make sure that this.particleAtom can be cleared first (by supertype).
     this.miniParticleAtom.clear();

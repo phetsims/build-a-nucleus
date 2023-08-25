@@ -38,6 +38,7 @@ import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import TinyProperty from '../../../../axon/js/TinyProperty.js';
 import NuclearShellModelText from './NuclearShellModelText.js';
+import Property from '../../../../axon/js/Property.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -59,6 +60,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
   // positions and sizes particles in the miniParticleAtom
   private readonly miniAtomMVT: ModelViewTransform2;
+  private readonly showMagicNumbersProperty: Property<boolean>;
+  private readonly nuclideChartAccordionBox: NuclideChartAccordionBox;
 
   public constructor( model: ChartIntroModel, providedOptions?: NuclideChartIntroScreenViewOptions ) {
 
@@ -188,41 +191,41 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // Whether to show a special highlight for magic-numbered nuclides in the charts
-    const showMagicNumbersProperty = new BooleanProperty( false );
+    this.showMagicNumbersProperty = new BooleanProperty( false );
 
     // create the nuclideChartAccordionBox
-    const nuclideChartAccordionBox = new NuclideChartAccordionBox(
+    this.nuclideChartAccordionBox = new NuclideChartAccordionBox(
       this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty, this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
-      this.decayAtom.bind( this ), showMagicNumbersProperty, this.model.hasIncomingParticlesProperty, {
+      this.decayAtom.bind( this ), this.showMagicNumbersProperty, this.model.hasIncomingParticlesProperty, {
         minWidth: periodicTableAndIsotopeSymbol.width
       } );
 
     // position and add the nuclideChartAccordionBox
-    nuclideChartAccordionBox.top = periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
-    nuclideChartAccordionBox.left = periodicTableAndIsotopeSymbol.left;
-    this.addChild( nuclideChartAccordionBox );
+    this.nuclideChartAccordionBox.top = periodicTableAndIsotopeSymbol.bottom + CHART_VERTICAL_MARGINS;
+    this.nuclideChartAccordionBox.left = periodicTableAndIsotopeSymbol.left;
+    this.addChild( this.nuclideChartAccordionBox );
 
     // create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox
-    const partialChartRadioButton = new RectangularRadioButtonGroup<SelectedChartType>(
+    const partialChartRadioButtonGroup = new RectangularRadioButtonGroup<SelectedChartType>(
       this.model.selectedNuclideChartProperty, [
         { value: 'partial', createNode: () => new CompleteNuclideChartIconNode() },
         { value: 'zoom', createNode: () => new ZoomInNuclideChartIconNode() }
       ], {
-        left: nuclideChartAccordionBox.left,
-        top: nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS,
+        left: this.nuclideChartAccordionBox.left,
+        top: this.nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS,
         orientation: 'horizontal',
         radioButtonOptions: { baseColor: BANColors.chartRadioButtonsBackgroundColorProperty }
       } );
-    this.addChild( partialChartRadioButton );
+    this.addChild( partialChartRadioButtonGroup );
 
     // create and add the checkbox to show special highlight for magic-numbered nuclides in the charts
-    const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersProperty,
+    const showMagicNumbersCheckbox = new Checkbox( this.showMagicNumbersProperty,
       new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ), {
         boxWidth: 15,
         touchAreaYDilation: 4
       } );
-    showMagicNumbersCheckbox.left = partialChartRadioButton.right + CHART_VERTICAL_MARGINS;
-    showMagicNumbersCheckbox.top = nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
+    showMagicNumbersCheckbox.left = partialChartRadioButtonGroup.right + CHART_VERTICAL_MARGINS;
+    showMagicNumbersCheckbox.top = this.nuclideChartAccordionBox.bottom + CHART_VERTICAL_MARGINS;
     this.addChild( showMagicNumbersCheckbox );
 
     // create and add the fullChartDialog and 'Full Chart' button
@@ -239,7 +242,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       listener: () => fullChartDialog.show()
     } );
     fullChartTextButton.left = showMagicNumbersCheckbox.left;
-    fullChartTextButton.bottom = partialChartRadioButton.bottom;
+    fullChartTextButton.bottom = partialChartRadioButtonGroup.bottom;
     this.addChild( fullChartTextButton );
 
     // add the particleView layer nodes after everything else so particles are in the top layer
@@ -247,8 +250,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( this.energyLevelLayer );
 
     this.pdomPlayAreaNode.pdomOrder = this.pdomPlayAreaNode.pdomOrder!.concat( [
-      nuclideChartAccordionBox,
-      partialChartRadioButton,
+      this.nuclideChartAccordionBox,
+      partialChartRadioButtonGroup,
       showMagicNumbersCheckbox,
       fullChartTextButton
     ] );
@@ -256,6 +259,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
       complete && this.model.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
     } );
+  }
+
+  protected override reset(): void {
+    this.showMagicNumbersProperty.reset();
+    this.nuclideChartAccordionBox.reset();
+    super.reset();
   }
 
   /**

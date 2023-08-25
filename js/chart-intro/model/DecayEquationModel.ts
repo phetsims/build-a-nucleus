@@ -60,6 +60,12 @@ class DecayEquationModel {
   private getCurrentCellModel( cellModelArray: NuclideChartCellModel[][], protonNumber: number, massNumber: number ): NuclideChartCellModel | null {
     return _.find( cellModelArray[ protonNumber ], cellModel => cellModel.neutronNumber === massNumber - protonNumber ) || null;
   }
+
+  public reset(): void {
+    this.currentCellModelProperty.reset();
+    this.finalProtonNumberProperty.reset();
+    this.finalMassNumberProperty.reset();
+  }
 }
 
 buildANucleus.register( 'DecayEquationModel', DecayEquationModel );
