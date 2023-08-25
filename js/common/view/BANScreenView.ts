@@ -106,7 +106,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // Create and add the textual readout for the element name.
     this.elementNameText = new ElementNameText( this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty,
-      this.model.doesNuclideExistBooleanProperty );
+      this.model.nuclideExistsProperty );
     this.addChild( this.elementNameText );
 
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
@@ -403,7 +403,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const p0n0Case = protonNumber === 0 && neutronNumber === 0;
 
     // We don't want this automatic atom-fixing behavior for the p0,n0 case
-    if ( !this.model.doesNuclideExistBooleanProperty.value && !p0n0Case ) {
+    if ( !this.model.nuclideExistsProperty.value && !p0n0Case ) {
 
       // start countdown to show the nuclide that does not exist for {{BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST}} seconds
       this.timeSinceCountdownStarted += dt;

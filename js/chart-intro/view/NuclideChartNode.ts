@@ -31,12 +31,12 @@ import BANModel from '../../common/model/BANModel.js';
 type SelfOptions = {
   cellTextFontSize: number;
   arrowSymbol: boolean;
-  showMagicNumbersBooleanProperty?: TReadOnlyProperty<boolean>;
+  showMagicNumbersProperty?: TReadOnlyProperty<boolean>;
 };
 
 export type NuclideChartNodeOptions = SelfOptions & NodeOptions;
 
-// Applies to both proton and neutron numbers see showMagicNumbersBooleanProperty for details.
+// Applies to both proton and neutron numbers see showMagicNumbersProperty for details.
 const MAGIC_NUMBERS = [ N_ZERO_CAPACITY, N_ZERO_CAPACITY + N_ONE_CAPACITY ];
 
 class NuclideChartNode extends Node {
@@ -49,14 +49,14 @@ class NuclideChartNode extends Node {
 
     const options = optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {
       excludeInvisibleChildrenFromBounds: true,
-      showMagicNumbersBooleanProperty: new BooleanProperty( false )
+      showMagicNumbersProperty: new BooleanProperty( false )
     }, providedOptions );
     super( options );
 
     // create and add the cells
     const cellLength = chartTransform.modelToViewDeltaX( 1 );
     const cellLayerNode = new Node();
-    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength, options.showMagicNumbersBooleanProperty );
+    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength, options.showMagicNumbersProperty );
     this.addChild( cellLayerNode );
 
     // add the arrowNode indicating the decay direction first so that it appears behind the cell's label
@@ -170,7 +170,7 @@ class NuclideChartNode extends Node {
    * Create a nuclide chart given a node to contain the cells and a chartTransform. Public for icon creation.
    */
   public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number,
-                                    showMagicNumbersBooleanProperty: TReadOnlyProperty<boolean> = new BooleanProperty( false ) ): NuclideChartCell[][] {
+                                    showMagicNumbersProperty: TReadOnlyProperty<boolean> = new BooleanProperty( false ) ): NuclideChartCell[][] {
     const cells: NuclideChartCell[][] = [];
 
     // create and add the chart cells to the chart. row is proton number and column is neutron number.
@@ -192,7 +192,7 @@ class NuclideChartNode extends Node {
         if ( cellIsMagic ) {
 
           // highlight the cell with a special colored stroke if the cell has a magic number of protons or neutrons
-          showMagicNumbersBooleanProperty.link( showMagic => {
+          showMagicNumbersProperty.link( showMagic => {
             showMagic && cell.moveToFront();
             cell.lineWidth = showMagic ? defaultLineWidth + 2 : defaultLineWidth;
             cell.stroke = showMagic ? BANColors.nuclideChartBorderMagicNumberColorProperty : BANColors.nuclideChartBorderColorProperty;

@@ -72,12 +72,12 @@ class HalfLifeNumberLineNode extends Node {
   private readonly numberLineLabelFont: PhetFont | undefined;
   private readonly chartTransform: ChartTransform;
   private readonly tickMarkSetCenterY = 0;
-  private readonly halfLifeArrowRotationNumberProperty: TProperty<number>;
+  private readonly halfLifeArrowRotationProperty: TProperty<number>;
   private arrowXPositionAnimation: null | Animation;
   private arrowRotationAnimation: null | Animation;
 
   // x position of half-life arrow in model coordinates
-  private readonly arrowXPositionNumberProperty: TProperty<number>;
+  private readonly arrowXPositionProperty: TProperty<number>;
 
   // the half life display node, public for positioning the infoButton
   public readonly halfLifeDisplayNode: VBox;
@@ -86,7 +86,7 @@ class HalfLifeNumberLineNode extends Node {
   private readonly numberLineNode: Node;
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
-                      isStableBooleanProperty: TReadOnlyProperty<boolean>,
+                      isStableProperty: TReadOnlyProperty<boolean>,
                       providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
@@ -150,7 +150,7 @@ class HalfLifeNumberLineNode extends Node {
     halfLifeArrow.addChild( arrowNode );
 
     // all valid values are based on the halfLifeNumberProperty, for more information see its implementation
-    this.arrowXPositionNumberProperty = new NumberProperty( 0 );
+    this.arrowXPositionProperty = new NumberProperty( 0 );
 
     this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
@@ -230,10 +230,10 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeDisplayNode.insertChild( 0, elementName );
     }
 
-    // animate the rotation of the halfLifeArrow through the halfLifeArrowRotationNumberProperty
-    this.halfLifeArrowRotationNumberProperty = new NumberProperty( 0,
+    // animate the rotation of the halfLifeArrow through the halfLifeArrowRotationProperty
+    this.halfLifeArrowRotationProperty = new NumberProperty( 0,
       { isValidValue: value => value >= ROTATION_POINTING_RIGHT_RADIANS && value <= ROTATION_POINTING_DOWN_RADIANS } );
-    this.halfLifeArrowRotationNumberProperty.link( rotation => { halfLifeArrow.rotation = rotation; } );
+    this.halfLifeArrowRotationProperty.link( rotation => { halfLifeArrow.rotation = rotation; } );
 
     // function to show or hide the halfLifeArrow
     const showHalfLifeArrow = ( show: boolean ) => {
@@ -244,7 +244,7 @@ class HalfLifeNumberLineNode extends Node {
     halfLifeNumberProperty.link( halfLifeNumber => {
 
       // the nuclide is stable
-      if ( isStableBooleanProperty.value ) {
+      if ( isStableProperty.value ) {
         showHalfLifeArrow( true );
 
         infinityNode.visible = true;
@@ -319,7 +319,7 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow
     ];
 
-    Multilink.multilink( [ this.arrowXPositionNumberProperty,
+    Multilink.multilink( [ this.arrowXPositionProperty,
 
       // Cannot listen to the bounds of halfLifeDisplayNode to prevent reentrancy, so instead listen to all potential children changes
       options.elementNameStringProperty,
@@ -376,7 +376,7 @@ class HalfLifeNumberLineNode extends Node {
 
     this.arrowXPositionAnimation = new Animation( {
       to: newXPosition,
-      property: this.arrowXPositionNumberProperty,
+      property: this.arrowXPositionProperty,
       duration: arrowXPositionAnimationDuration,
       easing: Easing.QUADRATIC_IN_OUT
     } );
@@ -394,7 +394,7 @@ class HalfLifeNumberLineNode extends Node {
       // rotate arrow horizontally, pointing right
       this.arrowRotationAnimation = new Animation( {
         to: ROTATION_POINTING_RIGHT_RADIANS,
-        property: this.halfLifeArrowRotationNumberProperty,
+        property: this.halfLifeArrowRotationProperty,
         duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );
@@ -412,7 +412,7 @@ class HalfLifeNumberLineNode extends Node {
       // rotate arrow back vertically, pointing down
       this.arrowRotationAnimation = new Animation( {
         to: ROTATION_POINTING_DOWN_RADIANS,
-        property: this.halfLifeArrowRotationNumberProperty,
+        property: this.halfLifeArrowRotationProperty,
         duration: arrowRotationAnimationDuration,
         easing: Easing.QUADRATIC_IN_OUT
       } );

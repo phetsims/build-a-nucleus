@@ -188,12 +188,12 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( rightDashedLine );
 
     // Whether to show a special highlight for magic-numbered nuclides in the charts
-    const showMagicNumbersBooleanProperty = new BooleanProperty( false );
+    const showMagicNumbersProperty = new BooleanProperty( false );
 
     // create the nuclideChartAccordionBox
     const nuclideChartAccordionBox = new NuclideChartAccordionBox(
       this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty, this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
-      this.decayAtom.bind( this ), showMagicNumbersBooleanProperty, this.model.hasIncomingParticlesProperty, {
+      this.decayAtom.bind( this ), showMagicNumbersProperty, this.model.hasIncomingParticlesProperty, {
         minWidth: periodicTableAndIsotopeSymbol.width
       } );
 
@@ -216,7 +216,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( partialChartRadioButton );
 
     // create and add the checkbox to show special highlight for magic-numbered nuclides in the charts
-    const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersBooleanProperty,
+    const showMagicNumbersCheckbox = new Checkbox( showMagicNumbersProperty,
       new Text( BuildANucleusStrings.magicNumbersStringProperty, { font: BANConstants.LEGEND_FONT, maxWidth: 145 } ), {
         boxWidth: 15,
         touchAreaYDilation: 4

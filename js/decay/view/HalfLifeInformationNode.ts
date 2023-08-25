@@ -36,12 +36,12 @@ const HBOX_OPTIONS: HBoxOptions = {
 class HalfLifeInformationNode extends Node {
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
-                      isStableBooleanProperty: TReadOnlyProperty<boolean>,
+                      isStableProperty: TReadOnlyProperty<boolean>,
                       elementNameStringProperty: TReadOnlyProperty<string> ) {
     super();
 
     // create and add the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableProperty, {
       tickMarkExtent: 18,
       numberLineLabelFont: new PhetFont( 15 ),
       numberLineWidth: 550,
@@ -52,7 +52,7 @@ class HalfLifeInformationNode extends Node {
     this.addChild( halfLifeNumberLineNode );
 
     // create and add the HalfLifeInfoDialog
-    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableBooleanProperty,
+    const halfLifeInfoDialog = new HalfLifeInfoDialog( halfLifeNumberProperty, isStableProperty,
       elementNameStringProperty );
 
     // create and add the info button

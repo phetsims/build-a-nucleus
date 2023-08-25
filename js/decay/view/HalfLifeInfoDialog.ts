@@ -24,7 +24,7 @@ const LEGEND_FONT = BANConstants.REGULAR_FONT;
 class HalfLifeInfoDialog extends Dialog {
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
-                      isStableBooleanProperty: TReadOnlyProperty<boolean>,
+                      isStableProperty: TReadOnlyProperty<boolean>,
                       elementNameStringProperty: TReadOnlyProperty<string> ) {
 
     const leftSideTimescalePoints = [
@@ -91,7 +91,7 @@ class HalfLifeInfoDialog extends Dialog {
     } );
 
     // create the halfLifeNumberLineNode
-    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableBooleanProperty, {
+    const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableProperty, {
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
       numberLineWidth: 750,

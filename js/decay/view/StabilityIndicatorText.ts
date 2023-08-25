@@ -21,7 +21,7 @@ type StabilityTextOptions = TextOptions;
 class StabilityIndicatorText extends Text {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean>,
+                      nuclideExistsProperty: TReadOnlyProperty<boolean>,
                       providedOptions?: StabilityTextOptions ) {
 
     const options = optionize<StabilityTextOptions, EmptySelfOptions, TextOptions>()( {
@@ -46,7 +46,7 @@ class StabilityIndicatorText extends Text {
     super( stabilityStringProperty, options );
 
     // update stability string visibility
-    doesNuclideExistBooleanProperty.link( ( visible: boolean ) => {
+    nuclideExistsProperty.link( ( visible: boolean ) => {
       this.visible = visible;
     } );
   }

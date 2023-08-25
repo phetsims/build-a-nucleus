@@ -23,11 +23,11 @@ const HIGHLIGHT_RECTANGLE_LINE_WIDTH = 1.5;
 class FocusedNuclideChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform, showMagicNumbersBooleanProperty: TReadOnlyProperty<boolean> ) {
+                      chartTransform: ChartTransform, showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
     super( protonCountProperty, neutronCountProperty, chartTransform, {
       cellTextFontSize: 6,
       arrowSymbol: false,
-      showMagicNumbersBooleanProperty: showMagicNumbersBooleanProperty
+      showMagicNumbersProperty: showMagicNumbersProperty
     } );
 
     // use current bounds to place and update highlightRectangle

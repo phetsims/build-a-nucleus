@@ -24,10 +24,10 @@ import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 class BANModel<T extends ParticleAtom> {
 
   // the stability of the nuclide
-  public readonly isStableBooleanProperty: TReadOnlyProperty<boolean>;
+  public readonly isStableProperty: TReadOnlyProperty<boolean>;
 
   // if a nuclide exists
-  public readonly doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean>;
+  public readonly nuclideExistsProperty: TReadOnlyProperty<boolean>;
 
   // arrays of all Particle's that exist in all places, except the mini atom in the Chart Intro screen.
   public readonly particles: ObservableArray<BANParticle>;
@@ -82,12 +82,12 @@ class BANModel<T extends ParticleAtom> {
     this.neutronNumberRange = new Range( BANConstants.CHART_MIN, maximumNeutronNumber );
 
     // the stability of the nuclide is determined by the given number of protons and neutrons
-    this.isStableBooleanProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
+    this.isStableProperty = new DerivedProperty( [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber )
     );
 
     // If a nuclide with a given number of protons and neutrons exists.
-    this.doesNuclideExistBooleanProperty = new DerivedProperty(
+    this.nuclideExistsProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
       ( protonNumber, neutronNumber ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
     );

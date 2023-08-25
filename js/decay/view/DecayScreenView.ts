@@ -53,7 +53,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.model = model;
 
     // create and add the half-life information node at the top half of the decay screen
-    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableBooleanProperty,
+    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableProperty,
       this.elementNameText.elementNameStringProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 30;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
@@ -158,7 +158,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // create and add stability indicator
     const stabilityIndicatorText = new StabilityIndicatorText( model.particleAtom.protonCountProperty,
-      model.particleAtom.neutronCountProperty, model.doesNuclideExistBooleanProperty );
+      model.particleAtom.neutronCountProperty, model.nuclideExistsProperty );
     this.addChild( stabilityIndicatorText );
 
     // add the particleViewLayerNode after everything else so particles are in the top layer

@@ -25,7 +25,7 @@ export default class ElementNameText extends Text {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>,
                       neutronCountProperty: TReadOnlyProperty<number>,
-                      doesNuclideExistBooleanProperty: TReadOnlyProperty<boolean>,
+                      nuclideExistsProperty: TReadOnlyProperty<boolean>,
                       providedOptions?: ElementNameTextOptions ) {
 
     const options = optionize<ElementNameTextOptions, EmptySelfOptions, TextOptions>()( {
@@ -37,7 +37,7 @@ export default class ElementNameText extends Text {
     const elementNameStringProperty = new DerivedStringProperty( [
       protonCountProperty,
       neutronCountProperty,
-      doesNuclideExistBooleanProperty,
+      nuclideExistsProperty,
 
       // We need to update whenever any of these strings change, to support Dynamic Locale
       BuildANucleusStrings.nameMassPatternStringProperty,

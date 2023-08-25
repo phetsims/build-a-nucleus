@@ -21,12 +21,12 @@ import BANConstants from '../../common/BANConstants.js';
 class ZoomInNuclideChartNode extends NuclideChartNode {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
-                      chartTransform: ChartTransform, showMagicNumbersBooleanProperty: TReadOnlyProperty<boolean> ) {
+                      chartTransform: ChartTransform, showMagicNumbersProperty: TReadOnlyProperty<boolean> ) {
 
     super( protonCountProperty, neutronCountProperty, chartTransform, {
       cellTextFontSize: 18,
       arrowSymbol: true,
-      showMagicNumbersBooleanProperty: showMagicNumbersBooleanProperty
+      showMagicNumbersProperty: showMagicNumbersProperty
     } );
 
     // create and add the border outline to the chart

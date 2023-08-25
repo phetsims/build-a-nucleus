@@ -33,8 +33,8 @@ class DecayModel extends BANModel<ParticleAtom> {
     this.halfLifeNumberProperty = new DerivedProperty( [
         this.particleAtom.protonCountProperty,
         this.particleAtom.neutronCountProperty,
-        this.doesNuclideExistBooleanProperty,
-        this.isStableBooleanProperty
+        this.nuclideExistsProperty,
+        this.isStableProperty
       ], ( protonNumber, neutronNumber, doesNuclideExist, isStable ) => {
 
         let halfLife: number | null;
