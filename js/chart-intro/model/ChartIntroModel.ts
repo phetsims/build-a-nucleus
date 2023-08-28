@@ -111,18 +111,15 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   public override step( dt: number ): void {
     super.step( dt );
 
+    const stepParticle = ( particle: Particle ) => {
+      assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
+      assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
+      particle.step( dt );
+    };
+
     // step the miniParticleAtom nucleons
-    // REVIEW - code duplication - the same closure is passed to forEach loops below.
-    this.miniParticleAtom.protons.forEach( particle => {
-      assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
-      assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
-      particle.step( dt );
-    } );
-    this.miniParticleAtom.neutrons.forEach( particle => {
-      assert && assert( !this.outgoingParticles.includes( particle ), 'should not double step particle' );
-      assert && assert( !this.particles.includes( particle ), 'should not double step particle' );
-      particle.step( dt );
-    } );
+    this.miniParticleAtom.protons.forEach( stepParticle );
+    this.miniParticleAtom.neutrons.forEach( stepParticle );
 
     // When decaying, the animated particle from the miniParticleAtom is removed from it, but still needs to be stepped off the screen
     this.outgoingParticles.forEach( particle => {

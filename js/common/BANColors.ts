@@ -1,10 +1,9 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
-// REVIEW: Does the author attribution need to be updated?  Looks like a cut-and-paste error to me.
 /**
  * BANColors defines the color profile for this sim.
  *
- * @author Chris Malley (PixelZoom, Inc.)
+ * @author Luisa Vargas
  */
 
 import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
