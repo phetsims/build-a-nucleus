@@ -20,7 +20,8 @@ class DecayModel extends BANModel<ParticleAtom> {
   // the half-life number
   public halfLifeNumberProperty: TReadOnlyProperty<number>;
 
-  // REVIEW: Some docs about this field would be helpful.
+  // A data structure for all the enabledProperties for the "decay buttons". These enabledProperties toggle to enabled
+  // when the Nuclide supports that given decay type.
   public decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
 
   public constructor() {

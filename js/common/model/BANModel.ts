@@ -108,7 +108,7 @@ class BANModel<T extends ParticleAtom> {
 
     this.particles.addItemAddedListener( particle => {
 
-      // REVIEW: Should there be an unlink for when the particles are removed?  If unnecessary, document why.
+      // No need to remove because when a particle is removed from this.particles, it is disposed
       particle.userControlledProperty.link( isUserControlled => userControlledListener( isUserControlled, particle ) );
     } );
 
