@@ -32,8 +32,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import DecayType from '../../common/model/DecayType.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import FullChartDialog from './FullChartDialog.js';
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import FullChartTextButton from './FullChartTextButton.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import TinyProperty from '../../../../axon/js/TinyProperty.js';
@@ -229,20 +228,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( showMagicNumbersCheckbox );
 
     // create and add the fullChartDialog and 'Full Chart' button
-    const fullChartDialog = new FullChartDialog();
-    const fullChartTextButton = new TextPushButton( BuildANucleusStrings.fullChartCapitalizedStringProperty, {
-      baseColor: BANColors.fullChartButtonColorProperty,
-      textNodeOptions: {
-        font: BANConstants.LEGEND_FONT
-      },
-      stroke: 'black',
-      lineWidth: 1,
-      minWidth: 80,
-      maxWidth: 160,
-      listener: () => fullChartDialog.show()
+    const fullChartTextButton = new FullChartTextButton( {
+      left: showMagicNumbersCheckbox.left,
+      bottom: partialChartRadioButtonGroup.bottom
     } );
-    fullChartTextButton.left = showMagicNumbersCheckbox.left;
-    fullChartTextButton.bottom = partialChartRadioButtonGroup.bottom;
     this.addChild( fullChartTextButton );
 
     // add the particleView layer nodes after everything else so particles are in the top layer
