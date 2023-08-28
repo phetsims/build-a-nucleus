@@ -65,11 +65,11 @@ class NucleonArrowButtons extends Node {
         const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
         const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
         const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
+        const massNumber = atomProtonNumber + atomNeutronNumber;
 
         // Disable all buttons if the nuclide doesn't exist and one of the two cases:
         // Something is being user controlled OR Particle Atom is not empty
-        if ( !doesNuclideExist &&
-             ( model.particleAtom.massNumberProperty.value !== 0 || userControlledNucleonNumber !== 0 ) ) {
+        if ( !doesNuclideExist && ( massNumber !== 0 || userControlledNucleonNumber !== 0 ) ) {
 
           // disable all arrow buttons if the nuclide does not exist
           NucleonArrowButtons.toggleCreatorNodeEnabled( protonsCreatorNode, false );

@@ -192,7 +192,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
 
         // called when a nucleon is finished being dragged
-        particle.dragEndedEmitter.addListener( () => { this.dragEndedListener( particle, this.model.particleAtom ); } );
+        particle.dragEndedEmitter.addListener( () => this.dragEndedListener( particle, this.model.particleAtom ) );
         this.checkIfCreatorNodeShouldBeInvisible( particleType );
       }
 
