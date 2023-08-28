@@ -19,6 +19,8 @@ import ParticleType from '../../common/model/ParticleType.js';
 import EnergyLevelType from './EnergyLevelType.js';
 import BANParticle from '../../common/model/BANParticle.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 export type ParticleShellPosition = {
   particle?: Particle;
@@ -29,6 +31,25 @@ export type ParticleShellPosition = {
 // constants
 export const N_ZERO_CAPACITY = EnergyLevelType.N_ZERO.capacity;
 export const N_ONE_CAPACITY = EnergyLevelType.N_ONE.capacity;
+// the MVT that places nucleons in their individual spaced apart array positions
+
+// have one less space than there are particles
+const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = N_ONE_CAPACITY - 1;
+const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
+const PARTICLE_DIAMETER = BANConstants.PARTICLE_DIAMETER;
+const PARTICLE_X_SPACING = PARTICLE_RADIUS;
+const NUMBER_OF_ENERGY_LEVELS = 3;
+const NUMBER_OF_Y_SPACINGS = NUMBER_OF_ENERGY_LEVELS - 1;
+const PARTICLE_Y_SPACING = PARTICLE_DIAMETER * 4;
+
+// This transform maps from arbitrary particle positions in the ParticleNucleus (see ALLOWED_PARTICLE_POSITIONS) to
+// actual model/view positions to be rendered. This is private because model units in this sim are the same as
+// view units, and this is just for ease of this class's implementation.
+const PARTICLE_POSITIONING_TRANSFORM = ModelViewTransform2.createRectangleInvertedYMapping(
+  new Bounds2( 0, 0, NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES, 2 ),
+  new Bounds2( 0, 0, ( PARTICLE_DIAMETER + PARTICLE_X_SPACING ) * NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES,
+    ( PARTICLE_DIAMETER + PARTICLE_Y_SPACING ) * NUMBER_OF_Y_SPACINGS ) );
+
 
 // row is yPosition, number is xPosition
 const ALLOWED_PARTICLE_POSITIONS = [
@@ -52,7 +73,7 @@ class ParticleNucleus extends ParticleAtom {
   public readonly neutronShellPositions: ParticleShellPosition[][] = [ [], [], [] ];
 
   // positions particles on the energy levels
-  public readonly modelViewTransform = BANConstants.NUCLEON_ENERGY_LEVEL_ARRAY_MVT;
+  public readonly modelViewTransform = PARTICLE_POSITIONING_TRANSFORM;
 
   // keep track of bound levels
   private readonly protonsLevelProperty = new EnumerationProperty( EnergyLevelType.N_ZERO );
