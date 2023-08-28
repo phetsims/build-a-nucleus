@@ -133,3 +133,7 @@ used in all three NuclideChartNode's and both nuclide chart icon nodes.
 - __smallChartTransform's__: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the
   radio
   buttons.
+
+## Data
+The half-life and decay data comes from the [Relational ENSDF](https://www-nds.iaea.org/relnsd/NdsEnsdf/QueryForm.html)
+from 2022. The values in this database from experimental data which is then manually hard-coded into AtomIdentifier.
