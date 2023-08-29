@@ -102,8 +102,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPosition, 1 );
 
-    this.nucleonCreatorsNode = new NucleonCreatorsNode( this.model,
-      this.globalToLocalPoint.bind( this ), this.addAndDragParticle.bind( this ),
+    this.nucleonCreatorsNode = new NucleonCreatorsNode( this.model, this.addAndDragParticle.bind( this ),
       this.particleTransform, this.createParticleFromStack.bind( this ), this.returnParticleToStack.bind( this ) );
     this.nucleonCreatorsNode.centerX = atomCenter.x;
     this.nucleonCreatorsNode.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;

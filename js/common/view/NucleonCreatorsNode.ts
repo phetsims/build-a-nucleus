@@ -68,12 +68,14 @@ class NucleonCreatorsNode extends HBox {
   public readonly protonsCreatorNode: Node;
   public readonly neutronsCreatorNode: Node;
 
-  public constructor( model: BANModel<ParticleAtom | ParticleNucleus>, getLocalPoint: ( point: Vector2 ) => Vector2,
+  public constructor( model: BANModel<ParticleAtom | ParticleNucleus>,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
                       particleTransform: ModelViewTransform2,
                       createParticleFromStack: ( particleType: ParticleType ) => Particle,
                       returnParticleToStack: ( particleType: ParticleType ) => void ) {
     super();
+
+    const getLocalPoint = this.globalToParentPoint.bind( this );
 
     // create and add the Protons and Neutrons label
     const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
