@@ -12,15 +12,12 @@ import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import BANModel from '../model/BANModel.js';
-import { Node, PressListenerEvent, Text } from '../../../../scenery/js/imports.js';
+import { Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
 import NucleonNumberPanel from './NucleonNumberPanel.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import NucleonCreatorNode from './NucleonCreatorNode.js';
 import ParticleType from '../model/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -32,7 +29,7 @@ import BANParticle from '../model/BANParticle.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AlphaParticle from '../model/AlphaParticle.js';
 import ElementNameText from './ElementNameText.js';
-import NucleonArrowButtons from './NucleonArrowButtons.js';
+import NucleonCreatorsNode from './NucleonCreatorsNode.js';
 
 // types
 type SelfOptions = {
@@ -51,9 +48,6 @@ type ParticleTypeInfo = {
   outgoingNucleons: number;
 };
 
-// constants
-const HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS = 160;
-
 abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>> extends ScreenView {
 
   protected model: M;
@@ -68,15 +62,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
   protected readonly particleViewMap: ParticleViewMap = {};
 
-  // The NucleonCreatorNode for the protons and neutrons.
-  protected readonly protonsCreatorNode: Node;
-  protected readonly neutronsCreatorNode: Node;
-
-  private readonly protonsCreatorNodeModelCenter: Vector2;
-  private readonly neutronsCreatorNodeModelCenter: Vector2;
-
   // The spinner buttons.
-  protected readonly nucleonArrowButtons: NucleonArrowButtons;
+  protected readonly nucleonCreatorsNode: NucleonCreatorsNode;
 
   protected readonly elementNameText: ElementNameText;
 
@@ -113,62 +100,14 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.nuclideExistsProperty );
     this.addChild( this.elementNameText );
 
-    const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
-
-    // Create and add the Protons and Neutrons label.
-    const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, nucleonLabelTextOptions );
-    this.addChild( protonsLabel );
-    const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, nucleonLabelTextOptions );
-    this.addChild( neutronsLabel );
-
     this.particleTransform = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, options.particleViewPosition, 1 );
 
-    const addAndDragParticle = this.addAndDragParticle.bind( this );
-    const getLocalPoint = this.globalToLocalPoint.bind( this );
-
-    // Create and add the NucleonCreatorNode for the protons.
-    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
-      this.particleTransform );
-    this.addChild( this.protonsCreatorNode );
-
-    // Create and add the NucleonCreatorNode for the neutrons.
-    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
-      this.particleTransform );
-    this.addChild( this.neutronsCreatorNode );
-
-    const nucleonArrowButtons = new NucleonArrowButtons( this.model, this.protonsCreatorNode,
-      this.neutronsCreatorNode, this.createParticleFromStack.bind( this ), this.returnParticleToStack.bind( this ) );
-    this.addChild( nucleonArrowButtons );
-
-    // Positioning.
-    // NucleonArrowButtons positioning must be first since others depend on them.
-    nucleonArrowButtons.doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    nucleonArrowButtons.doubleArrowButtons.centerX = atomCenter.x;
-    nucleonArrowButtons.protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    nucleonArrowButtons.protonArrowButtons.right = nucleonArrowButtons.doubleArrowButtons.left
-                                                   - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
-    nucleonArrowButtons.neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    nucleonArrowButtons.neutronArrowButtons.left = nucleonArrowButtons.doubleArrowButtons.right
-                                                   + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
-    protonsLabel.boundsProperty.link( () => {
-      protonsLabel.bottom = nucleonArrowButtons.doubleArrowButtons.bottom;
-      protonsLabel.centerX = ( nucleonArrowButtons.doubleArrowButtons.left - nucleonArrowButtons.protonArrowButtons.right ) / 2
-                             + nucleonArrowButtons.protonArrowButtons.right;
-    } );
-    neutronsLabel.boundsProperty.link( () => {
-      neutronsLabel.bottom = nucleonArrowButtons.doubleArrowButtons.bottom;
-      neutronsLabel.centerX = ( nucleonArrowButtons.neutronArrowButtons.left - nucleonArrowButtons.doubleArrowButtons.right ) / 2
-                              + nucleonArrowButtons.doubleArrowButtons.right;
-    } );
-    // Position creator nodes last since dependent on nucleonArrowButtons and nucleon labels.
-    this.protonsCreatorNode.top = nucleonArrowButtons.doubleArrowButtons.top;
-    this.protonsCreatorNode.centerX = protonsLabel.centerX;
-    this.neutronsCreatorNode.top = nucleonArrowButtons.doubleArrowButtons.top;
-    this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
-
-    // Store to know origin when creating / returning particles from stack.
-    this.protonsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.protonsCreatorNode.center );
-    this.neutronsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.neutronsCreatorNode.center );
+    this.nucleonCreatorsNode = new NucleonCreatorsNode( this.model,
+      this.globalToLocalPoint.bind( this ), this.addAndDragParticle.bind( this ),
+      this.particleTransform, this.createParticleFromStack.bind( this ), this.returnParticleToStack.bind( this ) );
+    this.nucleonCreatorsNode.centerX = atomCenter.x;
+    this.nucleonCreatorsNode.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
+    this.addChild( this.nucleonCreatorsNode );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
@@ -227,17 +166,14 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // Create the particleAtomNode but add it in subclasses so particles are in top layer.
     this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
 
-    // For use in positioning.
-    this.nucleonArrowButtons = nucleonArrowButtons;
-
     // Update the cloud size as the massNumber changes.
     this.model.particleAtom.protonCountProperty.link(
       protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
 
     this.pdomPlayAreaNode.pdomOrder = [
-      nucleonArrowButtons.protonArrowButtons,
-      nucleonArrowButtons.doubleArrowButtons,
-      nucleonArrowButtons.neutronArrowButtons
+      this.nucleonCreatorsNode.protonArrowButtons,
+      this.nucleonCreatorsNode.doubleArrowButtons,
+      this.nucleonCreatorsNode.neutronArrowButtons
     ];
     this.pdomControlAreaNode.pdomOrder = [ this.resetAllButton ];
   }
@@ -248,8 +184,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   private getInfoForParticleType( particleType: ParticleType ): ParticleTypeInfo {
     const maxNumber = particleType === ParticleType.PROTON ? this.model.protonNumberRange.max :
                       this.model.neutronNumberRange.max;
-    const creatorNode = particleType === ParticleType.PROTON ? this.protonsCreatorNode :
-                        this.neutronsCreatorNode;
+    const creatorNode = particleType === ParticleType.PROTON ? this.nucleonCreatorsNode.protonsCreatorNode :
+                        this.nucleonCreatorsNode.neutronsCreatorNode;
     const numberOfNucleons = [ ...this.model.particles ]
       .filter( particle => particle.type === particleType.particleTypeString ).length;
     const outgoingNucleons = [ ...this.model.outgoingParticles ]
@@ -311,7 +247,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // Create a particle at the center of its creator node.
     const particle = new BANParticle( particleType.particleTypeString );
     const origin = particleType === ParticleType.PROTON ?
-                   this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
+                   this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
+                   this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );
 
     // Send the particle the center of the particleAtom and add it to the model.
@@ -349,7 +286,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   private returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
-                                this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
+                                this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
+                                this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
 
     const particleToReturn = this.model.getParticleToReturn( particleType, creatorNodePosition );
 
@@ -481,8 +419,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Define a function that will decide where to put nucleons.
    */
   private dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
+    // TODO: can't we use the creator node's model center? https://github.com/phetsims/build-a-nucleus/issues/185
     const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
-                                      this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
+                                      this.nucleonCreatorsNode.protonsCreatorNode.center :
+                                      this.nucleonCreatorsNode.neutronsCreatorNode.center;
 
     // If removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom.
     const currentlyNonExistentAtom =
