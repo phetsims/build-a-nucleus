@@ -36,26 +36,29 @@ export default class DoubleArrowButton extends RectangularPushButton {
 
   public constructor( direction: ArrowButtonDirection, callback: () => void, providedOptions?: DoubleArrowButtonOptions ) {
 
-    const options = optionize<DoubleArrowButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
+    const options =
+      optionize<DoubleArrowButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
 
-      // options for the button
-      cursor: 'pointer',
-      baseColor: 'white',
-      stroke: 'black',
-      lineWidth: 1,
-      cornerRadius: 4,
-      xMargin: 7,
-      yMargin: 5,
-      touchAreaXDilation: 7,
-      touchAreaYDilation: 7,
-      heightSizable: false
-    }, providedOptions );
+        // options for the button
+        cursor: 'pointer',
+        baseColor: 'white',
+        stroke: 'black',
+        lineWidth: 1,
+        cornerRadius: 4,
+        xMargin: 7,
+        yMargin: 5,
+        touchAreaXDilation: 7,
+        touchAreaYDilation: 7,
+        heightSizable: false
+      }, providedOptions );
 
     options.listener = callback;
 
     // arrow shape pointing up
     const arrowShape = new Shape();
-    arrowShape.moveTo( 0, 0 ).lineTo( options.arrowWidth / 2, options.arrowHeight ).lineTo( -options.arrowWidth / 2, options.arrowHeight ).close();
+    arrowShape.moveTo( 0, 0 )
+      .lineTo( options.arrowWidth / 2, options.arrowHeight )
+      .lineTo( -options.arrowWidth / 2, options.arrowHeight ).close();
 
     // function to create a double arrow path
     const createDoubleArrow = ( direction: ArrowButtonDirection, leftArrowFill: TPaint, rightArrowFill: TPaint ) => {

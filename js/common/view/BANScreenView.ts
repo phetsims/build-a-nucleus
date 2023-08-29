@@ -37,7 +37,8 @@ import NucleonArrowButtons from './NucleonArrowButtons.js';
 // types
 type SelfOptions = {
 
-  // position of the center of the atom in the Decay screen and the top left corner of the energy levels in the Chart Intro screen
+  // Position of the center of the atom in the Decay screen and the top left corner of the energy levels in the
+  // Chart Intro screen.
   particleViewPosition?: Vector2;
 };
 export type BANScreenViewOptions = SelfOptions & ScreenViewOptions;
@@ -61,20 +62,20 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   protected readonly resetAllButton: Node;
   protected readonly nucleonNumberPanel: Node;
 
-  // the time since the step() count has started
+  // The time since the step() count has started.
   private timeSinceCountdownStarted = 0;
 
   // ParticleView.id => {ParticleView} - lookup map for efficiency. Used for storage only.
   protected readonly particleViewMap: ParticleViewMap = {};
 
-  // the NucleonCreatorNode for the protons and neutrons
+  // The NucleonCreatorNode for the protons and neutrons.
   protected readonly protonsCreatorNode: Node;
   protected readonly neutronsCreatorNode: Node;
 
   private readonly protonsCreatorNodeModelCenter: Vector2;
   private readonly neutronsCreatorNodeModelCenter: Vector2;
 
-  // the spinner buttons
+  // The spinner buttons.
   protected readonly nucleonArrowButtons: NucleonArrowButtons;
 
   protected readonly elementNameText: ElementNameText;
@@ -82,23 +83,26 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   // The view for the ParticleAtom, the cluster of nucleons in Decay screen and the mini-atom in the Chart Intro screen.
   protected readonly particleAtomNode: ParticleAtomNode;
 
-  // MVT for dragging particle's, setting particle's positions, and positioning energy levels and DecayScreen particleAtom center
+  // MVT for dragging particle's, setting particle's positions, and positioning energy levels and
+  // DecayScreen particleAtom center.
   protected readonly particleTransform: ModelViewTransform2;
 
   protected constructor( model: M, atomCenter: Vector2, providedOptions?: BANScreenViewOptions ) {
 
-    const options = optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
+    const options =
+      optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      particleViewPosition: atomCenter,
-      layoutBounds: BANConstants.LAYOUT_BOUNDS
-    }, providedOptions );
+        particleViewPosition: atomCenter,
+        layoutBounds: BANConstants.LAYOUT_BOUNDS
+      }, providedOptions );
 
     super( options );
 
     this.model = model;
 
-    // create and add the NucleonNumberPanel
-    this.nucleonNumberPanel = new NucleonNumberPanel( this.model.particleAtom.protonCountProperty, this.model.protonNumberRange,
+    // Create and add the NucleonNumberPanel.
+    this.nucleonNumberPanel = new NucleonNumberPanel(
+      this.model.particleAtom.protonCountProperty, this.model.protonNumberRange,
       this.model.particleAtom.neutronCountProperty, this.model.neutronNumberRange );
     this.nucleonNumberPanel.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.nucleonNumberPanel );
@@ -111,7 +115,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     const nucleonLabelTextOptions = { font: new PhetFont( 20 ), maxWidth: 150 };
 
-    // create and add the Protons and Neutrons label
+    // Create and add the Protons and Neutrons label.
     const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, nucleonLabelTextOptions );
     this.addChild( protonsLabel );
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, nucleonLabelTextOptions );
@@ -122,12 +126,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const addAndDragParticle = this.addAndDragParticle.bind( this );
     const getLocalPoint = this.globalToLocalPoint.bind( this );
 
-    // create and add the NucleonCreatorNode for the protons
+    // Create and add the NucleonCreatorNode for the protons.
     this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
       this.particleTransform );
     this.addChild( this.protonsCreatorNode );
 
-    // create and add the NucleonCreatorNode for the neutrons
+    // Create and add the NucleonCreatorNode for the neutrons.
     this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
       this.particleTransform );
     this.addChild( this.neutronsCreatorNode );
@@ -136,35 +140,39 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.neutronsCreatorNode, this.createParticleFromStack.bind( this ), this.returnParticleToStack.bind( this ) );
     this.addChild( nucleonArrowButtons );
 
-    // positioning
-    // nucleonArrowButtons positioning must be first since others depend on them
+    // Positioning.
+    // NucleonArrowButtons positioning must be first since others depend on them.
     nucleonArrowButtons.doubleArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
     nucleonArrowButtons.doubleArrowButtons.centerX = atomCenter.x;
     nucleonArrowButtons.protonArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    nucleonArrowButtons.protonArrowButtons.right = nucleonArrowButtons.doubleArrowButtons.left - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
+    nucleonArrowButtons.protonArrowButtons.right = nucleonArrowButtons.doubleArrowButtons.left
+                                                   - HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     nucleonArrowButtons.neutronArrowButtons.bottom = this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN;
-    nucleonArrowButtons.neutronArrowButtons.left = nucleonArrowButtons.doubleArrowButtons.right + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
+    nucleonArrowButtons.neutronArrowButtons.left = nucleonArrowButtons.doubleArrowButtons.right
+                                                   + HORIZONTAL_DISTANCE_BETWEEN_ARROW_BUTTONS;
     protonsLabel.boundsProperty.link( () => {
       protonsLabel.bottom = nucleonArrowButtons.doubleArrowButtons.bottom;
-      protonsLabel.centerX = ( nucleonArrowButtons.doubleArrowButtons.left - nucleonArrowButtons.protonArrowButtons.right ) / 2 + nucleonArrowButtons.protonArrowButtons.right;
+      protonsLabel.centerX = ( nucleonArrowButtons.doubleArrowButtons.left - nucleonArrowButtons.protonArrowButtons.right ) / 2
+                             + nucleonArrowButtons.protonArrowButtons.right;
     } );
     neutronsLabel.boundsProperty.link( () => {
       neutronsLabel.bottom = nucleonArrowButtons.doubleArrowButtons.bottom;
-      neutronsLabel.centerX = ( nucleonArrowButtons.neutronArrowButtons.left - nucleonArrowButtons.doubleArrowButtons.right ) / 2 + nucleonArrowButtons.doubleArrowButtons.right;
+      neutronsLabel.centerX = ( nucleonArrowButtons.neutronArrowButtons.left - nucleonArrowButtons.doubleArrowButtons.right ) / 2
+                              + nucleonArrowButtons.doubleArrowButtons.right;
     } );
-    // position creator nodes last since dependent on nucleonArrowButtons and nucleon labels
+    // Position creator nodes last since dependent on nucleonArrowButtons and nucleon labels.
     this.protonsCreatorNode.top = nucleonArrowButtons.doubleArrowButtons.top;
     this.protonsCreatorNode.centerX = protonsLabel.centerX;
     this.neutronsCreatorNode.top = nucleonArrowButtons.doubleArrowButtons.top;
     this.neutronsCreatorNode.centerX = neutronsLabel.centerX;
 
-    // store to know origin when creating / returning particles from stack
+    // Store to know origin when creating / returning particles from stack.
     this.protonsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.protonsCreatorNode.center );
     this.neutronsCreatorNodeModelCenter = this.particleTransform.viewToModelPosition( this.neutronsCreatorNode.center );
 
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
-        this.interruptSubtreeInput(); // cancel interactions that may be in progress
+        this.interruptSubtreeInput(); // Cancel interactions that may be in progress.
         this.model.reset();
         this.reset();
 
@@ -172,7 +180,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
           'all views should be cleaned up on reset\n' +
           Object.keys( this.particleViewMap ).map( ( x: string ) => {
             const particle = this.particleViewMap[ x as unknown as number ].particle;
-            return particle ? `${particle.id}, ${particle.type}, disposed:${particle.isDisposed}, ${particle.colorProperty.value.toString()}` : '';
+            return particle ?
+                   `${particle.id}, ${particle.type}, disposed:${particle.isDisposed}, ${particle.colorProperty.value.toString()}` :
+                   '';
           } ) );
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
@@ -181,7 +191,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.addChild( this.resetAllButton );
 
 
-    // add ParticleView's to match the model
+    // Add ParticleView's to match the model.
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
       const particleView = new ParticleView( particle, this.particleTransform );
 
@@ -191,7 +201,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
       if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
 
-        // called when a nucleon is finished being dragged
+        // Called when a nucleon is finished being dragged.
         particle.dragEndedEmitter.addListener( () => this.dragEndedListener( particle, this.model.particleAtom ) );
         this.checkIfCreatorNodeShouldBeInvisible( particleType );
       }
@@ -209,19 +219,20 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       } );
     } );
 
-    // remove ParticleView's to match the model. Dispose emitter deals with the view portion.
+    // Remove ParticleView's to match the model. Dispose emitter deals with the view portion.
     this.model.particles.addItemRemovedListener( ( particle: Particle ) => {
       particle.dispose();
     } );
 
-    // create the particleAtomNode but add it in subclasses so particles are in top layer
+    // Create the particleAtomNode but add it in subclasses so particles are in top layer.
     this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
 
-    // for use in positioning
+    // For use in positioning.
     this.nucleonArrowButtons = nucleonArrowButtons;
 
-    // update the cloud size as the massNumber changes
-    this.model.particleAtom.protonCountProperty.link( protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
+    // Update the cloud size as the massNumber changes.
+    this.model.particleAtom.protonCountProperty.link(
+      protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
 
     this.pdomPlayAreaNode.pdomOrder = [
       nucleonArrowButtons.protonArrowButtons,
@@ -235,8 +246,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Get information for a specific particle type.
    */
   private getInfoForParticleType( particleType: ParticleType ): ParticleTypeInfo {
-    const maxNumber = particleType === ParticleType.PROTON ? this.model.protonNumberRange.max : this.model.neutronNumberRange.max;
-    const creatorNode = particleType === ParticleType.PROTON ? this.protonsCreatorNode : this.neutronsCreatorNode;
+    const maxNumber = particleType === ParticleType.PROTON ? this.model.protonNumberRange.max :
+                      this.model.neutronNumberRange.max;
+    const creatorNode = particleType === ParticleType.PROTON ? this.protonsCreatorNode :
+                        this.neutronsCreatorNode;
     const numberOfNucleons = [ ...this.model.particles ]
       .filter( particle => particle.type === particleType.particleTypeString ).length;
     const outgoingNucleons = [ ...this.model.outgoingParticles ]
@@ -295,17 +308,17 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   protected createParticleFromStack( particleType: ParticleType ): Particle {
 
-    // create a particle at the center of its creator node
+    // Create a particle at the center of its creator node.
     const particle = new BANParticle( particleType.particleTypeString );
     const origin = particleType === ParticleType.PROTON ?
                    this.protonsCreatorNodeModelCenter : this.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );
 
-    // send the particle the center of the particleAtom and add it to the model
+    // Send the particle the center of the particleAtom and add it to the model.
     particle.destinationProperty.value = this.model.getParticleDestination( particleType, particle );
     this.model.addParticle( particle );
 
-    // don't let the particle be clicked until it reaches the particleAtom
+    // Don't let the particle be clicked until it reaches the particleAtom.
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
@@ -316,7 +329,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.model.incomingNeutrons.push( particle );
     }
 
-    // add the particle to the particleAtom once it reaches the center of the particleAtom and allow it to be clicked
+    // Add the particle to the particleAtom once it reaches the center of the particleAtom and allow it to be clicked.
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
 
@@ -331,7 +344,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
   }
 
   /**
-   * Remove a particle of particleType from the particleAtom, if it is in the particleAtom, and send it back to its creator node.
+   * Remove a particle of particleType from the particleAtom, if it is in the particleAtom, and send it back to its
+   * creator node.
    */
   private returnParticleToStack( particleType: ParticleType ): void {
     const creatorNodePosition = particleType === ParticleType.PROTON ?
@@ -344,7 +358,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     if ( this.model.particleAtom.containsParticle( particleToReturn ) ) {
       this.model.particleAtom.removeParticle( particleToReturn );
     }
-    else if ( this.model.incomingNeutrons.includes( particleToReturn ) || this.model.incomingProtons.includes( particleToReturn ) ) {
+    else if ( this.model.incomingNeutrons.includes( particleToReturn )
+              || this.model.incomingProtons.includes( particleToReturn ) ) {
       this.model.clearIncomingParticle( particleToReturn, particleType );
     }
     else {
@@ -402,10 +417,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     // A special case for when there are no particles, since it technically doesn't exist, but it is an acceptable state.
     const p0n0Case = protonNumber === 0 && neutronNumber === 0;
 
-    // We don't want this automatic atom-fixing behavior for the p0,n0 case
+    // We don't want this automatic atom-fixing behavior for the p0,n0 case.
     if ( !this.model.nuclideExistsProperty.value && !p0n0Case ) {
 
-      // start countdown to show the nuclide that does not exist for {{BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST}} seconds
+      // Start countdown to show the nuclide that does not exist for {{BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST}} seconds.
       this.timeSinceCountdownStarted += dt;
     }
     else {
@@ -416,11 +431,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       this.previousNeutronNumber = neutronNumber;
     }
 
-    // show the nuclide that does not exist for one second, then return the necessary particles
+    // Show the nuclide that does not exist for one second, then return the necessary particles.
     if ( this.timeSinceCountdownStarted >= BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST &&
 
          // User controlled particles get another behavior because we want that specific particle to go back to
-         // the atom, see this.dragEndedListener()
+         // the atom, see this.dragEndedListener().
          this.model.userControlledNeutrons.length === 0 &&
          this.model.userControlledProtons.length === 0 ) {
       this.timeSinceCountdownStarted = 0;
@@ -457,7 +472,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   protected findParticleView( particle: Particle ): ParticleView {
     const particleView = this.particleViewMap[ particle.id ];
-    assert && assert( particleView, 'Did not find matching ParticleView for type ' + particle.type + ' and id ' + particle.id );
+    assert && assert( particleView, 'Did not find matching ParticleView for type ' + particle.type
+                                    + ' and id ' + particle.id );
     return particleView;
   }
 
@@ -468,10 +484,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
                                       this.protonsCreatorNode.center : this.neutronsCreatorNode.center;
 
-    // if removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom
+    // If removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom.
     const currentlyNonExistentAtom =
       this.model.particleAtom.massNumberProperty.value !== 0 &&
-      !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value, this.model.particleAtom.neutronCountProperty.value );
+      !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value,
+        this.model.particleAtom.neutronCountProperty.value );
 
 
     if ( this.isNucleonInCaptureArea( nucleon, atom.positionProperty ) || currentlyNonExistentAtom ) {
@@ -479,7 +496,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     }
     else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
 
-      // only animate the removal of a nucleon if it was dragged out of the creator node
+      // Only animate the removal of a nucleon if it was dragged out of the creator node.
       this.animateAndRemoveParticle( nucleon, this.particleTransform.viewToModelPosition( particleCreatorNodeCenter ) );
     }
   }
@@ -521,7 +538,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
         this.emitAlphaParticle();
         break;
       default:
-        // No decay if there is no supported decayType
+        // No decay if there is no supported decayType.
         break;
     }
   }
@@ -565,27 +582,27 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     this.model.particleAtom.neutronCountProperty.value >= AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
       'The particleAtom needs 2 protons and 2 neutrons to emit an alpha particle.' );
 
-    // create and add the alpha particle node
+    // Create and add the alpha particle node.
     const alphaParticle = new AlphaParticle();
 
-    // get the protons and neutrons closest to the center of the particleAtom and remove them from the particleAtom
+    // Get the protons and neutrons closest to the center of the particleAtom and remove them from the particleAtom.
     const protonsToRemove = _.times( AlphaParticle.NUMBER_OF_ALLOWED_PROTONS,
       () => particleAtom.extractParticleClosestToCenter( ParticleType.PROTON.particleTypeString ) );
     const neutronsToRemove = _.times( AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
       () => particleAtom.extractParticleClosestToCenter( ParticleType.NEUTRON.particleTypeString ) );
 
-    // add the obtained protons and neutrons to the alphaParticle
+    // Add the obtained protons and neutrons to the alphaParticle.
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
       alphaParticle.addParticle( nucleon );
       this.model.outgoingParticles.add( nucleon );
       this.findParticleView( nucleon ).inputEnabled = false;
     } );
 
-    // ensure the creator nodes are visible since particles are being removed from the particleAtom
+    // Ensure the creator nodes are visible since particles are being removed from the particleAtom.
     alphaParticle.moveAllParticlesToDestination();
     this.checkIfCreatorNodesShouldBeVisible();
 
-    // animate the particle to a random destination outside the model
+    // Animate the particle to a random destination outside the model.
     const alphaParticleEmissionAnimation = alphaParticle.animateAndRemoveParticle(
       this.getRandomExternalModelPosition(), this.model.removeParticle.bind( this.model ) );
     this.model.particleAnimations.push( alphaParticleEmissionAnimation );
@@ -608,17 +625,17 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
     }
 
-    // get a random particle from the particleArray to determine the particleType
+    // Get a random particle from the particleArray to determine the particleType.
     const particleTypeString = ParticleType.enumeration.getValue( particleArray.get( 0 ).type.toUpperCase() ).name;
     assert && assert( particleArray.lengthProperty.value >= 1,
       'The particleAtom needs a ' + particleTypeString + ' for a ' + betaDecayType.name );
 
-    // the particle that will change its nucleon type will be the one closest to the center of the atom
+    // The particle that will change its nucleon type will be the one closest to the center of the atom.
     const closestParticle = _.sortBy( [ ...particleArray ],
       closestParticle => closestParticle.positionProperty.value.distance( particleAtom.positionProperty.value )
     ).shift()!;
 
-    // place the particleToEmit in the same position and behind the particle that is changing its nucleon type
+    // Place the particleToEmit in the same position and behind the particle that is changing its nucleon type.
     particleToEmit.positionProperty.value = closestParticle.positionProperty.value;
     particleToEmit.zLayerProperty.value = closestParticle.zLayerProperty.value + 1;
 
@@ -626,7 +643,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
 
     this.model.outgoingParticles.add( particleToEmit );
 
-    // add the particle to the model to emit it, then change the nucleon type and remove the particle
+    // Add the particle to the model to emit it, then change the nucleon type and remove the particle.
     particleAtom.changeNucleonType( closestParticle, () => {
       assert && assert( !particleToEmit.isDisposed, 'cannot animate a removedParticle' );
       this.animateAndRemoveParticle( particleToEmit, destination );

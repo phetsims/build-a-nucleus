@@ -28,18 +28,19 @@ export default class ElementNameText extends Text {
                       nuclideExistsProperty: TReadOnlyProperty<boolean>,
                       providedOptions?: ElementNameTextOptions ) {
 
-    const options = optionize<ElementNameTextOptions, EmptySelfOptions, TextOptions>()( {
-      font: BANConstants.REGULAR_FONT,
-      fill: Color.RED,
-      maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
-    }, providedOptions );
+    const options =
+      optionize<ElementNameTextOptions, EmptySelfOptions, TextOptions>()( {
+        font: BANConstants.REGULAR_FONT,
+        fill: Color.RED,
+        maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
+      }, providedOptions );
 
     const elementNameStringProperty = new DerivedStringProperty( [
       protonCountProperty,
       neutronCountProperty,
       nuclideExistsProperty,
 
-      // We need to update whenever any of these strings change, to support Dynamic Locale
+      // We need to update whenever any of these strings change, to support Dynamic Locale.
       BuildANucleusStrings.nameMassPatternStringProperty,
       BuildANucleusStrings.neutronsLowercaseStringProperty,
       BuildANucleusStrings.elementDoesNotFormPatternStringProperty,
@@ -58,11 +59,11 @@ export default class ElementNameText extends Text {
         mass: massNumberString
       } );
 
-      // show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built
+      // Show "{name} - {massNumber} does not form" in the elementName's place when a nuclide that does not exist on Earth is built.
       if ( !doesNuclideExist && massNumber !== 0 ) {
 
         if ( name.length === 0 ) {
-          // no protons
+          // No protons.
           name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
             mass: massNumberString,
             particleType: BuildANucleusStrings.neutronsLowercaseStringProperty,
@@ -77,14 +78,14 @@ export default class ElementNameText extends Text {
         }
       }
       else if ( name.length === 0 ) {
-        // no protons
+        // No protons.
 
         if ( neutronNumber === 0 ) {
-          // no neutrons
+          // No neutrons.
           name = '';
         }
         else if ( neutronNumber === 1 ) {
-          // only one neutron
+          // Only one neutron.
           name = StringUtils.fillIn( BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty, {
             mass: neutronNumber,
             particleType: BuildANucleusStrings.neutronLowercaseStringProperty,
@@ -92,7 +93,7 @@ export default class ElementNameText extends Text {
           } );
         }
         else {
-          // multiple neutrons
+          // Multiple neutrons.
           name = StringUtils.fillIn( BuildANucleusStrings.clusterOfNeutronsPatternStringProperty, {
             neutronNumber: neutronNumber
           } );
