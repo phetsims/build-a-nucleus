@@ -24,11 +24,13 @@ class EnergyLevelType extends EnumerationValue {
 
   public static readonly enumeration = new Enumeration( EnergyLevelType );
 
-  public constructor( public readonly xPosition: number, public readonly yPosition: number, public readonly capacity: number ) {
+  public constructor( public readonly xPosition: number, public readonly yPosition: number,
+                      public readonly capacity: number ) {
     super();
   }
 
-  public static readonly ENERGY_LEVELS = [ EnergyLevelType.N_ZERO, EnergyLevelType.N_ONE, EnergyLevelType.N_TWO ] as const;
+  public static readonly ENERGY_LEVELS =
+    [ EnergyLevelType.N_ZERO, EnergyLevelType.N_ONE, EnergyLevelType.N_TWO ] as const;
 
   /**
    * Given a particle index (0-based), return the EnergyLevelType that it will be placed on. See ParticleNucleus.

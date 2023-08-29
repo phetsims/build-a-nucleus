@@ -36,7 +36,7 @@ class NuclideChartAndNumberLines extends Node {
         nuclideChartNodeOptions: {}
       }, providedOptions );
 
-    // create the nuclideChartNode
+    // Create the nuclideChartNode.
     const nuclideChartNode = new NuclideChartNode(
       protonCountProperty, neutronCountProperty, chartTransform,
       combineOptions<NuclideChartNodeOptions>( {
@@ -45,7 +45,7 @@ class NuclideChartAndNumberLines extends Node {
       }, options.nuclideChartNodeOptions )
     );
 
-    // create and position the number lines
+    // Create and position the number lines.
     const tickSpacing = 1;
     const protonNumberLine = new NucleonNumberLine(
       chartTransform, protonCountProperty, Orientation.VERTICAL, {

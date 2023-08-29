@@ -41,7 +41,7 @@ const MAGIC_NUMBERS = [ N_ZERO_CAPACITY, N_ZERO_CAPACITY + N_ONE_CAPACITY ];
 
 class NuclideChartNode extends Node {
 
-  // keep track of the cells of the chart
+  // Keep track of the cells of the chart.
   protected readonly cells: NuclideChartCell[][];
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
@@ -54,13 +54,14 @@ class NuclideChartNode extends Node {
       }, providedOptions );
     super( options );
 
-    // create and add the cells
+    // Create and add the cells.
     const cellLength = chartTransform.modelToViewDeltaX( 1 );
     const cellLayerNode = new Node();
-    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength, options.showMagicNumbersProperty );
+    this.cells = NuclideChartNode.createNuclideChart( cellLayerNode, chartTransform, cellLength,
+      options.showMagicNumbersProperty );
     this.addChild( cellLayerNode );
 
-    // add the arrowNode indicating the decay direction first so that it appears behind the cell's label
+    // Add the arrowNode indicating the decay direction first so that it appears behind the cell's label.
     const arrowNode = new ArrowNode( 0, 0, 0, 0, combineOptions<ArrowNodeOptions>( {
       visible: false
     }, BANConstants.DECAY_ARROW_OPTIONS ) );
@@ -70,13 +71,14 @@ class NuclideChartNode extends Node {
 
     const labelDimension = cellLength * 0.75;
 
-    // make the labelTextBackground an octagon shape
+    // Make the labelTextBackground an octagon shape.
     const vertices = _.times( 8, side => {
-      return new Vector2( Math.cos( ( 2 * side * Math.PI ) / 8 ), Math.sin( ( 2 * side * Math.PI ) / 8 ) ).times( labelDimension * 0.6 );
+      return new Vector2( Math.cos( ( 2 * side * Math.PI ) / 8 ),
+        Math.sin( ( 2 * side * Math.PI ) / 8 ) ).times( labelDimension * 0.6 );
     } );
     const octagonShape = Shape.polygon( vertices );
 
-    // create and add the label which labels the cell with the elementSymbol
+    // Create and add the label which labels the cell with the elementSymbol.
     const labelTextBackground = new Path( octagonShape, { rotation: Math.PI / 8 } );
     const labelText = new Text( '', {
       fontSize: options.cellTextFontSize,
@@ -90,64 +92,66 @@ class NuclideChartNode extends Node {
     labelTextBackground.center = gridBox.center;
     this.addChild( labelContainer );
 
-    // highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide
+    // Highlight the cell that corresponds to the nuclide and make opaque any surrounding cells too far away from the nuclide.
     let highlightedCell: NuclideChartCell | null = null;
     Multilink.multilink( [
       protonCountProperty,
       neutronCountProperty
     ], ( protonNumber, neutronNumber ) => {
 
-      const currentCellCenter = chartTransform.modelToViewXY( neutronNumber + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+      const currentCellCenter = chartTransform.modelToViewXY(
+        neutronNumber + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
         protonNumber + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
 
-      // highlight the cell if it exists
+      // Highlight the cell if it exists.
       if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
 
-        // get the highlightedCell
+        // Get the highlightedCell.
         const protonRowIndex = protonNumber;
         const neutronRowIndex = BANModel.POPULATED_CELLS[ protonRowIndex ].indexOf( neutronNumber );
         highlightedCell = this.cells[ protonRowIndex ][ neutronRowIndex ];
         assert && assert( highlightedCell, 'The highlighted cell is null at protonRowIndex = ' + protonRowIndex +
                                            ' neutronRowIndex = ' + neutronRowIndex );
 
-        // get the decayType from the highlightedCell
+        // Get the decayType from the highlightedCell.
         const decayType = highlightedCell.cellModel.decayType;
 
-        // draw the decay direction with the arrowNode if there is a known decay for this nuclide cell
+        // Draw the decay direction with the arrowNode if there is a known decay for this nuclide cell.
         if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
 
-          // direction determined based on how the DecayType changes the current nuclide, see DecayType for more details
+          // Direction determined based on how the DecayType changes the current nuclide, see DecayType for more details.
           const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
                             decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
                             decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
                             decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
 
-                              // alpha decay
+                              // Alpha decay
                             new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
                               protonNumber - AlphaParticle.NUMBER_OF_ALLOWED_PROTONS );
-          const arrowTip = chartTransform.modelToViewXY( direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
+          const arrowTip = chartTransform.modelToViewXY(
+            direction.x + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
             direction.y + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
           arrowNode.setTailAndTip( currentCellCenter.x, currentCellCenter.y, arrowTip.x, arrowTip.y );
           arrowNode.visible = true;
         }
         else {
 
-          // stable cell or no known decay so hide the arrow
+          // Stable cell or no known decay so hide the arrow.
           arrowNode.visible = false;
         }
 
-        // show the cell's label
+        // Show the cell's label.
         labelContainer.visible = true;
         labelText.string = AtomIdentifier.getSymbol( protonNumber );
         labelContainer.center = currentCellCenter;
         labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
 
-        // cover the tail of the arrow that's in this cell's center
+        // Cover the tail of the arrow that's in this cell's center.
         labelTextBackground.fill = highlightedCell.decayBackgroundColor;
       }
       else {
 
-        // no cell exists so hide the label and arrow
+        // No cell exists so hide the label and arrow.
         arrowNode.visible = false;
         labelContainer.visible = false;
       }
@@ -171,37 +175,41 @@ class NuclideChartNode extends Node {
    * Create a nuclide chart given a node to contain the cells and a chartTransform. Public for icon creation.
    */
   public static createNuclideChart( cellLayerNode: Node, chartTransform: ChartTransform, cellLength: number,
-                                    showMagicNumbersProperty: TReadOnlyProperty<boolean> = new BooleanProperty( false ) ): NuclideChartCell[][] {
+                                    showMagicNumbersProperty: TReadOnlyProperty<boolean> = new BooleanProperty( false )
+  ): NuclideChartCell[][] {
     const cells: NuclideChartCell[][] = [];
 
-    // create and add the chart cells to the chart. row is proton number and column is neutron number.
-    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict', ( protonNumber, viewPosition ) => {
-      const populatedCellsInRow = BANModel.POPULATED_CELLS[ protonNumber ];
-      const rowCells: NuclideChartCell[] = [];
-      populatedCellsInRow.forEach( ( neutronNumber, columnIndex ) => {
+    // Create and add the chart cells to the chart. row is proton number and column is neutron number.
+    chartTransform.forEachSpacing( Orientation.VERTICAL, 1, 0, 'strict',
+      ( protonNumber, viewPosition ) => {
+        const populatedCellsInRow = BANModel.POPULATED_CELLS[ protonNumber ];
+        const rowCells: NuclideChartCell[] = [];
+        populatedCellsInRow.forEach( ( neutronNumber, columnIndex ) => {
 
-        // create and add the NuclideChartCell
-        const defaultLineWidth = chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH );
-        const cell = new NuclideChartCell( cellLength, ChartIntroModel.cellModelArray[ protonNumber ][ columnIndex ], {
-          lineWidth: defaultLineWidth
+          // Create and add the NuclideChartCell.
+          const defaultLineWidth = chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH );
+          const cell = new NuclideChartCell( cellLength,
+            ChartIntroModel.cellModelArray[ protonNumber ][ columnIndex ], {
+              lineWidth: defaultLineWidth
+            } );
+          cell.translation = new Vector2( chartTransform.modelToViewX( neutronNumber ), viewPosition );
+          cellLayerNode.addChild( cell );
+          rowCells.push( cell );
+
+          const cellIsMagic = MAGIC_NUMBERS.includes( protonNumber ) || MAGIC_NUMBERS.includes( neutronNumber );
+          if ( cellIsMagic ) {
+
+            // Highlight the cell with a special colored stroke if the cell has a magic number of protons or neutrons.
+            showMagicNumbersProperty.link( showMagic => {
+              showMagic && cell.moveToFront();
+              cell.lineWidth = showMagic ? defaultLineWidth + 2 : defaultLineWidth;
+              cell.stroke = showMagic ? BANColors.nuclideChartBorderMagicNumberColorProperty :
+                            BANColors.nuclideChartBorderColorProperty;
+            } );
+          }
         } );
-        cell.translation = new Vector2( chartTransform.modelToViewX( neutronNumber ), viewPosition );
-        cellLayerNode.addChild( cell );
-        rowCells.push( cell );
-
-        const cellIsMagic = MAGIC_NUMBERS.includes( protonNumber ) || MAGIC_NUMBERS.includes( neutronNumber );
-        if ( cellIsMagic ) {
-
-          // highlight the cell with a special colored stroke if the cell has a magic number of protons or neutrons
-          showMagicNumbersProperty.link( showMagic => {
-            showMagic && cell.moveToFront();
-            cell.lineWidth = showMagic ? defaultLineWidth + 2 : defaultLineWidth;
-            cell.stroke = showMagic ? BANColors.nuclideChartBorderMagicNumberColorProperty : BANColors.nuclideChartBorderColorProperty;
-          } );
-        }
+        cells.push( rowCells );
       } );
-      cells.push( rowCells );
-    } );
 
     return cells;
   }

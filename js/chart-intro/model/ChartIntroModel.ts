@@ -44,7 +44,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
     const particleAtom = new ParticleNucleus(); // This is our ground truth 'atom'.
 
-    // Empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons).
+    // Empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10p and 12n).
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.particleNucleus = particleAtom;

@@ -76,7 +76,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model = model;
 
     // The center of the particleAtomNode is the (0,0) point.
-    this.miniAtomMVT = ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
+    this.miniAtomMVT =
+      ModelViewTransform2.createSinglePointScaleMapping( Vector2.ZERO, this.particleAtomNode.emptyAtomCircle.center, 1 );
 
     // Updates nucleons in miniParticleAtom as the particleAtom's nucleon changes.
     // This listener keeps the mini-particle in sync.
@@ -177,7 +178,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       model.particleAtom.neutronCountProperty, this.model.particleAtom.modelViewTransform );
 
     // Neutron energy levels are further to the right than the proton energy levels.
-    this.neutronEnergyLevelNode.setTranslation( options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, 0 ) );
+    this.neutronEnergyLevelNode.setTranslation(
+      options.particleViewPosition.plusXY( BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS, 0 ) );
     this.addChild( this.neutronEnergyLevelNode );
 
     // Dashed 'zoom' lines options and positioning.
@@ -195,7 +197,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       periodicTableAndIsotopeSymbol.centerY, dashedLineOptions );
     this.addChild( rightDashedLine );
 
-    // Whether to show a special highlight for magic-numbered nuclides in the charts
+    // Whether to show a special highlight for magic-numbered nuclides in the charts.
     this.showMagicNumbersProperty = new BooleanProperty( false );
 
     // Create the nuclideChartAccordionBox.
@@ -253,7 +255,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     ] );
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
-      complete && this.model.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
+      complete &&
+      this.model.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
     } );
   }
 
@@ -270,8 +273,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   protected override isNucleonInCaptureArea( nucleon: Particle ): boolean {
     const nucleonViewPosition = this.particleTransform.modelToViewPosition( nucleon.positionProperty.value );
 
-    return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition ) ||
-           this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER ).containsPoint( nucleonViewPosition );
+    return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER )
+             .containsPoint( nucleonViewPosition ) ||
+           this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER )
+             .containsPoint( nucleonViewPosition );
   }
 
   /**

@@ -77,7 +77,7 @@ class FullChartTextButton extends TextPushButton {
         }
       }, providedOptions );
 
-    // create and add the full chart info dialog and button
+    // Create and add the full chart info dialog and button.
     super( BuildANucleusStrings.fullChartCapitalizedStringProperty, options );
   }
 }

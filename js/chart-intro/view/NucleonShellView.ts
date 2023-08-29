@@ -48,7 +48,7 @@ class NucleonShellView extends Node {
     const energyLevels: Line[] = [];
     nucleonShellPositions.forEach( ( particleShellRow, energyLevel ) => {
 
-      // Energy level's start at the left edge of the first particle in a row, so move the lines a 'particle radius' length left.
+      // Energy level's start at left edge of the first particle in a row, so move the lines a 'particle radius' length left.
       // Energy level's sit below the particles, so move the lines a 'particle radius' length down.
       // The first energy level begins at xPosition 2 instead of 0, for more information see ALLOWED_PARTICLE_POSITIONS.
       const lineStartingPoint = new Vector2(
