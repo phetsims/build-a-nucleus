@@ -11,7 +11,7 @@
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Particle from '../../../../shred/js/model/Particle.js';
+import Particle, { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -22,6 +22,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 
+// types
 export type ParticleShellPosition = {
   particle?: Particle;
   xPosition: number; // 0 - 5
@@ -31,16 +32,17 @@ export type ParticleShellPosition = {
 // constants
 export const N_ZERO_CAPACITY = EnergyLevelType.N_ZERO.capacity;
 export const N_ONE_CAPACITY = EnergyLevelType.N_ONE.capacity;
-// the MVT that places nucleons in their individual spaced apart array positions
 
-// have one less space than there are particles
-const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = N_ONE_CAPACITY - 1;
+// Constants for the MVT that place nucleons in their individual spaced apart array positions.
 const PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS;
 const PARTICLE_DIAMETER = BANConstants.PARTICLE_DIAMETER;
 const PARTICLE_X_SPACING = PARTICLE_RADIUS;
 const NUMBER_OF_ENERGY_LEVELS = 3;
 const NUMBER_OF_Y_SPACINGS = NUMBER_OF_ENERGY_LEVELS - 1;
 const PARTICLE_Y_SPACING = PARTICLE_DIAMETER * 4;
+
+// Have one less space than there are particles.
+const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = N_ONE_CAPACITY - 1;
 
 // This transform maps from arbitrary particle positions in the ParticleNucleus (see ALLOWED_PARTICLE_POSITIONS) to
 // actual model/view positions to be rendered. This is private because model units in this sim are the same as
@@ -51,7 +53,7 @@ const PARTICLE_POSITIONING_TRANSFORM = ModelViewTransform2.createRectangleInvert
     ( PARTICLE_DIAMETER + PARTICLE_Y_SPACING ) * NUMBER_OF_Y_SPACINGS ) );
 
 
-// row is yPosition, number is xPosition
+// Row is yPosition, number is xPosition.
 const ALLOWED_PARTICLE_POSITIONS = [
   [ 2, 3 ],
   [ 0, 1, 2, 3, 4, 5 ],
@@ -66,23 +68,23 @@ for ( let i = 0; i < EnergyLevelType.ENERGY_LEVELS.length; i++ ) {
 
 class ParticleNucleus extends ParticleAtom {
 
-  // allowed proton positions
+  // Allowed proton positions.
   public readonly protonShellPositions: ParticleShellPosition[][] = [ [], [], [] ];
 
-  // allowed neutron positions
+  // Allowed neutron positions.
   public readonly neutronShellPositions: ParticleShellPosition[][] = [ [], [], [] ];
 
-  // positions particles on the energy levels
+  // Positions particles on the energy levels.
   public readonly modelViewTransform = PARTICLE_POSITIONING_TRANSFORM;
 
-  // keep track of bound levels
+  // Keeps track of bound levels.
   private readonly protonsLevelProperty = new EnumerationProperty( EnergyLevelType.N_ZERO );
   private readonly neutronsLevelProperty = new EnumerationProperty( EnergyLevelType.N_ZERO );
 
   public constructor() {
     super();
 
-    // Initialize the positions where a nucleon can be placed.
+    // Initialize the positions for where a nucleon can be placed.
     for ( let i = 0; i < ALLOWED_PARTICLE_POSITIONS.length; i++ ) {
       for ( let j = 0; j < ALLOWED_PARTICLE_POSITIONS[ i ].length; j++ ) {
         this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = {
@@ -96,8 +98,9 @@ class ParticleNucleus extends ParticleAtom {
       }
     }
 
-    // update bound levels based on nucleon numbers
-    const createLevelPropertyListener = ( nucleonCountProperty: TReadOnlyProperty<number>, nucleonLevelProperty: EnumerationProperty<EnergyLevelType> ) => {
+    // Updates bound levels based on nucleon numbers.
+    const createLevelPropertyListener = ( nucleonCountProperty: TReadOnlyProperty<number>,
+                                          nucleonLevelProperty: EnumerationProperty<EnergyLevelType> ) => {
       nucleonCountProperty.link( nucleonNumber => {
         if ( nucleonNumber > N_ZERO_CAPACITY + N_ONE_CAPACITY ) {
           nucleonLevelProperty.value = EnergyLevelType.N_TWO;
@@ -113,7 +116,7 @@ class ParticleNucleus extends ParticleAtom {
     createLevelPropertyListener( this.protonCountProperty, this.protonsLevelProperty );
     createLevelPropertyListener( this.neutronCountProperty, this.neutronsLevelProperty );
 
-    // update nucleon positions when the level state changes
+    // Updates nucleon positions when the level state changes.
     this.protonsLevelProperty.link( () =>
       this.updateNucleonPositions( this.protons, this.protonShellPositions, this.protonsLevelProperty, 0 ) );
     this.neutronsLevelProperty.link( () =>
@@ -122,11 +125,19 @@ class ParticleNucleus extends ParticleAtom {
   }
 
   /**
+   * Return the shell positions array for the given particleType.
+   */
+  private getNucleonShellPositions( particleType: ParticleType | ParticleTypeString ): ParticleShellPosition[][] {
+    return particleType === ParticleType.NEUTRON || particleType === ParticleType.NEUTRON.particleTypeString ?
+           this.neutronShellPositions : this.protonShellPositions;
+  }
+
+  /**
    * Return the right-most particle from the highest energy level that contains particles, if there is one.
    * Otherwise, return undefined.
    */
   public getLastParticleInShell( particleType: ParticleType ): Particle | undefined {
-    const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
+    const nucleonShellPositions = this.getNucleonShellPositions( particleType );
     for ( let i = nucleonShellPositions.length - 1; i >= 0; i-- ) {
       const nucleonShellRow = nucleonShellPositions[ i ];
       for ( let j = nucleonShellRow.length - 1; j >= 0; j-- ) {
@@ -139,36 +150,39 @@ class ParticleNucleus extends ParticleAtom {
   }
 
   /**
-   * Return the view destination of the next open position for the given particleType shell positions and set the particle on that open shell position,
-   * even though it is not yet 'counted' as part of the particleAtom.
+   * Return the view destination of the next open position for the given particleType shell positions and set the
+   * particle on that open shell position, even though it is not yet 'counted' as part of the particleAtom.
    */
   public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
-    const nucleonShellPositions = particleType === ParticleType.NEUTRON ? this.neutronShellPositions : this.protonShellPositions;
+    const nucleonShellPositions = this.getNucleonShellPositions( particleType );
     let yPosition = EnergyLevelType.N_ZERO.yPosition; // initialize to the lowest shell where yPosition = 0
 
     const openNucleonShellPositions = nucleonShellPositions.map( particleShellRow => {
 
-      // remove any empty particleShellPosition's from particleShellRow
-      const noEmptyPositions = particleShellRow.filter( particleShellPosition => particleShellPosition !== undefined );
+      // Remove any empty particleShellPosition's from particleShellRow.
+      const noEmptyPositions = particleShellRow.filter(
+        particleShellPosition => particleShellPosition !== undefined );
 
-      // get the first open shell position in this particleShellRow
-      return noEmptyPositions.find( particleShellPosition => particleShellPosition.particle === undefined );
+      // Get the first open shell position in this particleShellRow.
+      return noEmptyPositions.find(
+        particleShellPosition => particleShellPosition.particle === undefined );
     } );
 
-    // get the first open shell position available from all rows
-    const openParticleShellPosition = openNucleonShellPositions.find( ( particleShellPosition, index ) => {
-      yPosition = index;
-      return particleShellPosition !== undefined;
+    // Get the first open shell position available from all rows.
+    const openParticleShellPosition = openNucleonShellPositions.find(
+      ( particleShellPosition, index ) => {
+        yPosition = index;
+        return particleShellPosition !== undefined;
     } );
 
     assert && assert( openParticleShellPosition, 'To add a particle there must be an empty particleShellPosition.' );
 
-    // add particle to the openParticleShellPosition
+    // Add particle to the openParticleShellPosition.
     openParticleShellPosition!.particle = particle;
 
     const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition!.xPosition, yPosition );
 
-    // add x offset for neutron particle to be aligned with its energy level position
+    // Add x offset for neutron particle to be aligned with its energy level position.
     viewDestination.addXY( particleType === ParticleType.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
     return viewDestination;
   }
@@ -196,7 +210,7 @@ class ParticleNucleus extends ParticleAtom {
    * Remove the given particle from its shell position, if it is a part of its corresponding shellPositions.
    */
   public removeParticleFromShell( particle: Particle ): void {
-    const nucleonShellPositions = particle.type === ParticleType.PROTON.particleTypeString ? this.protonShellPositions : this.neutronShellPositions;
+    const nucleonShellPositions = this.getNucleonShellPositions( particle.type );
     nucleonShellPositions.forEach( nucleonShellRow => {
       nucleonShellRow.forEach( nucleonShellPosition => {
         if ( nucleonShellPosition.particle === particle ) {
@@ -213,7 +227,7 @@ class ParticleNucleus extends ParticleAtom {
     this.protonsLevelProperty.reset();
     this.neutronsLevelProperty.reset();
 
-    // clear all particles that have a set shell position but may not be in the ParticleAtom
+    // Clear all particles that have a set shell position but may not be in the ParticleAtom.
     this.clearAllShellPositionParticles( this.protonShellPositions );
     this.clearAllShellPositionParticles( this.neutronShellPositions );
     super.clear();
@@ -236,11 +250,13 @@ class ParticleNucleus extends ParticleAtom {
    * Fill all nucleons in open positions from bottom to top, left to right.
    * xOffset is added in the x direction so neutron particles are aligned with their energy levels.
    */
-  private updateNucleonPositions( particleArray: ObservableArray<BANParticle>, particleShellPositions: ParticleShellPosition[][],
-                                  levelFillProperty: EnumerationProperty<EnergyLevelType>, xOffset: number ): void {
+  private updateNucleonPositions( particleArray: ObservableArray<BANParticle>,
+                                  particleShellPositions: ParticleShellPosition[][],
+                                  levelFillProperty: EnumerationProperty<EnergyLevelType>,
+                                  xOffset: number ): void {
 
-    // width in view coordinates of the n1/n2 energy level, which is the same as the other two levels (though the n0
-    // energy level line is drawn shorter - see NucleonShellView for details)
+    // Width in view coordinates of the n1/n2 energy level, which is the same as the other two levels (though the n0
+    // energy level line is drawn shorter - see NucleonShellView for details).
     const n1levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] ) -
                          this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
 
@@ -249,7 +265,7 @@ class ParticleNucleus extends ParticleAtom {
       const yPosition = EnergyLevelType.getForIndex( index ).yPosition;
       const xPosition = this.getLocalXIndex( index, yPosition );
 
-      // last level (yPosition === 2) never bounds so don't need levelIndex condition for it
+      // Last level (yPosition === 2) never bounds so don't need levelIndex condition for it.
       const levelIndex = yPosition === EnergyLevelType.N_ZERO.yPosition ? index : index - N_ZERO_CAPACITY;
       const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
       const unBoundXPosition = this.modelViewTransform.modelToViewX( nucleonShellPosition.xPosition ) + xOffset;
@@ -259,18 +275,18 @@ class ParticleNucleus extends ParticleAtom {
       let viewDestination;
       let inputEnabled;
 
-      // if the yPosition of the levelFillProperty is higher than the current yPosition level, 'bind' the particles in
-      // this level by removing the spaces between them
+      // If the yPosition of the levelFillProperty is higher than the current yPosition level, 'bind' the particles in
+      // this level by removing the spaces between them.
       if ( yPosition < levelFillProperty.value.yPosition ) {
 
-        // each particle on the level has one 'particle radius' space except for one.
-        // there are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
+        // Each particle on the level has one 'particle radius' space except for one.
+        // There are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
         const numberOfRadiusSpaces = yPosition === EnergyLevelType.N_ZERO.yPosition ? N_ZERO_CAPACITY - 1 : N_ONE_CAPACITY - 1;
 
-        // amount each particle moves so the space between it and the particle on its left is removed
+        // Amount each particle moves so the space between it and the particle on its left is removed.
         const boundOffset = n1levelWidth * ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
 
-        // amount each particle has to move for all particles to be centered in middle of energy level
+        // Amount each particle has to move for all particles to be centered in middle of energy level.
         const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;
 
         const destinationX = unBoundXPosition - boundOffset + centerOffset;
@@ -289,7 +305,9 @@ class ParticleNucleus extends ParticleAtom {
     } );
   }
 
-  // Get the "local" position for x placement on the yPosition EnergyLevel the index belongs to.
+  /**
+   * Get the "local" position for x placement on the yPosition EnergyLevel the index belongs to.
+   */
   private getLocalXIndex( index: number, yPosition: number ): number {
     let indexForLevel = index;
     let nextLowerYIndex = yPosition - 1;

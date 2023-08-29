@@ -24,33 +24,38 @@ export type SelectedChartType = 'partial' | 'zoom';
 
 class ChartIntroModel extends BANModel<ParticleNucleus> {
 
-  // the atom that the user will build, modify, and generally play with.
+  // The atom that the user builds, modifies, and generally plays with.
   public readonly particleNucleus: ParticleNucleus;
 
-  // the non-interactive mini-nucleus at the top of the screen
+  // The non-interactive mini-nucleus at the top of the screen.
   public readonly miniParticleAtom: ParticleAtom;
 
-  // There's not an entry for all the neutron values, see POPULATED_CELLS
-  public static cellModelArray = BANModel.POPULATED_CELLS.map( ( neutronNumberList, protonNumber ) => neutronNumberList.map( neutronNumber => new NuclideChartCellModel( protonNumber, neutronNumber ) ) );
+  // There's not an entry for all the neutron values, see POPULATED_CELLS.
+  public static cellModelArray = BANModel.POPULATED_CELLS.map(
+    ( neutronNumberList, protonNumber ) => neutronNumberList.map(
+      neutronNumber => new NuclideChartCellModel( protonNumber, neutronNumber )
+    )
+  );
 
   public readonly decayEquationModel: DecayEquationModel;
   public readonly selectedNuclideChartProperty: Property<SelectedChartType>;
 
   public constructor() {
 
-    const particleAtom = new ParticleNucleus(); // this is our ground truth 'atom'
+    const particleAtom = new ParticleNucleus(); // This is our ground truth 'atom'.
 
-    // empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons)
+    // Empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons and 12 neutrons).
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.particleNucleus = particleAtom;
 
-    // this is the mini-nucleus that updates based on the particleAtom
+    // This is the mini-nucleus that updates based on the particleAtom.
     this.miniParticleAtom = new ParticleAtom();
 
     this.selectedNuclideChartProperty = new Property<SelectedChartType>( 'partial' );
 
-    this.decayEquationModel = new DecayEquationModel( ChartIntroModel.cellModelArray, this.particleNucleus.protonCountProperty, this.particleNucleus.massNumberProperty );
+    this.decayEquationModel = new DecayEquationModel( ChartIntroModel.cellModelArray,
+      this.particleNucleus.protonCountProperty, this.particleNucleus.massNumberProperty );
   }
 
   /**
@@ -91,7 +96,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public override reset(): void {
 
-    // This subset of particles needs manual clean-up since it's not part of the regular particles array
+    // This subset of particles needs manual clean-up since it's not part of the regular particles array.
     this.outgoingParticles.forEach( particle => {
       if ( !this.particles.includes( particle ) ) {
         particle.dispose();
@@ -117,11 +122,12 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
       particle.step( dt );
     };
 
-    // step the miniParticleAtom nucleons
+    // Step the miniParticleAtom nucleons.
     this.miniParticleAtom.protons.forEach( stepParticle );
     this.miniParticleAtom.neutrons.forEach( stepParticle );
 
-    // When decaying, the animated particle from the miniParticleAtom is removed from it, but still needs to be stepped off the screen
+    // When decaying, the animated particle from the miniParticleAtom is removed from it, but this particle still needs
+    // to be stepped off of the screen.
     this.outgoingParticles.forEach( particle => {
       if ( !this.particles.includes( particle ) ) {
         particle.step( dt );

@@ -17,39 +17,44 @@ import Utils from '../../../../dot/js/Utils.js';
 
 class DecayEquationModel {
 
-  // the final mass and final proton number of a nuclide after a decay is done
+  // The final mass and final proton number of a nuclide after a decay is done.
   public readonly finalProtonNumberProperty: Property<number>;
   public readonly finalMassNumberProperty: Property<number>;
 
   // This cell (if available) holds all info about the initial mass and decay type.
   public readonly currentCellModelProperty: Property<NuclideChartCellModel | null>;
 
-  public constructor( cellModelArray: NuclideChartCellModel[][], protonCountProperty: TReadOnlyProperty<number>, massNumberProperty: TReadOnlyProperty<number> ) {
+  public constructor( cellModelArray: NuclideChartCellModel[][], protonCountProperty: TReadOnlyProperty<number>,
+                      massNumberProperty: TReadOnlyProperty<number> ) {
 
-    // keep track of the current nuclide cell to update the decay equation
-    this.currentCellModelProperty = new Property( this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value ) );
+    // Keeps track of the current nuclide cell to update the decay equation.
+    this.currentCellModelProperty = new Property(
+      this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value ) );
 
-    // initialize to 0
+    // Initialize final proton and mass numbers to 0.
     this.finalProtonNumberProperty = new NumberProperty( 0,
       { validValues: Utils.rangeInclusive( 0, BANConstants.CHART_MAX_NUMBER_OF_PROTONS ) } );
     this.finalMassNumberProperty = new NumberProperty( 0,
-      { validValues: Utils.rangeInclusive( 0, BANConstants.CHART_MAX_NUMBER_OF_PROTONS + BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ) } );
+      { validValues: Utils.rangeInclusive( 0,
+          BANConstants.CHART_MAX_NUMBER_OF_PROTONS + BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ) } );
 
-    // update the finalProtonNumber, finalMassNumber, and the currentCellModel
+    // Update the finalProtonNumber, finalMassNumber, and the currentCellModel.
     massNumberProperty.link( () => {
-      const currentCell = this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
+      const currentCell =
+        this.getCurrentCellModel( cellModelArray, protonCountProperty.value, massNumberProperty.value );
 
-      // if there's no cell or decay type, just take the current proton and mass number values
+      // If there's no cell or decay type, just take the current proton and mass number values.
       if ( !currentCell || !currentCell.decayType ) {
         this.finalProtonNumberProperty.value = protonCountProperty.value;
         this.finalMassNumberProperty.value = massNumberProperty.value;
       }
       else {
         this.finalProtonNumberProperty.value = currentCell.protonNumber - currentCell.decayType.protonNumber;
-        this.finalMassNumberProperty.value = currentCell.protonNumber + currentCell.neutronNumber - currentCell.decayType.massNumber;
+        this.finalMassNumberProperty.value = ( currentCell.protonNumber + currentCell.neutronNumber )
+                                             - currentCell.decayType.massNumber;
       }
 
-      // this must be last so the listener on it in the view (DecayEquationNode) updates with the correct final values
+      // This must be last so the listener on it in the view (DecayEquationNode) updates with the correct final values.
       this.currentCellModelProperty.value = currentCell;
     } );
   }
@@ -57,8 +62,10 @@ class DecayEquationModel {
   /**
    * Return the current NuclideChartCellModel for the current proton number and mass number, if there exists one.
    */
-  private getCurrentCellModel( cellModelArray: NuclideChartCellModel[][], protonNumber: number, massNumber: number ): NuclideChartCellModel | null {
-    return _.find( cellModelArray[ protonNumber ], cellModel => cellModel.neutronNumber === massNumber - protonNumber ) || null;
+  private getCurrentCellModel( cellModelArray: NuclideChartCellModel[][],
+                               protonNumber: number, massNumber: number ): NuclideChartCellModel | null {
+    return _.find( cellModelArray[ protonNumber ],
+        cellModel => cellModel.neutronNumber === massNumber - protonNumber ) || null;
   }
 
   public reset(): void {

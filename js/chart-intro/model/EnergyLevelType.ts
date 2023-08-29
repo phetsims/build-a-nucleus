@@ -30,7 +30,9 @@ class EnergyLevelType extends EnumerationValue {
 
   public static readonly ENERGY_LEVELS = [ EnergyLevelType.N_ZERO, EnergyLevelType.N_ONE, EnergyLevelType.N_TWO ] as const;
 
-  // Given a particle index (0-based), return the EnergyLevelType that it will be placed on. See ParticleNucleus.
+  /**
+   * Given a particle index (0-based), return the EnergyLevelType that it will be placed on. See ParticleNucleus.
+   */
   public static getForIndex( index: number ): EnergyLevelType {
     let indexRemainder = index;
     for ( let i = 0; i < EnergyLevelType.ENERGY_LEVELS.length; i++ ) {
