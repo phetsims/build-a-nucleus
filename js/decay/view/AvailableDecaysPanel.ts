@@ -75,19 +75,19 @@ class AvailableDecaysPanel extends Panel {
         font: LABEL_FONT,
         maxWidth: BUTTON_CONTENT_WIDTH
       } );
-
       buttonText.boundsProperty.link( () => {
         assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
 
         // manually layout the button text due to the superscripts causing the normal layout to look out of place
         buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
       } );
-      buttonBackgroundRectangle.addChild( buttonText );
 
       const enabledProperty = options.decayEnabledPropertyMap.get( decayType )!;
       assert && assert( enabledProperty, 'No enabledProperty found, is your decay type valid? ' + decayType );
       const decayButton = new RectangularPushButton( {
-        content: buttonBackgroundRectangle,
+
+        // add buttonText and buttonBackgroundRectangle in the same layer, so they have the same coordinate frame when the bounds change
+        content: new Node( { children: [ buttonText, buttonBackgroundRectangle ] } ),
         yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
         enabledProperty: enabledProperty,
