@@ -16,7 +16,7 @@ import Particle from '../../../../shred/js/model/Particle.js';
 
 class AlphaParticle extends ParticleAtom {
 
-  // for use in distance calculations
+  // For use in distance calculations.
   public velocity = 0;
 
   public static readonly NUMBER_OF_ALLOWED_PROTONS = 2;
@@ -32,7 +32,7 @@ class AlphaParticle extends ParticleAtom {
   public animateAndRemoveParticle( destination: Vector2, removeParticle: ( particle: Particle ) => void ): Animation {
     const totalDistanceAlphaParticleTravels = this.positionProperty.value.distance( destination );
 
-    // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty
+    // ParticleAtom doesn't have the same animation, like Particle.animationVelocityProperty.
     const animationDuration = totalDistanceAlphaParticleTravels / BANConstants.PARTICLE_ANIMATION_SPEED;
 
     this.velocity = totalDistanceAlphaParticleTravels / animationDuration;

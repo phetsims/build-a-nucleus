@@ -17,13 +17,17 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 class ParticleType extends EnumerationValue {
 
-  public static readonly PROTON = new ParticleType( 'proton', BuildANucleusStrings.protonStringProperty, BANColors.protonColorProperty );
+  public static readonly PROTON = new ParticleType(
+    'proton', BuildANucleusStrings.protonStringProperty, BANColors.protonColorProperty );
 
-  public static readonly NEUTRON = new ParticleType( 'neutron', BuildANucleusStrings.neutronUppercaseStringProperty, BANColors.neutronColorProperty );
+  public static readonly NEUTRON = new ParticleType(
+    'neutron', BuildANucleusStrings.neutronUppercaseStringProperty, BANColors.neutronColorProperty );
 
-  public static readonly ELECTRON = new ParticleType( 'electron', BuildANucleusStrings.electronStringProperty, BANColors.electronColorProperty );
+  public static readonly ELECTRON = new ParticleType(
+    'electron', BuildANucleusStrings.electronStringProperty, BANColors.electronColorProperty );
 
-  public static readonly POSITRON = new ParticleType( 'positron', BuildANucleusStrings.positronStringProperty, BANColors.positronColorProperty );
+  public static readonly POSITRON = new ParticleType(
+    'positron', BuildANucleusStrings.positronStringProperty, BANColors.positronColorProperty );
 
   public static readonly enumeration = new Enumeration( ParticleType );
 
@@ -33,7 +37,9 @@ class ParticleType extends EnumerationValue {
     super();
   }
 
-  // convert string particle type to a ParticleType
+  /**
+   * Convert string particle type to a ParticleType.
+   */
   public static getParticleTypeFromStringType( particleTypeString: ParticleTypeString ): ParticleType {
     const particleType = particleTypeString === ParticleType.PROTON.particleTypeString ? ParticleType.PROTON :
                          particleTypeString === ParticleType.NEUTRON.particleTypeString ? ParticleType.NEUTRON :

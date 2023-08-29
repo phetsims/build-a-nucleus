@@ -16,15 +16,20 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 class DecayType extends EnumerationValue {
 
-  public static readonly ALPHA_DECAY = new DecayType( BuildANucleusStrings.alphaDecayStringProperty, BANColors.alphaColorProperty, 4, 2, 'α' );
+  public static readonly ALPHA_DECAY = new DecayType(
+    BuildANucleusStrings.alphaDecayStringProperty, BANColors.alphaColorProperty, 4, 2, 'α' );
 
-  public static readonly BETA_MINUS_DECAY = new DecayType( BuildANucleusStrings.betaMinusDecayStringProperty, BANColors.betaMinusColorProperty, 0, -1, 'β' );
+  public static readonly BETA_MINUS_DECAY = new DecayType(
+    BuildANucleusStrings.betaMinusDecayStringProperty, BANColors.betaMinusColorProperty, 0, -1, 'β' );
 
-  public static readonly BETA_PLUS_DECAY = new DecayType( BuildANucleusStrings.betaPlusDecayStringProperty, BANColors.betaPlusColorProperty, 0, 1, 'β' );
+  public static readonly BETA_PLUS_DECAY = new DecayType(
+    BuildANucleusStrings.betaPlusDecayStringProperty, BANColors.betaPlusColorProperty, 0, 1, 'β' );
 
-  public static readonly PROTON_EMISSION = new DecayType( BuildANucleusStrings.protonEmissionStringProperty, BANColors.protonEmissionColorProperty, 1, 1, 'p' );
+  public static readonly PROTON_EMISSION = new DecayType(
+    BuildANucleusStrings.protonEmissionStringProperty, BANColors.protonEmissionColorProperty, 1, 1, 'p' );
 
-  public static readonly NEUTRON_EMISSION = new DecayType( BuildANucleusStrings.neutronEmissionStringProperty, BANColors.neutronEmissionColorProperty, 1, 0, 'n' );
+  public static readonly NEUTRON_EMISSION = new DecayType(
+    BuildANucleusStrings.neutronEmissionStringProperty, BANColors.neutronEmissionColorProperty, 1, 0, 'n' );
 
   public static readonly enumeration = new Enumeration( DecayType );
 

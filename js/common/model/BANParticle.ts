@@ -15,10 +15,13 @@ export type BANParticleOptions = ParticleOptions;
 export default class BANParticle extends Particle {
 
   public constructor( type: ParticleTypeString, providedOptions?: BANParticleOptions ) {
-    const options = optionize<BANParticleOptions, EmptySelfOptions, BANParticleOptions>()( {
-      maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
-    }, providedOptions );
+
+    const options =
+      optionize<BANParticleOptions, EmptySelfOptions, BANParticleOptions>()( {
+        maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
+      }, providedOptions );
     super( type, options );
+
     this.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
   }
 }
