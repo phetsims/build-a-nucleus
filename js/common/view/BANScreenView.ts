@@ -171,9 +171,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
       protonNumber => this.particleAtomNode.updateCloudSize( protonNumber, 0.27, 10, 20 ) );
 
     this.pdomPlayAreaNode.pdomOrder = [
-      this.nucleonCreatorsNode.protonArrowButtons,
-      this.nucleonCreatorsNode.doubleArrowButtons,
-      this.nucleonCreatorsNode.neutronArrowButtons
+      this.nucleonCreatorsNode
     ];
     this.pdomControlAreaNode.pdomOrder = [ this.resetAllButton ];
   }
@@ -420,8 +418,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    */
   private dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
     const particleCreatorNodeModelCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
-                                      this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
-                                      this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
+                                           this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
+                                           this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
 
     // If removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom.
     const currentlyNonExistentAtom =

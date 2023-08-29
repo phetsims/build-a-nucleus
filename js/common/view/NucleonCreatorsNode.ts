@@ -10,7 +10,7 @@
 import buildANucleus from '../../buildANucleus.js';
 import ParticleType from '../model/ParticleType.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import { HBox, Node, PressListenerEvent, ProfileColorProperty, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, PressListenerEvent, ProfileColorProperty, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DoubleArrowButton, { ArrowButtonDirection } from './DoubleArrowButton.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -27,18 +27,24 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const MAX_TEXT_WIDTH = 150;
 const TOUCH_AREA_Y_DILATION = 3;
 const NUCLEON_LABEL_TEXT_OPTIONS = { font: new PhetFont( 20 ), maxWidth: MAX_TEXT_WIDTH };
+const CREATOR_NODE_VBOX_OPTIONS = {
+  excludeInvisibleChildrenFromBounds: false,
+  layoutOptions: {
+    minContentWidth: MAX_TEXT_WIDTH
+  }
+};
 
 class NucleonCreatorsNode extends HBox {
 
-  // public for positioning only
-  public readonly doubleArrowButtons: Node;
-  public readonly protonArrowButtons: Node;
-  public readonly neutronArrowButtons: Node;
+  private readonly doubleArrowButtons: Node;
+  private readonly protonArrowButtons: Node;
+  private readonly neutronArrowButtons: Node;
 
   // for use in methods
   private readonly protonNumberRange: Range;
@@ -46,12 +52,11 @@ class NucleonCreatorsNode extends HBox {
   private readonly createParticleFromStack: ( particleType: ParticleType ) => Particle;
   private readonly returnParticleToStack: ( particleType: ParticleType ) => void;
   private model: BANModel<ParticleAtom | ParticleNucleus>;
+  private readonly particleTransform: ModelViewTransform2;
 
   // the NucleonCreatorNode for the protons and neutrons
   public readonly protonsCreatorNode: Node;
   public readonly neutronsCreatorNode: Node;
-
-  private readonly particleTransform: ModelViewTransform2;
 
   public constructor( model: BANModel<ParticleAtom | ParticleNucleus>, getLocalPoint: ( point: Vector2 ) => Vector2,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
@@ -62,6 +67,7 @@ class NucleonCreatorsNode extends HBox {
 
     // create and add the Protons and Neutrons label
     const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
+    const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
 
     // create and add the NucleonCreatorNode for the protons
     this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
@@ -70,7 +76,6 @@ class NucleonCreatorsNode extends HBox {
     // create and add the NucleonCreatorNode for the neutrons
     this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
       particleTransform );
-    const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
 
     this.model = model;
     this.protonNumberRange = model.protonNumberRange;
@@ -148,47 +153,37 @@ class NucleonCreatorsNode extends HBox {
       stretch: true,
       children: [
         this.protonArrowButtons,
-        new VBox( {
+        new VBox( combineOptions<VBoxOptions>( {
           children: [
             this.protonsCreatorNode,
             protonsLabel
-          ],
-          layoutOptions: {
-            minContentWidth: MAX_TEXT_WIDTH
-          }
-        } ),
+          ]
+        }, CREATOR_NODE_VBOX_OPTIONS ) ),
         this.doubleArrowButtons,
-        new VBox( {
+        new VBox( combineOptions<VBoxOptions>( {
           children: [
             this.neutronsCreatorNode,
             neutronsLabel
-          ],
-          layoutOptions: {
-            minContentWidth: MAX_TEXT_WIDTH
-          }
-        } ),
+          ]
+        }, CREATOR_NODE_VBOX_OPTIONS ) ),
         this.neutronArrowButtons
       ]
     } );
   }
 
-  public get protonsCreatorNodeModelCenter(): Vector2 {
+  /**
+   * Convert creator node center into the coordinate frame of whoever is using this NucleonCreatorsNode (in model coords).
+   */
+  private getCreatorNodeModelCenter( creatorNode: Node ): Vector2 {
+    const globalCreatorNodeViewCenter = this.globalToParentPoint(
+      creatorNode.parentToGlobalPoint( creatorNode.center ) );
 
-    // convert creator node center into the coordinate frame of whoever is using this NucleonCreatorsNode
-    const globalProtonsCreatorNodeViewCenter = this.globalToParentPoint(
-      this.protonsCreatorNode.parentToGlobalPoint( this.protonsCreatorNode.center ) );
-
-    return this.particleTransform.viewToModelPosition( globalProtonsCreatorNodeViewCenter );
+    return this.particleTransform.viewToModelPosition( globalCreatorNodeViewCenter );
   }
 
-  public get neutronsCreatorNodeModelCenter(): Vector2 {
+  public get protonsCreatorNodeModelCenter(): Vector2 { return this.getCreatorNodeModelCenter( this.protonsCreatorNode ); }
 
-    // convert creator node center into the coordinate frame of whoever is using this NucleonCreatorsNode
-    const globalNeutronsCreatorNodeCenter = this.globalToParentPoint(
-      this.neutronsCreatorNode.parentToGlobalPoint( this.neutronsCreatorNode.center ) );
-
-    return this.particleTransform.viewToModelPosition( globalNeutronsCreatorNodeCenter );
-  }
+  public get neutronsCreatorNodeModelCenter(): Vector2 { return this.getCreatorNodeModelCenter( this.neutronsCreatorNode ); }
 
   private createArrowEnabledProperty( direction: ArrowButtonDirection, firstParticleType: ParticleType, secondParticleType?: ParticleType ): TReadOnlyProperty<boolean> {
 
