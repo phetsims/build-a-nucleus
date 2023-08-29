@@ -21,10 +21,9 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 
-// Fill in the space eagerly, as a constant
-const unknownSpacePatternStringProperty = new PatternStringProperty( BuildANucleusStrings.unknownSpacePatternStringProperty, {
-  space: ' '
-} );
+// Fill in the space eagerly, as a constant.
+const unknownSpacePatternStringProperty = new PatternStringProperty(
+  BuildANucleusStrings.unknownSpacePatternStringProperty, { space: ' ' } );
 
 const EQUATION_HBOX_MIN_CONTENT_HEIGHT = 30;
 const TEXT_OPTIONS = {
@@ -39,7 +38,7 @@ class DecayEquationNode extends VBox {
       spacing: 5,
       align: 'left',
 
-      // leave equationHBox space visible despite being blank sometimes
+      // Leave equationHBox space visible despite being blank sometimes.
       excludeInvisibleChildrenFromBounds: false
     } );
 
@@ -49,42 +48,48 @@ class DecayEquationNode extends VBox {
       maxWidth: 150
     } );
 
-    // create the two text container nodes
+    // Create the two text container nodes.
     const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
       minContentHeight: EQUATION_HBOX_MIN_CONTENT_HEIGHT
     } );
-    assert && assert( stableText.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT, `Min content height must be a max so the space is consistent across all equation forms. Stable string height is ${stableText.height}` );
+    assert && assert( stableText.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT,
+      `Min content height must be a max so the space is consistent across all equation forms.
+      Stable string height is ${stableText.height}` );
 
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       equationHBox.visible = true;
       if ( currentCellModel ) {
-        // There exists a cell model, you are a nuclide that exists, so create all the necessary Text and node components
+        // There exists a cell model, you are a nuclide that exists, so create all the necessary Text and node components.
 
-        const decayLikelihoodPercentText = new Text( new PatternStringProperty( BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
-          decayLikelihoodPercent: new DerivedStringProperty( [
-            unknownSpacePatternStringProperty
-          ], unknownText => currentCellModel.decayTypeLikelihoodPercent === null ?
-                            unknownText : `${currentCellModel.decayTypeLikelihoodPercent}` )
+        const decayLikelihoodPercentText = new Text( new PatternStringProperty(
+          BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
+            decayLikelihoodPercent: new DerivedStringProperty( [
+              unknownSpacePatternStringProperty
+            ], unknownText => currentCellModel.decayTypeLikelihoodPercent === null ?
+                              unknownText : `${currentCellModel.decayTypeLikelihoodPercent}` )
         } ), {
           maxWidth: 100,
           font: BANConstants.LEGEND_FONT
         } );
 
-        const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber, currentCellModel.protonNumber + currentCellModel.neutronNumber );
+        const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber,
+          currentCellModel.protonNumber + currentCellModel.neutronNumber );
         assert && assert( currentNuclideSymbol.height < EQUATION_HBOX_MIN_CONTENT_HEIGHT,
-          `Min content height must be a max so the space is consistent across all equation forms. Current nuclide symbol height is ${currentNuclideSymbol.height}` );
+          `Min content height must be a max so the space is consistent across all equation forms.
+          Current nuclide symbol height is ${currentNuclideSymbol.height}` );
 
-        // Choose a length of the arrow that works well for the equation look, and matches the look of the chart arrow
+        // Choose a length of the arrow that works well for the equation look, and matches the look of the chart arrow.
         const decayEquationArrow = new ArrowNode( 0, 0, 25, 0, BANConstants.DECAY_ARROW_OPTIONS );
 
-        const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonNumberProperty.value, decayEquationModel.finalMassNumberProperty.value );
+        const newNuclideSymbol = new DecaySymbolNode( decayEquationModel.finalProtonNumberProperty.value,
+          decayEquationModel.finalMassNumberProperty.value );
 
         const plusNode = IconFactory.createPlusNode( BANColors.decayEquationArrowAndPlusNodeColorProperty );
 
         if ( currentCellModel.decayType ) {
-          // you are unstable and your decay is known so create a decay symbol and set the components for the decay equation
+          // You are unstable and your decay is known so create a decay symbol and set the components for the decay equation.
 
           const decaySymbol = new DecaySymbolNode(
             currentCellModel.decayType.protonNumber,
@@ -94,20 +99,20 @@ class DecayEquationNode extends VBox {
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, newNuclideSymbol, plusNode, decaySymbol ] );
         }
         else if ( currentCellModel.isStable ) {
-          // if you are stable, there is no decay type so hide the decayLikelihoodPercentText and show 'Stable'
+          // If you are stable, there is no decay type so hide the decayLikelihoodPercentText and show 'Stable'.
 
           equationHBox.setChildren( [ stableText ] );
           decayLikelihoodPercentText.visible = false;
 
-          // re-center the stable text at the horizontal center based on the parameter dimension. Do this whenever the
+          // Re-center the stable text at the horizontal center based on the parameter dimension. Do this whenever the
           // text changes length due to a language change.
           stableText.boundsProperty.link( () => {
             stableText.setLayoutOptions( { leftMargin: stableTextCenterXPosition - stableText.width / 2 } );
           } );
         }
         else {
-          // nuclide cell unstable but with no known decay type so hide the decayLikelihoodPercentText, and show the
-          // nuclide decays into an 'Unknown'
+          // Nuclide cell unstable but with no known decay type so hide the decayLikelihoodPercentText, and show the
+          // nuclide decays into an 'Unknown'.
 
           const unknownText = new Text( BuildANucleusStrings.unknownStringProperty, TEXT_OPTIONS );
           equationHBox.setChildren( [ currentNuclideSymbol, decayEquationArrow, unknownText ] );
@@ -117,15 +122,15 @@ class DecayEquationNode extends VBox {
         mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText, decayLikelihoodPercentText ] );
       }
       else {
-        // if there does not exist a cell model, then a nuclide that does not exist formed, hide the equation but set
-        // the stableText as a child so equationHBox has the right height
+        // If there does not exist a cell model, then a nuclide that does not exist formed, hide the equation but set
+        // the stableText as a child so equationHBox has the right height.
 
         equationHBox.setChildren( [ stableText ] );
         equationHBox.visible = false;
         mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText ] );
       }
 
-      // add the two container nodes
+      // Add the two container nodes.
       this.children = [
         mostLikelyDecayHBox,
         equationHBox

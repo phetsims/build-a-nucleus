@@ -33,43 +33,48 @@ class NucleonNumberLine extends Node {
   public constructor( chartTransform: ChartTransform, nucleonNumberProperty: TReadOnlyProperty<number>,
                       orientation: Orientation, providedOptions: NucleonNumberLineOptions ) {
 
-    const options = optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
+    const options =
+      optionize<NucleonNumberLineOptions, SelfOptions, NodeOptions>()( {
 
-      // In model coordinates. This will be used to position the labels to be aligned with the "bar" space in between
-      // the tick marks, and not as labels for the actual tick marks.
-      tickSpacing: 1
-    }, providedOptions );
+        // In model coordinates. This will be used to position the labels to be aligned with the "bar" space in between
+        // the tick marks, and not as labels for the actual tick marks.
+        tickSpacing: 1
+      }, providedOptions );
 
     super( options );
 
     const numberLineNode = new Node();
 
-    // create and add the tick marks
+    // Create and add the tick marks.
     const tickMarkSet = new TickMarkSet( chartTransform, orientation, options.tickSpacing, {
       stroke: BANColors.nucleonNumberLineAndTextFontColorProperty,
       lineWidth: 1
     } );
     numberLineNode.addChild( tickMarkSet );
 
-    // create and add the tick labels
+    // Create and add the tick labels.
     const tickLabelSet = new TickLabelSet( chartTransform, orientation, options.tickSpacing, {
       extent: 5,
       createLabel: ( value: number ) =>
         new BackgroundNode( new Text( value, {
           fontSize: 12,
-          fill: new DerivedProperty( [ nucleonNumberProperty, BANColors.highLightedTickLabelColorProperty, BANColors.nucleonNumberLineAndTextFontColorProperty ],
-            ( particleNumber, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
+          fill: new DerivedProperty( [
+            nucleonNumberProperty,
+            BANColors.highLightedTickLabelColorProperty,
+            BANColors.nucleonNumberLineAndTextFontColorProperty
+          ],
+          ( particleNumber, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
 
-              // color the label text a different color if it is the current nucleon number
-              return particleNumber === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
-            } )
+            // Color the label text a different color if it is the current nucleon number.
+            return particleNumber === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
+          } )
         } ),
         {
           rectangleOptions: {
             fill: new DerivedProperty( [ nucleonNumberProperty, options.labelHighlightColorProperty ],
               ( particleNumber, labelHighlightColor ) => {
 
-                // add a 'highlight' to the label text if it is the current nucleon number
+                // Add a 'highlight' to the label text if it is the current nucleon number.
                 return particleNumber === value ? labelHighlightColor : null;
               } ),
             opacity: 1
@@ -79,12 +84,12 @@ class NucleonNumberLine extends Node {
       positionLabel: ( label: Node, tickBounds: Bounds2, axisOrientation: Orientation ) => {
         if ( axisOrientation === Orientation.HORIZONTAL ) {
 
-          // ticks flow horizontally, so tick labels should be below
+          // Ticks flow horizontally, so tick labels should be below.
           label.centerTop = tickBounds.centerBottom.plusXY( chartTransform.modelToViewDeltaX( -options.tickSpacing / 2 ), 0 );
         }
         else {
 
-          // ticks flow vertically, so tick labels should be to the left
+          // Ticks flow vertically, so tick labels should be to the left.
           label.rightCenter = tickBounds.leftCenter.plusXY( 0, chartTransform.modelToViewDeltaY( -options.tickSpacing / 2 ) );
         }
         return label;
@@ -92,7 +97,7 @@ class NucleonNumberLine extends Node {
     } );
     numberLineNode.addChild( tickLabelSet );
 
-    // create and add the arrow to the number line
+    // Create and add the arrow to the number line.
     const numberLine = new AxisArrowNode( chartTransform, orientation, {
       doubleHead: false,
       tailWidth: 1,
@@ -101,7 +106,7 @@ class NucleonNumberLine extends Node {
     numberLineNode.addChild( numberLine );
     this.addChild( numberLineNode );
 
-    // create and add the number line axis label
+    // Create and add the number line axis label.
     const numberLineLabel = new Text( options.axisLabelStringProperty, {
       fontSize: 12,
       maxWidth: 150

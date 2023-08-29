@@ -29,17 +29,17 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
       showMagicNumbersProperty: showMagicNumbersProperty
     } );
 
-    // create and add the border outline to the chart
+    // Create and add the border outline to the chart.
     const borderPath = new Path( null, { stroke: Color.BLACK, lineWidth: 1.5 } );
     this.addChild( borderPath );
 
-    // length to clip the chart to
+    // Length to clip the chart to.
     const squareLength = chartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH +
                                                            ( 2 * BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) );
 
     let initialized = false;
 
-    // update the clip area of the chart whenever the proton or neutron number change
+    // Update the clip area of the chart whenever the proton or neutron number change.
     Multilink.multilink( [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
       const cellX = neutronNumber;
       const cellY = protonNumber;
@@ -48,12 +48,13 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
       if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) || !initialized ) {
         initialized = true;
 
-        // limit the bounds of the ZoomInNuclideChartNode to avoid showing white space
+        // Limit the bounds of the ZoomInNuclideChartNode to avoid showing white space.
         const clampedCellX = Utils.clamp( cellX, 2, 10 );
         const clampedCellY = Utils.clamp( cellY, 2, 8 );
 
-        // clip chart to 2 cellLength's around current cell
-        const clipArea = Shape.rectangle( chartTransform.modelToViewX( clampedCellX - 2 - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
+        // Clip chart to 2 cellLength's around current cell.
+        const clipArea = Shape.rectangle(
+          chartTransform.modelToViewX( clampedCellX - 2 - BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
           chartTransform.modelToViewY( clampedCellY + 2 + BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ),
           squareLength, squareLength );
         borderPath.shape = clipArea;

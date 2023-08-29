@@ -30,13 +30,15 @@ class NuclideChartAndNumberLines extends Node {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform, providedOptions?: NuclideChartAndNumberLinesOptions ) {
 
-    const options = optionize<NuclideChartAndNumberLinesOptions, SelfOptions, NodeOptions>()( {
-      excludeInvisibleChildrenFromBounds: true,
-      nuclideChartNodeOptions: {}
-    }, providedOptions );
+    const options =
+      optionize<NuclideChartAndNumberLinesOptions, SelfOptions, NodeOptions>()( {
+        excludeInvisibleChildrenFromBounds: true,
+        nuclideChartNodeOptions: {}
+      }, providedOptions );
 
     // create the nuclideChartNode
-    const nuclideChartNode = new NuclideChartNode( protonCountProperty, neutronCountProperty, chartTransform,
+    const nuclideChartNode = new NuclideChartNode(
+      protonCountProperty, neutronCountProperty, chartTransform,
       combineOptions<NuclideChartNodeOptions>( {
         cellTextFontSize: 11,
         arrowSymbol: false
@@ -45,22 +47,25 @@ class NuclideChartAndNumberLines extends Node {
 
     // create and position the number lines
     const tickSpacing = 1;
-    const protonNumberLine = new NucleonNumberLine( chartTransform, protonCountProperty, Orientation.VERTICAL, {
-      labelHighlightColorProperty: BANColors.protonColorProperty,
-      axisLabelStringProperty: BuildANucleusStrings.axis.protonNumberStringProperty,
-      tickSpacing: tickSpacing
+    const protonNumberLine = new NucleonNumberLine(
+      chartTransform, protonCountProperty, Orientation.VERTICAL, {
+        labelHighlightColorProperty: BANColors.protonColorProperty,
+        axisLabelStringProperty: BuildANucleusStrings.axis.protonNumberStringProperty,
+        tickSpacing: tickSpacing
     } );
-    const neutronNumberLine = new NucleonNumberLine( chartTransform, neutronCountProperty, Orientation.HORIZONTAL, {
-      labelHighlightColorProperty: BANColors.neutronColorProperty,
-      axisLabelStringProperty: BuildANucleusStrings.axis.neutronNumberStringProperty,
-      tickSpacing: tickSpacing
+    const neutronNumberLine = new NucleonNumberLine(
+      chartTransform, neutronCountProperty, Orientation.HORIZONTAL, {
+        labelHighlightColorProperty: BANColors.neutronColorProperty,
+        axisLabelStringProperty: BuildANucleusStrings.axis.neutronNumberStringProperty,
+        tickSpacing: tickSpacing
     } );
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;
 
     // The numberLine's origin is at 0 in model coordinates, but because of how we position the labels offset from the
     // tick marks (see NucleonNumberLine), we need to do that here too
-    nuclideChartNode.left = neutronNumberLine.localToParentPoint( Vector2.ZERO ).x - chartTransform.modelToViewX( tickSpacing );
+    nuclideChartNode.left = neutronNumberLine.localToParentPoint( Vector2.ZERO ).x
+                            - chartTransform.modelToViewX( tickSpacing );
 
     options.children = [ nuclideChartNode, protonNumberLine, neutronNumberLine ];
     super( options );

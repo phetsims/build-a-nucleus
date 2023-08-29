@@ -18,17 +18,18 @@ type NuclideChartCellOptions = SelfOptions & RectangleOptions;
 
 class NuclideChartCell extends Rectangle {
 
-  // public to help color the cell's label text background color
+  // Public to help color the cell's label text background color.
   public readonly decayBackgroundColor: TPaint;
 
   public readonly cellModel: NuclideChartCellModel;
 
   public constructor( cellLength: number, cellModel: NuclideChartCellModel, providedOptions?: NuclideChartCellOptions ) {
 
-    const options = optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
-      stroke: BANColors.nuclideChartBorderColorProperty,
-      fill: cellModel.colorProperty
-    }, providedOptions );
+    const options =
+      optionize<NuclideChartCellOptions, SelfOptions, RectangleOptions>()( {
+        stroke: BANColors.nuclideChartBorderColorProperty,
+        fill: cellModel.colorProperty
+      }, providedOptions );
 
     super( 0, 0, cellLength, cellLength, 0, 0, options );
 
@@ -36,7 +37,9 @@ class NuclideChartCell extends Rectangle {
     this.cellModel = cellModel;
   }
 
-  // make cell more opaque to de-emphasize the cell
+  /**
+   * Make cell more opaque to de-emphasize the cell.
+   */
   public makeOpaque( protonDelta: number, neutronDelta: number ): void {
     this.opacity = protonDelta > 2 || neutronDelta > 2 ? 0.65 : 1;
   }

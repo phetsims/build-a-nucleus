@@ -30,14 +30,14 @@ class FocusedNuclideChartNode extends NuclideChartNode {
       showMagicNumbersProperty: showMagicNumbersProperty
     } );
 
-    // use current bounds to place and update highlightRectangle
+    // Use current bounds to place and update highlightRectangle.
     const nuclideChartBounds = this.bounds.copy();
 
-    // to keep the chart from shifting when the highlight rectangle updates
+    // To keep the chart from shifting when the highlight rectangle updates.
     const backgroundRectangle = new Rectangle( this.bounds.dilated( 2 ), { stroke: 'white' } );
     this.addChild( backgroundRectangle );
 
-    // create and add a box around current nuclide
+    // Create and add a box around current nuclide.
     const squareLength = chartTransform.modelToViewDeltaX( BANConstants.ZOOM_IN_CHART_SQUARE_LENGTH );
     const highlightRectangle = new Rectangle( 0, 0,
       squareLength, squareLength, { stroke: Color.BLACK, lineWidth: HIGHLIGHT_RECTANGLE_LINE_WIDTH } );
@@ -45,7 +45,7 @@ class FocusedNuclideChartNode extends NuclideChartNode {
 
     let initialized = false;
 
-    // keep track of the current center of the highlight rectangle
+    // Keeps track of the current center of the highlight rectangle
     const viewHighlightRectangleCenterProperty = new DerivedProperty(
       [ protonCountProperty, neutronCountProperty ], ( protonNumber, neutronNumber ) => {
         const cellX = neutronNumber;
@@ -55,25 +55,25 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) || !initialized ) {
           initialized = true;
 
-          // constrain the bounds of the highlightRectangle
+          // Constrain the bounds of the highlightRectangle.
           const constrainedCenter = chartTransform.modelToViewXY( cellX + BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE,
             cellY + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
           return new Vector2( constrainedCenter.x, constrainedCenter.y );
         }
         else {
 
-          // keep the current center if the cell built does not exist
+          // Keep the current center if the cell built does not exist.
           return highlightRectangle.center;
         }
       } );
 
-    // create listener to update highLightRectangle center, and opacity of cells around
+    // Listener updates highLightRectangle center, and opacity of cells around.
     const updateHighlightRectangleCenter = () => {
 
-      // update center of highlightRectangle
+      // Update center of highlightRectangle.
       highlightRectangle.center = viewHighlightRectangleCenterProperty.value;
 
-      // update edges of highlight rectangle to match bounds and account for the rectangle stroke width and cell line width
+      // Update edges of highlight rectangle to match bounds and account for the rectangle stroke width and cell line width.
       const shift = ( HIGHLIGHT_RECTANGLE_LINE_WIDTH -
                       chartTransform.modelToViewDeltaX( BANConstants.NUCLIDE_CHART_CELL_LINE_WIDTH ) ) / 2;
       if ( highlightRectangle.left < nuclideChartBounds.left ) {
@@ -90,21 +90,23 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         highlightRectangle.bottom = nuclideChartBounds.bottom + shift;
       }
 
-      // make opaque any cells too far away from the center of the highlight rectangle
+      // Make opaque any cells too far away from the center of the highlight rectangle.
       this.cells.forEach( nuclideChartCellRow => {
         nuclideChartCellRow.forEach( nuclideChartCell => {
           if ( nuclideChartCell ) {
             const protonDelta = Math.abs( chartTransform.viewToModelY( highlightRectangle.center.y )
-                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell.cellModel.protonNumber );
+                                          - BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE
+                                          - nuclideChartCell.cellModel.protonNumber );
             const neutronDelta = Math.abs( chartTransform.viewToModelX( highlightRectangle.center.x )
-                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE - nuclideChartCell.cellModel.neutronNumber );
+                                           - BANConstants.X_SHIFT_HIGHLIGHT_RECTANGLE
+                                           - nuclideChartCell.cellModel.neutronNumber );
             nuclideChartCell.makeOpaque( protonDelta, neutronDelta );
           }
         } );
       } );
     };
 
-    // add listener to update the center of the highLightRectangle
+    // Add listener to update the center of the highLightRectangle.
     viewHighlightRectangleCenterProperty.link( updateHighlightRectangleCenter );
   }
 }

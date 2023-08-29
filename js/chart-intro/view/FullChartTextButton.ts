@@ -27,7 +27,7 @@ class FullChartTextButton extends TextPushButton {
   public constructor( providedOptions?: FullChartTextButtonOptions ) {
 
     // If links are allowed, use hyperlinks. Otherwise, just output the URL. This doesn't need to be internationalized.
-    // create the chart information text
+    // Create the chart information text.
     const stringProperty = new DerivedStringProperty( [
       allowLinksProperty,
       BuildANucleusStrings.fullChartInfoPanelTextPatternStringProperty,
@@ -38,15 +38,16 @@ class FullChartTextButton extends TextPushButton {
              StringUtils.fillIn( fullChartInfoText, { link: LINK_TEXT } );
     } );
     const fullChartInfoText = new RichText( stringProperty, combineOptions<RichTextOptions>( {
-      links: { url: LINK_TEXT } // RichText must fill in URL for link
+      links: { url: LINK_TEXT } // RichText must fill in URL for link.
     }, BANConstants.INFO_DIALOG_TEXT_OPTIONS ) );
 
-    // create the chart image
+    // Create the chart image.
     const fullChartImage = new Image( fullNuclideChart_png );
     fullChartImage.setMaxWidth( 481.5 ); // determined empirically
-    const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ), { stroke: Color.BLACK } );
+    const fullChartImageBorderRectangle = Rectangle.bounds( fullChartImage.bounds.dilated( 5 ),
+      { stroke: Color.BLACK } );
 
-    // create and add the fullChartDialog and 'Full Chart' button
+    // Create and add the fullChartDialog and 'Full Chart' button.
     const dialogContent = new VBox( {
       children: [
         fullChartInfoText,
@@ -63,17 +64,18 @@ class FullChartTextButton extends TextPushButton {
       bottomMargin: 60
     }, BANConstants.INFO_DIALOG_OPTIONS ) );
 
-    const options = optionize<FullChartTextButtonOptions, EmptySelfOptions, TextPushButtonOptions>()( {
-      baseColor: BANColors.fullChartButtonColorProperty,
-      stroke: 'black',
-      lineWidth: 1,
-      minWidth: 80,
-      maxWidth: 160,
-      listener: () => fullChartDialog.show(),
-      textNodeOptions: {
-        font: BANConstants.LEGEND_FONT
-      }
-    }, providedOptions );
+    const options =
+      optionize<FullChartTextButtonOptions, EmptySelfOptions, TextPushButtonOptions>()( {
+        baseColor: BANColors.fullChartButtonColorProperty,
+        stroke: 'black',
+        lineWidth: 1,
+        minWidth: 80,
+        maxWidth: 160,
+        listener: () => fullChartDialog.show(),
+        textNodeOptions: {
+          font: BANConstants.LEGEND_FONT
+        }
+      }, providedOptions );
 
     // create and add the full chart info dialog and button
     super( BuildANucleusStrings.fullChartCapitalizedStringProperty, options );

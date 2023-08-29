@@ -23,7 +23,7 @@ class NuclideChartLegendNode extends Node {
   public constructor() {
     super();
 
-    // create a legend item which consists of a box with the legend color and the string of the decay type to its right
+    // Create a legend item which consists of a box with the legend color and the string of the decay type to its right.
     const createLegendItem = ( decayTypeText: TReadOnlyProperty<string>, decayTypeColor: ProfileColorProperty ): HBox => {
       return new HBox( {
         children: [
@@ -41,12 +41,12 @@ class NuclideChartLegendNode extends Node {
       } );
     };
 
-    // to store all legend items
+    // Stores all legend items.
     const decayHBoxes = [];
     const stableHBox = createLegendItem( BuildANucleusStrings.stableStringProperty, BANColors.stableColorProperty );
     decayHBoxes.push( stableHBox );
 
-    // create the legend item for each decay type in a grid box
+    // Create the legend item for each decay type in a grid box.
     DecayType.enumeration.values.forEach( decayType => {
       decayHBoxes.push( createLegendItem( decayType.labelStringProperty, decayType.colorProperty ) );
     } );

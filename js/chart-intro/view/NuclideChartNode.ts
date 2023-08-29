@@ -47,10 +47,11 @@ class NuclideChartNode extends Node {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       chartTransform: ChartTransform, providedOptions: NuclideChartNodeOptions ) {
 
-    const options = optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {
-      excludeInvisibleChildrenFromBounds: true,
-      showMagicNumbersProperty: new BooleanProperty( false )
-    }, providedOptions );
+    const options =
+      optionize<NuclideChartNodeOptions, SelfOptions, NodeOptions>()( {
+        excludeInvisibleChildrenFromBounds: true,
+        showMagicNumbersProperty: new BooleanProperty( false )
+      }, providedOptions );
     super( options );
 
     // create and add the cells

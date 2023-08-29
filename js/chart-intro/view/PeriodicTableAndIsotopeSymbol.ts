@@ -32,7 +32,7 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
     periodicTable.scale( 0.75 );
     panelContents.addChild( periodicTable );
 
-    // create and add the symbol node in an accordion box
+    // Create and add the symbol node in an accordion box.
     const symbolNode = new SymbolNode( particleAtom.protonCountProperty, particleAtom.massNumberProperty, {
       scale: 0.15
     } );

@@ -16,7 +16,7 @@ import BANConstants from '../../common/BANConstants.js';
 export default class NuclearShellModelText extends Node {
   public constructor() {
 
-    // create and add the 'Nuclear Shell Model' title and background
+    // Create and add the 'Nuclear Shell Model' title and background.
     const text = new RichText( BuildANucleusStrings.nuclearShellModelStringProperty, {
       font: BANConstants.REGULAR_FONT,
       maxWidth: 220

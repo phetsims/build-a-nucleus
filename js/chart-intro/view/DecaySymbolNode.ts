@@ -29,10 +29,11 @@ class DecaySymbolNode extends Node {
                       massNumber: number,
                       providedOptions?: DecaySymbolNodeOptions ) {
 
-    const options = optionize<DecaySymbolNodeOptions, SelfOptions, NodeOptions>()( {
-      symbolString: protonNumber > 0 ? AtomIdentifier.getSymbol( protonNumber ) : '-',
-      scale: 0.15
-    }, providedOptions );
+    const options =
+      optionize<DecaySymbolNodeOptions, SelfOptions, NodeOptions>()( {
+        symbolString: protonNumber > 0 ? AtomIdentifier.getSymbol( protonNumber ) : '-',
+        scale: 0.15
+      }, providedOptions );
 
     super( options );
 

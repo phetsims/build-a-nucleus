@@ -16,7 +16,7 @@ class CompleteNuclideChartIconNode extends Node {
 
   public constructor() {
 
-    // create and add a nuclide chart
+    // Create and add a nuclide chart.
     const cellLayerNode = new Node();
     const smallChartTransform = NuclideChartAccordionBox.getChartTransform( 3.5 );
     NuclideChartNode.createNuclideChart( cellLayerNode, smallChartTransform, smallChartTransform.modelToViewDeltaX( 1 ) );

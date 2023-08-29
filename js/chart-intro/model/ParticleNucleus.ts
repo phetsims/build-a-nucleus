@@ -157,16 +157,17 @@ class ParticleNucleus extends ParticleAtom {
     const nucleonShellPositions = this.getNucleonShellPositions( particleType );
     let yPosition = EnergyLevelType.N_ZERO.yPosition; // initialize to the lowest shell where yPosition = 0
 
-    const openNucleonShellPositions = nucleonShellPositions.map( particleShellRow => {
+    const openNucleonShellPositions = nucleonShellPositions.map(
+      particleShellRow => {
 
-      // Remove any empty particleShellPosition's from particleShellRow.
-      const noEmptyPositions = particleShellRow.filter(
-        particleShellPosition => particleShellPosition !== undefined );
+        // Remove any empty particleShellPosition's from particleShellRow.
+        const noEmptyPositions = particleShellRow.filter(
+          particleShellPosition => particleShellPosition !== undefined );
 
-      // Get the first open shell position in this particleShellRow.
-      return noEmptyPositions.find(
-        particleShellPosition => particleShellPosition.particle === undefined );
-    } );
+        // Get the first open shell position in this particleShellRow.
+        return noEmptyPositions.find(
+          particleShellPosition => particleShellPosition.particle === undefined );
+      } );
 
     // Get the first open shell position available from all rows.
     const openParticleShellPosition = openNucleonShellPositions.find(
@@ -257,8 +258,9 @@ class ParticleNucleus extends ParticleAtom {
 
     // Width in view coordinates of the n1/n2 energy level, which is the same as the other two levels (though the n0
     // energy level line is drawn shorter - see NucleonShellView for details).
-    const n1levelWidth = this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] ) -
-                         this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
+    const n1levelWidth =
+      this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] )
+      - this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
 
 
     particleArray.forEach( ( particle, index ) => {

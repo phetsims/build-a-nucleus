@@ -25,15 +25,16 @@ class ChartIntroScreen extends Screen<ChartIntroModel, ChartIntroScreenView> {
 
   public constructor( providedOptions?: NuclideChartIntroScreenOptions ) {
 
-    const options = optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
-      name: BuildANucleusStrings.screen.chartIntroStringProperty,
-      backgroundColorProperty: BANColors.screenBackgroundColorProperty,
-      homeScreenIcon: createScreenIcon(),
+    const options =
+      optionize<NuclideChartIntroScreenOptions, EmptySelfOptions, ScreenOptions>()( {
+        name: BuildANucleusStrings.screen.chartIntroStringProperty,
+        backgroundColorProperty: BANColors.screenBackgroundColorProperty,
+        homeScreenIcon: createScreenIcon(),
 
-      createKeyboardHelpNode: () => new BasicActionsKeyboardHelpSection( {
-        withCheckboxContent: true
-      } )
-    }, providedOptions );
+        createKeyboardHelpNode: () => new BasicActionsKeyboardHelpSection( {
+          withCheckboxContent: true
+        } )
+      }, providedOptions );
 
     super(
       () => new ChartIntroModel(),
