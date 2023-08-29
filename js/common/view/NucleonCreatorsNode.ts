@@ -40,6 +40,16 @@ const CREATOR_NODE_VBOX_OPTIONS = {
   }
 };
 
+// arrow buttons spacing and size options
+const ARROW_BUTTON_VBOX_SPACING = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
+const ARROW_BUTTON_OPTIONS = {
+  arrowWidth: 14,
+  arrowHeight: 14,
+  fireOnHold: false,
+  touchAreaYDilation: TOUCH_AREA_Y_DILATION
+};
+
+
 class NucleonCreatorsNode extends HBox {
 
   private readonly doubleArrowButtons: Node;
@@ -84,68 +94,15 @@ class NucleonCreatorsNode extends HBox {
     this.returnParticleToStack = returnParticleToStack;
     this.particleTransform = particleTransform;
 
-    // create the arrow enabled properties
-    const protonUpArrowEnabledProperty = this.createArrowEnabledProperty( 'up', ParticleType.PROTON );
-    const neutronUpArrowEnabledProperty = this.createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
-    const doubleUpArrowEnabledProperty = this.createArrowEnabledProperty( 'up', ParticleType.PROTON, ParticleType.NEUTRON );
-    const protonDownArrowEnabledProperty = this.createArrowEnabledProperty( 'down', ParticleType.PROTON );
-    const neutronDownArrowEnabledProperty = this.createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
-    const doubleDownArrowEnabledProperty = this.createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
-
-    // arrow buttons spacing and size options
-    const arrowButtonSpacing = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
-    const arrowButtonOptions = {
-      arrowWidth: 14,
-      arrowHeight: 14,
-      fireOnHold: false,
-      touchAreaYDilation: TOUCH_AREA_Y_DILATION
-    };
-
-    // function to create the double arrow buttons
-    const createDoubleArrowButtons = ( direction: ArrowButtonDirection ): Node => {
-      return new DoubleArrowButton( direction,
-        direction === 'up' ?
-        () => this.increaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
-        () => this.decreaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ),
-        merge( {
-          leftArrowFill: BANColors.protonColorProperty,
-          rightArrowFill: BANColors.neutronColorProperty,
-          enabledProperty: direction === 'up' ? doubleUpArrowEnabledProperty : doubleDownArrowEnabledProperty
-        }, arrowButtonOptions )
-      );
-    };
-
     // create and add the double arrow buttons
     this.doubleArrowButtons = new VBox( {
-      children: [ createDoubleArrowButtons( 'up' ), createDoubleArrowButtons( 'down' ) ],
-      spacing: arrowButtonSpacing
+      children: [ this.createDoubleArrowButtons( 'up' ), this.createDoubleArrowButtons( 'down' ) ],
+      spacing: ARROW_BUTTON_VBOX_SPACING
     } );
 
-    // function to create the single arrow buttons
-    const createSingleArrowButtons = ( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): Node => {
-      const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, arrowButtonOptions );
-      const upArrowButton = new ArrowButton( 'up', () => this.increaseNucleonNumberListener( nucleonType ),
-        merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonUpArrowEnabledProperty : neutronUpArrowEnabledProperty
-          },
-          singleArrowButtonOptions )
-      );
-      const downArrowButton = new ArrowButton( 'down', () => this.decreaseNucleonNumberListener( nucleonType ),
-        merge( {
-            enabledProperty: nucleonType === ParticleType.PROTON ? protonDownArrowEnabledProperty : neutronDownArrowEnabledProperty
-          },
-          singleArrowButtonOptions )
-      );
-      return new VBox( {
-        justify: 'center',
-        children: [ upArrowButton, downArrowButton ],
-        spacing: arrowButtonSpacing
-      } );
-    };
-
     // create and add the single arrow buttons
-    this.protonArrowButtons = createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
-    this.neutronArrowButtons = createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
+    this.protonArrowButtons = this.createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
+    this.neutronArrowButtons = this.createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
 
     this.mutate( {
       align: 'bottom',
@@ -185,7 +142,60 @@ class NucleonCreatorsNode extends HBox {
 
   public get neutronsCreatorNodeModelCenter(): Vector2 { return this.getCreatorNodeModelCenter( this.neutronsCreatorNode ); }
 
-  private createArrowEnabledProperty( direction: ArrowButtonDirection, firstParticleType: ParticleType, secondParticleType?: ParticleType ): TReadOnlyProperty<boolean> {
+  private createDoubleArrowButtons( direction: ArrowButtonDirection ): Node {
+
+    const enabledProperty = direction === 'up' ?
+                            this.createArrowEnabledProperty( 'up', ParticleType.PROTON, ParticleType.NEUTRON ) :
+                            this.createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
+
+    return new DoubleArrowButton( direction,
+      direction === 'up' ?
+      () => this.increaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
+      () => this.decreaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ),
+      merge( {
+        leftArrowFill: BANColors.protonColorProperty,
+        rightArrowFill: BANColors.neutronColorProperty,
+        enabledProperty: enabledProperty
+      }, ARROW_BUTTON_OPTIONS )
+    );
+  }
+
+  private createSingleArrowButtons( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): Node {
+
+    // Create the arrow enabled properties.
+    const upArrowEnabledProperty = nucleonType === ParticleType.PROTON ?
+                                   this.createArrowEnabledProperty( 'up', ParticleType.PROTON ) :
+                                   this.createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
+
+    const downArrowEnabledProperty = nucleonType === ParticleType.PROTON ?
+                                     this.createArrowEnabledProperty( 'up', ParticleType.PROTON ) :
+                                     this.createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
+
+    const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, ARROW_BUTTON_OPTIONS );
+
+    const upArrowButton = new ArrowButton( 'up', () => this.increaseNucleonNumberListener( nucleonType ),
+      merge( {
+        enabledProperty: upArrowEnabledProperty
+      }, singleArrowButtonOptions )
+    );
+    const downArrowButton = new ArrowButton( 'down', () => this.decreaseNucleonNumberListener( nucleonType ),
+      merge( {
+        enabledProperty: downArrowEnabledProperty
+      }, singleArrowButtonOptions )
+    );
+
+    return new VBox( {
+      justify: 'center',
+      children: [ upArrowButton, downArrowButton ],
+      spacing: ARROW_BUTTON_VBOX_SPACING
+    } );
+  }
+
+  private createArrowEnabledProperty(
+    direction: ArrowButtonDirection,
+    firstParticleType: ParticleType,
+    secondParticleType?: ParticleType
+  ): TReadOnlyProperty<boolean> {
 
     // function to create the arrow enabled properties
     return new DerivedProperty( [
