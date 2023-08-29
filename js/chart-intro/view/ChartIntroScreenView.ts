@@ -135,14 +135,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // Positioning.
     this.elementNameText.boundsProperty.link( () => {
-      this.elementNameText.centerX = this.nucleonCreatorsNode.doubleArrowButtons.centerX;
+      this.elementNameText.centerX = this.nucleonCreatorsNode.centerX;
       this.elementNameText.top = this.nucleonNumberPanel.top;
     } );
     this.nucleonNumberPanel.left = this.layoutBounds.left + 20;
 
     const nuclearShellModelText = new NuclearShellModelText();
     nuclearShellModelText.boundsProperty.link( () => {
-      nuclearShellModelText.centerX = this.nucleonCreatorsNode.doubleArrowButtons.centerX;
+      nuclearShellModelText.centerX = this.nucleonCreatorsNode.centerX;
       nuclearShellModelText.centerY = periodicTableAndIsotopeSymbol.bottom + 20;
     } );
     this.addChild( nuclearShellModelText );
@@ -162,7 +162,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // Create and add the 'Energy' arrow.
     const energyTextDistanceFromArrow = 10;
     const arrow = new ArrowNode( energyText.right + energyTextDistanceFromArrow,
-      this.nucleonCreatorsNode.protonArrowButtons.top - 30, energyText.right + energyTextDistanceFromArrow,
+      this.nucleonCreatorsNode.top - 30, energyText.right + energyTextDistanceFromArrow,
       periodicTableAndIsotopeSymbol.bottom + 15, { tailWidth: 2 } );
     this.addChild( arrow );
 
