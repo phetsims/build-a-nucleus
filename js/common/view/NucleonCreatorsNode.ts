@@ -77,15 +77,15 @@ class NucleonCreatorsNode extends HBox {
 
     const getLocalPoint = this.globalToParentPoint.bind( this );
 
-    // create and add the Protons and Neutrons label
+    // Create and add the Protons and Neutrons label.
     const protonsLabel = new Text( BuildANucleusStrings.protonsStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
 
-    // create and add the NucleonCreatorNode for the protons
+    // Create and add the NucleonCreatorNode for the protons.
     this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
       particleTransform );
 
-    // create and add the NucleonCreatorNode for the neutrons
+    // Create and add the NucleonCreatorNode for the neutrons.
     this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
       particleTransform );
 
@@ -96,13 +96,13 @@ class NucleonCreatorsNode extends HBox {
     this.returnParticleToStack = returnParticleToStack;
     this.particleTransform = particleTransform;
 
-    // create and add the double arrow buttons
+    // Create and add the double arrow buttons.
     this.doubleArrowButtons = new VBox( {
       children: [ this.createDoubleArrowButtons( 'up' ), this.createDoubleArrowButtons( 'down' ) ],
       spacing: ARROW_BUTTON_VBOX_SPACING
     } );
 
-    // create and add the single arrow buttons
+    // Create and add the single arrow buttons.
     this.protonArrowButtons = this.createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
     this.neutronArrowButtons = this.createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
 
@@ -199,7 +199,7 @@ class NucleonCreatorsNode extends HBox {
     secondParticleType?: ParticleType
   ): TReadOnlyProperty<boolean> {
 
-    // function to create the arrow enabled properties
+    // Function to create the arrow enabled properties.
     return new DerivedProperty( [
       this.model.particleAtom.protonCountProperty,
       this.model.particleAtom.neutronCountProperty,
@@ -220,7 +220,7 @@ class NucleonCreatorsNode extends HBox {
       // Something is being user controlled OR Particle Atom is not empty
       if ( !doesNuclideExist && ( massNumber !== 0 || userControlledNucleonNumber !== 0 ) ) {
 
-        // disable all arrow buttons if the nuclide does not exist
+        // Disable all arrow buttons if the nuclide does not exist.
         NucleonCreatorsNode.toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
         NucleonCreatorsNode.toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
         return false;
@@ -274,13 +274,13 @@ class NucleonCreatorsNode extends HBox {
 
     if ( direction === 'up' ) {
 
-      // proton up arrow
+      // Proton up arrow.
       if ( particleType === ParticleType.PROTON ) {
         return AtomIdentifier.doesNextIsotoneExist( protonNumber, neutronNumber );
       }
       else if ( particleType === ParticleType.NEUTRON ) {
 
-        // neutron up arrow
+        // Neutron up arrow.
         return AtomIdentifier.doesNextIsotopeExist( protonNumber, neutronNumber );
       }
       else {
@@ -291,13 +291,13 @@ class NucleonCreatorsNode extends HBox {
     else {
       //  direction === 'down'
 
-      // proton down arrow
+      // Proton down arrow.
       if ( particleType === ParticleType.PROTON ) {
         return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber ) || ( neutronNumber === 0 && protonNumber === 1 );
       }
       else if ( particleType === ParticleType.NEUTRON ) {
 
-        // neutron down arrow
+        // Neutron down arrow.
         return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber ) || ( neutronNumber === 1 && protonNumber === 0 );
       }
       else {
@@ -314,23 +314,23 @@ class NucleonCreatorsNode extends HBox {
   private isNucleonNumberNotAtRangeBounds( direction: ArrowButtonDirection, particleType: ParticleType, protonNumber: number, neutronNumber: number ): boolean {
     if ( direction === 'up' ) {
 
-      // proton up arrow
+      // Proton up arrow.
       if ( particleType === ParticleType.PROTON ) {
         return protonNumber !== this.protonNumberRange.max;
       }
 
-      // neutron up arrow
+      // Neutron up arrow.
       return neutronNumber !== this.neutronNumberRange.max;
     }
     else {
       //  direction === 'down'
 
-      // proton down arrow
+      // Proton down arrow.
       if ( particleType === ParticleType.PROTON ) {
         return protonNumber !== this.protonNumberRange.min;
       }
 
-      // neutron down arrow
+      // Neutron down arrow.
       return neutronNumber !== this.neutronNumberRange.min;
     }
   }
