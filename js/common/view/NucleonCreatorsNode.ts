@@ -51,8 +51,7 @@ class NucleonCreatorsNode extends HBox {
   public readonly protonsCreatorNode: Node;
   public readonly neutronsCreatorNode: Node;
 
-  public readonly protonsCreatorNodeModelCenter: Vector2;
-  public readonly neutronsCreatorNodeModelCenter: Vector2;
+  private readonly particleTransform: ModelViewTransform2;
 
   public constructor( model: BANModel<ParticleAtom | ParticleNucleus>, getLocalPoint: ( point: Vector2 ) => Vector2,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
@@ -73,17 +72,12 @@ class NucleonCreatorsNode extends HBox {
       particleTransform );
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
 
-
-    // store to know origin when creating / returning particles from stack
-    this.protonsCreatorNodeModelCenter = particleTransform.viewToModelPosition( this.protonsCreatorNode.center );
-    this.neutronsCreatorNodeModelCenter = particleTransform.viewToModelPosition( this.neutronsCreatorNode.center );
-
-
     this.model = model;
     this.protonNumberRange = model.protonNumberRange;
     this.neutronNumberRange = model.neutronNumberRange;
     this.createParticleFromStack = createParticleFromStack;
     this.returnParticleToStack = returnParticleToStack;
+    this.particleTransform = particleTransform;
 
     // create the arrow enabled properties
     const protonUpArrowEnabledProperty = this.createArrowEnabledProperty( 'up', ParticleType.PROTON );
@@ -176,6 +170,24 @@ class NucleonCreatorsNode extends HBox {
         this.neutronArrowButtons
       ]
     } );
+  }
+
+  public get protonsCreatorNodeModelCenter(): Vector2 {
+
+    // convert creator node center into the coordinate frame of whoever is using this NucleonCreatorsNode
+    const globalProtonsCreatorNodeViewCenter = this.globalToParentPoint(
+      this.protonsCreatorNode.parentToGlobalPoint( this.protonsCreatorNode.center ) );
+
+    return this.particleTransform.viewToModelPosition( globalProtonsCreatorNodeViewCenter );
+  }
+
+  public get neutronsCreatorNodeModelCenter(): Vector2 {
+
+    // convert creator node center into the coordinate frame of whoever is using this NucleonCreatorsNode
+    const globalNeutronsCreatorNodeCenter = this.globalToParentPoint(
+      this.neutronsCreatorNode.parentToGlobalPoint( this.neutronsCreatorNode.center ) );
+
+    return this.particleTransform.viewToModelPosition( globalNeutronsCreatorNodeCenter );
   }
 
   private createArrowEnabledProperty( direction: ArrowButtonDirection, firstParticleType: ParticleType, secondParticleType?: ParticleType ): TReadOnlyProperty<boolean> {

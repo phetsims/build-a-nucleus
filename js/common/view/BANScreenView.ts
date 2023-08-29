@@ -419,10 +419,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
    * Define a function that will decide where to put nucleons.
    */
   private dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
-    // TODO: can't we use the creator node's model center? https://github.com/phetsims/build-a-nucleus/issues/185
-    const particleCreatorNodeCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
-                                      this.nucleonCreatorsNode.protonsCreatorNode.center :
-                                      this.nucleonCreatorsNode.neutronsCreatorNode.center;
+    const particleCreatorNodeModelCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
+                                      this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
+                                      this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
 
     // If removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom.
     const currentlyNonExistentAtom =
@@ -434,10 +433,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     if ( this.isNucleonInCaptureArea( nucleon, atom.positionProperty ) || currentlyNonExistentAtom ) {
       atom.addParticle( nucleon );
     }
-    else if ( nucleon.positionProperty.value.distance( particleCreatorNodeCenter ) > 10 ) {
-
-      // Only animate the removal of a nucleon if it was dragged out of the creator node.
-      this.animateAndRemoveParticle( nucleon, this.particleTransform.viewToModelPosition( particleCreatorNodeCenter ) );
+    else {
+      this.animateAndRemoveParticle( nucleon, particleCreatorNodeModelCenter );
     }
   }
 
