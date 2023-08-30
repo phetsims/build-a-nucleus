@@ -262,7 +262,6 @@ class ParticleNucleus extends ParticleAtom {
       this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] )
       - this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
 
-    // TODO: assert that the n+1 spot has an empty particle in the shell position, https://github.com/phetsims/build-a-nucleus/issues/105
     particleArray.forEach( ( particle, index ) => {
       const yPosition = EnergyLevelType.getForIndex( index ).yPosition;
       const xPosition = this.getLocalXIndex( index, yPosition );
