@@ -28,6 +28,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // constants
 const MAX_TEXT_WIDTH = 150;
@@ -68,6 +69,9 @@ class NucleonCreatorsNode extends HBox {
   public readonly protonsCreatorNode: Node;
   public readonly neutronsCreatorNode: Node;
 
+  // Created to keep dependencies in sync for all updating of enabledProperties for nucleon creator UI
+  private readonly enabledDependencies: readonly [ TReadOnlyProperty<number>, TReadOnlyProperty<number>, TReadOnlyProperty<number>, TReadOnlyProperty<number>, TReadOnlyProperty<number>, TReadOnlyProperty<number> ];
+
   public constructor( model: BANModel<ParticleAtom | ShellModelNucleus>,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
                       particleTransform: ModelViewTransform2,
@@ -96,6 +100,15 @@ class NucleonCreatorsNode extends HBox {
     this.returnParticleToStack = returnParticleToStack;
     this.particleTransform = particleTransform;
 
+    this.enabledDependencies = [
+      this.model.particleAtom.protonCountProperty,
+      this.model.particleAtom.neutronCountProperty,
+      this.model.incomingProtons.lengthProperty,
+      this.model.incomingNeutrons.lengthProperty,
+      this.model.userControlledProtons.lengthProperty,
+      this.model.userControlledNeutrons.lengthProperty
+    ] as const;
+
     // Create and add the double arrow buttons.
     this.doubleArrowButtons = new VBox( {
       children: [ this.createDoubleArrowButtons( 'up' ), this.createDoubleArrowButtons( 'down' ) ],
@@ -105,6 +118,25 @@ class NucleonCreatorsNode extends HBox {
     // Create and add the single arrow buttons.
     this.protonArrowButtons = this.createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
     this.neutronArrowButtons = this.createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
+
+    // Function to toggle nucleon creator nodes enabled
+    // NOTE: this linkage is very similar to that of each arrow button enabled property, version these together.
+    Multilink.multilink( this.enabledDependencies,
+      ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
+        userControlledProtonNumber, userControlledNeutronNumber ) => {
+
+        const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
+        const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
+        const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
+        const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
+        const massNumber = atomProtonNumber + atomNeutronNumber;
+
+        const shouldEnableCreators = this.shouldEnableCreators( doesNuclideExist, massNumber, userControlledNucleonNumber );
+
+        // Disable all arrow buttons if the nuclide does not exist.
+        NucleonCreatorsNode.toggleCreatorNodeEnabled( this.protonsCreatorNode, shouldEnableCreators );
+        NucleonCreatorsNode.toggleCreatorNodeEnabled( this.neutronsCreatorNode, shouldEnableCreators );
+      } );
 
     this.mutate( {
       align: 'bottom',
@@ -193,6 +225,17 @@ class NucleonCreatorsNode extends HBox {
     } );
   }
 
+  /**
+   * Disable creators if the nuclide doesn't exist and one of the two cases:
+   * 1. Something (any particle) is being user controlled
+   * 2. The ParticleAtom is not empty.
+   */
+  private shouldEnableCreators( doesNuclideExist: boolean, massNumber: number, userControlledNucleonNumber: number ): boolean {
+    const shouldDisableCreators = !doesNuclideExist && ( massNumber !== 0 || userControlledNucleonNumber !== 0 );
+    return !shouldDisableCreators;
+  }
+
+
   private createArrowEnabledProperty(
     direction: ArrowButtonDirection,
     firstParticleType: ParticleType,
@@ -200,71 +243,58 @@ class NucleonCreatorsNode extends HBox {
   ): TReadOnlyProperty<boolean> {
 
     // Function to create the arrow enabled properties.
-    return new DerivedProperty( [
-      this.model.particleAtom.protonCountProperty,
-      this.model.particleAtom.neutronCountProperty,
-      this.model.incomingProtons.lengthProperty,
-      this.model.incomingNeutrons.lengthProperty,
-      this.model.userControlledProtons.lengthProperty,
-      this.model.userControlledNeutrons.lengthProperty
-    ], ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
-         userControlledProtonNumber, userControlledNeutronNumber ) => {
+    // NOTE: this linkage is very similar to that of nucleon creators enabled property, version these together.
+    return new DerivedProperty( this.enabledDependencies,
+      ( atomProtonNumber, atomNeutronNumber, incomingProtonsNumber, incomingNeutronsNumber,
+        userControlledProtonNumber, userControlledNeutronNumber ) => {
 
-      const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
-      const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
-      const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
-      const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
-      const massNumber = atomProtonNumber + atomNeutronNumber;
+        const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
+        const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
+        const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
+        const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
+        const massNumber = atomProtonNumber + atomNeutronNumber;
 
-      // Disable all buttons if the nuclide doesn't exist and one of the two cases:
-      // Something is being user controlled OR Particle Atom is not empty.
-      if ( !doesNuclideExist && ( massNumber !== 0 || userControlledNucleonNumber !== 0 ) ) {
-
-        // Disable all arrow buttons if the nuclide does not exist.
-        NucleonCreatorsNode.toggleCreatorNodeEnabled( this.protonsCreatorNode, false );
-        NucleonCreatorsNode.toggleCreatorNodeEnabled( this.neutronsCreatorNode, false );
-        return false;
-      }
-      else {
-        // Else handle each enabled case specifically.
-
-        // Turn creator nodes back on to a default, (enabled:true) state.
-        NucleonCreatorsNode.toggleCreatorNodeEnabled( this.protonsCreatorNode, true );
-        NucleonCreatorsNode.toggleCreatorNodeEnabled( this.neutronsCreatorNode, true );
-
-        // True when the potential spot to go to does not "exist". If there is a second particle type, check by
-        // changing both particle numbers.
-        const nextIsoDoesNotExist = secondParticleType ?
-                                    !NucleonCreatorsNode.hasNextIso( direction, 'both', protonNumber, neutronNumber ) :
-                                    !NucleonCreatorsNode.hasNextIso( direction, firstParticleType, protonNumber, neutronNumber );
-
-        // In the up direction, you can create one extra past an atom that does exist.
-        const allowIncreaseToNonExistent = direction === 'up' && AtomIdentifier.doesExist( protonNumber, neutronNumber );
-
-        // Covers cases where you can't remove a particle into a nuclide that doesn't exist, but you can add one
-        // extra (for learning) before it is animated back to an existent state.
-        if ( !allowIncreaseToNonExistent && nextIsoDoesNotExist ) {
+        // Disable all buttons if the nuclide doesn't exist and one of the two cases:
+        // Something is being user controlled OR Particle Atom is not empty.
+        if ( !this.shouldEnableCreators( doesNuclideExist, massNumber, userControlledNucleonNumber ) ) {
           return false;
         }
+        else {
+          // Else handle each enabled case specifically.
 
-        // If there are no atoms actually in the atom (only potentially animating to the atom),
-        // see https://github.com/phetsims/build-a-nucleus/issues/74.
-        if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
-          return ( particleType === ParticleType.NEUTRON && atomNeutronNumber === 0 ) ||
-                 ( particleType === ParticleType.PROTON && atomProtonNumber === 0 );
-        } ) ) {
-          return false;
+          // True when the potential spot to go to does not "exist". If there is a second particle type, check by
+          // changing both particle numbers.
+          const nextIsoDoesNotExist = secondParticleType ?
+                                      !NucleonCreatorsNode.hasNextIso( direction, 'both', protonNumber, neutronNumber ) :
+                                      !NucleonCreatorsNode.hasNextIso( direction, firstParticleType, protonNumber, neutronNumber );
+
+          // In the up direction, you can create one extra past an atom that does exist.
+          const allowIncreaseToNonExistent = direction === 'up' && AtomIdentifier.doesExist( protonNumber, neutronNumber );
+
+          // Covers cases where you can't remove a particle into a nuclide that doesn't exist, but you can add one
+          // extra (for learning) before it is animated back to an existent state.
+          if ( !allowIncreaseToNonExistent && nextIsoDoesNotExist ) {
+            return false;
+          }
+
+          // If there are no atoms actually in the atom (only potentially animating to the atom),
+          // see https://github.com/phetsims/build-a-nucleus/issues/74.
+          if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
+            return ( particleType === ParticleType.NEUTRON && atomNeutronNumber === 0 ) ||
+                   ( particleType === ParticleType.PROTON && atomProtonNumber === 0 );
+          } ) ) {
+            return false;
+          }
+
+          // Finally, disable any buttons that are at the range bound for that button.
+          const firstTypeNotAtRangeBound = this.isNucleonNumberNotAtRangeBounds( direction, firstParticleType,
+            protonNumber, neutronNumber );
+          return secondParticleType ?
+                 firstTypeNotAtRangeBound && this.isNucleonNumberNotAtRangeBounds( direction, secondParticleType,
+                                            protonNumber, neutronNumber ) :
+                 firstTypeNotAtRangeBound;
         }
-
-        // Finally, disable any buttons that are at the range bound for that button.
-        const firstTypeNotAtRangeBound = this.isNucleonNumberNotAtRangeBounds( direction, firstParticleType,
-          protonNumber, neutronNumber );
-        return secondParticleType ?
-               firstTypeNotAtRangeBound && this.isNucleonNumberNotAtRangeBounds( direction, secondParticleType,
-                                          protonNumber, neutronNumber ) :
-               firstTypeNotAtRangeBound;
-      }
-    } );
+      } );
   }
 
   /**
