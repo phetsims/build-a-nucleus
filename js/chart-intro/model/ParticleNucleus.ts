@@ -174,7 +174,7 @@ class ParticleNucleus extends ParticleAtom {
       ( particleShellPosition, index ) => {
         yPosition = index;
         return particleShellPosition !== undefined;
-    } );
+      } );
 
     assert && assert( openParticleShellPosition, 'To add a particle there must be an empty particleShellPosition.' );
 
@@ -267,10 +267,7 @@ class ParticleNucleus extends ParticleAtom {
       const yPosition = EnergyLevelType.getForIndex( index ).yPosition;
       const xPosition = this.getLocalXIndex( index, yPosition );
 
-      // Last level (yPosition === 2) never bounds so don't need levelIndex condition for it.
-      const levelIndex = yPosition === EnergyLevelType.N_ZERO.yPosition ? index : index - N_ZERO_CAPACITY;
       const nucleonShellPosition = particleShellPositions[ yPosition ][ xPosition ];
-      const unBoundXPosition = this.modelViewTransform.modelToViewX( nucleonShellPosition.xPosition ) + xOffset;
 
       nucleonShellPosition.particle = particle;
 
@@ -281,17 +278,22 @@ class ParticleNucleus extends ParticleAtom {
       // this level by removing the spaces between them.
       if ( yPosition < levelFillProperty.value.yPosition ) {
 
-        // Each particle on the level has one 'particle radius' space except for one.
-        // There are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
-        const numberOfRadiusSpaces = yPosition === EnergyLevelType.N_ZERO.yPosition ?
-                                     N_ZERO_CAPACITY - 1 : N_ONE_CAPACITY - 1;
+        // Last level (yPosition === 2) never bounds so don't need levelIndex condition for it.
+        const levelIndex = yPosition === EnergyLevelType.N_ZERO.yPosition ? index : index - N_ZERO_CAPACITY;
 
         // Amount each particle moves so the space between it and the particle on its left is removed.
         const boundOffset = n1levelWidth *
                             ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
 
+        // Each particle on the level has one 'particle radius' space except for one.
+        // There are 2 particles on the y = 0 level and 6 particles on the y = 1 level.
+        const numberOfRadiusSpaces = yPosition === EnergyLevelType.N_ZERO.yPosition ?
+                                     N_ZERO_CAPACITY - 1 : N_ONE_CAPACITY - 1;
+
         // Amount each particle has to move for all particles to be centered in middle of energy level.
         const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;
+
+        const unBoundXPosition = this.modelViewTransform.modelToViewX( nucleonShellPosition.xPosition ) + xOffset;
 
         const destinationX = unBoundXPosition - boundOffset + centerOffset;
 
