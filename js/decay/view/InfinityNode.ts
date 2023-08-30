@@ -21,14 +21,15 @@ class InfinityNode extends Path {
 
   public constructor( providedOptions?: InfinityNodeOptions ) {
 
-    const options = optionize<InfinityNodeOptions, SelfOptions, PathOptions>()( {
-      radius: 6,
-      lineWidth: 2,
-      stroke: Color.BLACK
-    }, providedOptions );
+    const options =
+      optionize<InfinityNodeOptions, SelfOptions, PathOptions>()( {
+        radius: 6,
+        lineWidth: 2,
+        stroke: Color.BLACK
+      }, providedOptions );
 
-    const radius = options.radius; // for convenience
-    const distanceBetweenCircles = 2.85 * radius; // empirically determined to have the straight lines form an 'X'
+    const radius = options.radius; // For convenience.
+    const distanceBetweenCircles = 2.85 * radius; // Empirically determined to have the straight lines form an 'X'.
 
     const infinityShape = new Shape()
       .ellipticalArc( 0, -radius, radius, radius, 0, Math.PI / 4, -Math.PI / 4, false )

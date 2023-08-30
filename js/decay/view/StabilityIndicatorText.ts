@@ -24,18 +24,19 @@ class StabilityIndicatorText extends Text {
                       nuclideExistsProperty: TReadOnlyProperty<boolean>,
                       providedOptions?: StabilityTextOptions ) {
 
-    const options = optionize<StabilityTextOptions, EmptySelfOptions, TextOptions>()( {
-      font: BANConstants.REGULAR_FONT,
-      fill: 'black',
-      visible: true,
-      maxWidth: 225
-    }, providedOptions );
+    const options =
+      optionize<StabilityTextOptions, EmptySelfOptions, TextOptions>()( {
+        font: BANConstants.REGULAR_FONT,
+        fill: 'black',
+        visible: true,
+        maxWidth: 225
+      }, providedOptions );
 
     const stabilityStringProperty = new DerivedStringProperty( [
         protonCountProperty,
         neutronCountProperty,
 
-        // We need to update whenever any of these strings change, to support Dynamic Locale
+        // We need to update whenever any of these strings change, to support Dynamic Locale.
         BuildANucleusStrings.stableStringProperty,
         BuildANucleusStrings.unstableStringProperty
       ], ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber ) ?
@@ -45,7 +46,7 @@ class StabilityIndicatorText extends Text {
 
     super( stabilityStringProperty, options );
 
-    // update stability string visibility
+    // Update stability string visibility.
     nuclideExistsProperty.link( ( visible: boolean ) => {
       this.visible = visible;
     } );

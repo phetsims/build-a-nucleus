@@ -1,7 +1,7 @@
 // Copyright 2023, University of Colorado Boulder
 
 /**
- * The Checkbox used to show the particle atom's electron cloud
+ * The Checkbox used to show the particle atom's electron cloud.
  *
  * @author Luisa Vargas
  * @author Michael Kauzmann (PhET Interactive Simulations)
@@ -21,10 +21,10 @@ class ShowElectronCloudCheckbox extends Checkbox {
 
   public constructor( electronCloud: Node ) {
 
-    // show the electron cloud by default
+    // Show the electron cloud by default.
     const showElectronCloudBooleanProperty = new BooleanProperty( true );
 
-    // create and add the electronCloud checkbox
+    // Create and add the electronCloud checkbox.
     const electronCloudText = new Text( BuildANucleusStrings.electronCloudStringProperty, {
       font: BANConstants.REGULAR_FONT, maxWidth: 210
     } );
@@ -36,7 +36,7 @@ class ShowElectronCloudCheckbox extends Checkbox {
       children: [
         electronCloudText,
 
-        // electron cloud icon
+        // Electron cloud icon.
         new Circle( {
           radius: electronCloudIconRadius,
           fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( electronCloudIconRadius )

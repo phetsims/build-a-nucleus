@@ -42,7 +42,7 @@ class HalfLifeInfoDialog extends Dialog {
       BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS
     ];
 
-    // use a GridBox to create the left adn right side nodes of the HalfLifeInfoDialog legend
+    // Use a GridBox to create the left adn right side nodes of the HalfLifeInfoDialog legend.
     const createGridBox = ( timescalePoints: BANTimescalePoints[] ): Node => {
 
       const grid = new GridBox( {
@@ -79,7 +79,7 @@ class HalfLifeInfoDialog extends Dialog {
       return grid;
     };
 
-    // create the legend node
+    // Create the legend node.
     const legend = new HBox( {
       children: [
         createGridBox( leftSideTimescalePoints ),
@@ -90,7 +90,7 @@ class HalfLifeInfoDialog extends Dialog {
       maxWidth: 870
     } );
 
-    // create the halfLifeNumberLineNode
+    // Create the halfLifeNumberLineNode.
     const halfLifeNumberLineNode = new HalfLifeNumberLineNode( halfLifeNumberProperty, isStableProperty, {
       tickMarkExtent: 24,
       numberLineLabelFont: LEGEND_FONT,
@@ -101,7 +101,7 @@ class HalfLifeInfoDialog extends Dialog {
       elementNameStringProperty: elementNameStringProperty
     } );
 
-    // add the legend and halfLifeNumberLineNode
+    // Add the legend and halfLifeNumberLineNode.
     const numberLineNodeAndLegend = new VBox( {
       children: [ legend, halfLifeNumberLineNode ],
       spacing: 30,
@@ -109,12 +109,12 @@ class HalfLifeInfoDialog extends Dialog {
       resize: true
     } );
 
-    // surround contents with rectangle for extra padding
+    // Surround contents with rectangle for extra padding.
     const contents = new Rectangle( 0, 0, numberLineNodeAndLegend.width + 100, numberLineNodeAndLegend.height );
     contents.addChild( numberLineNodeAndLegend );
     numberLineNodeAndLegend.centerX = contents.centerX;
 
-    // the half-life's of the strings, in respective order
+    // The half-life's of the strings, in respective order.
     const timescalePoints = [
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_A_NUCLEUS,
       BANTimescalePoints.TIME_FOR_LIGHT_TO_CROSS_AN_ATOM,
@@ -128,7 +128,7 @@ class HalfLifeInfoDialog extends Dialog {
       BANTimescalePoints.LIFETIME_OF_LONGEST_LIVED_STARS
     ];
 
-    // create and add the half-life arrow and label
+    // Create and add the half-life arrow and label.
     for ( let i = 0; i < timescalePoints.length; i++ ) {
       const timescalePoint = timescalePoints[ i ];
       halfLifeNumberLineNode.addArrowAndLabel( timescalePoint.timescaleMarkerStringProperty, timescalePoints[ i ].numberOfSeconds );

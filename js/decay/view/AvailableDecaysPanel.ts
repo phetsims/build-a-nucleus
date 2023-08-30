@@ -30,31 +30,32 @@ const BUTTON_TEXT_BOTTOM_MARGIN = 8;
 const BUTTON_HEIGHT = 35;
 const BUTTON_CONTENT_WIDTH = 145;
 
+// types
 type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
   decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
 
-  // Upon any decay button firing, this listener fires with the given decay type
+  // Upon any decay button firing, this listener fires with the given decay type.
   handleDecayListener: ( decayType: DecayType ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
 
 class AvailableDecaysPanel extends Panel {
 
-  // decay button and icon pair
+  // Decay button and icon pair.
   public readonly arrangedDecayButtonsAndIcons: Node;
 
-  // map of decayType => {arrayIndex}
+  // Map of decayType => {arrayIndex}.
   public decayTypeButtonIndexMap: decayTypeButtonIndexType;
 
   public constructor( options: AvailableDecaysPanelOptions ) {
 
-    // create and add the title
+    // Create and add the title.
     const titleNode = new Text( BuildANucleusStrings.availableDecaysStringProperty, {
       font: TITLE_FONT, maxWidth: 250
     } );
 
-    // create and add the decays info dialog and button
+    // Create and add the decays info dialog and button.
     const decaysInfoDialog = new Dialog(
       new RichText( BuildANucleusStrings.availableDecaysInfoPanelTextStringProperty, BANConstants.INFO_DIALOG_TEXT_OPTIONS ),
       combineOptions<DialogOptions>( {
@@ -67,7 +68,7 @@ class AvailableDecaysPanel extends Panel {
       baseColor: BANColors.availableDecaysInfoButtonColorProperty
     } );
 
-    // function to create the decay button and corresponding decay icon pair
+    // Function to create the decay button and corresponding decay icon pair.
     const createDecayButtonAndIcon = ( decayType: DecayType ): Node => {
 
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
@@ -76,9 +77,10 @@ class AvailableDecaysPanel extends Panel {
         maxWidth: BUTTON_CONTENT_WIDTH
       } );
       buttonText.boundsProperty.link( () => {
-        assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT, 'The button text is changing the size of the button.' );
+        assert && assert( BUTTON_TEXT_BOTTOM_MARGIN + buttonText.height < BUTTON_HEIGHT,
+          'The button text is changing the size of the button.' );
 
-        // manually layout the button text due to the superscripts causing the normal layout to look out of place
+        // Manually layout the button text due to the superscripts causing the normal layout to look out of place.
         buttonText.centerBottom = buttonBackgroundRectangle.centerBottom.minusXY( 0, BUTTON_TEXT_BOTTOM_MARGIN );
       } );
 
@@ -86,7 +88,8 @@ class AvailableDecaysPanel extends Panel {
       assert && assert( enabledProperty, 'No enabledProperty found, is your decay type valid? ' + decayType );
       const decayButton = new RectangularPushButton( {
 
-        // add buttonText and buttonBackgroundRectangle in the same layer, so they have the same coordinate frame when the bounds change
+        // Add buttonText and buttonBackgroundRectangle in the same layer, so they have the same coordinate frame when
+        // the bounds change.
         content: new Node( { children: [ buttonText, buttonBackgroundRectangle ] } ),
         yMargin: 0,
         baseColor: BANColors.decayButtonColorProperty,
@@ -98,18 +101,18 @@ class AvailableDecaysPanel extends Panel {
         children: [
           decayButton,
 
-          // createDecayButtonAndIcon is called when looping through the DecayType enumeration values so null won't be returned
+          // createDecayButtonAndIcon is called when looping through the DecayType enumeration values so null won't be returned.
           IconFactory.createDecayIcon( decayType )!
         ],
-        spacing: SPACING * 1.5, // empirically determined
+        spacing: SPACING * 1.5, // Empirically determined.
         align: 'center'
       } );
     };
 
-    // see this.decayTypeButtonIndexMap for detail
+    // See this.decayTypeButtonIndexMap for detail.
     const decayTypeButtonIndexMap: decayTypeButtonIndexType = {};
 
-    // create the decay button and icon pair in a VBox
+    // Create the decay button and icon pair in a VBox.
     const decayButtonsAndIcons: Node[] = [];
     DecayType.enumeration.values.forEach( decayType => {
       decayTypeButtonIndexMap[ decayType.name.toString() ] = decayButtonsAndIcons.push( createDecayButtonAndIcon( decayType ) ) - 1;
@@ -121,12 +124,12 @@ class AvailableDecaysPanel extends Panel {
     } );
     arrangedDecayButtonsAndIcons.top = titleNode.bottom + SPACING;
 
-    // create the separator
+    // Create the separator.
     const separator = new HSeparator( { stroke: '#CACACA' } );
     separator.top = arrangedDecayButtonsAndIcons.bottom + SPACING;
 
-    // create and add the particle labels
-    // a particle label is a particle node on the left with its corresponding particle name on the right
+    // Create and add the particle labels.
+    // A particle label is a particle node on the left with its corresponding particle name on the right.
     const particleLabels = ParticleType.enumeration.values.map( particleType => {
       return new HBox( {
         children: [
@@ -173,7 +176,7 @@ class AvailableDecaysPanel extends Panel {
       cornerRadius: BANConstants.PANEL_CORNER_RADIUS
     } );
 
-    // used when positioning the undo decay buttons
+    // Used when positioning the undo decay buttons.
     this.arrangedDecayButtonsAndIcons = arrangedDecayButtonsAndIcons;
     this.decayTypeButtonIndexMap = decayTypeButtonIndexMap;
   }

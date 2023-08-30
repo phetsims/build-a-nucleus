@@ -37,17 +37,17 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 // types
 type SelfOptions = {
 
-  // the length of the tick marks
+  // The length of the tick marks.
   tickMarkExtent: number;
   numberLineWidth: number;
   numberLineLabelFont: PhetFont;
   halfLifeArrowLength: number;
 
-  // scale for the halfLifeDisplayNode
+  // Scale for the halfLifeDisplayNode.
   halfLifeDisplayScale?: number;
 
-  // if the half-life label is fixed, place it centered above the number line, otherwise, animate its position with
-  // the half-life arrow
+  // If the half-life label is fixed, place it centered above the number line, otherwise, animate its position with
+  // the half-life arrow.
   isHalfLifeLabelFixed: boolean;
   elementNameStringProperty?: TReadOnlyProperty<string>;
 
@@ -63,7 +63,7 @@ const NUMBER_LINE_END_EXPONENT = BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT
 // Distance between the moving arrow and the half life and element name that travel with it.
 const ARROW_TOP_MARGIN = 14;
 
-// the number in radians for the halfLifeArrow rotation to be pointing in a certain direction
+// The number in radians for the halfLifeArrow rotation to be pointing in a certain direction.
 const ROTATION_POINTING_DOWN_RADIANS = 0;
 const ROTATION_POINTING_RIGHT_RADIANS = -Math.PI / 2;
 
@@ -76,13 +76,13 @@ class HalfLifeNumberLineNode extends Node {
   private arrowXPositionAnimation: null | Animation;
   private arrowRotationAnimation: null | Animation;
 
-  // x position of half-life arrow in model coordinates
+  // X position of half-life arrow in model coordinates.
   private readonly arrowXPositionProperty: TProperty<number>;
 
-  // the half life display node, public for positioning the infoButton
+  // The half life display node, public for positioning the infoButton.
   public readonly halfLifeDisplayNode: VBox;
 
-  // contains the whole number-line portion, including tick marks and labels
+  // Contains the whole number-line portion, including tick marks and labels.
   private readonly numberLineNode: Node;
 
   public constructor( halfLifeNumberProperty: TReadOnlyProperty<number>,
@@ -90,11 +90,12 @@ class HalfLifeNumberLineNode extends Node {
                       providedOptions: HalfLifeNumberLineNodeOptions ) {
     super();
 
-    const options = optionize<HalfLifeNumberLineNodeOptions, SelfOptions, NodeOptions>()( {
-      halfLifeDisplayScale: 1,
-      elementNameStringProperty: new StringProperty( '' ),
-      unitsLabelFont: new PhetFont( 18 )
-    }, providedOptions );
+    const options =
+      optionize<HalfLifeNumberLineNodeOptions, SelfOptions, NodeOptions>()( {
+        halfLifeDisplayScale: 1,
+        elementNameStringProperty: new StringProperty( '' ),
+        unitsLabelFont: new PhetFont( 18 )
+      }, providedOptions );
 
     this.numberLineLabelFont = options.numberLineLabelFont;
 
@@ -107,7 +108,7 @@ class HalfLifeNumberLineNode extends Node {
       } );
     };
 
-    // create the numberLineNode
+    // Create the numberLineNode.
     this.numberLineNode = new Node();
 
     this.chartTransform = new ChartTransform( {
@@ -115,7 +116,7 @@ class HalfLifeNumberLineNode extends Node {
       modelXRange: new Range( NUMBER_LINE_START_EXPONENT, NUMBER_LINE_END_EXPONENT )
     } );
 
-    // create and add all the number line components
+    // Create and add all the number line components.
     const tickXSpacing = 3;
     const tickMarkSet = new TickMarkSet( this.chartTransform, Orientation.HORIZONTAL, tickXSpacing, {
       stroke: Color.BLACK,
@@ -137,7 +138,7 @@ class HalfLifeNumberLineNode extends Node {
     } );
     this.numberLineNode.addChild( numberLine );
 
-    // create and add the halfLifeArrow pointing down
+    // Create and add the halfLifeArrow pointing down.
     const arrowNode = new ArrowNode( 0, 0, 0, options.halfLifeArrowLength, {
       fill: BANColors.halfLifeColorProperty,
       stroke: null,
@@ -145,17 +146,17 @@ class HalfLifeNumberLineNode extends Node {
       headWidth: 12
     } );
 
-    // use a different node for the halfLifeArrow to allow for easy rotation and position animation
+    // Use a different node for the halfLifeArrow to allow for easy rotation and position animation.
     const halfLifeArrow = new Node();
     halfLifeArrow.addChild( arrowNode );
 
-    // all valid values are based on the halfLifeNumberProperty, for more information see its implementation
+    // All valid values are based on the halfLifeNumberProperty, for more information see its implementation.
     this.arrowXPositionProperty = new NumberProperty( 0 );
 
     this.arrowXPositionAnimation = null;
     this.arrowRotationAnimation = null;
 
-    // create and add the half life display, which is a parent node used to contain the number readout, the infinity
+    // Create and add the half life display, which is a parent node used to contain the number readout, the infinity
     // symbol, and the 'Unknown' text.
     this.halfLifeDisplayNode = new VBox( {
       scale: options.halfLifeDisplayScale,
@@ -168,32 +169,33 @@ class HalfLifeNumberLineNode extends Node {
     } );
     this.halfLifeDisplayNode.addChild( sentenceHBox );
 
-    // create and add the text for "Half-life:"
+    // Create and add the text for "Half-life:".
     const halfLifeColonText = new RichText( BuildANucleusStrings.halfLifeColonStringProperty, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
     sentenceHBox.addChild( halfLifeColonText );
 
-    // create and add the "Unknown" text
+    // Create and add the "Unknown" text.
     const halfLifeUnknownText = new RichText( BuildANucleusStrings.unknownStringProperty, {
       font: TITLE_FONT,
       maxWidth: 115
     } );
     sentenceHBox.addChild( halfLifeUnknownText );
 
-    // create and add the infinity node, which represents a math infinity symbol
+    // Create and add the infinity node, which represents a math infinity symbol.
     const infinityNode = new InfinityNode( {
       layoutOptions: {
         align: 'center',
-        bottomMargin: -5 // offset to match the apparent bottom position of the text
+        bottomMargin: -5 // Offset to match the apparent bottom position of the text.
       }
     } );
     sentenceHBox.addChild( infinityNode );
 
-    // something with scientific notation needs
+    // Something with scientific notation needs.
     const startupTestProperty = new Property<null | number>( 10000 );
-    const compositeHalfLifeProperty = new DerivedProperty( [ halfLifeNumberProperty, startupTestProperty ],
+    const compositeHalfLifeProperty = new DerivedProperty(
+      [ halfLifeNumberProperty, startupTestProperty ],
       ( halfLife, startupTest ) => {
         if ( startupTest ) {
           return startupTest;
@@ -202,7 +204,7 @@ class HalfLifeNumberLineNode extends Node {
       }
     );
 
-    // the half life number in scientific notation with an 's' for seconds at the end
+    // The half life number in scientific notation with an 's' for seconds at the end.
     const halfLifeScientificNotation = new ScientificNotationNode( compositeHalfLifeProperty, {
       font: TITLE_FONT
     } );
@@ -218,7 +220,7 @@ class HalfLifeNumberLineNode extends Node {
     sentenceHBox.minContentHeight = halfLifeNumberText.height;
     startupTestProperty.value = null; // Clear the startup item used to get the max height needed, and use the model from here.
 
-    // if the half-life text is a label to the arrow
+    // If the half-life text is a label to the arrow
     if ( !options.isHalfLifeLabelFixed ) {
 
       // Create the textual readout for the element name.
@@ -230,20 +232,20 @@ class HalfLifeNumberLineNode extends Node {
       this.halfLifeDisplayNode.insertChild( 0, elementName );
     }
 
-    // animate the rotation of the halfLifeArrow through the halfLifeArrowRotationProperty
+    // Animate the rotation of the halfLifeArrow through the halfLifeArrowRotationProperty.
     this.halfLifeArrowRotationProperty = new NumberProperty( 0,
       { isValidValue: value => value >= ROTATION_POINTING_RIGHT_RADIANS && value <= ROTATION_POINTING_DOWN_RADIANS } );
     this.halfLifeArrowRotationProperty.link( rotation => { halfLifeArrow.rotation = rotation; } );
 
-    // function to show or hide the halfLifeArrow
+    // Function to show or hide the halfLifeArrow.
     const showHalfLifeArrow = ( show: boolean ) => {
       halfLifeArrow.visible = show;
     };
 
-    // link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout
+    // Link the halfLifeNumberProperty to the half-life arrow indicator and to the half-life number readout.
     halfLifeNumberProperty.link( halfLifeNumber => {
 
-      // the nuclide is stable
+      // The nuclide is stable.
       if ( isStableProperty.value ) {
         showHalfLifeArrow( true );
 
@@ -251,15 +253,15 @@ class HalfLifeNumberLineNode extends Node {
         halfLifeUnknownText.visible = false;
         halfLifeNumberText.visible = false;
 
-        // peg the indicator to the right when stable
+        // Peg the indicator to the right when stable.
         this.moveHalfLifePointerSet( halfLifeNumber );
       }
 
-      // the nuclide is unstable or does not exist
+      // The nuclide is unstable or does not exist.
       else {
         infinityNode.visible = false;
 
-        // the nuclide does not exist
+        // The nuclide does not exist.
         if ( halfLifeNumber === 0 ) {
           showHalfLifeArrow( false );
 
@@ -269,7 +271,7 @@ class HalfLifeNumberLineNode extends Node {
           this.moveHalfLifePointerSet( halfLifeNumber );
         }
 
-        // the nuclide is unstable but the half-life data is unknown
+        // The nuclide is unstable but the half-life data is unknown.
         else if ( halfLifeNumber === -1 ) {
           showHalfLifeArrow( false );
 
@@ -279,7 +281,7 @@ class HalfLifeNumberLineNode extends Node {
           this.moveHalfLifePointerSet( 0 );
         }
 
-        // the nuclide is unstable and the half-life data is known
+        // The nuclide is unstable and the half-life data is known.
         else {
           showHalfLifeArrow( true );
 
@@ -287,7 +289,7 @@ class HalfLifeNumberLineNode extends Node {
           halfLifeNumberText.visible = true;
           halfLifeNumberText.bottom = halfLifeColonText.bottom;
 
-          // peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout
+          // Peg the indicator to the right when the half-life goes off-scale but still show the accurate half-life readout.
           if ( halfLifeNumber > Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
             this.moveHalfLifePointerSet( Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) );
           }
@@ -298,13 +300,13 @@ class HalfLifeNumberLineNode extends Node {
       }
     } );
 
-    // create and add the units label on the number line
+    // Create and add the units label on the number line.
     const numberLineUnitsLabel = new Text( BuildANucleusStrings.secondsStringProperty, {
       font: options.unitsLabelFont,
       maxWidth: 150
     } );
 
-    // Add the units to the number line and add the numberLineNode
+    // Add the units to the number line and add the numberLineNode.
     const numberLineVBox = new VBox( {
       spacing: 5,
       children: [
@@ -321,7 +323,8 @@ class HalfLifeNumberLineNode extends Node {
 
     Multilink.multilink( [ this.arrowXPositionProperty,
 
-      // Cannot listen to the bounds of halfLifeDisplayNode to prevent reentrancy, so instead listen to all potential children changes
+      // Cannot listen to the bounds of halfLifeDisplayNode to prevent reentrancy, so instead listen to all potential
+      // children changes.
       options.elementNameStringProperty,
       sentenceHBox.boundsProperty
     ], xPosition => {
@@ -330,20 +333,21 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         numberLineCenterY - options.halfLifeArrowLength );
 
-      // Static positioning
+      // Static positioning.
       if ( options.isHalfLifeLabelFixed ) {
-        this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
+        this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE
+                                        + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
         this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
       }
       else {
 
-        // Translate the half life text also
+        // Translate the half life text also.
         this.halfLifeDisplayNode.centerBottom =
           new Vector2( this.chartTransform.modelToViewX( xPosition ),
             halfLifeArrow.top - ARROW_TOP_MARGIN );
 
 
-        // make sure the text never goes over the edge of the numberLineNode
+        // Make sure the text never goes over the edge of the numberLineNode.
         if ( this.halfLifeDisplayNode.left < this.numberLineNode.left ) {
           this.halfLifeDisplayNode.left = this.numberLineNode.left;
           this.halfLifeDisplayNode.align = 'left';
@@ -368,7 +372,7 @@ class HalfLifeNumberLineNode extends Node {
 
     const arrowXPositionAnimationDuration = 0.7; // in seconds
 
-    // animate the half-life arrow's x position
+    // Animate the half-life arrow's x position.
     if ( this.arrowXPositionAnimation ) {
       this.arrowXPositionAnimation.stop();
       this.arrowXPositionAnimation = null;
@@ -381,9 +385,9 @@ class HalfLifeNumberLineNode extends Node {
       easing: Easing.QUADRATIC_IN_OUT
     } );
 
-    const arrowRotationAnimationDuration = 0.1; // in seconds
+    const arrowRotationAnimationDuration = 0.1; // In seconds.
 
-    // if the halfLife number is stable, then animate the arrow's rotation
+    // If the halfLife number is stable, then animate the arrow's rotation.
     if ( this.arrowRotationAnimation ) {
       this.arrowRotationAnimation.stop();
       this.arrowRotationAnimation = null;
@@ -391,7 +395,7 @@ class HalfLifeNumberLineNode extends Node {
 
     if ( halfLife === Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT ) ) {
 
-      // rotate arrow horizontally, pointing right
+      // Rotate arrow horizontally, pointing right.
       this.arrowRotationAnimation = new Animation( {
         to: ROTATION_POINTING_RIGHT_RADIANS,
         property: this.halfLifeArrowRotationProperty,
@@ -409,7 +413,7 @@ class HalfLifeNumberLineNode extends Node {
     }
     else {
 
-      // rotate arrow back vertically, pointing down
+      // Rotate arrow back vertically, pointing down.
       this.arrowRotationAnimation = new Animation( {
         to: ROTATION_POINTING_DOWN_RADIANS,
         property: this.halfLifeArrowRotationProperty,

@@ -17,7 +17,7 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 
 class DecayModel extends BANModel<ParticleAtom> {
 
-  // the half-life number
+  // The half-life number.
   public halfLifeNumberProperty: TReadOnlyProperty<number>;
 
   // A data structure for all the enabledProperties for the "decay buttons". These enabledProperties toggle to enabled
@@ -28,7 +28,7 @@ class DecayModel extends BANModel<ParticleAtom> {
 
     const particleAtom = new ParticleAtom();
 
-    // empirically determined, the last nuclide the Decay screen goes up to is Plutonium-240 (94 protons and 146 neutrons)
+    // Empirically determined, the last nuclide the Decay screen goes up to is Plutonium-240 (94 protons and 146 neutrons).
     super( BANConstants.DECAY_MAX_NUMBER_OF_PROTONS, BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
     this.halfLifeNumberProperty = new DerivedProperty( [
@@ -43,17 +43,17 @@ class DecayModel extends BANModel<ParticleAtom> {
         if ( doesNuclideExist ) {
           if ( isStable ) {
 
-            // the nuclide is stable, set the indicator to the maximum half-life number on the half-life number line
+            // The nuclide is stable, set the indicator to the maximum half-life number on the half-life number line.
             halfLife = Math.pow( 10, BANConstants.HALF_LIFE_NUMBER_LINE_END_EXPONENT );
           }
           else {
 
-            // the nuclide is unstable, update its half-life
+            // The nuclide is unstable, update its half-life.
             halfLife = AtomIdentifier.getNuclideHalfLife( protonNumber, neutronNumber );
           }
         }
         else {
-          // the nuclide does not exist
+          // The nuclide does not exist.
           halfLife = 0;
         }
 
@@ -69,13 +69,14 @@ class DecayModel extends BANModel<ParticleAtom> {
       }
     );
 
-    // function which would return whether a given nuclide (defined by the number of protons and neutrons) has a certain
-    // available decay type
+    // Function which would return whether a given nuclide (defined by the number of protons and neutrons) has a certain
+    // available decay type.
     const createDecayEnabledListener = ( protonNumber: number, neutronNumber: number, decayType: DecayType,
                                          hasIncomingParticles: boolean ): boolean => {
       const decays = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
-      return !hasIncomingParticles && !!decays.find( decay => Object.keys( decay ).includes( decayType.name ) );
+      return !hasIncomingParticles
+             && !!decays.find( decay => Object.keys( decay ).includes( decayType.name ) );
     };
 
     const dependencies = [
@@ -86,7 +87,7 @@ class DecayModel extends BANModel<ParticleAtom> {
 
     this.decayEnabledPropertyMap = new Map();
 
-    // create the decay enabled properties
+    // Create the decay enabled properties.
     this.decayEnabledPropertyMap.set( DecayType.PROTON_EMISSION, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
         createDecayEnabledListener( protonNumber, neutronNumber, DecayType.PROTON_EMISSION, hasIncomingParticles )

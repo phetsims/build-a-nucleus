@@ -38,32 +38,33 @@ export type DecayScreenViewOptions = BANScreenViewOptions;
 
 class DecayScreenView extends BANScreenView<DecayModel> {
 
-  // the symbol node in an accordion box
+  // The symbol node in an accordion box.
   private readonly symbolAccordionBox: AccordionBox;
 
-  // For resetting
+  // For resetting.
   private readonly showElectronCloudCheckbox: ShowElectronCloudCheckbox;
 
   public constructor( model: DecayModel, providedOptions?: DecayScreenViewOptions ) {
 
-    const options = optionize<DecayScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {}, providedOptions );
+    const options =
+      optionize<DecayScreenViewOptions, EmptySelfOptions, BANScreenViewOptions>()( {}, providedOptions );
 
     super( model, new Vector2( BANConstants.SCREEN_VIEW_ATOM_CENTER_X, BANConstants.SCREEN_VIEW_ATOM_CENTER_Y ), options );
 
     this.model = model;
 
-    // create and add the half-life information node at the top half of the decay screen
-    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty, model.isStableProperty,
-      this.elementNameText.elementNameStringProperty );
+    // Create and add the half-life information node at the top half of the decay screen.
+    const halfLifeInformationNode = new HalfLifeInformationNode( model.halfLifeNumberProperty,
+      model.isStableProperty, this.elementNameText.elementNameStringProperty );
     halfLifeInformationNode.left = this.layoutBounds.minX + BANConstants.SCREEN_VIEW_X_MARGIN + 30;
     halfLifeInformationNode.y = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN + 80;
     this.addChild( halfLifeInformationNode );
 
-    // use this constant since everything else is positioned off of the halfLifeInformationNode and the centerX changes
-    // as the halfLifeArrow in the halfLifeInformationNode moves
+    // Use this constant since everything else is positioned off of the halfLifeInformationNode and the centerX changes
+    // as the halfLifeArrow in the halfLifeInformationNode moves.
     const halfLifeInformationNodeCenterX = halfLifeInformationNode.centerX;
 
-    // create and add the symbol node in an accordion box
+    // Create and add the symbol node in an accordion box.
     const symbolNode = new SymbolNode( model.particleAtom.protonCountProperty, model.particleAtom.massNumberProperty, {
       scale: 0.3
     } );
@@ -90,11 +91,11 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox.top = this.layoutBounds.minY + BANConstants.SCREEN_VIEW_Y_MARGIN;
     this.addChild( this.symbolAccordionBox );
 
-    // store the current nucleon numbers
+    // Store the current nucleon numbers.
     let oldProtonNumber: number;
     let oldNeutronNumber: number;
 
-    // create and add the undo decay button
+    // Create and add the undo decay button.
     const undoDecayButton = new ReturnButton( {
       iconOptions: { scale: 0.7 },
       listener: () => {
@@ -102,28 +103,28 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         this.restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
         this.restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
 
-        // remove all particles in the outgoingParticles array from the particles array
+        // Remove all particles in the outgoingParticles array from the particles array.
         [ ...this.model.outgoingParticles ].forEach( particle => {
           this.model.removeParticle( particle );
         } );
         this.model.outgoingParticles.clear();
         this.model.particleAnimations.clear();
 
-        // clear all active animations
+        // Clear all active animations.
         this.model.particleAtom.clearAnimations();
       }
     } );
     undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
 
-    // hide the undo decay button if anything in the nucleus changes
+    // Hide the undo decay button if anything in the nucleus changes.
     Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
       this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
       this.model.userControlledNeutrons.lengthProperty ], () => {
       undoDecayButton.visible = false;
     } );
 
-    // create and add the available decays panel at the center right of the decay screen
+    // Create and add the available decays panel at the center right of the decay screen.
     const availableDecaysPanel = new AvailableDecaysPanel( {
       decayEnabledPropertyMap: model.decayEnabledPropertyMap,
       handleDecayListener: decayType => {
@@ -140,7 +141,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     let manualConstraint: ManualConstraint<Node[]> | null;
 
-    // reposition the undo button beside the decayButton
+    // Reposition the undo button beside the decayButton.
     const repositionUndoDecayButton = ( decayType: string ) => {
       const decayButtonAndIconIndex = availableDecaysPanel.decayTypeButtonIndexMap[ decayType ];
       const decayButtonAndIcon = availableDecaysPanel.arrangedDecayButtonsAndIcons.children[ decayButtonAndIconIndex ];
@@ -156,18 +157,18 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.showElectronCloudCheckbox.bottom = this.resetAllButton.bottom;
     this.addChild( this.showElectronCloudCheckbox );
 
-    // create and add stability indicator
+    // Create and add stability indicator.
     const stabilityIndicatorText = new StabilityIndicatorText( model.particleAtom.protonCountProperty,
       model.particleAtom.neutronCountProperty, model.nuclideExistsProperty );
     this.addChild( stabilityIndicatorText );
 
-    // add the particleViewLayerNode after everything else so particles are in the top layer
+    // Add the particleViewLayerNode after everything else so particles are in the top layer.
     this.addChild( this.particleAtomNode );
 
-    // positioning
+    // Positioning.
     this.elementNameText.boundsProperty.link( () => {
 
-      // place the elementNameText a bit below the stabilityIndicatorText
+      // Place the elementNameText a bit below the stabilityIndicatorText.
       this.elementNameText.center = stabilityIndicatorText.center.plusXY( 0, 60 );
     } );
     this.nucleonNumberPanel.left = availableDecaysPanel.left;
@@ -209,17 +210,17 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   protected override emitAlphaParticle(): AlphaParticle {
     const alphaParticle = super.emitAlphaParticle();
 
-    // this is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too
+    // This is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too.
     if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
       const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
 
-      // the distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
+      // The distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds.
       const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * alphaParticle.velocity;
 
       let protonsEmitted = false;
       alphaParticle.positionProperty.link( position => {
 
-        // emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds
+        // Emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds.
         if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
           _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
           protonsEmitted = true;
@@ -246,7 +247,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     return nucleon.positionProperty.value.distance( atomPositionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
   }
 
-  // restore the particleAtom to have the nucleon numbers before a decay occurred
+  /**
+   * Restore the particleAtom to have the nucleon numbers before a decay occurred.
+   */
   private restorePreviousNucleonNumber( particleType: ParticleType, oldNucleonNumber: number ): void {
     const newNucleonNumber = particleType === ParticleType.PROTON ?
                              this.model.particleAtom.protonCountProperty.value :
@@ -263,7 +266,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     }
   }
 
-  // remove a nucleon of a given particleType from the atom immediately
+  /**
+   * Remove a nucleon of a given particleType from the atom immediately.
+   */
   private removeNucleonImmediatelyFromAtom( particleType: ParticleType ): void {
     const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
     this.animateAndRemoveParticle( particleToRemove );
