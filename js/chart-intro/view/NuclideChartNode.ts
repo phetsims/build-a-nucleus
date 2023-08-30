@@ -24,7 +24,7 @@ import ChartIntroModel from '../model/ChartIntroModel.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
-import { N_ONE_CAPACITY, N_ZERO_CAPACITY } from '../model/ParticleNucleus.js';
+import { N_ONE_CAPACITY, N_ZERO_CAPACITY } from '../model/ShellModelNucleus.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANModel from '../../common/model/BANModel.js';
 

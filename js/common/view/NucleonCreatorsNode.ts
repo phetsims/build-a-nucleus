@@ -16,7 +16,7 @@ import DoubleArrowButton, { ArrowButtonDirection } from './DoubleArrowButton.js'
 import merge from '../../../../phet-core/js/merge.js';
 import BANColors from '../BANColors.js';
 import BANModel from '../model/BANModel.js';
-import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
+import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
 import Particle from '../../../../shred/js/model/Particle.js';
@@ -61,14 +61,14 @@ class NucleonCreatorsNode extends HBox {
   private readonly neutronNumberRange: Range;
   private readonly createParticleFromStack: ( particleType: ParticleType ) => Particle;
   private readonly returnParticleToStack: ( particleType: ParticleType ) => void;
-  private model: BANModel<ParticleAtom | ParticleNucleus>;
+  private model: BANModel<ParticleAtom | ShellModelNucleus>;
   private readonly particleTransform: ModelViewTransform2;
 
   // The NucleonCreatorNode for the protons and neutrons.
   public readonly protonsCreatorNode: Node;
   public readonly neutronsCreatorNode: Node;
 
-  public constructor( model: BANModel<ParticleAtom | ParticleNucleus>,
+  public constructor( model: BANModel<ParticleAtom | ShellModelNucleus>,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
                       particleTransform: ModelViewTransform2,
                       createParticleFromStack: ( particleType: ParticleType ) => Particle,

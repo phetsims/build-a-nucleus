@@ -18,7 +18,7 @@ counter all depend on these count properties.
 
 - __ParticleAtom__: A way of representing an atom in the model. It contains and manages references to constituent
   particles.
-- __ParticleNucleus__: A subtype of ParticleAtom. This manages the positions and motion of all particles in the nucleus
+- __ShellModelNucleus__: A subtype of ParticleAtom. This manages the positions and motion of all particles in the nucleus
   on the Chart Intro screen.
 - __ParticleAtomNode__: Node that holds the ParticleView's from ParticleAtom. Rearranges particles in different node
   layers
@@ -47,10 +47,10 @@ is not considered as a part of the ParticleAtom particles.
   the ParticleAtom particles.
 - __protonShellPositions__: Array to keep track of where a proton particle can be placed in the energy levels. This
   array
-  exists only in the ParticleNucleus.
+  exists only in the ShellModelNucleus.
 - __neutronShellPositions__: Array to keep track of where a neutron particle can be placed in the energy levels. This
   array
-  exists only in the ParticleNucleus.
+  exists only in the ShellModelNucleus.
 
 The ParticleView's of the model particles are kept track of in the `particleViewMap`, a lookup map which uses the
 particle's id as a key. All ParticleView's are stored in the map, including the mini-atom ParticleView's.
@@ -88,7 +88,7 @@ on the decay type, can create or remove particles. Note, the beta decay type is 
 nucleon type of a nucleon particle.
 
 It's important to note that in the Chart Intro screen, an _incoming_ particle holds a position in the _ShellPositions_
-before it reaches its destination to become a part of the ParticleNucleus' particles.
+before it reaches its destination to become a part of the ShellModelNucleus' particles.
 
 #### ModelViewTransform's
 

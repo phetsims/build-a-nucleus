@@ -17,7 +17,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { N_ZERO_CAPACITY, ParticleShellPosition, N_ONE_CAPACITY } from '../model/ParticleNucleus.js';
+import { N_ZERO_CAPACITY, ParticleShellPosition, N_ONE_CAPACITY } from '../model/ShellModelNucleus.js';
 import EnergyLevelType from '../model/EnergyLevelType.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 

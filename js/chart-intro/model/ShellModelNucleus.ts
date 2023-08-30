@@ -44,7 +44,7 @@ const PARTICLE_Y_SPACING = PARTICLE_DIAMETER * 4;
 // Have one less space than there are particles.
 const NUMBER_OF_RADII_SPACES_BETWEEN_PARTICLES = N_ONE_CAPACITY - 1;
 
-// This transform maps from arbitrary particle positions in the ParticleNucleus (see ALLOWED_PARTICLE_POSITIONS) to
+// This transform maps from arbitrary particle positions in the ShellModelNucleus (see ALLOWED_PARTICLE_POSITIONS) to
 // actual model/view positions to be rendered. This is private because model units in this sim are the same as
 // view units, and this is just for ease of this class's implementation.
 const PARTICLE_POSITIONING_TRANSFORM = ModelViewTransform2.createRectangleInvertedYMapping(
@@ -66,7 +66,7 @@ for ( let i = 0; i < EnergyLevelType.ENERGY_LEVELS.length; i++ ) {
   assert && assert( ALLOWED_PARTICLE_POSITIONS[ i ].length === energyLevel.capacity, `n${i} capacity spots check` );
 }
 
-class ParticleNucleus extends ParticleAtom {
+class ShellModelNucleus extends ParticleAtom {
 
   // Allowed proton positions.
   public readonly protonShellPositions: ParticleShellPosition[][] = [ [], [], [] ];
@@ -200,7 +200,7 @@ class ParticleNucleus extends ParticleAtom {
   /**
    * Remove the particle's placement in the shell and from the ParticleAtom.
    * We need to remove from the shell here too since sometimes a particle is not a part of the ParticleAtom, but it does
-   * have a shell position here in the ParticleNucleus.
+   * have a shell position here in the ShellModelNucleus.
    */
   public override removeParticle( particle: Particle ): void {
     this.removeParticleFromShell( particle );
@@ -324,5 +324,5 @@ class ParticleNucleus extends ParticleAtom {
   }
 }
 
-buildANucleus.register( 'ParticleNucleus', ParticleNucleus );
-export default ParticleNucleus;
+buildANucleus.register( 'ShellModelNucleus', ShellModelNucleus );
+export default ShellModelNucleus;

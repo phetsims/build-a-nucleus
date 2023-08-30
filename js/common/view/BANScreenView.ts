@@ -21,7 +21,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ParticleType from '../model/ParticleType.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import ParticleNucleus from '../../chart-intro/model/ParticleNucleus.js';
+import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
 import ParticleAtomNode from './ParticleAtomNode.js';
 import DecayType from '../model/DecayType.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -48,7 +48,7 @@ type ParticleTypeInfo = {
   outgoingNucleons: number;
 };
 
-abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>> extends ScreenView {
+abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus>> extends ScreenView {
 
   protected model: M;
   private previousProtonNumber = 0;

@@ -8,7 +8,7 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import BANModel from '../../common/model/BANModel.js';
-import ParticleNucleus from './ParticleNucleus.js';
+import ShellModelNucleus from './ShellModelNucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import Particle from '../../../../shred/js/model/Particle.js';
@@ -22,10 +22,10 @@ import BANParticle from '../../common/model/BANParticle.js';
 // types
 export type SelectedChartType = 'partial' | 'zoom';
 
-class ChartIntroModel extends BANModel<ParticleNucleus> {
+class ChartIntroModel extends BANModel<ShellModelNucleus> {
 
   // The atom that the user builds, modifies, and generally plays with.
-  public readonly particleNucleus: ParticleNucleus;
+  public readonly shellModelNucleus: ShellModelNucleus;
 
   // The non-interactive mini-nucleus at the top of the screen.
   public readonly miniParticleAtom: ParticleAtom;
@@ -42,13 +42,13 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
 
   public constructor() {
 
-    const particleAtom = new ParticleNucleus(); // This is our ground truth 'atom'.
+    const particleAtom = new ShellModelNucleus(); // This is our ground truth 'atom'.
 
     // Empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons
     // and 12 neutrons).
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
-    this.particleNucleus = particleAtom;
+    this.shellModelNucleus = particleAtom;
 
     // This is the mini-nucleus that updates based on the particleAtom.
     this.miniParticleAtom = new ParticleAtom();
@@ -56,7 +56,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
     this.selectedNuclideChartProperty = new Property<SelectedChartType>( 'partial' );
 
     this.decayEquationModel = new DecayEquationModel( ChartIntroModel.cellModelArray,
-      this.particleNucleus.protonCountProperty, this.particleNucleus.massNumberProperty );
+      this.shellModelNucleus.protonCountProperty, this.shellModelNucleus.massNumberProperty );
   }
 
   /**
@@ -69,10 +69,10 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
   }
 
   /**
-   * Remove the particle from its shell position in the ParticleNucleus.
+   * Remove the particle from its shell position in the ShellModelNucleus.
    */
   public override removeParticle( particle: Particle ): void {
-    this.particleNucleus.removeParticleFromShell( particle );
+    this.shellModelNucleus.removeParticleFromShell( particle );
     super.removeParticle( particle );
   }
 
@@ -80,7 +80,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    * Select the particle in the farthest energy level.
    */
   public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
-    const particleToReturn = this.particleNucleus.getLastParticleInShell( particleType );
+    const particleToReturn = this.shellModelNucleus.getLastParticleInShell( particleType );
     assert && assert( particleToReturn, 'No particle of type ' + particleType.name + ' exists in the particleAtom.' );
     assert && assert( !particleToReturn!.isDisposed, 'Particle should not already be disposed.' );
 
@@ -92,7 +92,7 @@ class ChartIntroModel extends BANModel<ParticleNucleus> {
    * Return the next open shell position for the given particleType and add it to that shell position.
    */
   public override getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
-    return this.particleNucleus.getParticleDestination( particleType, particle );
+    return this.shellModelNucleus.getParticleDestination( particleType, particle );
   }
 
   public override reset(): void {

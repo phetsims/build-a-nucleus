@@ -52,7 +52,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   private readonly neutronEnergyLevelNode: NucleonShellView;
   private readonly energyLevelLayer = new Node();
 
-  // If the miniAtom is connected to the main particleAtom (ParticleNucleus in the Chart Intro screen). When true the
+  // If the miniAtom is connected to the main particleAtom (ShellModelNucleus in the Chart Intro screen). When true the
   // mini ParticleAtom is kept in sync (false only for when decaying particles cause behavior differences in each
   // representation).
   private isMiniAtomConnected = true;
@@ -92,7 +92,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       // Add nucleons to miniAtom.
       if ( nucleonDelta < 0 ) {
 
-        // If true, keep the mini atom's particles identical to those in the ParticleNucleus.
+        // If true, keep the mini atom's particles identical to those in the ShellModelNucleus.
         if ( this.isMiniAtomConnected ) {
           _.times( nucleonDelta * -1, () => {
             const miniParticle = model.createMiniParticleModel( particleType );
@@ -105,7 +105,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       else if ( nucleonDelta > 0 ) {
         _.times( nucleonDelta, () => {
 
-          // If true, keep the mini atom's particles identical to those in the ParticleNucleus.
+          // If true, keep the mini atom's particles identical to those in the ShellModelNucleus.
           if ( this.isMiniAtomConnected ) {
             const particle = model.miniParticleAtom.extractParticle( particleType.particleTypeString );
             particle.dispose();
@@ -304,7 +304,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     super.emitNucleon( particleType, this.model.miniParticleAtom );
     this.model.miniParticleAtom.reconfigureNucleus();
 
-    // Fade away the nucleon in the ParticleNucleus.
+    // Fade away the nucleon in the ShellModelNucleus.
     this.fadeOutShellNucleon( particleType );
 
     this.isMiniAtomConnected = true;
@@ -314,7 +314,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Fade away and remove a nucleon of a given particleType from the energy levels.
    */
   private fadeOutShellNucleon( particleType: ParticleType ): void {
-    const shellNucleusNucleon = this.model.particleNucleus.extractParticle( particleType.particleTypeString );
+    const shellNucleusNucleon = this.model.shellModelNucleus.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( shellNucleusNucleon );
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;
