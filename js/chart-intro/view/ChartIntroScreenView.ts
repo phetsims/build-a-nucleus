@@ -314,7 +314,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * Fade away and remove a nucleon of a given particleType from the energy levels.
    */
   private fadeOutShellNucleon( particleType: ParticleType ): void {
-    const shellNucleusNucleon = this.model.shellModelNucleus.extractParticle( particleType.particleTypeString );
+    const shellNucleusNucleon = this.model.particleAtom.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( shellNucleusNucleon );
     const particleView = this.findParticleView( shellNucleusNucleon );
     particleView.inputEnabled = false;

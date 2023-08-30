@@ -24,9 +24,6 @@ export type SelectedChartType = 'partial' | 'zoom';
 
 class ChartIntroModel extends BANModel<ShellModelNucleus> {
 
-  // The atom that the user builds, modifies, and generally plays with.
-  public readonly shellModelNucleus: ShellModelNucleus;
-
   // The non-interactive mini-nucleus at the top of the screen.
   public readonly miniParticleAtom: ParticleAtom;
 
@@ -48,15 +45,13 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
     // and 12 neutrons).
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
 
-    this.shellModelNucleus = particleAtom;
-
     // This is the mini-nucleus that updates based on the particleAtom.
     this.miniParticleAtom = new ParticleAtom();
 
     this.selectedNuclideChartProperty = new Property<SelectedChartType>( 'partial' );
 
     this.decayEquationModel = new DecayEquationModel( ChartIntroModel.cellModelArray,
-      this.shellModelNucleus.protonCountProperty, this.shellModelNucleus.massNumberProperty );
+      this.particleAtom.protonCountProperty, this.particleAtom.massNumberProperty );
   }
 
   /**
@@ -72,7 +67,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
    * Remove the particle from its shell position in the ShellModelNucleus.
    */
   public override removeParticle( particle: Particle ): void {
-    this.shellModelNucleus.removeParticleFromShell( particle );
+    this.particleAtom.removeParticleFromShell( particle );
     super.removeParticle( particle );
   }
 
@@ -80,7 +75,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
    * Select the particle in the farthest energy level.
    */
   public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
-    const particleToReturn = this.shellModelNucleus.getLastParticleInShell( particleType );
+    const particleToReturn = this.particleAtom.getLastParticleInShell( particleType );
     assert && assert( particleToReturn, 'No particle of type ' + particleType.name + ' exists in the particleAtom.' );
     assert && assert( !particleToReturn!.isDisposed, 'Particle should not already be disposed.' );
 
@@ -92,7 +87,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
    * Return the next open shell position for the given particleType and add it to that shell position.
    */
   public override getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
-    return this.shellModelNucleus.getParticleDestination( particleType, particle );
+    return this.particleAtom.getParticleDestination( particleType, particle );
   }
 
   public override reset(): void {
