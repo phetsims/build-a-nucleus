@@ -39,7 +39,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
     super(
       () => new DecayModel(),
-      model => new DecayScreenView( model, { preventFit: true, tandem: Tandem.OPT_OUT } ),
+      model => new DecayScreenView( model, { tandem: Tandem.OPT_OUT } ),
       options
     );
   }

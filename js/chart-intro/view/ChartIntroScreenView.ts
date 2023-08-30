@@ -183,9 +183,10 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( this.neutronEnergyLevelNode );
 
     // Dashed 'zoom' lines options and positioning.
-    const dashedLineOptions =
-      { stroke: BANColors.zoomInDashedLineStrokeColorProperty,
-        lineDash: [ 6, 3 ] };
+    const dashedLineOptions = {
+      stroke: BANColors.zoomInDashedLineStrokeColorProperty,
+      lineDash: [ 6, 3 ]
+    };
     const endLeft = this.particleAtomNode.emptyAtomCircle.center.x - ( BANConstants.PARTICLE_DIAMETER );
     const endRight = this.particleAtomNode.emptyAtomCircle.center.x + ( BANConstants.PARTICLE_DIAMETER );
 

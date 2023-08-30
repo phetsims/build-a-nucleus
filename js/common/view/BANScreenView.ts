@@ -79,6 +79,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     const options =
       optionize<BANScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
+        // To help with animation lagging, see https://github.com/phetsims/build-a-nucleus/issues/47
+        preventFit: true,
+
         particleViewPosition: atomCenter,
         layoutBounds: BANConstants.LAYOUT_BOUNDS
       }, providedOptions );
