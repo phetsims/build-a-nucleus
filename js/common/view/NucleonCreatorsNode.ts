@@ -170,8 +170,8 @@ class NucleonCreatorsNode extends HBox {
                                    this.createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
 
     const downArrowEnabledProperty = nucleonType === ParticleType.PROTON ?
-                                     this.createArrowEnabledProperty( 'up', ParticleType.PROTON ) :
-                                     this.createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
+                                     this.createArrowEnabledProperty( 'down', ParticleType.PROTON ) :
+                                     this.createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
 
     const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, ARROW_BUTTON_OPTIONS );
 
