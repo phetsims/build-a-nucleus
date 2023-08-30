@@ -304,7 +304,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ParticleNucleus>>
     assert && assert( !particleToReturn.animationEndedEmitter.hasListeners(),
       'should not have animation listeners, we are about to animate' );
 
-    // send particle back to its creator node position
+    // Send particle back to its creator node position.
     this.animateAndRemoveParticle( particleToReturn, creatorNodePosition );
   }
 

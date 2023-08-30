@@ -20,10 +20,10 @@ export type ArrowButtonDirection = 'up' | 'down';
 
 type SelfOptions = {
 
-  // from tip to base
+  // From tip to base.
   arrowHeight: number;
 
-  // width of base
+  // Width of base.
   arrowWidth: number;
 
   leftArrowFill: TPaint;
@@ -39,7 +39,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
     const options =
       optionize<DoubleArrowButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
 
-        // options for the button
+        // Options for the button.
         cursor: 'pointer',
         baseColor: 'white',
         stroke: 'black',
@@ -54,13 +54,13 @@ export default class DoubleArrowButton extends RectangularPushButton {
 
     options.listener = callback;
 
-    // arrow shape pointing up
+    // Arrow shape pointing up.
     const arrowShape = new Shape();
     arrowShape.moveTo( 0, 0 )
       .lineTo( options.arrowWidth / 2, options.arrowHeight )
       .lineTo( -options.arrowWidth / 2, options.arrowHeight ).close();
 
-    // function to create a double arrow path
+    // Function to create a double arrow path.
     const createDoubleArrow = ( direction: ArrowButtonDirection, leftArrowFill: TPaint, rightArrowFill: TPaint ) => {
       const leftArrowPath = new Path( arrowShape, { fill: leftArrowFill } );
       const rightArrowPath = new Path( arrowShape, { fill: rightArrowFill } );
@@ -72,7 +72,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
       if ( direction === 'down' ) {
         doubleArrow.setRotation( Math.PI );
 
-        // switch the colors since the arrow was rotated 180 degrees
+        // Switch the colors since the arrow was rotated 180 degrees.
         leftArrowPath.fill = rightArrowFill;
         rightArrowPath.fill = leftArrowFill;
       }

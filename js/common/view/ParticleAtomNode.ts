@@ -20,15 +20,15 @@ import Range from '../../../../dot/js/Range.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 
-// empirically determined, from the ElectronCloudView radius
+// Empirically determined, from the ElectronCloudView radius.
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;
 
 class ParticleAtomNode extends Node {
 
-  // public to set its visibility
+  // Public to set its visibility.
   public readonly electronCloud: Circle;
 
-  // public to set its visibility and for positioning
+  // Public to set its visibility and for positioning.
   public readonly emptyAtomCircle: Circle;
 
   private readonly nucleonLayers: Node[];
@@ -37,21 +37,21 @@ class ParticleAtomNode extends Node {
 
   public constructor( particleAtom: ParticleAtom, atomCenter: Vector2, protonNumberRange: Range ) {
 
-    // Add the nucleonLayers
+    // Add the nucleonLayers.
     const nucleonLayers: Node[] = [];
     _.times( BANConstants.NUMBER_OF_NUCLEON_LAYERS, () => {
       const nucleonLayer = new Node();
       nucleonLayers.push( nucleonLayer );
     } );
 
-    // create and add the electron cloud
+    // Create and add the electron cloud.
     const electronCloud = new Circle( {
       radius: MIN_ELECTRON_CLOUD_RADIUS,
       fill: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( MIN_ELECTRON_CLOUD_RADIUS )
     } );
     electronCloud.center = atomCenter;
 
-    // create and add the dashed empty circle at the center
+    // Create and add the dashed empty circle at the center.
     const lineWidth = 1;
     const emptyAtomCircle = new Circle( {
       radius: BANConstants.PARTICLE_RADIUS - lineWidth,
@@ -71,7 +71,7 @@ class ParticleAtomNode extends Node {
     this.electronCloud = electronCloud;
     this.emptyAtomCircle = emptyAtomCircle;
 
-    // only show the emptyAtomCircle when there are zero nucleons
+    // Only show the emptyAtomCircle when there are zero nucleons.
     Multilink.multilink( [ particleAtom.protonCountProperty, particleAtom.neutronCountProperty ],
       ( protonNumber: number, neutronNumber: number ) => {
         this.emptyAtomCircle.visible = ( protonNumber + neutronNumber ) === 0;
@@ -133,7 +133,8 @@ class ParticleAtomNode extends Node {
    */
   private static reduceRadiusRange( value: number, minShellRadius: number, maxShellRadius: number,
                                     minChangedRadius: number, maxChangedRadius: number ): number {
-    const compressionFunction = new LinearFunction( minShellRadius, maxShellRadius, minChangedRadius, maxChangedRadius );
+    const compressionFunction =
+      new LinearFunction( minShellRadius, maxShellRadius, minChangedRadius, maxChangedRadius );
     return compressionFunction.evaluate( value );
   }
 
@@ -165,7 +166,8 @@ class ParticleAtomNode extends Node {
       this.electronCloud.fill = 'transparent';
     }
     else {
-      const radius = this.atomCenter.x - ( this.getElectronShellDiameter( protonNumber, minChangedRadius, maxChangedRadius ) / 2 );
+      const radius = this.atomCenter.x
+                     - ( this.getElectronShellDiameter( protonNumber, minChangedRadius, maxChangedRadius ) / 2 );
       this.electronCloud.radius = radius * factor;
       this.electronCloud.fill = BANConstants.ELECTRON_CLOUD_FILL_GRADIENT( radius * factor );
     }

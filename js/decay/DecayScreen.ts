@@ -27,14 +27,15 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 
   public constructor( providedOptions?: DecayScreenOptions ) {
 
-    const options = optionize<DecayScreenOptions, EmptySelfOptions, ScreenOptions>()( {
-      name: BuildANucleusStrings.screen.decayStringProperty,
-      backgroundColorProperty: BANColors.screenBackgroundColorProperty,
-      homeScreenIcon: createScreenIcon(),
-      createKeyboardHelpNode: () => new BasicActionsKeyboardHelpSection( {
-        withCheckboxContent: true
-      } )
-    }, providedOptions );
+    const options =
+      optionize<DecayScreenOptions, EmptySelfOptions, ScreenOptions>()( {
+        name: BuildANucleusStrings.screen.decayStringProperty,
+        backgroundColorProperty: BANColors.screenBackgroundColorProperty,
+        homeScreenIcon: createScreenIcon(),
+        createKeyboardHelpNode: () => new BasicActionsKeyboardHelpSection( {
+          withCheckboxContent: true
+        } )
+      }, providedOptions );
 
     super(
       () => new DecayModel(),

@@ -13,7 +13,7 @@ import BANConstants from './BANConstants.js';
 import AtomIdentifier from '../../../shred/js/AtomIdentifier.js';
 import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
 
-// Acceptable nucleon counts should be an integer greater than zero, and less than the available max per screen
+// Acceptable nucleon counts should be an integer greater than zero, and less than the available max per screen.
 const getValidationFunctionForMaximum = ( max: number ) => {
   return ( value: number ) => Number.isInteger( value ) && value >= 0 && value <= max;
 };
@@ -55,18 +55,18 @@ const BANQueryParameters = QueryStringMachine.getAll( {
 
 type QueryParamsWeCareAbout = keyof StrictOmit<typeof BANQueryParameters, 'SCHEMA_MAP'>;
 
-// use QSM's warning logic for these public parameters if trying to create an Atom that doesn't exist.
+// Use QSM's warning logic for these public parameters if trying to create an Atom that doesn't exist.
 function warnForNonExistentAtom( protonsKeyString: QueryParamsWeCareAbout, neutronsKeyString: QueryParamsWeCareAbout ): void {
 
-// check if a nuclide with the given query parameters exists and reset to default values if not
+  // Check if a nuclide with the given query parameters exists and reset to default values if not.
   const numberOfNeutrons = BANQueryParameters[ neutronsKeyString ];
   const numberOfProtons = BANQueryParameters[ protonsKeyString ];
 
   if ( !AtomIdentifier.doesExist( numberOfProtons, numberOfNeutrons ) ) {
     const errorMessage = `A nuclide with ${numberOfProtons} protons and ${numberOfNeutrons} neutrons does not exist`;
 
-    // add a warning if the protons or neutrons query parameter was part of an invalid combo (atom doesn't exist)
-    // there may have already been a warning added if the query parameter value is outside the valid range, so check first
+    // Add a warning if the protons or neutrons query parameter was part of an invalid combo (atom doesn't exist)
+    // There may have already been a warning added if the query parameter value is outside the valid range, so check first.
     if ( QueryStringMachine.containsKey( protonsKeyString ) &&
          !_.some( QueryStringMachine.warnings, warning => warning.key === protonsKeyString ) ) {
       QueryStringMachine.addWarning( protonsKeyString, numberOfProtons, errorMessage );

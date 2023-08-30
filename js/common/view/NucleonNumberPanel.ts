@@ -40,13 +40,13 @@ class NucleonNumberPanel extends Panel {
   public constructor( protonCountProperty: TReadOnlyProperty<number>, protonNumberRange: Range,
                neutronCountProperty: TReadOnlyProperty<number>, neutronNumberRange: Range ) {
 
-    const panelContents = new Rectangle( 0, 0, 140, 40 ); // empirically determined
+    const panelContents = new Rectangle( 0, 0, 140, 40 ); // Empirically determined.
 
-    // function to create the nucleon labels and add them to panelContents
+    // Function to create the nucleon labels and add them to panelContents.
     const nucleonLabel = ( nucleonStringProperty: TReadOnlyProperty<string>, nucleonType: ParticleType,
                            nucleonCountProperty: TReadOnlyProperty<number>, nucleonNumberRange: Range ): NucleonLabel => {
 
-      // nucleon title and icon pair
+      // The nucleon title and icon pair.
       const nucleonTitle = new Text( nucleonStringProperty, { font: LABEL_FONT, maxWidth: MAX_TITLE_WIDTH } );
       const nucleonParticleNode = new ParticleNode( nucleonType.particleTypeString, NUCLEON_PARTICLE_RADIUS );
       const nucleonContents = new HBox( { spacing: 5, children: [ nucleonParticleNode, nucleonTitle ] } );
@@ -55,7 +55,7 @@ class NucleonNumberPanel extends Panel {
       nucleonParticleNode.centerY = nucleonTitle.centerY;
       panelContents.addChild( nucleonContents );
 
-      // shows the new value of nucleonCountProperty
+      // Shows the new value of nucleonCountProperty.
       const newNucleonNumberDisplay = new NumberDisplay( nucleonCountProperty, nucleonNumberRange, {
         align: 'right',
         textOptions: {
@@ -71,7 +71,7 @@ class NucleonNumberPanel extends Panel {
         validValues: Utils.rangeInclusive( nucleonNumberRange.min, nucleonNumberRange.max )
       } );
 
-      // shows the old value of nucleonCountProperty
+      // Shows the old value of nucleonCountProperty.
       const oldNucleonNumberDisplay = new NumberDisplay( oldNucleonNumberProperty, nucleonNumberRange, {
         align: 'right',
         textOptions: {
@@ -83,7 +83,7 @@ class NucleonNumberPanel extends Panel {
       oldNucleonNumberDisplay.right = panelContents.right;
       panelContents.addChild( oldNucleonNumberDisplay );
 
-      // start removing oldNucleonNumberDisplay by making it more opaque
+      // Start removing oldNucleonNumberDisplay by making it more opaque.
       const startRemovingNucleonNumberDisplay = new Animation( {
         to: 0.33,
         property: oldNucleonNumberDisplay.opacityProperty,
@@ -91,7 +91,7 @@ class NucleonNumberPanel extends Panel {
         easing: Easing.LINEAR
       } );
 
-      // 'replace' the oldNucleonNumberDisplay with the newNucleonNumberDisplay
+      // 'Replace' the oldNucleonNumberDisplay with the newNucleonNumberDisplay.
       const addNucleonNumberDisplay = new Animation( {
         targets: [ {
           to: 1,
@@ -105,13 +105,13 @@ class NucleonNumberPanel extends Panel {
         easing: Easing.LINEAR
       } );
 
-      // start showing the newNucleonNumberDisplay when the oldNucleonNumberDisplay has started becoming opaque
+      // Start showing the newNucleonNumberDisplay when the oldNucleonNumberDisplay has started becoming opaque.
       startRemovingNucleonNumberDisplay.then( addNucleonNumberDisplay );
 
       nucleonCountProperty.link( () => {
         startRemovingNucleonNumberDisplay.start();
 
-        // at the end of both animations, reset the values and opacities of oldNucleonNumberDisplay and newNucleonNumberDisplay
+        // At the end of both animations, reset the values and opacities of oldNucleonNumberDisplay and newNucleonNumberDisplay.
         addNucleonNumberDisplay.finishEmitter.addListener( () => {
           oldNucleonNumberProperty.value = nucleonCountProperty.value;
           oldNucleonNumberDisplay.opacity = 1;
@@ -127,18 +127,19 @@ class NucleonNumberPanel extends Panel {
       };
     };
 
-    // create the nucleon labels
-    const protonLabel = nucleonLabel( BuildANucleusStrings.protonsColonStringProperty, ParticleType.PROTON, protonCountProperty,
-      protonNumberRange );
-    const neutronLabel = nucleonLabel( BuildANucleusStrings.neutronsColonStringProperty, ParticleType.NEUTRON, neutronCountProperty,
-      neutronNumberRange );
+    // Create the nucleon labels.
+    const protonLabel = nucleonLabel( BuildANucleusStrings.protonsColonStringProperty,
+      ParticleType.PROTON, protonCountProperty, protonNumberRange );
+    const neutronLabel = nucleonLabel( BuildANucleusStrings.neutronsColonStringProperty,
+      ParticleType.NEUTRON, neutronCountProperty, neutronNumberRange );
 
-    // position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's
+    // Position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's.
     protonLabel.contents.top = 0;
     protonLabel.numberDisplays.forEach( numberDisplay => {
       numberDisplay.centerY = protonLabel.contents.centerY;
     } );
-    neutronLabel.contents.bottom = protonLabel.particleNode.bottom + Math.max( neutronLabel.particleNode.height, MIN_VERTICAL_SPACING );
+    neutronLabel.contents.bottom = protonLabel.particleNode.bottom
+                                   + Math.max( neutronLabel.particleNode.height, MIN_VERTICAL_SPACING );
     neutronLabel.numberDisplays.forEach( numberDisplay => {
       numberDisplay.centerY = neutronLabel.contents.centerY;
     } );

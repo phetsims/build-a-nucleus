@@ -90,7 +90,8 @@ class BANModel<T extends ParticleAtom> {
 
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
 
-      if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString && !this.userControlledProtons.includes( particle ) ) {
+      if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString
+           && !this.userControlledProtons.includes( particle ) ) {
         this.userControlledProtons.add( particle );
       }
       else if ( !isUserControlled && particle.type === ParticleType.PROTON.particleTypeString

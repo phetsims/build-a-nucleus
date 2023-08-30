@@ -40,8 +40,8 @@ const CREATOR_NODE_VBOX_OPTIONS = {
   }
 };
 
-// arrow buttons spacing and size options
-const ARROW_BUTTON_VBOX_SPACING = 7; // spacing between the 'up' arrow buttons and 'down' arrow buttons
+// The arrow buttons spacing and size options.
+const ARROW_BUTTON_VBOX_SPACING = 7; // Spacing between the 'up' arrow buttons and 'down' arrow buttons.
 const ARROW_BUTTON_OPTIONS = {
   arrowWidth: 14,
   arrowHeight: 14,
@@ -56,7 +56,7 @@ class NucleonCreatorsNode extends HBox {
   private readonly protonArrowButtons: Node;
   private readonly neutronArrowButtons: Node;
 
-  // for use in methods
+  // For use in methods.
   private readonly protonNumberRange: Range;
   private readonly neutronNumberRange: Range;
   private readonly createParticleFromStack: ( particleType: ParticleType ) => Particle;
@@ -64,7 +64,7 @@ class NucleonCreatorsNode extends HBox {
   private model: BANModel<ParticleAtom | ParticleNucleus>;
   private readonly particleTransform: ModelViewTransform2;
 
-  // the NucleonCreatorNode for the protons and neutrons
+  // The NucleonCreatorNode for the protons and neutrons.
   public readonly protonsCreatorNode: Node;
   public readonly neutronsCreatorNode: Node;
 
@@ -217,7 +217,7 @@ class NucleonCreatorsNode extends HBox {
       const massNumber = atomProtonNumber + atomNeutronNumber;
 
       // Disable all buttons if the nuclide doesn't exist and one of the two cases:
-      // Something is being user controlled OR Particle Atom is not empty
+      // Something is being user controlled OR Particle Atom is not empty.
       if ( !doesNuclideExist && ( massNumber !== 0 || userControlledNucleonNumber !== 0 ) ) {
 
         // Disable all arrow buttons if the nuclide does not exist.
@@ -226,13 +226,13 @@ class NucleonCreatorsNode extends HBox {
         return false;
       }
       else {
-        // Else handle each enabled case specifically
+        // Else handle each enabled case specifically.
 
-        // Turn creator nodes back on to a default, (enabled:true) state
+        // Turn creator nodes back on to a default, (enabled:true) state.
         NucleonCreatorsNode.toggleCreatorNodeEnabled( this.protonsCreatorNode, true );
         NucleonCreatorsNode.toggleCreatorNodeEnabled( this.neutronsCreatorNode, true );
 
-        // true when the potential spot to go to does not "exist". If there is a second particle type, check by
+        // True when the potential spot to go to does not "exist". If there is a second particle type, check by
         // changing both particle numbers.
         const nextIsoDoesNotExist = secondParticleType ?
                                     !NucleonCreatorsNode.hasNextIso( direction, 'both', protonNumber, neutronNumber ) :
@@ -247,7 +247,8 @@ class NucleonCreatorsNode extends HBox {
           return false;
         }
 
-        // If there are no atoms actually in the atom (only potentially animating to the atom), see https://github.com/phetsims/build-a-nucleus/issues/74
+        // If there are no atoms actually in the atom (only potentially animating to the atom),
+        // see https://github.com/phetsims/build-a-nucleus/issues/74.
         if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
           return ( particleType === ParticleType.NEUTRON && atomNeutronNumber === 0 ) ||
                  ( particleType === ParticleType.PROTON && atomProtonNumber === 0 );
@@ -256,9 +257,11 @@ class NucleonCreatorsNode extends HBox {
         }
 
         // Finally, disable any buttons that are at the range bound for that button.
-        const firstTypeNotAtRangeBound = this.isNucleonNumberNotAtRangeBounds( direction, firstParticleType, protonNumber, neutronNumber );
+        const firstTypeNotAtRangeBound = this.isNucleonNumberNotAtRangeBounds( direction, firstParticleType,
+          protonNumber, neutronNumber );
         return secondParticleType ?
-               firstTypeNotAtRangeBound && this.isNucleonNumberNotAtRangeBounds( direction, secondParticleType, protonNumber, neutronNumber ) :
+               firstTypeNotAtRangeBound && this.isNucleonNumberNotAtRangeBounds( direction, secondParticleType,
+                                          protonNumber, neutronNumber ) :
                firstTypeNotAtRangeBound;
       }
     } );
@@ -270,7 +273,8 @@ class NucleonCreatorsNode extends HBox {
    *
    * NOTE: we also return true for the p0,n0 case, even though that doesn't technically "exist".
    */
-  private static hasNextIso( direction: ArrowButtonDirection, particleType: ParticleType | 'both', protonNumber: number, neutronNumber: number ): boolean {
+  private static hasNextIso( direction: ArrowButtonDirection, particleType: ParticleType | 'both',
+                             protonNumber: number, neutronNumber: number ): boolean {
 
     if ( direction === 'up' ) {
 
@@ -293,16 +297,19 @@ class NucleonCreatorsNode extends HBox {
 
       // Proton down arrow.
       if ( particleType === ParticleType.PROTON ) {
-        return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber ) || ( neutronNumber === 0 && protonNumber === 1 );
+        return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber )
+               || ( neutronNumber === 0 && protonNumber === 1 );
       }
       else if ( particleType === ParticleType.NEUTRON ) {
 
         // Neutron down arrow.
-        return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber ) || ( neutronNumber === 1 && protonNumber === 0 );
+        return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber )
+               || ( neutronNumber === 1 && protonNumber === 0 );
       }
       else {
         assert && assert( particleType === 'both', 'all cases covered' );
-        return AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber ) || ( neutronNumber === 1 && protonNumber === 1 );
+        return AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber )
+               || ( neutronNumber === 1 && protonNumber === 1 );
       }
     }
   }
@@ -311,7 +318,8 @@ class NucleonCreatorsNode extends HBox {
    * Function returns whether true when the protonNumber or neutronNumber is not at its min or max range (depending on
    * the direction of the button).
    */
-  private isNucleonNumberNotAtRangeBounds( direction: ArrowButtonDirection, particleType: ParticleType, protonNumber: number, neutronNumber: number ): boolean {
+  private isNucleonNumberNotAtRangeBounds( direction: ArrowButtonDirection, particleType: ParticleType,
+                                           protonNumber: number, neutronNumber: number ): boolean {
     if ( direction === 'up' ) {
 
       // Proton up arrow.

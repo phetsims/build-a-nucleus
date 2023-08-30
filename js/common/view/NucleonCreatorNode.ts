@@ -40,7 +40,7 @@ class NucleonCreatorNode extends Node {
         particleTransform.viewToModelPosition( viewPosition ).minus( particle.positionProperty.value )
       );
 
-      // Create and start dragging the new particle
+      // Create and start dragging the new particle.
       addAndDragParticle( event, particle );
     } ) );
   }

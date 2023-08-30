@@ -13,12 +13,12 @@ import { Color, RadialGradient } from '../../../scenery/js/imports.js';
 import BANColors from './BANColors.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 
+// constants
 const PARTICLE_RADIUS = ShredConstants.NUCLEON_RADIUS;
 const PARTICLE_DIAMETER = PARTICLE_RADIUS * 2;
 
 const PANEL_CORNER_RADIUS = 6;
 
-// constants
 const LAYOUT_BOUNDS = ScreenView.DEFAULT_LAYOUT_BOUNDS;
 
 const BANConstants = {
@@ -27,37 +27,36 @@ const BANConstants = {
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
 
-  // radius of the particle node used on the NucleonNumberPanel and AvailableDecaysPanel
+  // Radius of the particle node used on the NucleonNumberPanel and AvailableDecaysPanel.
   PARTICLE_RADIUS: PARTICLE_RADIUS,
 
   PARTICLE_DIAMETER: PARTICLE_DIAMETER,
 
-  // CSS pixels per second
+  // In CSS pixels per second.
   PARTICLE_ANIMATION_SPEED: 300,
 
-  // font size of the content labels in the NucleonNumberPanel and AvailableDecaysPanel
+  // Font size of the content labels in the NucleonNumberPanel and AvailableDecaysPanel.
   BUTTONS_AND_LEGEND_FONT_SIZE: 18,
 
   // This is based on max number of decay particles, may need adjustment if that changes.
   NUMBER_OF_NUCLEON_LAYERS: 22,
 
-  // half-life number line starting exponent
+  // Half-life number line starting exponent.
   HALF_LIFE_NUMBER_LINE_START_EXPONENT: -24,
 
-  // some half-life's are greater than 10^24
-  // half-life number line ending exponent
+  // Half-life number line ending exponent. Some half-life's are greater than 10^24.
   HALF_LIFE_NUMBER_LINE_END_EXPONENT: 24,
 
-  // the maximum number of protons and neutrons for each screen
+  // The maximum number of protons and neutrons for each screen.
   DECAY_MAX_NUMBER_OF_PROTONS: 94,
   DECAY_MAX_NUMBER_OF_NEUTRONS: 146,
   CHART_MAX_NUMBER_OF_PROTONS: 10,
   CHART_MAX_NUMBER_OF_NEUTRONS: 12,
 
-  // the side length of the number of cells the zoom-in chart node and focused chart node should highlight
+  // The side length of the number of cells the zoom-in chart node and focused chart node should highlight.
   ZOOM_IN_CHART_SQUARE_LENGTH: 5,
 
-  // time to 'pause' the simulation to show the nuclide that does not exist, in seconds
+  // Time to 'pause' the simulation to show the nuclide that does not exist, in seconds.
   TIME_TO_SHOW_DOES_NOT_EXIST: 1,
 
   PANEL_CORNER_RADIUS: PANEL_CORNER_RADIUS,
@@ -66,26 +65,26 @@ const BANConstants = {
   INFO_BUTTON_INDENT_DISTANCE: 124,
   INFO_BUTTON_MAX_HEIGHT: 30,
 
-  // font size throughout the first screen (stability strings, legend strings, accordion box titles, etc.)
+  // Font size throughout the first screen (stability strings, legend strings, accordion box titles, etc.).
   REGULAR_FONT: new PhetFont( 20 ),
 
-  // font size of the legend text in the accordion box and the 'most likely decay' string
+  // Font size of the legend text in the accordion box and the 'most likely decay' string.
   LEGEND_FONT: new PhetFont( 12 ),
 
-  // font size of the info dialog title's
+  // Font size of the info dialog title's.
   TITLE_FONT: new PhetFont( 32 ),
 
   DEFAULT_INITIAL_PROTON_NUMBER: 0,
   DEFAULT_INITIAL_NEUTRON_NUMBER: 0,
 
-  // center of the atom in view coordinates
+  // Center of the atom in view coordinates.
   SCREEN_VIEW_ATOM_CENTER_X: LAYOUT_BOUNDS.width / 3,
   SCREEN_VIEW_ATOM_CENTER_Y: LAYOUT_BOUNDS.height * 0.55,
 
-  // the x distance between the left side of the nucleon energy levels
+  // The x distance between the left side of the nucleon energy levels.
   X_DISTANCE_BETWEEN_ENERGY_LEVELS: LAYOUT_BOUNDS.width / 4,
 
-  // shift highlight rectangle to be aligned on the chart
+  // Shift highlight rectangle to be aligned on the chart.
   X_SHIFT_HIGHLIGHT_RECTANGLE: 0.5,
   Y_SHIFT_HIGHLIGHT_RECTANGLE: -0.5,
 
@@ -107,17 +106,17 @@ const BANConstants = {
     lineWidth: 0.5
   },
 
-  // the minimum number where the nuclide chart always begins
+  // The minimum number where the nuclide chart always begins.
   CHART_MIN: 0,
 
-  // function to create a gradient fill based on a given radius
+  // Function to create a gradient fill based on a given radius.
   ELECTRON_CLOUD_FILL_GRADIENT: function( radius: number ): RadialGradient {
     return new RadialGradient( 0, 0, 0, 0, 0, radius )
       .addColorStop( 0, BANColors.electronColorProperty.value.withAlpha( 1 ) )
       .addColorStop( 0.9, BANColors.electronColorProperty.value.withAlpha( 0 ) );
   },
 
-  // options for the panel
+  // Options for the panel.
   PANEL_OPTIONS: {
     fill: BANColors.panelBackgroundColorProperty,
     xMargin: 10,
