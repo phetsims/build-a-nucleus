@@ -63,7 +63,7 @@ class NuclideChartAndNumberLines extends Node {
     neutronNumberLine.left = protonNumberLine.right;
 
     // The numberLine's origin is at 0 in model coordinates, but because of how we position the labels offset from the
-    // tick marks (see NucleonNumberLine), we need to do that here too
+    // tick marks (see NucleonNumberLine), we need to do that here too.
     nuclideChartNode.left = neutronNumberLine.localToParentPoint( Vector2.ZERO ).x
                             - chartTransform.modelToViewX( tickSpacing );
 

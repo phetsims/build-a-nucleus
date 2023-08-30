@@ -125,7 +125,7 @@ class NuclideChartNode extends Node {
                             decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
                             decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
 
-                              // Alpha decay
+                              // Alpha decay.
                             new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
                               protonNumber - AlphaParticle.NUMBER_OF_ALLOWED_PROTONS );
           const arrowTip = chartTransform.modelToViewXY(

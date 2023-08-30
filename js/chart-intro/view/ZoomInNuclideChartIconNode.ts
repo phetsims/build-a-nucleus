@@ -34,7 +34,7 @@ class ZoomInNuclideChartIconNode extends Node {
       squareLength, squareLength );
     cellLayerNode.clipArea = zoomInShape;
 
-    // add the border outline to the chart
+    // Add the border outline to the chart.
     const borderPath = new Path( zoomInShape, { stroke: Color.BLACK, lineWidth: 0.5 } );
 
     super( { children: [ cellLayerNode, borderPath ] } );

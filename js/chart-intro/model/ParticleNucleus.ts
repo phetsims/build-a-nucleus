@@ -287,7 +287,8 @@ class ParticleNucleus extends ParticleAtom {
                                      N_ZERO_CAPACITY - 1 : N_ONE_CAPACITY - 1;
 
         // Amount each particle moves so the space between it and the particle on its left is removed.
-        const boundOffset = n1levelWidth * ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
+        const boundOffset = n1levelWidth *
+                            ( levelIndex / ( 3 * N_ONE_CAPACITY - 1 ) ); // 3 radius spaces / particle * 5 particle spaces
 
         // Amount each particle has to move for all particles to be centered in middle of energy level.
         const centerOffset = BANConstants.PARTICLE_RADIUS * numberOfRadiusSpaces / 2;

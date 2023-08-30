@@ -300,7 +300,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   public override emitNucleon( particleType: ParticleType, particleAtom: ParticleAtom ): void {
     this.isMiniAtomConnected = false;
 
-    // Handle the animation for the mini ParticleAtom
+    // Handle the animation for the mini ParticleAtom.
     super.emitNucleon( particleType, this.model.miniParticleAtom );
     this.model.miniParticleAtom.reconfigureNucleus();
 
