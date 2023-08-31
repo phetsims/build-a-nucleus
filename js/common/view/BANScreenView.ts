@@ -322,7 +322,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
       particle.destinationProperty.value = destination;
 
       particle.animationEndedEmitter.addListener( () => {
-        this.model.removeParticle( particle );
+        !particle.isDisposed && this.model.removeParticle( particle );
       } );
     }
     else {
