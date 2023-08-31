@@ -71,7 +71,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
       titleNode: new Text( BuildANucleusStrings.symbolStringProperty, {
         font: BANConstants.REGULAR_FONT,
-        maxWidth: 118
+        maxWidth: 113 // This value largely controls the size of the whole panel, which others rely on. Change wisely, https://github.com/phetsims/build-a-nucleus/issues/187
       } ),
       fill: BANColors.panelBackgroundColorProperty,
       minWidth: 50,
@@ -218,6 +218,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * alphaParticle.velocity;
 
       let protonsEmitted = false;
+
+      // Make sure that this case stays valid through the animation and that particleAtom state doesn't get mucked with.
+      this.model.particleAtom.protons.forEach( proton => proton.inputEnabledProperty.set( false ) );
+
       alphaParticle.positionProperty.link( position => {
 
         // Emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds.

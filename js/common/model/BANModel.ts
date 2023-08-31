@@ -49,7 +49,7 @@ class BANModel<T extends ParticleAtom> {
   public readonly hasIncomingParticlesProperty: TReadOnlyProperty<boolean>;
 
   // Keep track of any particle related animations that may need to be cancelled at some point.
-  public readonly particleAnimations = createObservableArray<Animation | null>();
+  public readonly particleAnimations = createObservableArray<Animation>();
 
   public readonly userControlledProtons = createObservableArray<BANParticle>();
   public readonly userControlledNeutrons = createObservableArray<BANParticle>();
@@ -69,8 +69,14 @@ class BANModel<T extends ParticleAtom> {
       this.incomingNeutrons.lengthProperty
     ], ( protonsLength, neutronsLength ) => protonsLength > 0 || neutronsLength > 0 );
 
+    this.particleAnimations.addItemAddedListener( animation => {
+      animation.endedEmitter.addListener( () => {
+        this.particleAnimations.includes( animation ) && this.particleAnimations.remove( animation );
+      } );
+    } );
+
     this.particleAnimations.addItemRemovedListener( animation => {
-      animation && animation.stop();
+      animation.stop();
     } );
 
     this.protonNumberRange = new Range( BANConstants.CHART_MIN, maximumProtonNumber );
@@ -89,6 +95,11 @@ class BANModel<T extends ParticleAtom> {
     );
 
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
+
+      // This duplicates code in ParticleAtom, but not all particles are in the particleAtom, see
+      if ( isUserControlled && this.particleAtom.containsParticle( particle ) ) {
+        this.particleAtom.removeParticle( particle );
+      }
 
       if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString
            && !this.userControlledProtons.includes( particle ) ) {
