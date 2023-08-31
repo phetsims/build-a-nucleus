@@ -120,7 +120,8 @@ class BANModel<T extends ParticleAtom> {
   }
 
   /**
-   * Select the particle closest to its creator node.
+   * Select the particle closest to its creator node but don't remove it yet, that's done in returnParticleToStack in
+   * the view.
    */
   public getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
     const sortedParticles = _.sortBy( this.getParticlesByType( particleType ), particle => {
