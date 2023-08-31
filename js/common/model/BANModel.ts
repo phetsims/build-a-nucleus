@@ -69,6 +69,12 @@ class BANModel<T extends ParticleAtom> {
       this.incomingNeutrons.lengthProperty
     ], ( protonsLength, neutronsLength ) => protonsLength > 0 || neutronsLength > 0 );
 
+    this.particleAnimations.addItemAddedListener( animation => {
+      animation.endedEmitter.addListener( () => {
+        this.particleAnimations.includes( animation ) && this.particleAnimations.remove( animation );
+      } );
+    } );
+
     this.particleAnimations.addItemRemovedListener( animation => {
       animation.stop();
     } );
