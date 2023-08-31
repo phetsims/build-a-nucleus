@@ -108,16 +108,15 @@ class NucleonNumberPanel extends Panel {
       // Start showing the newNucleonNumberDisplay when the oldNucleonNumberDisplay has started becoming opaque.
       startRemovingNucleonNumberDisplay.then( addNucleonNumberDisplay );
 
+      // At the end of both animations, reset the values and opacities of oldNucleonNumberDisplay and newNucleonNumberDisplay.
+      addNucleonNumberDisplay.finishEmitter.addListener( () => {
+        oldNucleonNumberProperty.value = nucleonCountProperty.value;
+        oldNucleonNumberDisplay.opacity = 1;
+        newNucleonNumberDisplay.opacity = 0;
+      } );
+
       nucleonCountProperty.link( () => {
         startRemovingNucleonNumberDisplay.start();
-
-        // At the end of both animations, reset the values and opacities of oldNucleonNumberDisplay and newNucleonNumberDisplay.
-        addNucleonNumberDisplay.finishEmitter.addListener( () => {
-          oldNucleonNumberProperty.value = nucleonCountProperty.value;
-          oldNucleonNumberDisplay.opacity = 1;
-          newNucleonNumberDisplay.opacity = 0;
-        } );
-
       } );
 
       return {
