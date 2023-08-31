@@ -321,6 +321,9 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow
     ];
 
+    // If the position is fixed, we don't need to ever change it after initialization.
+    let positionSet = false;
+
     Multilink.multilink( [ this.arrowXPositionProperty,
 
       // Cannot listen to the bounds of halfLifeDisplayNode to prevent reentrancy, so instead listen to all potential
@@ -333,23 +336,21 @@ class HalfLifeNumberLineNode extends Node {
       halfLifeArrow.translation = new Vector2( this.chartTransform.modelToViewX( xPosition ),
         numberLineCenterY - options.halfLifeArrowLength );
 
-      const bottomPosition = this.halfLifeArrowRotationProperty.value === ROTATION_POINTING_RIGHT_RADIANS ?
-                             halfLifeArrow.centerY :
-                             halfLifeArrow.top;
-
       // Static positioning.
       if ( options.isHalfLifeLabelFixed ) {
-        this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE
-                                        + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
-        this.halfLifeDisplayNode.bottom = bottomPosition - 8;
+        if ( !positionSet ) {
+          positionSet = true;
+          this.halfLifeDisplayNode.bottom = halfLifeArrow.top - 8;
+          this.halfLifeDisplayNode.left = this.left + BANConstants.INFO_BUTTON_INDENT_DISTANCE
+                                          + BANConstants.INFO_BUTTON_MAX_HEIGHT + 10;
+        }
       }
       else {
 
         // Translate the half life text also.
         this.halfLifeDisplayNode.centerBottom =
           new Vector2( this.chartTransform.modelToViewX( xPosition ),
-            bottomPosition - ARROW_TOP_MARGIN );
-
+            halfLifeArrow.top - ARROW_TOP_MARGIN );
 
         // Make sure the text never goes over the edge of the numberLineNode.
         if ( this.halfLifeDisplayNode.left < this.numberLineNode.left ) {
