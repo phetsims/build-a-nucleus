@@ -49,7 +49,7 @@ class BANModel<T extends ParticleAtom> {
   public readonly hasIncomingParticlesProperty: TReadOnlyProperty<boolean>;
 
   // Keep track of any particle related animations that may need to be cancelled at some point.
-  public readonly particleAnimations = createObservableArray<Animation | null>();
+  public readonly particleAnimations = createObservableArray<Animation>();
 
   public readonly userControlledProtons = createObservableArray<BANParticle>();
   public readonly userControlledNeutrons = createObservableArray<BANParticle>();
@@ -70,7 +70,7 @@ class BANModel<T extends ParticleAtom> {
     ], ( protonsLength, neutronsLength ) => protonsLength > 0 || neutronsLength > 0 );
 
     this.particleAnimations.addItemRemovedListener( animation => {
-      animation && animation.stop();
+      animation.stop();
     } );
 
     this.protonNumberRange = new Range( BANConstants.CHART_MIN, maximumProtonNumber );
