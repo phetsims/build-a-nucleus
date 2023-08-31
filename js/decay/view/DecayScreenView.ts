@@ -71,7 +71,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox = new AccordionBox( symbolNode, {
       titleNode: new Text( BuildANucleusStrings.symbolStringProperty, {
         font: BANConstants.REGULAR_FONT,
-        maxWidth: 118
+        maxWidth: 113 // This value largely controls the size of the whole panel, which others rely on. Change wisely, https://github.com/phetsims/build-a-nucleus/issues/187
       } ),
       fill: BANColors.panelBackgroundColorProperty,
       minWidth: 50,

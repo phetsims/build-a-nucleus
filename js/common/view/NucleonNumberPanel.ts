@@ -38,7 +38,7 @@ const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
 class NucleonNumberPanel extends Panel {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, protonNumberRange: Range,
-               neutronCountProperty: TReadOnlyProperty<number>, neutronNumberRange: Range ) {
+                      neutronCountProperty: TReadOnlyProperty<number>, neutronNumberRange: Range ) {
 
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // Empirically determined.
 
