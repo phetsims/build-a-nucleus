@@ -96,6 +96,11 @@ class BANModel<T extends ParticleAtom> {
 
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {
 
+      // This duplicates code in ParticleAtom, but not all particles are in the particleAtom, see
+      if ( isUserControlled && this.particleAtom.containsParticle( particle ) ) {
+        this.particleAtom.removeParticle( particle );
+      }
+
       if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString
            && !this.userControlledProtons.includes( particle ) ) {
         this.userControlledProtons.add( particle );
