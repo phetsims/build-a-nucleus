@@ -58,21 +58,27 @@ class DecayEquationNode extends VBox {
       `Min content height must be a max so the space is consistent across all equation forms.
       Stable string height is ${stableText.height}` );
 
+    const decayLikelihoodPercentText = new Text( new PatternStringProperty(
+      BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
+        decayLikelihoodPercent: new DerivedStringProperty( [
+          unknownSpacePatternStringProperty,
+          decayEquationModel.currentCellModelProperty
+        ], ( unknownText, currentCellModel ) => currentCellModel ?
+                                                ( currentCellModel.decayTypeLikelihoodPercent === null ?
+                                                  unknownText :
+                                                  `${currentCellModel.decayTypeLikelihoodPercent}` ) :
+                                                '' ) // Shouldn't show in this case anyway
+      } ), {
+      maxWidth: 100,
+      font: BANConstants.LEGEND_FONT
+    } );
+
     decayEquationModel.currentCellModelProperty.link( currentCellModel => {
       equationHBox.visible = true;
+      decayLikelihoodPercentText.visible = true;
+
       if ( currentCellModel ) {
         // There exists a cell model, you are a nuclide that exists, so create all the necessary Text and node components.
-
-        const decayLikelihoodPercentText = new Text( new PatternStringProperty(
-          BuildANucleusStrings.percentageInParenthesesPatternStringProperty, {
-            decayLikelihoodPercent: new DerivedStringProperty( [
-              unknownSpacePatternStringProperty
-            ], unknownText => currentCellModel.decayTypeLikelihoodPercent === null ?
-                              unknownText : `${currentCellModel.decayTypeLikelihoodPercent}` )
-        } ), {
-          maxWidth: 100,
-          font: BANConstants.LEGEND_FONT
-        } );
 
         const currentNuclideSymbol = new DecaySymbolNode( currentCellModel.protonNumber,
           currentCellModel.protonNumber + currentCellModel.neutronNumber );
