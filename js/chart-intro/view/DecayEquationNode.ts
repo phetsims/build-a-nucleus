@@ -43,6 +43,13 @@ class DecayEquationNode extends VBox {
     } );
 
     const stableText = new Text( BuildANucleusStrings.stableStringProperty, TEXT_OPTIONS );
+
+    // Re-center the stable text at the horizontal center based on the parameter dimension. Do this whenever the
+    // text changes length due to a language change.
+    stableText.boundsProperty.link( () => {
+      stableText.setLayoutOptions( { leftMargin: stableTextCenterXPosition - stableText.width / 2 } );
+    } );
+
     const mostLikelyDecayText = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, {
       font: BANConstants.LEGEND_FONT,
       maxWidth: 150
@@ -109,12 +116,6 @@ class DecayEquationNode extends VBox {
 
           equationHBox.setChildren( [ stableText ] );
           decayLikelihoodPercentText.visible = false;
-
-          // Re-center the stable text at the horizontal center based on the parameter dimension. Do this whenever the
-          // text changes length due to a language change.
-          stableText.boundsProperty.link( () => {
-            stableText.setLayoutOptions( { leftMargin: stableTextCenterXPosition - stableText.width / 2 } );
-          } );
         }
         else {
           // Nuclide cell unstable but with no known decay type so hide the decayLikelihoodPercentText, and show the
