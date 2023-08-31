@@ -218,6 +218,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       const alphaParticleDistanceTravelled = BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST * alphaParticle.velocity;
 
       let protonsEmitted = false;
+
+      // Make sure that this case stays valid through the animation and that particleAtom state doesn't get mucked with.
+      this.model.particleAtom.protons.forEach( proton => proton.inputEnabledProperty.set( false ) );
+
       alphaParticle.positionProperty.link( position => {
 
         // Emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds.
