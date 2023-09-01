@@ -35,7 +35,9 @@ for protons and neutrons.
 ## Overview
 
 In the Build a Nucleus simulation, a user can build a nuclide from protons and neutrons. The nuclide is assumed to be
-neutral since the electron cloud contains as many electrons as there are protons.
+neutral since the electron cloud contains as many electrons as there are protons. The particles are not at all to scale
+and neither is the placement of particles exactly scientifically accurate. This was done to make it so that the
+particles could be easily seen and manipulated by the users.
 
 The user can place neutrons and protons into the play area by using the spinners next to the nucleons. The spinner
 between the protons and neutrons places both a proton and neutron into the nucleus simultaneously. Nucleons can also be
