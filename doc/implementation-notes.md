@@ -20,9 +20,8 @@ counter all depend on these count properties.
   particles.
 - __ShellModelNucleus__: A subtype of ParticleAtom. This manages the positions and motion of all particles in the nucleus
   on the Chart Intro screen.
-- __ParticleAtomNode__: Node that holds the ParticleView's from ParticleAtom. Rearranges particles in different node
-  layers
-  and has a blue electron cloud.
+- __ParticleAtomNode__: Node that holds the ParticleView instances from ParticleAtom. Rearranges particles in different  
+  node layers and has a blue electron cloud.
 - __Particle__: The model for a particle. It contains information about the particle type, id, color, position, and
   destination, among others.
 - __ParticleNode__: An icon for a particle, just a circle node with a color gradient.
@@ -52,17 +51,17 @@ is not considered as a part of the ParticleAtom particles.
   array
   exists only in the ShellModelNucleus.
 
-The ParticleView's of the model particles are kept track of in the `particleViewMap`, a lookup map which uses the
-particle's id as a key. All ParticleView's are stored in the map, including the mini-atom ParticleView's.
+The ParticleViews of the model particles are kept track of in the `particleViewMap`, a lookup map which uses the
+particles id as a key. All ParticleView instances are stored in the map, including the mini-atom ParticleViews.
 
 #### Chart Intro screen
 
 The Chart Intro screen features a main nuclide chart, the `NuclideChartNode` which has two subtypes.
 
-- __NuclideChartNode__: The main nuclide chart node which goes up to 10 protons and 12 neutrons. Chart is made of
-  NuclideChartCell's.
+- __NuclideChartNode__: The main nuclide chart node which goes up to 10 protons and 12 neutrons. The chart is made of
+  NuclideChartCells.
   - Visible by default in the first scene of the Partial Nuclide Chart accordion box.
-- __ZoomInNuclideChartNode__: Subtype of NuclideChartNode which shows a chart of 5x5 NuclideChartCell's
+- __ZoomInNuclideChartNode__: Subtype of NuclideChartNode which shows a chart of 5x5 NuclideChartCells.
   - Visible on the left side of the 'zoom-in' scene in the Partial Nuclide Chart accordion box.
 - __FocusedNuclideChartNode__: Subtype of NuclideChartNode which also goes up to 10 protons and 12 neutrons, however, it
   highlights the current nuclide through 'graying out' cells too far away from the current nuclide.
@@ -88,7 +87,7 @@ on the decay type, can create or remove particles. Note, the beta decay type is 
 nucleon type of a nucleon particle.
 
 It's important to note that in the Chart Intro screen, an _incoming_ particle holds a position in the _ShellPositions_
-before it reaches its destination to become a part of the ShellModelNucleus' particles.
+before it reaches its destination to become a part of the ShellModelNucleus particles.
 
 #### ModelViewTransform's
 
@@ -97,12 +96,11 @@ energy levels.
 
 - `particleTransform` is a single point scaling transformation that defines (0,0) as the center of the atom in the Decay
   screen, and the top left corner of the proton energy levels in the Chart Intro screen. Also used in:
-  - the creation of ParticleView's to determine their corresponding ParticleNode's radius
+  - the creation of ParticleViews to determine their corresponding ParticleNodes radius
   - centering the pointer in the center of draggable particles
   - setting the destination for particles when animating them
 - `NUCLEON_ENERGY_LEVEL_ARRAY_MVT` is a constant and used in positioning the energy level Line's and the particles in
-  the
-  Chart Intro screen.
+  the Chart Intro screen.
 - `miniAtomMVT` also is a single point scaling transformation defining (0,0) as the center of the miniParticleAtom in
   the
   Chart Intro screen. As such, it is only used in positioning mini-atom particles.
@@ -121,10 +119,10 @@ lines. ChartTransform's were used to aid in the creation of these.
 
 *Chart Intro screen*
 
-There is a function `getChartTransform` in the NuclideChartAccordionBox that creates individual `ChartTransform`'s to be
+There is a function `getChartTransform` in the NuclideChartAccordionBox that creates individual `ChartTransform`s to be
 used in all three NuclideChartNode's and both nuclide chart icon nodes.
 
-- __partialChartTransform__: used in creating the PartialNuclideChart and its NucleonNumberLine's.
+- __partialChartTransform__: used in creating the PartialNuclideChart and its NucleonNumberLines.
   - responsible for the cell's position and size, and for the decay arrow's position and direction.
 - __focusedChartTransform__: used in creating the FocusedNuclideChart.
   - responsible for the highlightRectangle position and movement, and opaquing of cells too far away from current

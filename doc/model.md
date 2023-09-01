@@ -42,8 +42,7 @@ particles could be easily seen and manipulated by the users.
 The user can place neutrons and protons into the play area by using the spinners next to the nucleons. The spinner
 between the protons and neutrons places both a proton and neutron into the nucleus simultaneously. Nucleons can also be
 placed by dragging them into the nucleus in the **Decay screen**, or dragging them into the energy levels play area in
-the **Chart Intro screen**. If a nucleon particle is placed outside the play area, it will return to its stack.
-<!--- REVIEW: I'm not seeing anything that looks like a "stack" in the sim.  Does this reference need an update? -->
+the **Chart Intro screen**. If a nucleon particle is placed outside the play area, it will return to its creator.
 
 As the number of nucleons in the nucleus changes, the sim updates the nuclide species name (eg. Helium-5) and the
 readout of nucleon numbers. Only nuclides that exist on Earth can be built, this is done through the disabling of
