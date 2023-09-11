@@ -18,19 +18,20 @@ counter all depend on these count properties.
 
 - __ParticleAtom__: A way of representing an atom in the model. It contains and manages references to constituent
   particles.
-- __ShellModelNucleus__: A subtype of ParticleAtom. This manages the positions and motion of all particles in the nucleus
-  on the Chart Intro screen.
-- __ParticleAtomNode__: Node that holds the ParticleView instances from ParticleAtom. Rearranges particles in different  
+- __ShellModelNucleus__: A subtype of ParticleAtom. This manages the positions and motion of all particles in the
+  nucleus on the Chart Intro screen.
+- __ParticleAtomNode__: Node that holds the ParticleView instances from ParticleAtom. Rearranges particles in
+  different  
   node layers and has a blue electron cloud.
 - __Particle__: The model for a particle. It contains information about the particle type, id, color, position, and
   destination, among others.
 - __ParticleNode__: An icon for a particle, just a circle node with a color gradient.
 - __ParticleView__: Tracks a particle in the view, the 'view' portion for the Particle model.
 
-Since there are particles located in various parts throughout the sim, on the way to the atom, away from the atom,
-and in the atom, there are various arrays to keep track of the particles. If a particle is not visible in the
-ParticleAtom, which is in the nucleus in the Decay screen and in the energy levels in the Chart Intro screen, then it
-is not considered as a part of the ParticleAtom particles.
+Since there are particles located in various parts throughout the sim, on the way to the atom, away from the atom, and
+in the atom, there are various arrays to keep track of the particles. If a particle is not visible in the ParticleAtom,
+which is in the nucleus in the Decay screen and in the energy levels in the Chart Intro screen, then it is not
+considered as a part of the ParticleAtom particles.
 
 - __particles__: Array of all particles existing in the model, including the ParticleAtom particles, except for the
   mini-atom particles.
@@ -39,17 +40,13 @@ is not considered as a part of the ParticleAtom particles.
 - __incomingProtons__: Array of all protons sent on the way to the ParticleAtom.
 - __incomingNeutrons__: Array of all neutrons sent on the way to the ParticleAtom.
 - __userControlledProtons__: Array of all protons currently being dragged by the user, as such, these are not a part of
-  the
-  ParticleAtom particles.
-- __userControlledNeutrons__: Array of all neutrons currently being dragged by the user, as such, these are not a part
-  of
   the ParticleAtom particles.
+- __userControlledNeutrons__: Array of all neutrons currently being dragged by the user, as such, these are not a part
+  of the ParticleAtom particles.
 - __protonShellPositions__: Array to keep track of where a proton particle can be placed in the energy levels. This
-  array
-  exists only in the ShellModelNucleus.
+  array exists only in the ShellModelNucleus.
 - __neutronShellPositions__: Array to keep track of where a neutron particle can be placed in the energy levels. This
-  array
-  exists only in the ShellModelNucleus.
+  array exists only in the ShellModelNucleus.
 
 The ParticleViews of the model particles are kept track of in the `particleViewMap`, a lookup map which uses the
 particles id as a key. All ParticleView instances are stored in the map, including the mini-atom ParticleViews.
@@ -82,8 +79,8 @@ The Chart Intro screen features a main nuclide chart, the `NuclideChartNode` whi
 #### Important notes
 
 The proton and neutron count properties change the model of the sim through the interaction with the spinner buttons and
-through clicking and dragging of particles. However, these properties can also change through decays, which depending
-on the decay type, can create or remove particles. Note, the beta decay type is special because it can also change the
+through clicking and dragging of particles. However, these properties can also change through decays, which depending on
+the decay type, can create or remove particles. Note, the beta decay type is special because it can also change the
 nucleon type of a nucleon particle.
 
 It's important to note that in the Chart Intro screen, an _incoming_ particle holds a position in the _ShellPositions_
@@ -102,8 +99,7 @@ energy levels.
 - `NUCLEON_ENERGY_LEVEL_ARRAY_MVT` is a constant and used in positioning the energy level Line's and the particles in
   the Chart Intro screen.
 - `miniAtomMVT` also is a single point scaling transformation defining (0,0) as the center of the miniParticleAtom in
-  the
-  Chart Intro screen. As such, it is only used in positioning mini-atom particles.
+  the Chart Intro screen. As such, it is only used in positioning mini-atom particles.
 
 #### ChartTransform's
 
@@ -113,8 +109,8 @@ lines. ChartTransform's were used to aid in the creation of these.
 *Decay screen*
 
 - `HalfLifeNumberLineNode` uses a `ChartTransform` to create the number line. Visually, this looks like a log scale
-  number
-  line of values with the base power of 10. However, this was done by mapping the number line width to the range of the
+  number line of values with the base power of 10. However, this was done by mapping the number line width to the range
+  of the
   *exponents* in the number line.
 
 *Chart Intro screen*
@@ -129,9 +125,9 @@ used in all three NuclideChartNode's and both nuclide chart icon nodes.
     nuclide
 - __zoomInChartTransform__: used in creating the ZoomInNuclideChart. No additional responsibilities.
 - __smallChartTransform's__: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the
-  radio
-  buttons.
+  radio buttons.
 
 ## Data
+
 The half-life and decay data comes from the [Relational ENSDF](https://www-nds.iaea.org/relnsd/NdsEnsdf/QueryForm.html)
 from 2022. The values in this database from experimental data which is then manually hard-coded into AtomIdentifier.
