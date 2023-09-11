@@ -89,13 +89,13 @@ nuclide position in the chart of the nuclides, and the decay equation.
 
 In the Partial Nuclide Chart, a smaller version of the Chart of the Nuclides is shown with the nucleon number lines
 highlighting the current nuclide position using the respective nucleon colors. For example, for Hydrogen-1, the label
-for position '1' on the proton axis is highlighted in orange while the label for position '0' is highlighted in gray
-on the neutron axis.
+for position '1' on the proton axis is highlighted in orange while the label for position '0' is highlighted in gray on
+the neutron axis.
 
 The zoomed in view of the chart shows the decay equation of the most likely decay to occur for the current nuclide
 built. It also shows the percent likelihood of this decay happening. There is also a decay button beside the equation to
 visibly see the decay occur on the nucleus. In the shell model however, particles only fade in / fade out of the energy
 levels for simplification purposes. The decay direction is also seen in the zoomed-in chart through a white arrow.
 
-The magic numbers checkbox highlights the rows on the chart that have magic numbers, which is only the rows with 2 and
-8 nucleons in this screen.
+The magic numbers checkbox highlights the rows on the chart that have magic numbers, which is only the rows with 2 and 8
+nucleons in this screen.
