@@ -35,9 +35,7 @@ for protons and neutrons.
 ## Overview
 
 In the Build a Nucleus simulation, a user can build a nuclide from protons and neutrons. The nuclide is assumed to be
-neutral since the electron cloud contains as many electrons as there are protons. The particles are not at all to scale
-and neither is the placement of particles exactly scientifically accurate. This was done to make it so that the
-particles could be easily seen and manipulated by the users.
+neutral since the electron cloud contains as many electrons as there are protons.
 
 The user can place neutrons and protons into the play area by using the spinners next to the nucleons. The spinner
 between the protons and neutrons places both a proton and neutron into the nucleus simultaneously. Nucleons can also be
@@ -51,6 +49,12 @@ then the nucleus rearranges itself back to the last formed nuclide.
 
 Five decay types are represented within the simulation: α decay, β<sup>+</sup> decay, β<sup>-</sup> decay, proton
 emission, and neutron emission. Unstable nuclides decay into stable nuclides through one of these decay paths.
+
+### Model caveats
+* The particles are not at all to scale and neither is the placement of particles exactly scientifically accurate. This
+  was done to make it so that the particles could be easily seen and manipulated by the users.
+* The electron cloud size is based on experimental data of the atomic radii of elements but it's tweaked to make the 
+  electron cloud appear our desired size.
 
 ## Decay screen
 
@@ -108,3 +112,5 @@ To write well-behaved programs, it's not always possible to be physically accura
 * Beryllium - 6 (4p 2n) can undergo an alpha decay where only 2 protons remain in the nucleus afterward. A nuclide with
   2 protons does not exist so the 2 protons are shown in the "{{nuclide name}} does not form" case format and then
   forcibly emitted as well.
+* 0 protons and 0 neutrons is the base case and an acceptable state for the simulation to exist in even though such a
+  nuclide does not exist.
