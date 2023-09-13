@@ -1,11 +1,5 @@
 # Build a Nucleus - Implementation notes
 
-<!--- REVIEW: I (jbphet) find the use of apostrophes for plural class names to be a bit hard to read, for example, 
-"Node that holds the ParticleView's from ParticleAtom".  Usually apostrophes are used for contractions or for possessive
-forms.  I'd recommend using "instances", e.g. "Node that holds the ParticleView instances from ParticleAtom", or simply
-tacking on an 's'.  This isn't a big deal, and you're free to ignore it, but it would have made it more readable for me.
--->
-
 @author Luisa Vargas
 
 This document contains notes related to the implementation of Build a Nucleus.
@@ -70,8 +64,8 @@ The Chart Intro screen features a main nuclide chart, the `NuclideChartNode` whi
 
 - A particle is created from either the `NucleonCreatorNode` or from `createParticleFromStack()`. The created particle
   is added to the _particles_ array (unless it is a mini-atom particle).
-- The particle then moves on from the _incoming_ or _userControlled_ arrays to becoming a part of the ParticleAtom's
-  particles if it reaches its destination in the ParticleAtom or is let go of within the play area.
+- The particle then moves on from the _incoming_ or _userControlled_ arrays to becoming a part of the particles in the
+  ParticleAtom if it reaches its destination in the ParticleAtom or is let go of within the play area.
 - A particle is removed using `returnParticleToStack()` and / or `animateAndRemoveParticle()`.
   - Each particle deals with its disposal of its ParticleView through a disposeEmitter called when the Particle is
     disposed, this is typically the last step after removal of the particle from all necessary arrays.
@@ -86,7 +80,7 @@ nucleon type of a nucleon particle.
 It's important to note that in the Chart Intro screen, an _incoming_ particle holds a position in the _ShellPositions_
 before it reaches its destination to become a part of the ShellModelNucleus particles.
 
-#### ModelViewTransform's
+#### ModelViewTransforms
 
 There are various MVT uses throughout the model to help in positioning of the particles, the particle atom and the
 energy levels.
@@ -101,10 +95,10 @@ energy levels.
 - `miniAtomMVT` also is a single point scaling transformation defining (0,0) as the center of the miniParticleAtom in
   the Chart Intro screen. As such, it is only used in positioning mini-atom particles.
 
-#### ChartTransform's
+#### ChartTransforms
 
 The simulation has various charts and number lines throughout both screens, though the Decay screen only has number
-lines. ChartTransform's were used to aid in the creation of these.
+lines. ChartTransforms were used to aid in the creation of these.
 
 *Decay screen*
 
@@ -116,15 +110,15 @@ lines. ChartTransform's were used to aid in the creation of these.
 *Chart Intro screen*
 
 There is a function `getChartTransform` in the NuclideChartAccordionBox that creates individual `ChartTransform`s to be
-used in all three NuclideChartNode's and both nuclide chart icon nodes.
+used in all three NuclideChartNodes and both nuclide chart icon nodes.
 
 - __partialChartTransform__: used in creating the PartialNuclideChart and its NucleonNumberLines.
-  - responsible for the cell's position and size, and for the decay arrow's position and direction.
+  - responsible for the cells position and size, and for the decay arrows position and direction.
 - __focusedChartTransform__: used in creating the FocusedNuclideChart.
   - responsible for the highlightRectangle position and movement, and opaquing of cells too far away from current
     nuclide
 - __zoomInChartTransform__: used in creating the ZoomInNuclideChart. No additional responsibilities.
-- __smallChartTransform's__: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the
+- __smallChartTransforms__: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the
   radio buttons.
 
 ## Data
