@@ -99,3 +99,12 @@ levels for simplification purposes. The decay direction is also seen in the zoom
 
 The magic numbers checkbox highlights the rows on the chart that have magic numbers, which is only the rows with 2 and 8
 nucleons in this screen.
+
+## Hollywood!
+
+To write well-behaved programs, it's not always possible to be physically accurate. This section summarizes where we
+"Hollywooded" things to provide close approximations and convincing behavior.
+
+* Beryllium - 6 (4p 2n) can undergo an alpha decay where only 2 protons remain in the nucleus afterward. A nuclide with
+  2 protons does not exist so the 2 protons are shown in the "{{nuclide name}} does not form" case format and then
+  forcibly emitted as well.
