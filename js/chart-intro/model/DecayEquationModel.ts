@@ -34,9 +34,10 @@ class DecayEquationModel {
     // Initialize final proton and mass numbers to 0.
     this.finalProtonNumberProperty = new NumberProperty( 0,
       { validValues: Utils.rangeInclusive( 0, BANConstants.CHART_MAX_NUMBER_OF_PROTONS ) } );
-    this.finalMassNumberProperty = new NumberProperty( 0,
-      { validValues: Utils.rangeInclusive( 0,
-          BANConstants.CHART_MAX_NUMBER_OF_PROTONS + BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS ) } );
+    this.finalMassNumberProperty = new NumberProperty( 0, {
+      validValues: Utils.rangeInclusive( 0,
+        BANConstants.CHART_MAX_NUMBER_OF_PROTONS + BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS )
+    } );
 
     // Update the finalProtonNumber, finalMassNumber, and the currentCellModel.
     massNumberProperty.link( () => {
@@ -65,7 +66,9 @@ class DecayEquationModel {
   private getCurrentCellModel( cellModelArray: NuclideChartCellModel[][],
                                protonNumber: number, massNumber: number ): NuclideChartCellModel | null {
     return _.find( cellModelArray[ protonNumber ],
-        cellModel => cellModel.neutronNumber === massNumber - protonNumber ) || null;
+      cellModel => {
+        return cellModel.neutronNumber === massNumber - protonNumber;
+      } ) || null;
   }
 
   public reset(): void {

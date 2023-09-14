@@ -53,14 +53,14 @@ class NucleonShellView extends Node {
       // The first energy level begins at xPosition 2 instead of 0, for more information see ALLOWED_PARTICLE_POSITIONS.
       const lineStartingPoint = new Vector2(
         modelViewTransform.modelToViewX( particleShellRow[ energyLevel === 0 ? 2 : 0 ].xPosition )
-          - BANConstants.PARTICLE_RADIUS,
+        - BANConstants.PARTICLE_RADIUS,
         modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS
       );
 
       // Add the particle radius to extend the energyLevel to the right edge of the last particle.
       const lineEndingPoint = new Vector2(
         modelViewTransform.modelToViewX( particleShellRow[ particleShellRow.length - 1 ].xPosition )
-          + BANConstants.PARTICLE_RADIUS,
+        + BANConstants.PARTICLE_RADIUS,
         modelViewTransform.modelToViewY( energyLevel ) + BANConstants.PARTICLE_RADIUS
       );
       energyLevels.push( new Line( lineStartingPoint, lineEndingPoint, { stroke: 'black' } )

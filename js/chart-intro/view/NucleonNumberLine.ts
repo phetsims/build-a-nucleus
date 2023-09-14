@@ -57,30 +57,30 @@ class NucleonNumberLine extends Node {
       extent: 5,
       createLabel: ( value: number ) =>
         new BackgroundNode( new Text( value, {
-          fontSize: 12,
-          fill: new DerivedProperty( [
-            nucleonNumberProperty,
-            BANColors.highLightedTickLabelColorProperty,
-            BANColors.nucleonNumberLineAndTextFontColorProperty
-          ],
-          ( particleNumber, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
+            fontSize: 12,
+            fill: new DerivedProperty( [
+                nucleonNumberProperty,
+                BANColors.highLightedTickLabelColorProperty,
+                BANColors.nucleonNumberLineAndTextFontColorProperty
+              ],
+              ( particleNumber, highlightedTickLabelColor, nucleonNumberLineAndTextFontColor ) => {
 
-            // Color the label text a different color if it is the current nucleon number.
-            return particleNumber === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
-          } )
-        } ),
-        {
-          rectangleOptions: {
-            fill: new DerivedProperty( [ nucleonNumberProperty, options.labelHighlightColorProperty ],
-              ( particleNumber, labelHighlightColor ) => {
+                // Color the label text a different color if it is the current nucleon number.
+                return particleNumber === value ? highlightedTickLabelColor : nucleonNumberLineAndTextFontColor;
+              } )
+          } ),
+          {
+            rectangleOptions: {
+              fill: new DerivedProperty( [ nucleonNumberProperty, options.labelHighlightColorProperty ],
+                ( particleNumber, labelHighlightColor ) => {
 
-                // Add a 'highlight' to the label text if it is the current nucleon number.
-                return particleNumber === value ? labelHighlightColor : null;
-              } ),
-            opacity: 1
-          },
-          yMargin: 1.5
-        } ),
+                  // Add a 'highlight' to the label text if it is the current nucleon number.
+                  return particleNumber === value ? labelHighlightColor : null;
+                } ),
+              opacity: 1
+            },
+            yMargin: 1.5
+          } ),
       positionLabel: ( label: Node, tickBounds: Bounds2, axisOrientation: Orientation ) => {
         if ( axisOrientation === Orientation.HORIZONTAL ) {
 

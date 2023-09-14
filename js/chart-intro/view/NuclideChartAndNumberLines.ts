@@ -52,13 +52,13 @@ class NuclideChartAndNumberLines extends Node {
         labelHighlightColorProperty: BANColors.protonColorProperty,
         axisLabelStringProperty: BuildANucleusStrings.axis.protonNumberStringProperty,
         tickSpacing: tickSpacing
-    } );
+      } );
     const neutronNumberLine = new NucleonNumberLine(
       chartTransform, neutronCountProperty, Orientation.HORIZONTAL, {
         labelHighlightColorProperty: BANColors.neutronColorProperty,
         axisLabelStringProperty: BuildANucleusStrings.axis.neutronNumberStringProperty,
         tickSpacing: tickSpacing
-    } );
+      } );
     neutronNumberLine.top = protonNumberLine.bottom;
     neutronNumberLine.left = protonNumberLine.right;
 
