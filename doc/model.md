@@ -114,3 +114,10 @@ To write well-behaved programs, it's not always possible to be physically accura
   forcibly emitted as well.
 * 0 protons and 0 neutrons is the base case and an acceptable state for the simulation to exist in even though such a
   nuclide does not exist.
+* The nucleon energy levels and the number of nucleons they each can hold, based on the
+  [nuclear shell model](https://en.wikipedia.org/wiki/Nuclear_shell_model), is:
+  * n = 0 holds 2 nucleons
+  * n = 1 holds 6 nucleons
+  * n = 2 holds 12 nucleons
+  However, since there is a limited space for particles in the last energy level in the simulation, we model the n = 2 
+  energy level as if it can only hold 6 nucleons before getting full.
