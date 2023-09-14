@@ -60,7 +60,7 @@ The Chart Intro screen features a main nuclide chart, the `NuclideChartNode` whi
 
 ## General functioning
 
-#### General particle lifespan
+#### General particle lifespan and note on disposal
 
 - A particle is created from either the `NucleonCreatorNode` or from `createParticleFromStack()`. The created particle
   is added to the _particles_ array (unless it is a mini-atom particle).
@@ -69,6 +69,12 @@ The Chart Intro screen features a main nuclide chart, the `NuclideChartNode` whi
 - A particle is removed using `returnParticleToStack()` and / or `animateAndRemoveParticle()`.
   - Each particle deals with its disposal of its ParticleView through a disposeEmitter called when the Particle is
     disposed, this is typically the last step after removal of the particle from all necessary arrays.
+  - `particles` is the main list of particles and once a Particle is removed from there, the Particle goes through the
+    disposal process above.
+
+
+- Other than particles, everything else stays around for the lifetime of the sim and therefore doesn't need to be
+  unlinked or disposed.
 
 #### Important notes
 
