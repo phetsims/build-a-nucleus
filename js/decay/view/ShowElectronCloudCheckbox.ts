@@ -26,7 +26,7 @@ class ShowElectronCloudCheckbox extends Checkbox {
 
     // Create and add the electronCloud checkbox.
     const electronCloudText = new Text( BuildANucleusStrings.electronCloudStringProperty, {
-      font: BANConstants.REGULAR_FONT, maxWidth: 210
+      font: BANConstants.REGULAR_FONT, maxWidth: 200
     } );
 
     // Empirically determined ratio based on the text, to give the electron cloud a bit of "umph" as an icon.
