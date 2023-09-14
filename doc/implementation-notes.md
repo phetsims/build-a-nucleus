@@ -99,7 +99,7 @@ energy levels.
 - `PARTICLE_POSITIONING_TRANSFORM` is an inverted Y mapping type of transform and used in positioning the energy level
   Line instances and the large particles in the Chart Intro screen.
   - This is the main MVT in the Chart Intro screen though it doesn't do any scaling, rather it maps from arbitrary
-  grid-like positions (see `ALLOWED_PARTICLE_POSITIONS` in `ShellModelNucleus`) into model / view positions.
+    grid-like positions (see `ALLOWED_PARTICLE_POSITIONS` in `ShellModelNucleus`) into model / view positions.
 - `miniAtomMVT` also is a single point scaling transformation defining (0,0) as the center of the miniParticleAtom in
   the Chart Intro screen. As such, it is only used in positioning mini-atom particles.
 
@@ -126,8 +126,8 @@ used in all three NuclideChartNodes and both nuclide chart icon nodes.
   - responsible for the highlightRectangle position and movement, and opaquing of cells too far away from current
     nuclide
 - __zoomInChartTransform__: used in creating the ZoomInNuclideChart. No additional responsibilities.
-- __smallChartTransforms__: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the
-  radio buttons.
+- __smallChartTransforms__: created and used in CompleteNuclideChartIconNode and ZoomInNuclideChartIconNode in the radio
+  buttons.
 
 ## Data
 
