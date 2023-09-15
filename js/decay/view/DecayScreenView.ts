@@ -185,8 +185,12 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.pdomControlAreaNode.pdomOrder = [ this.showElectronCloudCheckbox, ...this.pdomControlAreaNode.pdomOrder! ];
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
-      complete && this.model.populateAtom( BANQueryParameters.decayScreenProtons, BANQueryParameters.decayScreenNeutrons );
+      complete && this.populateDefaultAtom();
     } );
+  }
+
+  private populateDefaultAtom(): void {
+    this.model.populateAtom( BANQueryParameters.decayScreenProtons, BANQueryParameters.decayScreenNeutrons );
   }
 
   /**
@@ -282,6 +286,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     this.symbolAccordionBox.reset();
     this.showElectronCloudCheckbox.reset();
     super.reset();
+    this.populateDefaultAtom(); // this should be last
   }
 }
 

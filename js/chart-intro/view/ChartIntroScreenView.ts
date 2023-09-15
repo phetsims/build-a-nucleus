@@ -256,15 +256,19 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     ] );
 
     phet.joist.sim.isConstructionCompleteProperty.link( ( complete: boolean ) => {
-      complete &&
-      this.model.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
+      complete && this.populateDefaultAtom();
     } );
+  }
+
+  private populateDefaultAtom(): void {
+    this.model.populateAtom( BANQueryParameters.chartIntroScreenProtons, BANQueryParameters.chartIntroScreenNeutrons );
   }
 
   protected override reset(): void {
     this.showMagicNumbersProperty.reset();
     this.nuclideChartAccordionBox.reset();
     super.reset();
+    this.populateDefaultAtom(); // this should be last
   }
 
   /**

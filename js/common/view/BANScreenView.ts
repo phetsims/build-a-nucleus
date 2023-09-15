@@ -30,6 +30,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AlphaParticle from '../model/AlphaParticle.js';
 import ElementNameText from './ElementNameText.js';
 import NucleonCreatorsNode from './NucleonCreatorsNode.js';
+import BANQueryParameters from '../BANQueryParameters.js';
 
 // types
 type SelfOptions = {
@@ -117,7 +118,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
         this.model.reset();
         this.reset();
 
-        assert && assert( Object.keys( this.particleViewMap ).length === 0,
+        assert &&
+        BANQueryParameters.decayScreenProtons === 0 && BANQueryParameters.decayScreenNeutrons === 0 &&
+        BANQueryParameters.chartIntroScreenProtons === 0 && BANQueryParameters.chartIntroScreenNeutrons === 0 &&
+        assert( Object.keys( this.particleViewMap ).length === 0,
           'all views should be cleaned up on reset\n' +
           Object.keys( this.particleViewMap ).map( ( x: string ) => {
             const particle = this.particleViewMap[ x as unknown as number ].particle;
