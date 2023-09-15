@@ -256,12 +256,28 @@ class ShellModelNucleus extends ParticleAtom {
                                   levelFillProperty: EnumerationProperty<EnergyLevelType>,
                                   xOffset: number ): void {
 
+    // keep track of incomingParticles where a shell position is being held for them, but it's not in particleArray yet
+    const incomingParticles: Particle[] = [];
+
+    // clear out all shell positions
+    particleShellPositions.forEach( particleShellPositionsRow => {
+      particleShellPositionsRow.forEach( particleShellPosition => {
+
+        // keep track of incoming particle position holders to add later
+        if ( particleShellPosition.particle && !particleArray.includes( particleShellPosition.particle ) ) {
+          incomingParticles.push( particleShellPosition.particle );
+        }
+        particleShellPosition.particle = undefined;
+      } );
+    } );
+
     // Width in view coordinates of the n1/n2 energy level, which is the same as the other two levels (though the n0
     // energy level line is drawn shorter - see NucleonShellView for details).
     const n1levelWidth =
       this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ ALLOWED_PARTICLE_POSITIONS[ 1 ].length - 1 ] )
       - this.modelViewTransform.modelToViewX( ALLOWED_PARTICLE_POSITIONS[ 1 ][ 0 ] );
 
+    // add all particles in particleArray to the particleShellPositions
     particleArray.forEach( ( particle, index ) => {
       const yPosition = EnergyLevelType.getForIndex( index ).yPosition;
       const xPosition = this.getLocalXIndex( index, yPosition );
@@ -307,6 +323,22 @@ class ShellModelNucleus extends ParticleAtom {
 
       particle.destinationProperty.set( viewDestination );
       particle.inputEnabledProperty.value = inputEnabled;
+    } );
+
+    // check that no particles are being duplicated in particleShellPositions
+    if ( assert ) {
+      const particleShellPositionsParticles = particleShellPositions.flat()
+        .map( particleShellPosition => particleShellPosition.particle )
+        .filter( particle => particle && !incomingParticles.includes( particle ) );
+
+      assert && assert( _.uniq( particleShellPositionsParticles ).length === particleShellPositionsParticles.length,
+        'There are duplicate particles in particleShellPositions: ', particleShellPositions );
+    }
+
+    // now put back in the incoming particles that had positions held for them in shell positions
+    incomingParticles.forEach( particle => {
+      particle.destinationProperty.value = this.getParticleDestination(
+        ParticleType.getParticleTypeFromStringType( particle.type ), particle );
     } );
   }
 
