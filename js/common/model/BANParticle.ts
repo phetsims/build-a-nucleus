@@ -10,7 +10,9 @@ import Particle, { ParticleOptions, ParticleTypeString } from '../../../../shred
 import BANConstants from '../BANConstants.js';
 import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
+const ANIMATION_TIME = 0.75; // in seconds
 export type BANParticleOptions = ParticleOptions;
 export default class BANParticle extends Particle {
 
@@ -21,8 +23,15 @@ export default class BANParticle extends Particle {
         maxZLayer: BANConstants.NUMBER_OF_NUCLEON_LAYERS - 1
       }, providedOptions );
     super( type, options );
+  }
 
-    this.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
+  public static setAnimationDestination( particle: Particle, destination: Vector2, consistentTime = false ): void {
+    particle.destinationProperty.value = destination;
+
+    const distance = particle.destinationProperty.value.distance( particle.positionProperty.value );
+    particle.animationVelocityProperty.value = consistentTime ?
+                                               distance / ANIMATION_TIME :
+                                               BANConstants.PARTICLE_ANIMATION_SPEED;
   }
 }
 

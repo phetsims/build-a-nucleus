@@ -321,7 +321,7 @@ class ShellModelNucleus extends ParticleAtom {
         inputEnabled = true;
       }
 
-      particle.destinationProperty.set( viewDestination );
+      BANParticle.setAnimationDestination( particle, viewDestination );
       particle.inputEnabledProperty.value = inputEnabled;
     } );
 
@@ -337,8 +337,8 @@ class ShellModelNucleus extends ParticleAtom {
 
     // now put back in the incoming particles that had positions held for them in shell positions
     incomingParticles.forEach( particle => {
-      particle.destinationProperty.value = this.getParticleDestination(
-        ParticleType.getParticleTypeFromStringType( particle.type ), particle );
+      BANParticle.setAnimationDestination( particle, this.getParticleDestination(
+        ParticleType.getParticleTypeFromStringType( particle.type ), particle ) );
     } );
   }
 

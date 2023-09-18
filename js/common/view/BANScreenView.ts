@@ -257,7 +257,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     particle.setPositionAndDestination( origin );
 
     // Send the particle the center of the particleAtom and add it to the model.
-    particle.destinationProperty.value = this.model.getParticleDestination( particleType, particle );
+    BANParticle.setAnimationDestination( particle, this.model.getParticleDestination( particleType, particle ), true );
     this.model.addParticle( particle );
 
     // Don't let the particle be clicked until it reaches the particleAtom.
@@ -324,7 +324,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     particleView.inputEnabled = false;
 
     if ( destination ) {
-      particle.destinationProperty.value = destination;
+      BANParticle.setAnimationDestination( particle, destination, true );
 
       particle.animationEndedEmitter.addListener( () => {
         !particle.isDisposed && this.model.removeParticle( particle );
