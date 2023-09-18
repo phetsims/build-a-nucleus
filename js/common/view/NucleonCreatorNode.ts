@@ -33,7 +33,6 @@ class NucleonCreatorNode extends Node {
       // We want this relative to the screen view, so it is guaranteed to be the proper view coordinates.
       const viewPosition = getLocalPoint( event.pointer.point );
       const particle = new BANParticle( particleType.particleTypeString );
-      particle.animationVelocityProperty.value = BANConstants.PARTICLE_ANIMATION_SPEED;
 
       // Once we have the number's bounds, we set the position so that our pointer is in the middle of the drag target.
       particle.setPositionAndDestination(
