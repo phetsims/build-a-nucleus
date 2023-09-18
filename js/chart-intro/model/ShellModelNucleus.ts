@@ -337,8 +337,10 @@ class ShellModelNucleus extends ParticleAtom {
 
     // now put back in the incoming particles that had positions held for them in shell positions
     incomingParticles.forEach( particle => {
-      BANParticle.setAnimationDestination( particle, this.getParticleDestination(
-        ParticleType.getParticleTypeFromStringType( particle.type ), particle ) );
+
+      // Don't use setAnimationDestination because we don't want to alter the velocity mid animation.
+      particle.destinationProperty.value = this.getParticleDestination(
+        ParticleType.getParticleTypeFromStringType( particle.type ), particle );
     } );
   }
 
