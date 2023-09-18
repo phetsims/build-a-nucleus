@@ -11,8 +11,9 @@ for protons and neutrons.
 
 - __Nuclide__: an atomic species defined by the number of protons and neutrons it has in its nucleus.
 - __Half-life__: the amount of time it takes for one-half of the radioactive isotope to decay.
-- __Decay__: is the process by which an unstable atomic nucleus loses energy by radiation. A material containing
-  unstable nuclei is considered radioactive.
+- __Decay__: the process by which an unstable atomic nucleus undergoes spontaneous transformation into a different 
+  nuclei. The decay process can involve the emission of subatomic particles, the transformation of particles, and the 
+  emission of radiation (photons).
 - __Chart of the nuclides__: chart of all isotopes of all elements color coded based on the decay a nuclide would most
   likely undergo.
 - __Nuclear Shell Model__: model describing the nucleus using energy levels.
@@ -51,6 +52,7 @@ Five decay types are represented within the simulation: α decay, β<sup>+</sup>
 emission, and neutron emission. Unstable nuclides decay into stable nuclides through one of these decay paths.
 
 ### Model caveats
+* Although decays can involve neutrinos, that aspect is beyond the scope of the simulation and thus not represented here.
 * The particles are not at all to scale and neither is the placement of particles exactly scientifically accurate. This
   was done to make it so that the particles could be easily seen and manipulated by the users.
 * The electron cloud size is based on experimental data of the atomic radii of elements but it's tweaked to make the 
