@@ -20,6 +20,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import { N_ZERO_CAPACITY, ParticleShellPosition, N_ONE_CAPACITY } from '../model/ShellModelNucleus.js';
 import EnergyLevelType from '../model/EnergyLevelType.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 type EnergyLevelNodeOptions = EmptySelfOptions & NodeOptions;
 
@@ -114,6 +115,18 @@ class NucleonShellView extends Node {
                                                       defaultEnergyLevelWidth;
       }
     } );
+  }
+
+  /**
+   * The bounds of this node doesn't account for the particles that sit on top of the top energy level line, so we need
+   * to dilate the capture area above this Node more than below it.
+   * Created in https://github.com/phetsims/build-a-nucleus/issues/194
+   */
+  public getCaptureAreaBounds(): Bounds2 {
+    const dilated = this.bounds.dilated( BANConstants.PARTICLE_DIAMETER ); // normal dilation on all sides, like expanding the drag area.
+
+    // account for particles above the top energy level
+    return dilated.offset( 0, BANConstants.PARTICLE_RADIUS, 0, 0 );
   }
 }
 

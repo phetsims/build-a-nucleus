@@ -278,10 +278,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   protected override isNucleonInCaptureArea( nucleon: Particle ): boolean {
     const nucleonViewPosition = this.particleTransform.modelToViewPosition( nucleon.positionProperty.value );
 
-    return this.protonEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER )
-             .containsPoint( nucleonViewPosition ) ||
-           this.neutronEnergyLevelNode.boundsProperty.value.dilated( BANConstants.PARTICLE_DIAMETER )
-             .containsPoint( nucleonViewPosition );
+    return this.protonEnergyLevelNode.getCaptureAreaBounds().containsPoint( nucleonViewPosition ) ||
+           this.neutronEnergyLevelNode.getCaptureAreaBounds().containsPoint( nucleonViewPosition );
   }
 
   /**
