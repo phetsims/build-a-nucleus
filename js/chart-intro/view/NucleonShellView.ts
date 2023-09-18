@@ -126,7 +126,7 @@ class NucleonShellView extends Node {
     const dilated = this.bounds.dilated( BANConstants.PARTICLE_DIAMETER ); // normal dilation on all sides, like expanding the drag area.
 
     // account for particles above the top energy level
-    return dilated.offset( 0, BANConstants.PARTICLE_RADIUS, 0, 0 );
+    return dilated.offset( 0, BANConstants.PARTICLE_DIAMETER, 0, 0 );
   }
 }
 
