@@ -152,6 +152,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         } );
     };
     undoDecayButton.right = availableDecaysPanel.left - 10;
+
+    // Create and add the showElectronCloudCheckbox.
     this.showElectronCloudCheckbox = new ShowElectronCloudCheckbox( this.particleAtomNode.electronCloud );
     this.showElectronCloudCheckbox.left = availableDecaysPanel.left;
     this.showElectronCloudCheckbox.bottom = this.resetAllButton.bottom;
