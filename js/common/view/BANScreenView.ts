@@ -31,6 +31,7 @@ import AlphaParticle from '../model/AlphaParticle.js';
 import ElementNameText from './ElementNameText.js';
 import NucleonCreatorsNode from './NucleonCreatorsNode.js';
 import BANQueryParameters from '../BANQueryParameters.js';
+import BANParticleView from './BANParticleView.js';
 
 // types
 type SelfOptions = {
@@ -138,7 +139,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
     // Add ParticleView's to match the model.
     this.model.particles.addItemAddedListener( ( particle: Particle ) => {
-      const particleView = new ParticleView( particle, this.particleTransform );
+      const particleView = new BANParticleView( particle, this.particleTransform );
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle );

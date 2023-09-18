@@ -22,7 +22,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import NucleonShellView from './NucleonShellView.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import CompleteNuclideChartIconNode from './CompleteNuclideChartIconNode.js';
@@ -38,6 +37,7 @@ import BANQueryParameters from '../../common/BANQueryParameters.js';
 import TinyProperty from '../../../../axon/js/TinyProperty.js';
 import NuclearShellModelText from './NuclearShellModelText.js';
 import Property from '../../../../axon/js/Property.js';
+import BANParticleView from '../../common/view/BANParticleView.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;
@@ -400,7 +400,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
    * disposeEmitter for when the given particle is disposed.
    */
   private createMiniParticleView( particle: Particle ): void {
-    const particleView = new ParticleView( particle, this.miniAtomMVT, { inputEnabled: false } );
+    const particleView = new BANParticleView( particle, this.miniAtomMVT, { inputEnabled: false } );
     this.particleViewMap[ particle.id ] = particleView;
     this.particleAtomNode.addParticleView( particle, this.particleViewMap[ particle.id ] );
     particle.disposeEmitter.addListener( () => {
