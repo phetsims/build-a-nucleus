@@ -39,11 +39,9 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
 
   public constructor() {
 
-    const particleAtom = new ShellModelNucleus(); // This is our ground truth 'atom'.
-
     // Empirically determined, the last nuclide the NuclideChartIntro screen goes up to is Neon-22 (10 protons
     // and 12 neutrons).
-    super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, particleAtom );
+    super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, new ShellModelNucleus() );
 
     // This is the mini-nucleus that updates based on the particleAtom.
     this.miniParticleAtom = new ParticleAtom();
