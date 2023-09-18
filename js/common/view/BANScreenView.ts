@@ -319,12 +319,12 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Animate particle to the given destination, if there is one, and then remove it.
    */
-  protected animateAndRemoveParticle( particle: Particle, destination?: Vector2 ): void {
+  protected animateAndRemoveParticle( particle: Particle, destination?: Vector2, consistentTime = true ): void {
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
     if ( destination ) {
-      BANParticle.setAnimationDestination( particle, destination, true );
+      BANParticle.setAnimationDestination( particle, destination, consistentTime );
 
       particle.animationEndedEmitter.addListener( () => {
         !particle.isDisposed && this.model.removeParticle( particle );
@@ -507,7 +507,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   protected emitNucleon( particleType: ParticleType, particleAtom: ParticleAtom = this.model.particleAtom ): void {
     const nucleon = particleAtom.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( nucleon );
-    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition() );
+    this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition(), false );
   }
 
   /**
@@ -588,7 +588,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     // Add the particle to the model to emit it, then change the nucleon type and remove the particle.
     particleAtom.changeNucleonType( closestParticle, () => {
       assert && assert( !particleToEmit.isDisposed, 'cannot animate a removedParticle' );
-      this.animateAndRemoveParticle( particleToEmit, destination );
+      this.animateAndRemoveParticle( particleToEmit, destination, false );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
       this.checkIfCreatorNodesShouldBeVisible();
