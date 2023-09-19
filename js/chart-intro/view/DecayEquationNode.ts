@@ -50,13 +50,13 @@ class DecayEquationNode extends VBox {
       stableText.setLayoutOptions( { leftMargin: stableTextCenterXPosition - stableText.width / 2 } );
     } );
 
-    const mostLikelyDecayText = new Text( BuildANucleusStrings.mostLikelyDecayStringProperty, {
+    const mostLikelyDecayTypeText = new Text( BuildANucleusStrings.mostLikelyDecayTypeStringProperty, {
       font: BANConstants.LEGEND_FONT,
       maxWidth: 150
     } );
 
     // Create the two text container nodes.
-    const mostLikelyDecayHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
+    const mostLikelyDecayTypeHBox = new HBox( { spacing: 5, layoutOptions: { align: 'left' } } );
     const equationHBox = new HBox( {
       spacing: 10,
       minContentHeight: EQUATION_HBOX_MIN_CONTENT_HEIGHT
@@ -126,7 +126,7 @@ class DecayEquationNode extends VBox {
           decayLikelihoodPercentText.visible = false;
         }
 
-        mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText, decayLikelihoodPercentText ] );
+        mostLikelyDecayTypeHBox.setChildren( [ mostLikelyDecayTypeText, decayLikelihoodPercentText ] );
       }
       else {
         // If there does not exist a cell model, then a nuclide that does not exist formed, hide the equation but set
@@ -134,12 +134,12 @@ class DecayEquationNode extends VBox {
 
         equationHBox.setChildren( [ stableText ] );
         equationHBox.visible = false;
-        mostLikelyDecayHBox.setChildren( [ mostLikelyDecayText ] );
+        mostLikelyDecayTypeHBox.setChildren( [ mostLikelyDecayTypeText ] );
       }
 
       // Add the two container nodes.
       this.children = [
-        mostLikelyDecayHBox,
+        mostLikelyDecayTypeHBox,
         equationHBox
       ];
     } );

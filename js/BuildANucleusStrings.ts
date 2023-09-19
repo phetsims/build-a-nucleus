@@ -77,7 +77,7 @@ type StringsType = {
     'protonNumberStringProperty': LocalizedStringProperty;
     'neutronNumberStringProperty': LocalizedStringProperty;
   };
-  'mostLikelyDecayStringProperty': LocalizedStringProperty;
+  'mostLikelyDecayTypeStringProperty': LocalizedStringProperty;
   'percentageInParenthesesPatternStringProperty': LocalizedStringProperty;
   'magicNumbersStringProperty': LocalizedStringProperty;
   'fullChartInfoPanelTextPatternStringProperty': LocalizedStringProperty;
