@@ -62,8 +62,8 @@ emission, and neutron emission. Unstable nuclides decay into stable nuclides thr
 
 The Decay screen allows building of nuclides up to 94 protons and 146 neutrons.
 
-If the electron cloud is visible, then an atom is being built, but if the electron cloud is not visible, then a nucleus
-is built.
+The electron cloud is provided as an option to help orient users that the nucleus is being constructed within the
+context of an atom.
 
 Changing the number of nucleons in the nucleus updates the half-life of this species, whether this species is stable or
 unstable, the symbol display, and the available decays.
