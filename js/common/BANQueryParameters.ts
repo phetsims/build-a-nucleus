@@ -50,6 +50,12 @@ const BANQueryParameters = QueryStringMachine.getAll( {
     type: 'number',
     defaultValue: BANConstants.DEFAULT_INITIAL_PROTON_NUMBER,
     isValidValue: getValidationFunctionForMaximum( BANConstants.CHART_MAX_NUMBER_OF_PROTONS )
+  },
+
+  // TODO: for designing the particle touch offset in https://github.com/phetsims/build-a-nucleus/issues/197, should be removed soon.
+  particleTouchOffset: {
+    type: 'number',
+    defaultValue: 20
   }
 } );
 
