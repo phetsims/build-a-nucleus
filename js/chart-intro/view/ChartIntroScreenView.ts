@@ -201,11 +201,22 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // Whether to show a special highlight for magic-numbered nuclides in the charts.
     this.showMagicNumbersProperty = new BooleanProperty( false );
 
+    // Store the current nucleon numbers.
+    let oldProtonNumber: number;
+    let oldNeutronNumber: number;
+
     // Create the nuclideChartAccordionBox.
     this.nuclideChartAccordionBox = new NuclideChartAccordionBox(
       this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
-      this.model.selectedNuclideChartProperty, this.model.decayEquationModel, this.decayAtom.bind( this ),
-      this.showMagicNumbersProperty, this.model.hasIncomingParticlesProperty, {
+      this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
+      ( decayType: DecayType | null ) => {
+        oldProtonNumber = this.model.particleAtom.protonCountProperty.value;
+        oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
+        this.decayAtom( decayType );
+      },
+      this.showMagicNumbersProperty, this.model.hasIncomingParticlesProperty, () => {
+        this.undoDecay( oldProtonNumber, oldNeutronNumber );
+      }, {
         minWidth: periodicTableAndIsotopeSymbol.width
       } );
 
@@ -338,7 +349,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       duration: FADE_ANINIMATION_DURATION,
       easing: Easing.LINEAR
     } );
-    endedEmitterListener && fadeAnimation.endedEmitter.addListener( endedEmitterListener );
+    endedEmitterListener && fadeAnimation.finishEmitter.addListener( endedEmitterListener );
     this.model.particleAnimations.push( fadeAnimation );
     fadeAnimation.start();
   }
@@ -382,7 +393,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.fadeOutShellNucleon( nucleonTypeToChange );
 
     // Create new nucleon particle.
-    const particle = this.createParticleFromStack( newNucleonType );
+    const particle = this.createParticleFromStack( newNucleonType, true );
 
     // Place particle right beside its destination so that animationEndedEmitter fires.
     particle.positionProperty.value = particle.destinationProperty.value.plusXY( 0.000001, 0.000001 );

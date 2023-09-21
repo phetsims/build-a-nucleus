@@ -27,6 +27,8 @@ import DecayType from '../../common/model/DecayType.js';
 import buildANucleus from '../../buildANucleus.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import BANScreenView from '../../common/view/BANScreenView.js';
 
 type NuclideChartAccordionBoxOptions = AccordionBoxOptions;
 
@@ -37,6 +39,7 @@ class NuclideChartAccordionBox extends AccordionBox {
                       decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
                       showMagicNumbersProperty: TReadOnlyProperty<boolean>,
                       hasIncomingParticlesProperty: TReadOnlyProperty<boolean>,
+                      undoDecay: VoidFunction,
                       providedOptions?: NuclideChartAccordionBoxOptions ) {
 
     const options =
@@ -81,7 +84,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     const decayEquationNode = new DecayEquationNode( decayEquationModel, zoomInNuclideChartNode.width / 2 );
 
     // Create the 'Decay' button.
-    const decayPushButton = new TextPushButton( BuildANucleusStrings.screen.decayStringProperty, {
+    const decayButton = new TextPushButton( BuildANucleusStrings.screen.decayStringProperty, {
       enabledProperty: new DerivedProperty( [
         decayEquationModel.currentCellModelProperty,
         hasIncomingParticlesProperty
@@ -100,13 +103,27 @@ class NuclideChartAccordionBox extends AccordionBox {
         // Do the given decay on the atom, if there is a decay.
         const decayType = decayEquationModel.currentCellModelProperty.value?.decayType;
         decayAtom( decayType || null );
+
+        // Must be last so that if anything changes in the sim afterward, it is set to invisible again.
+        undoDecayButton.visible = true;
       }
     } );
+
+    // Create and add the undo decay button.
+    const undoDecayButton = new ReturnButton( {
+      iconOptions: { scale: 0.7 },
+      visible: false,
+      listener: () => {
+        BANScreenView.hideUndoButtonEmitter.emit();
+        undoDecay();
+      }
+    } );
+    BANScreenView.hideUndoButtonEmitter.addListener( () => { undoDecayButton.visible = false; } );
 
     // Position the focused chart and the decay button together.
     const focusedChartAndButtonVBox = new VBox( {
       children: [
-        decayPushButton,
+        new HBox( { children: [ decayButton, undoDecayButton ], spacing: 5, excludeInvisibleChildrenFromBounds: false } ),
         focusedNuclideChartNode
       ],
       spacing: 10,
@@ -165,6 +182,11 @@ class NuclideChartAccordionBox extends AccordionBox {
       viewHeight: modelYRange.getLength() * scaleFactor,
       modelYRange: modelYRange
     } );
+  }
+
+  public override reset(): void {
+    super.reset();
+    BANScreenView.hideUndoButtonEmitter.emit();
   }
 }
 

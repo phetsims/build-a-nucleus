@@ -32,6 +32,8 @@ import ElementNameText from './ElementNameText.js';
 import NucleonCreatorsNode from './NucleonCreatorsNode.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 import BANParticleView from './BANParticleView.js';
+import Emitter from '../../../../axon/js/Emitter.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 // types
 type SelfOptions = {
@@ -57,6 +59,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   private previousNeutronNumber = 0;
   protected readonly resetAllButton: Node;
   protected readonly nucleonNumberPanel: Node;
+  public static hideUndoButtonEmitter = new Emitter();
 
   // The time since the step() count has started.
   private timeSinceCountdownStarted = 0;
@@ -170,6 +173,23 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
       particle.dispose();
     } );
 
+    // Store the previous mass number and mass number two sim states prior so massNumberProperty changes does not fire
+    // hideUndoButtonEmitter in a beta decay
+    // TODO: hacky, what's a better way to 'defer' the mass number property here only? https://github.com/phetsims/build-a-nucleus/issues/189
+    let oldMassNumber: number;
+    let olderMassNumber: number;
+
+    // Hide the undo decay button if anything in the nucleus changes.
+    Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
+      this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
+      this.model.userControlledNeutrons.lengthProperty ], massNumber => {
+      if ( !( olderMassNumber === massNumber ) ) {
+        BANScreenView.hideUndoButtonEmitter.emit();
+      }
+      olderMassNumber = oldMassNumber;
+      oldMassNumber = massNumber;
+    } );
+
     // Create the particleAtomNode but add it in subclasses so particles are in top layer.
     this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
 
@@ -247,7 +267,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Create a particle of particleType at its creator node and send it (and add it) to the particleAtom.
    */
-  protected createParticleFromStack( particleType: ParticleType ): Particle {
+  protected createParticleFromStack( particleType: ParticleType, fromBetaDecay = false ): Particle {
 
     // Create a particle at the center of its creator node.
     const particle = new BANParticle( particleType.particleTypeString );
@@ -264,18 +284,21 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
-    if ( particleType === ParticleType.PROTON ) {
-      this.model.incomingProtons.push( particle );
-    }
-    else {
-      this.model.incomingNeutrons.push( particle );
+    if ( !fromBetaDecay ) {
+      if ( particleType === ParticleType.PROTON ) {
+        this.model.incomingProtons.push( particle );
+      }
+      else {
+        this.model.incomingNeutrons.push( particle );
+      }
     }
 
     // Add the particle to the particleAtom once it reaches the center of the particleAtom and allow it to be clicked.
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
 
-        this.model.clearIncomingParticle( particle, particleType );
+        !fromBetaDecay && this.model.clearIncomingParticle( particle, particleType );
+        fromBetaDecay && particle.animationEndedEmitter.removeAllListeners();
 
         this.model.particleAtom.addParticle( particle );
         particleView.inputEnabled = true;
@@ -453,6 +476,51 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
    * Add particleView to correct layer.
    */
   protected abstract addParticleView( particle: Particle ): void;
+
+  /**
+   * Remove a nucleon of a given particleType from the atom immediately.
+   */
+  private removeNucleonImmediatelyFromAtom( particleType: ParticleType ): void {
+    const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
+    this.animateAndRemoveParticle( particleToRemove );
+  }
+
+  /**
+   * Restore the particleAtom to have the nucleon number before a decay occurred.
+   */
+  private restorePreviousNucleonNumber( particleType: ParticleType, oldNucleonNumber: number ): void {
+    const newNucleonNumber = particleType === ParticleType.PROTON ?
+                             this.model.particleAtom.protonCountProperty.value :
+                             this.model.particleAtom.neutronCountProperty.value;
+    const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
+
+    for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
+      if ( nucleonNumberDifference > 0 ) {
+        this.model.addNucleonImmediatelyToAtom( particleType );
+      }
+      else if ( nucleonNumberDifference < 0 ) {
+        this.removeNucleonImmediatelyFromAtom( particleType );
+      }
+    }
+  }
+
+  /**
+   * Restore the sim to the old nucleon numbers and clear all currently outgoing particles and active animations.
+   */
+  protected undoDecay( oldProtonNumber: number, oldNeutronNumber: number ): void {
+    this.restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
+    this.restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
+
+    // Remove all particles in the outgoingParticles array from the particles array.
+    [ ...this.model.outgoingParticles ].forEach( particle => {
+      this.model.removeParticle( particle );
+    } );
+    this.model.outgoingParticles.clear();
+    this.model.particleAnimations.clear();
+
+    // Clear all active animations.
+    this.model.particleAtom.clearAnimations();
+  }
 
   /**
    * Given a decayType, conduct that decay on the model's ParticleAtom.

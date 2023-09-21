@@ -225,6 +225,7 @@ class BANModel<T extends ParticleAtom> {
   public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
     const particle = new BANParticle( particleType.particleTypeString );
     this.addParticle( particle );
+    particle.positionProperty.value = this.getParticleDestination( particleType, particle );
     this.particleAtom.addParticle( particle );
   }
 

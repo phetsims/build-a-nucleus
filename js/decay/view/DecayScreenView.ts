@@ -21,7 +21,6 @@ import BANColors from '../../common/BANColors.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleType from '../../common/model/ParticleType.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import DecayType from '../../common/model/DecayType.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
@@ -98,31 +97,14 @@ class DecayScreenView extends BANScreenView<DecayModel> {
     // Create and add the undo decay button.
     const undoDecayButton = new ReturnButton( {
       iconOptions: { scale: 0.7 },
+      visible: false,
       listener: () => {
-        undoDecayButton.visible = false;
-        this.restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
-        this.restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
-
-        // Remove all particles in the outgoingParticles array from the particles array.
-        [ ...this.model.outgoingParticles ].forEach( particle => {
-          this.model.removeParticle( particle );
-        } );
-        this.model.outgoingParticles.clear();
-        this.model.particleAnimations.clear();
-
-        // Clear all active animations.
-        this.model.particleAtom.clearAnimations();
+        BANScreenView.hideUndoButtonEmitter.emit();
+        this.undoDecay( oldProtonNumber, oldNeutronNumber );
       }
     } );
-    undoDecayButton.visible = false;
     this.addChild( undoDecayButton );
-
-    // Hide the undo decay button if anything in the nucleus changes.
-    Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
-      this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
-      this.model.userControlledNeutrons.lengthProperty ], () => {
-      undoDecayButton.visible = false;
-    } );
+    BANScreenView.hideUndoButtonEmitter.addListener( () => { undoDecayButton.visible = false; } );
 
     // Create and add the available decays panel at the center right of the decay screen.
     const availableDecaysPanel = new AvailableDecaysPanel( {
@@ -132,6 +114,8 @@ class DecayScreenView extends BANScreenView<DecayModel> {
         oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
         this.decayAtom( decayType );
         repositionUndoDecayButton( decayType.name.toString() );
+
+        // Must be last so that if anything changes in the sim afterward, it is set to invisible again.
         undoDecayButton.visible = true;
       }
     } );
@@ -255,33 +239,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
    */
   protected override isNucleonInCaptureArea( nucleon: Particle, atomPositionProperty: TReadOnlyProperty<Vector2> ): boolean {
     return nucleon.positionProperty.value.distance( atomPositionProperty.value ) < NUCLEON_CAPTURE_RADIUS;
-  }
-
-  /**
-   * Restore the particleAtom to have the nucleon numbers before a decay occurred.
-   */
-  private restorePreviousNucleonNumber( particleType: ParticleType, oldNucleonNumber: number ): void {
-    const newNucleonNumber = particleType === ParticleType.PROTON ?
-                             this.model.particleAtom.protonCountProperty.value :
-                             this.model.particleAtom.neutronCountProperty.value;
-    const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
-
-    for ( let i = 0; i < Math.abs( nucleonNumberDifference ); i++ ) {
-      if ( nucleonNumberDifference > 0 ) {
-        this.model.addNucleonImmediatelyToAtom( particleType );
-      }
-      else if ( nucleonNumberDifference < 0 ) {
-        this.removeNucleonImmediatelyFromAtom( particleType );
-      }
-    }
-  }
-
-  /**
-   * Remove a nucleon of a given particleType from the atom immediately.
-   */
-  private removeNucleonImmediatelyFromAtom( particleType: ParticleType ): void {
-    const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
-    this.animateAndRemoveParticle( particleToRemove );
   }
 
   protected override reset(): void {
