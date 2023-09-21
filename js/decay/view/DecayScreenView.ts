@@ -99,7 +99,6 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       iconOptions: { scale: 0.7 },
       visible: false,
       listener: () => {
-        BANScreenView.hideUndoButtonEmitter.emit();
         this.undoDecay( oldProtonNumber, oldNeutronNumber );
       }
     } );

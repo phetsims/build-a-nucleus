@@ -173,21 +173,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
       particle.dispose();
     } );
 
-    // Store the previous mass number and mass number two sim states prior so massNumberProperty changes does not fire
-    // hideUndoButtonEmitter in a beta decay
-    // TODO: hacky, what's a better way to 'defer' the mass number property here only? https://github.com/phetsims/build-a-nucleus/issues/189
-    let oldMassNumber: number;
-    let olderMassNumber: number;
-
     // Hide the undo decay button if anything in the nucleus changes.
     Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
       this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
       this.model.userControlledNeutrons.lengthProperty ], massNumber => {
-      if ( !( olderMassNumber === massNumber ) ) {
-        BANScreenView.hideUndoButtonEmitter.emit();
-      }
-      olderMassNumber = oldMassNumber;
-      oldMassNumber = massNumber;
+      BANScreenView.hideUndoButtonEmitter.emit();
     } );
 
     // Create the particleAtomNode but add it in subclasses so particles are in top layer.
@@ -655,8 +645,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
     // Add the particle to the model to emit it, then change the nucleon type and remove the particle.
     particleAtom.changeNucleonType( closestParticle, () => {
-      assert && assert( !particleToEmit.isDisposed, 'cannot animate a removedParticle' );
-      this.animateAndRemoveParticle( particleToEmit, destination, false );
+      !particleToEmit.isDisposed && this.animateAndRemoveParticle( particleToEmit, destination, false );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
       this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
       this.checkIfCreatorNodesShouldBeVisible();

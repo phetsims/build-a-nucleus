@@ -395,8 +395,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     // Create new nucleon particle.
     const particle = this.createParticleFromStack( newNucleonType, true );
 
-    // Place particle right beside its destination so that animationEndedEmitter fires.
+    // Place particle right beside its destination so that animationEndedEmitter fires. And then add it to the
+    // particleAtom synchronously with a step() call
     particle.positionProperty.value = particle.destinationProperty.value.plusXY( 0.000001, 0.000001 );
+    this.model.step( 0.000001 );
+
     const particleView = this.findParticleView( particle );
     particleView.opacityProperty.value = 0;
     this.fadeAnimation( 1, particleView.opacityProperty );

@@ -114,7 +114,6 @@ class NuclideChartAccordionBox extends AccordionBox {
       iconOptions: { scale: 0.7 },
       visible: false,
       listener: () => {
-        BANScreenView.hideUndoButtonEmitter.emit();
         undoDecay();
       }
     } );
