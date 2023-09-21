@@ -19,7 +19,7 @@ export default class BANParticleView extends ParticleView {
 
   public constructor( particle: Particle, modelViewTransform: ModelViewTransform2, providedOptions?: BANParticleViewOptions ) {
     const options = optionize<BANParticleViewOptions, EmptySelfOptions, ParticleViewOptions>()( {
-      touchOffset: new Vector2( 0, -BANConstants.PARTICLE_DIAMETER * 3 ) // empirically determined
+      touchOffset: new Vector2( 0, -BANConstants.PARTICLE_RADIUS * 3 ) // empirically determined
     }, providedOptions );
     super( particle, modelViewTransform, options );
   }
