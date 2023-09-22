@@ -11,7 +11,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import ParticleView, { ParticleViewOptions } from '../../../../shred/js/view/ParticleView.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import BANConstants from '../BANConstants.js';
 import BANQueryParameters from '../BANQueryParameters.js';
 
 export type BANParticleViewOptions = ParticleViewOptions;
