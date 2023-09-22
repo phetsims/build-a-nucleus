@@ -388,18 +388,20 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.createMiniParticleView( particleToEmit );
 
     // Animate the NucleonShellView.
+    // Fade out the old nucleon particle and remove it immediately after the fade.
+    const particleToRemove = this.model.particleAtom.extractParticle( nucleonTypeToChange.particleTypeString );
+    const oldParticleView = this.findParticleView( particleToRemove );
+    oldParticleView.inputEnabled = false;
+    this.fadeAnimation( 0, oldParticleView.opacityProperty, () => {
+      this.animateAndRemoveParticle( particleToRemove );
+    } );
+
+    // Create the new particle and add it immediately to the atom.
     const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ?
                            ParticleType.NEUTRON : ParticleType.PROTON;
-    this.fadeOutShellNucleon( nucleonTypeToChange );
+    const particle = this.model.addNucleonImmediatelyToAtom( newNucleonType );
 
-    // Create new nucleon particle.
-    const particle = this.createParticleFromStack( newNucleonType, true );
-
-    // Place particle right beside its destination so that animationEndedEmitter fires. And then add it to the
-    // particleAtom synchronously with a step() call
-    particle.positionProperty.value = particle.destinationProperty.value.plusXY( 0.000001, 0.000001 );
-    this.model.step( 0.000001 );
-
+    // Fade in the new nucleon particle.
     const particleView = this.findParticleView( particle );
     particleView.opacityProperty.value = 0;
     this.fadeAnimation( 1, particleView.opacityProperty );

@@ -220,13 +220,14 @@ class BANModel<T extends ParticleAtom> {
 
   /**
    * Create and add a nucleon of particleType immediately to the particleAtom. Position is by default the position of
-   * the particleAtom.
+   * the particleAtom. Returns the new nucleon created.
    */
-  public addNucleonImmediatelyToAtom( particleType: ParticleType ): void {
+  public addNucleonImmediatelyToAtom( particleType: ParticleType ): Particle {
     const particle = new BANParticle( particleType.particleTypeString );
     this.addParticle( particle );
     particle.positionProperty.value = this.getParticleDestination( particleType, particle );
     this.particleAtom.addParticle( particle );
+    return particle;
   }
 
   /**

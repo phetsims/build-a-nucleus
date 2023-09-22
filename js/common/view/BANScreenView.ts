@@ -176,7 +176,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     // Hide the undo decay button if anything in the nucleus changes.
     Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
       this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
-      this.model.userControlledNeutrons.lengthProperty ], massNumber => {
+      this.model.userControlledNeutrons.lengthProperty ], () => {
       BANScreenView.hideUndoButtonEmitter.emit();
     } );
 
@@ -257,7 +257,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Create a particle of particleType at its creator node and send it (and add it) to the particleAtom.
    */
-  protected createParticleFromStack( particleType: ParticleType, fromBetaDecay = false ): Particle {
+  protected createParticleFromStack( particleType: ParticleType ): Particle {
 
     // Create a particle at the center of its creator node.
     const particle = new BANParticle( particleType.particleTypeString );
@@ -274,21 +274,18 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
-    if ( !fromBetaDecay ) {
-      if ( particleType === ParticleType.PROTON ) {
-        this.model.incomingProtons.push( particle );
-      }
-      else {
-        this.model.incomingNeutrons.push( particle );
-      }
+    if ( particleType === ParticleType.PROTON ) {
+      this.model.incomingProtons.push( particle );
+    }
+    else {
+      this.model.incomingNeutrons.push( particle );
     }
 
     // Add the particle to the particleAtom once it reaches the center of the particleAtom and allow it to be clicked.
     particle.animationEndedEmitter.addListener( () => {
       if ( !this.model.particleAtom.containsParticle( particle ) ) {
 
-        !fromBetaDecay && this.model.clearIncomingParticle( particle, particleType );
-        fromBetaDecay && particle.animationEndedEmitter.removeAllListeners();
+        this.model.clearIncomingParticle( particle, particleType );
 
         this.model.particleAtom.addParticle( particle );
         particleView.inputEnabled = true;
