@@ -12,7 +12,7 @@ import buildANucleus from '../../buildANucleus.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 
-const ANIMATION_TIME = 0.75; // in seconds
+const ANIMATION_TIME = 0.6; // in seconds
 export type BANParticleOptions = ParticleOptions;
 export default class BANParticle extends Particle {
 
