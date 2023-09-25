@@ -11,7 +11,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import ParticleView, { ParticleViewOptions } from '../../../../shred/js/view/ParticleView.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import BANQueryParameters from '../BANQueryParameters.js';
 
 export type BANParticleViewOptions = ParticleViewOptions;
 
@@ -19,7 +18,7 @@ export default class BANParticleView extends ParticleView {
 
   public constructor( particle: Particle, modelViewTransform: ModelViewTransform2, providedOptions?: BANParticleViewOptions ) {
     const options = optionize<BANParticleViewOptions, EmptySelfOptions, ParticleViewOptions>()( {
-      touchOffset: new Vector2( 0, -BANQueryParameters.particleTouchOffset ) // empirically determined
+      touchOffset: new Vector2( 0, -30 ) // empirically determined, https://github.com/phetsims/build-a-nucleus/issues/197
     }, providedOptions );
     super( particle, modelViewTransform, options );
   }
