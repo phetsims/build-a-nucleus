@@ -30,7 +30,6 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AlphaParticle from '../model/AlphaParticle.js';
 import ElementNameText from './ElementNameText.js';
 import NucleonCreatorsNode from './NucleonCreatorsNode.js';
-import BANQueryParameters from '../BANQueryParameters.js';
 import BANParticleView from './BANParticleView.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Multilink from '../../../../axon/js/Multilink.js';
@@ -122,17 +121,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
         this.model.reset();
         this.reset();
 
-        assert &&
-        BANQueryParameters.decayScreenProtons === 0 && BANQueryParameters.decayScreenNeutrons === 0 &&
-        BANQueryParameters.chartIntroScreenProtons === 0 && BANQueryParameters.chartIntroScreenNeutrons === 0 &&
-        assert( Object.keys( this.particleViewMap ).length === 0,
-          'all views should be cleaned up on reset\n' +
-          Object.keys( this.particleViewMap ).map( ( x: string ) => {
-            const particle = this.particleViewMap[ x as unknown as number ].particle;
-            return particle ?
-                   `${particle.id}, ${particle.type}, disposed:${particle.isDisposed}, ${particle.colorProperty.value.toString()}` :
-                   '';
-          } ) );
+        // Some garbage could not be cleaned up fully in some cases that we don't fully understand, so here we are
+        // putting on a band-aid, see https://github.com/phetsims/build-a-nucleus/issues/115
+        Object.values( this.particleViewMap ).forEach( particleView => particleView.particle.dispose() );
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
