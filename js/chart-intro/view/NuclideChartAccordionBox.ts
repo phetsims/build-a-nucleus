@@ -97,7 +97,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         fontSize: 14
       },
       minWidth: 80,
-      maxWidth: 150,
+      maxWidth: 115,
       listener: () => {
 
         // Do the given decay on the atom, if there is a decay.
@@ -122,7 +122,7 @@ class NuclideChartAccordionBox extends AccordionBox {
     // Position the focused chart and the decay button together.
     const focusedChartAndButtonVBox = new VBox( {
       children: [
-        new HBox( { children: [ decayButton, undoDecayButton ], spacing: 5, excludeInvisibleChildrenFromBounds: false } ),
+        new HBox( { children: [ undoDecayButton, decayButton ], spacing: 5, excludeInvisibleChildrenFromBounds: false } ),
         focusedNuclideChartNode
       ],
       spacing: 10,
