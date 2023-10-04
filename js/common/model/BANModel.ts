@@ -213,9 +213,26 @@ class BANModel<T extends ParticleAtom> {
     // Update particle positions.
     this.particles.forEach( particle => {
       assert && assert( !particle.isDisposed, 'Cannot step a particle that has already been disposed: ' + particle.type
-                                              + ' ' + particle.colorProperty.value );
+      + this.isParticleInOtherArrays( particle ) );
       particle.step( dt );
     } );
+  }
+
+  /**
+   *  Temporary function. Returns a string with arrays a neutron is a part of, for use in the assert function in step().
+   */
+  private isParticleInOtherArrays( particle: Particle ): string {
+    let stringLog = ' ';
+    if ( this.outgoingParticles.includes( particle ) ) {
+      stringLog += 'outgoingParticles';
+    }
+    if ( this.incomingNeutrons.includes( particle ) ) {
+      stringLog += ' incomingNeutrons';
+    }
+    if ( this.userControlledNeutrons.includes( particle ) ) {
+      stringLog += ' userControlledNeutrons';
+    }
+    return stringLog;
   }
 
 
