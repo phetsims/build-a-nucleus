@@ -232,6 +232,9 @@ class BANModel<T extends ParticleAtom> {
     if ( this.userControlledNeutrons.includes( particle ) ) {
       stringLog += ' userControlledNeutrons';
     }
+    if ( stringLog === ' ' ) {
+      stringLog = ' false';
+    }
     return stringLog;
   }
 
