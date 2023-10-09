@@ -23,6 +23,7 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
 
     // Create and add the periodic table.
     const periodicTable = new PeriodicTableNode( particleAtom, {
+      strokeHighlightWidth: 1,
       interactiveMax: 0,
       disabledCellColor: BANColors.disabledPeriodicTableCellColorProperty,
       selectedCellColor: BANColors.selectedPeriodicTableCellFillAndStrokeColorProperty,
