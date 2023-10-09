@@ -58,7 +58,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   private previousNeutronNumber = 0;
   protected readonly resetAllButton: Node;
   protected readonly nucleonNumberPanel: Node;
-  public static hideUndoButtonEmitter = new Emitter();
+  public hideUndoButtonEmitter = new Emitter();
 
   // The time since the step() count has started.
   private timeSinceCountdownStarted = 0;
@@ -168,7 +168,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     Multilink.multilink( [ this.model.particleAtom.massNumberProperty, this.model.userControlledProtons.lengthProperty,
       this.model.incomingProtons.lengthProperty, this.model.incomingNeutrons.lengthProperty,
       this.model.userControlledNeutrons.lengthProperty ], () => {
-      BANScreenView.hideUndoButtonEmitter.emit();
+      this.hideUndoButtonEmitter.emit();
     } );
 
     // Create the particleAtomNode but add it in subclasses so particles are in top layer.
