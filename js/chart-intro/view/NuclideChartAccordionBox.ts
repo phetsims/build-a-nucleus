@@ -28,18 +28,20 @@ import buildANucleus from '../../buildANucleus.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
-import BANScreenView from '../../common/view/BANScreenView.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
 
 type NuclideChartAccordionBoxOptions = AccordionBoxOptions;
 
 class NuclideChartAccordionBox extends AccordionBox {
+
+  private hideUndoButtonEmitter: TEmitter;
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
                       decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
                       showMagicNumbersProperty: TReadOnlyProperty<boolean>,
                       hasIncomingParticlesProperty: TReadOnlyProperty<boolean>,
-                      undoDecay: VoidFunction,
+                      undoDecay: VoidFunction, hideUndoButtonEmitter: TEmitter,
                       providedOptions?: NuclideChartAccordionBoxOptions ) {
 
     const options =
@@ -117,7 +119,7 @@ class NuclideChartAccordionBox extends AccordionBox {
         undoDecay();
       }
     } );
-    BANScreenView.hideUndoButtonEmitter.addListener( () => { undoDecayButton.visible = false; } );
+    hideUndoButtonEmitter.addListener( () => { undoDecayButton.visible = false; } );
 
     // Position the focused chart and the decay button together.
     const focusedChartAndButtonVBox = new VBox( {
@@ -167,6 +169,9 @@ class NuclideChartAccordionBox extends AccordionBox {
     } );
 
     super( contentVBox, options );
+
+    // For use in reset.
+    this.hideUndoButtonEmitter = hideUndoButtonEmitter;
   }
 
   /**
@@ -185,7 +190,7 @@ class NuclideChartAccordionBox extends AccordionBox {
 
   public override reset(): void {
     super.reset();
-    BANScreenView.hideUndoButtonEmitter.emit();
+    this.hideUndoButtonEmitter.emit();
   }
 }
 

@@ -103,7 +103,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
       }
     } );
     this.addChild( undoDecayButton );
-    BANScreenView.hideUndoButtonEmitter.addListener( () => { undoDecayButton.visible = false; } );
+    this.hideUndoButtonEmitter.addListener( () => { undoDecayButton.visible = false; } );
 
     // Create and add the available decays panel at the center right of the decay screen.
     const availableDecaysPanel = new AvailableDecaysPanel( {

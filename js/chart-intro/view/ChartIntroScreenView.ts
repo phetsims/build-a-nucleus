@@ -216,7 +216,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       },
       this.showMagicNumbersProperty, this.model.hasIncomingParticlesProperty, () => {
         this.undoDecay( oldProtonNumber, oldNeutronNumber );
-      }, {
+      }, this.hideUndoButtonEmitter, {
         minWidth: periodicTableAndIsotopeSymbol.width
       } );
 
