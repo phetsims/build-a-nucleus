@@ -213,13 +213,14 @@ class BANModel<T extends ParticleAtom> {
     // Update particle positions.
     this.particles.forEach( particle => {
       assert && assert( !particle.isDisposed, 'Cannot step a particle that has already been disposed: ' + particle.type
-      + this.isParticleInOtherArrays( particle ) );
+      + this.isParticleInOtherArrays( particle ) + '  id ' + particle.id );
       particle.step( dt );
     } );
   }
 
   /**
-   *  Temporary function. Returns a string with arrays a neutron is a part of, for use in the assert function in step().
+   *  Temporary function, remove when https://github.com/phetsims/build-a-nucleus/issues/202 is fixed.
+   *  Returns a string with arrays a neutron is a part of, for use in the assert function in step().
    */
   private isParticleInOtherArrays( particle: Particle ): string {
     let stringLog = ' ';
