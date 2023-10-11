@@ -9,7 +9,7 @@
 
 import buildANucleus from '../../buildANucleus.js';
 import DecayType from '../../common/model/DecayType.js';
-import AtomIdentifier, { DecayPercentageTuple } from '../../../../shred/js/AtomIdentifier.js';
+import AtomIdentifier, { DecayAmount } from '../../../../shred/js/AtomIdentifier.js';
 import BANColors from '../../common/BANColors.js';
 import { ColorProperty } from '../../../../scenery/js/imports.js';
 
@@ -20,46 +20,49 @@ class NuclideChartCellModel {
 
   // Null could be that it is stable or has an unknown decay type, see NuclideChartCellModel.isStable to differentiate.
   public readonly decayType: DecayType | null;
-  public readonly decayTypeLikelihoodPercent: number | null;
+  public readonly decayTypeLikelihoodPercent: DecayAmount;
 
   public readonly colorProperty: ColorProperty;
   public readonly isStable: boolean;
 
   public constructor( protonNumber: number, neutronNumber: number ) {
 
-    // Get the first decay in available decays to color the cell according to that decay type.
-    const decayTypeStringAndPercent = this.getDecayTypeAndPercent( protonNumber, neutronNumber );
-
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
     this.isStable = AtomIdentifier.isStable( protonNumber, neutronNumber );
-    this.decayType = decayTypeStringAndPercent ?
-                     DecayType.enumeration.getValue( decayTypeStringAndPercent[ 0 ] ) :
-                     null;
-    this.decayTypeLikelihoodPercent = decayTypeStringAndPercent ?
-                                      decayTypeStringAndPercent[ 1 ] :
-                                      null;
+
+    // Get the first decay in available decays to color the cell according to that decay type.
+    const decayTypeAndPercent = this.getDecayTypeAndPercent( protonNumber, neutronNumber );
+    this.decayType = decayTypeAndPercent[ 0 ];
+    this.decayTypeLikelihoodPercent = decayTypeAndPercent[ 1 ];
+
     this.colorProperty = this.isStable ? BANColors.stableColorProperty :
                          this.decayType === null ? BANColors.unknownColorProperty : // No available decays, unknown decay type.
                          this.decayType.colorProperty;
   }
 
-  private getDecayTypeAndPercent( protonNumber: number, neutronNumber: number ): DecayPercentageTuple | null {
+  private getDecayTypeAndPercent( protonNumber: number, neutronNumber: number ): readonly [ DecayType | null, DecayAmount ] {
 
     const decaysAndPercentTuples = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
     if ( decaysAndPercentTuples.length === 0 ) {
-      return null;
+      return [ null, null ];
     }
 
-    const percents = _.sortBy( decaysAndPercentTuples, x => x[ 1 ] );
+    let desiredEntry = decaysAndPercentTuples[ 0 ];
+    for ( let i = 1; i < decaysAndPercentTuples.length; i++ ) {
+      const decayAndPercent = decaysAndPercentTuples[ i ];
 
-    // We want the actual highest percent over the null if given the opportunity
-    if ( percents[ percents.length - 1 ][ 0 ] === null && percents.length > 1 ) {
-      percents[ percents.length - 2 ];
+      // We want the actual highest percent over the null if given the opportunity
+      if ( desiredEntry[ 1 ] === null ) {
+        desiredEntry = decayAndPercent;
+      }
+      else if ( decayAndPercent[ 1 ] !== null && desiredEntry[ 1 ] < decayAndPercent[ 1 ] ) {
+        desiredEntry = decayAndPercent;
+      }
     }
 
-    return percents[ percents.length - 1 ];
+    return [ DecayType.enumeration.getValue( desiredEntry[ 0 ] ), desiredEntry[ 1 ] ];
   }
 }
 
