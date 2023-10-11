@@ -20,7 +20,7 @@ const simOptions: SimOptions = {
     leadDesign: 'Luisa Vargas, Ariel Paul',
     softwareDevelopment: 'Luisa Vargas, Chris Klusendorf',
     team: 'Jason Donev (University of Calgary), Kathy Perkins, Amy Rouinfar',
-    qualityAssurance: 'Clifford Hardin, Emily Miller, Nancy Salpepi, Kathryn Woessner',
+    qualityAssurance: 'Jaron Droder, Clifford Hardin, Emily Miller, Nancy Salpepi, Kathryn Woessner',
     graphicArts: '',
     soundDesign: '',
     thanks: 'We gratefully acknowledge the support of ECO Canada for helping to fund this sim.'
