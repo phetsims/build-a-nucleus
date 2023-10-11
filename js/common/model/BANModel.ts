@@ -203,6 +203,8 @@ class BANModel<T extends ParticleAtom> {
     this.outgoingParticles.clear();
     this.userControlledProtons.clear();
     this.userControlledNeutrons.clear();
+    assert && assert( this.particles.length === 0, 'There are remaining particles in this.particles: ' +
+                                                   this.particles.map( particle => particle.id ) );
   }
 
   /**
