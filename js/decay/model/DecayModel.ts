@@ -75,8 +75,7 @@ class DecayModel extends BANModel<ParticleAtom> {
                                          hasIncomingParticles: boolean ): boolean => {
       const decays = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
-      return !hasIncomingParticles
-             && !!decays.find( decay => Object.keys( decay ).includes( decayType.name ) );
+      return !hasIncomingParticles && !!decays.find( decay => decay[ 0 ] === decayType.name );
     };
 
     const dependencies = [
