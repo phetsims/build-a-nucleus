@@ -60,6 +60,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   protected readonly nucleonNumberPanel: Node;
   public hideUndoButtonEmitter = new Emitter();
 
+  // Flag indicates whether the sim will correct a nonexistent nuclide back to the last state with an existent nuclide.
+  protected correctingNonexistentNuclide = true;
+
   // The time since the step() count has started.
   private timeSinceCountdownStarted = 0;
 
@@ -353,6 +356,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     this.previousProtonNumber = 0;
     this.previousNeutronNumber = 0;
     this.timeSinceCountdownStarted = 0;
+    this.correctingNonexistentNuclide = true;
   }
 
   /**
@@ -366,7 +370,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     const p0n0Case = protonNumber === 0 && neutronNumber === 0;
 
     // We don't want this automatic atom-fixing behavior for the p0,n0 case.
-    if ( !this.model.nuclideExistsProperty.value && !p0n0Case ) {
+    if ( !this.model.nuclideExistsProperty.value && !p0n0Case && this.correctingNonexistentNuclide ) {
 
       // Start countdown to show the nuclide that does not exist for {{BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST}} seconds.
       this.timeSinceCountdownStarted += dt;
