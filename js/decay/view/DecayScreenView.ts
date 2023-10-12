@@ -201,6 +201,10 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
     // This is a special case where the 2 remaining protons, after an alpha particle is emitted, are emitted too.
     if ( this.model.particleAtom.protonCountProperty.value === 2 && this.model.particleAtom.neutronCountProperty.value === 0 ) {
+
+      // Allow the sim to stay in this 'nonexistent nuclide' state.
+      this.correctingNonexistentNuclide = false;
+
       const alphaParticleInitialPosition = alphaParticle.positionProperty.value;
 
       // The distance the alpha particle travels in {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds.
@@ -210,6 +214,9 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
       // Make sure that this case stays valid through the animation and that particleAtom state doesn't get mucked with.
       this.model.particleAtom.protons.forEach( proton => proton.inputEnabledProperty.set( false ) );
+
+      // Set the sim back to always correcting the sim state when a nonexistent nuclide is formed.
+      alphaParticle.disposeEmitter.addListener( () => { this.correctingNonexistentNuclide = true; } );
 
       alphaParticle.positionProperty.link( position => {
 
