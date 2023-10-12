@@ -123,7 +123,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
         // Some garbage could not be cleaned up fully in some cases that we don't fully understand, so here we are
         // putting on a band-aid, see https://github.com/phetsims/build-a-nucleus/issues/115
-        Object.values( this.particleViewMap ).forEach( particleView => particleView.particle.dispose() );
+        Object.values( this.particleViewMap ).forEach( particleView => {
+          if ( !this.model.particles.includes( particleView.particle ) ) {
+            particleView.particle.dispose();
+          }
+        } );
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
