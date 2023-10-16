@@ -425,6 +425,15 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       particleView.dispose();
     } );
   }
+
+  protected override handleMinorBugCleanup(): void {
+    Object.values( this.particleViewMap ).forEach( particleView => {
+      if ( !this.model.particles.includes( particleView.particle ) &&
+           !this.model.miniParticleAtom.containsParticle( particleView.particle ) ) {
+        particleView.particle.dispose();
+      }
+    } );
+  }
 }
 
 buildANucleus.register( 'ChartIntroScreenView', ChartIntroScreenView );
