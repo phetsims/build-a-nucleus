@@ -124,13 +124,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
         this.model.reset();
         this.reset();
 
-        // Some garbage could not be cleaned up fully in some cases that we don't fully understand, so here we are
-        // putting on a band-aid, see https://github.com/phetsims/build-a-nucleus/issues/115
-        Object.values( this.particleViewMap ).forEach( particleView => {
-          if ( !this.model.particles.includes( particleView.particle ) ) {
-            particleView.particle.dispose();
-          }
-        } );
+        // This must be last after all reset steps
+        this.handleMinorBugCleanup();
       },
       right: this.layoutBounds.maxX - BANConstants.SCREEN_VIEW_X_MARGIN,
       bottom: this.layoutBounds.maxY - BANConstants.SCREEN_VIEW_Y_MARGIN
@@ -648,6 +643,16 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     } );
 
     return particleToEmit;
+  }
+
+  // Some garbage could not be cleaned up fully in some cases that we don't fully understand, so here we are
+  // putting on a band-aid, see https://github.com/phetsims/build-a-nucleus/issues/115
+  protected handleMinorBugCleanup(): void {
+    Object.values( this.particleViewMap ).forEach( particleView => {
+      if ( !this.model.particles.includes( particleView.particle ) ) {
+        particleView.particle.dispose();
+      }
+    } );
   }
 }
 
