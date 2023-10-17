@@ -23,7 +23,8 @@ const simOptions: SimOptions = {
     qualityAssurance: 'Jaron Droder, Clifford Hardin, Emily Miller, Nancy Salpepi, Kathryn Woessner',
     graphicArts: '',
     soundDesign: '',
-    thanks: 'We gratefully acknowledge the support of ECO Canada for helping to fund this sim.'
+    thanks: 'We gratefully acknowledge the support of ECO Canada and the Canadian Nuclear Society for helping to fund' +
+            ' this sim.'
   }
 };
 
