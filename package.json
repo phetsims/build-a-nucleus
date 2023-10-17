@@ -31,7 +31,8 @@
     "screenNameKeys": [
       "BUILD_A_NUCLEUS/screen.decay",
       "BUILD_A_NUCLEUS/screen.chartIntro"
-    ]
+    ],
+    "published": true
   },
   "eslintConfig": {
     "extends": "../chipper/eslint/sim_eslintrc.js"
