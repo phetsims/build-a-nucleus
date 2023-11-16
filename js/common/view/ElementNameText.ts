@@ -9,12 +9,12 @@
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import { Color, Text, TextOptions } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomIdentifier, { nameTable } from '../../../../shred/js/AtomIdentifier.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import BANConstants from '../BANConstants.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 export type ElementNameTextOptions = TextOptions;
 
@@ -35,7 +35,7 @@ export default class ElementNameText extends Text {
         maxWidth: BANConstants.ELEMENT_NAME_MAX_WIDTH
       }, providedOptions );
 
-    const elementNameStringProperty = new DerivedStringProperty( [
+    const elementNameStringProperty = DerivedProperty.deriveAny( [
       protonCountProperty,
       neutronCountProperty,
       nuclideExistsProperty,
@@ -47,9 +47,15 @@ export default class ElementNameText extends Text {
       BuildANucleusStrings.doesNotFormStringProperty,
       BuildANucleusStrings.zeroParticlesDoesNotFormPatternStringProperty,
       BuildANucleusStrings.neutronLowercaseStringProperty,
-      BuildANucleusStrings.clusterOfNeutronsPatternStringProperty
-    ], ( protonNumber, neutronNumber, doesNuclideExist ) => {
-      let name = AtomIdentifier.getName( protonNumber );
+      BuildANucleusStrings.clusterOfNeutronsPatternStringProperty,
+      ...nameTable // when any name of any element changes, we should update here.
+    ], () => {
+
+      const protonNumber = protonCountProperty.value;
+      const neutronNumber = neutronCountProperty.value;
+      const doesNuclideExist = nuclideExistsProperty.value;
+
+      let name = AtomIdentifier.getName( protonNumber ).value;
       const massNumber = protonNumber + neutronNumber;
 
       const massNumberString = massNumber.toString();
