@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "193fa30be89836d059a9d43912dbdb5e4c0fa8ba",
+    "sha": "085accdf3f8ca6ef752bd4825ff8377319b9d678",
     "branch": "1.1"
   },
   "chipper": {
@@ -81,7 +81,7 @@
     "branch": "HEAD"
   },
   "shred": {
-    "sha": "68d0c70182c7eee57673aeb57c428f9a19144987",
+    "sha": "bbcc103cecd3181fa224b4a85e554a6b5be24dea",
     "branch": "HEAD"
   },
   "studio": {
