@@ -1,5 +1,5 @@
 {
-  "comment": "# build-a-nucleus 1.1.1-rc.1 Wed Nov 15 2023 18:56:11 GMT-0700 (Mountain Standard Time)",
+  "comment": "# build-a-nucleus 1.1.1 Fri Nov 17 2023 11:18:32 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "94831413cd4dd4dc27c2a1aebbcafd3987934a99",
     "branch": "HEAD"
@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "64d471d607e51b256de6c65b04878048b33d31ac",
+    "sha": "5de9a59084cf969628b2dbfe804a739d7163b019",
     "branch": "1.1"
   },
   "chipper": {
