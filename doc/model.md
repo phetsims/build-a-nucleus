@@ -11,8 +11,8 @@ for protons and neutrons.
 
 - __Nuclide__: an atomic species defined by the number of protons and neutrons it has in its nucleus.
 - __Half-life__: the amount of time it takes for one-half of the radioactive isotope to decay.
-- __Decay__: the process by which an unstable atomic nucleus undergoes spontaneous transformation into a different 
-  nuclei. The decay process can involve the emission of subatomic particles, the transformation of particles, and the 
+- __Decay__: the process by which an unstable atomic nucleus undergoes spontaneous transformation into a different
+  nuclei. The decay process can involve the emission of subatomic particles, the transformation of particles, and the
   emission of radiation (photons).
 - __Chart of the nuclides__: chart of all isotopes of all elements color coded based on the decay a nuclide would most
   likely undergo.
@@ -52,10 +52,12 @@ Five decay types are represented within the simulation: α decay, β<sup>+</sup>
 emission, and neutron emission. Unstable nuclides decay into stable nuclides through one of these decay paths.
 
 ### Model caveats
-* Although decays can involve neutrinos, that aspect is beyond the scope of the simulation and thus not represented here.
+
+* Although decays can involve neutrinos, that aspect is beyond the scope of the simulation and thus not represented
+  here.
 * The particles are not at all to scale and neither is the placement of particles exactly scientifically accurate. This
   was done to make it so that the particles could be easily seen and manipulated by the users.
-* The electron cloud size is based on experimental data of the atomic radii of elements but it's tweaked to make the 
+* The electron cloud size is based on experimental data of the atomic radii of elements but it's tweaked to make the
   electron cloud appear our desired size.
 
 ## Decay screen
@@ -120,6 +122,5 @@ To write well-behaved programs, it's not always possible to be physically accura
   [nuclear shell model](https://en.wikipedia.org/wiki/Nuclear_shell_model), is:
   * n = 0 holds 2 nucleons
   * n = 1 holds 6 nucleons
-  * n = 2 holds 12 nucleons
-  However, since there is a limited space for particles in the last energy level in the simulation, we model the n = 2 
-  energy level as if it can only hold 6 nucleons before getting full.
+  * n = 2 holds 12 nucleons However, since there is a limited space for particles in the last energy level in the
+    simulation, we model the n = 2 energy level as if it can only hold 6 nucleons before getting full.
