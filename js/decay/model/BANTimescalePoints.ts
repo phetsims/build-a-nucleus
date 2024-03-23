@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * BANTimescalePoints identifies meaningful sets of points on a timescale with seconds as the unit of time.

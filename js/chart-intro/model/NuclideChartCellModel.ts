@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * Model of a cell in the Nuclide Chart. Tracks proton number, neutron number, and decay type of cell.
