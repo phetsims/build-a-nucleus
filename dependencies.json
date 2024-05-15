@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "6e42122cc37ea0729ad97b2b7d5abc5d1a690b7b",
+    "sha": "7ab94a00213accacc9ef021f549fd35a98548b3b",
     "branch": "1.1"
   },
   "chipper": {
@@ -29,7 +29,7 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "b78584e9bbacda896902b152fc9b0a5130f29b38",
+    "sha": "70ab02d9f801b80e6d6604936635e3682de6c8cb",
     "branch": "HEAD"
   },
   "kite": {
