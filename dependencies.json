@@ -17,11 +17,11 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "348faed74a8e1fa5b1c11db069abaff2ee1309a6",
+    "sha": "0ef119e0cf6b2f2b807474d05fffdc6b76f23ed1",
     "branch": "1.1"
   },
   "chipper": {
-    "sha": "6efb0385e472556fef3e34849c1ca2e7f008ba26",
+    "sha": "207010a5289ece5d85eb0ae1701b4d1f6da0114f",
     "branch": "HEAD"
   },
   "dot": {
