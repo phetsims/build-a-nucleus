@@ -66,6 +66,7 @@ export default class DoubleArrowButton extends RectangularPushButton {
       const rightArrowPath = new Path( arrowShape, { fill: rightArrowFill } );
       const doubleArrow = new HBox( {
         children: [ leftArrowPath, rightArrowPath ],
+        sizable: false,
         spacing: 0
       } );
 
