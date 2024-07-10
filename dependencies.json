@@ -17,7 +17,7 @@
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "ca8385da0548a7e3ba92eabb75c7744602432b84",
+    "sha": "4ba20da5dc415d1b1cff1ac0ec8d3f7934b38183",
     "branch": "1.1"
   },
   "chipper": {
@@ -69,7 +69,7 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "46bef5fc0a5111b7142c266a55c22567d9221298",
+    "sha": "9640fc713b81f7d12acc4a0ca879fd97cfcae4fe",
     "branch": "HEAD"
   },
   "scenery-phet": {
