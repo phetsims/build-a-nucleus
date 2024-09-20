@@ -43,7 +43,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../build-a-nucleus/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
