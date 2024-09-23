@@ -9,8 +9,8 @@
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import BuildANucleusStrings from './BuildANucleusStrings.js';
-import DecayScreen from './decay/DecayScreen.js';
 import ChartIntroScreen from './chart-intro/ChartIntroScreen.js';
+import DecayScreen from './decay/DecayScreen.js';
 
 const buildANucleusTitleStringProperty = BuildANucleusStrings[ 'build-a-nucleus' ].titleStringProperty;
 
