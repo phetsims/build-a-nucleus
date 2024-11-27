@@ -8,10 +8,10 @@
  */
 
 
+import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
+import AtomIdentifier from '../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../buildANucleus.js';
 import BANConstants from './BANConstants.js';
-import AtomIdentifier from '../../../shred/js/AtomIdentifier.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
 
 // Acceptable nucleon counts should be an integer greater than zero, and less than the available max per screen.
 const getValidationFunctionForMaximum = ( max: number ) => {

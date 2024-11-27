@@ -5,17 +5,17 @@
  * @author Luisa Vargas
  */
 
-import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
-import buildANucleus from '../../buildANucleus.js';
-import { allowLinksProperty, Color, Image, Node, Rectangle, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
-import fullNuclideChart_png from '../../../images/fullNuclideChart_png.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANConstants from '../../common/BANConstants.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import { allowLinksProperty, Color, Image, Node, Rectangle, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
+import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
+import fullNuclideChart_png from '../../../images/fullNuclideChart_png.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
+import BANConstants from '../../common/BANConstants.js';
 
 assert && assert( typeof BANConstants.INFO_DIALOG_TEXT_OPTIONS.maxWidth === 'number', 'maxWidth needed for text' );
 

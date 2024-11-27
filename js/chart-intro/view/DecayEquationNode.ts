@@ -9,17 +9,17 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import DecayEquationModel from '../model/DecayEquationModel.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import DecaySymbolNode from './DecaySymbolNode.js';
-import IconFactory from '../../common/view/IconFactory.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import IconFactory from '../../common/view/IconFactory.js';
+import DecayEquationModel from '../model/DecayEquationModel.js';
+import DecaySymbolNode from './DecaySymbolNode.js';
 
 // Fill in the space eagerly, as a constant.
 const unknownSpacePatternStringProperty = new PatternStringProperty(

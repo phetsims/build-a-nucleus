@@ -6,38 +6,38 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import TinyProperty from '../../../../axon/js/TinyProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import { Line, Node, RichText, Text } from '../../../../scenery/js/imports.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { Line, Node, RichText, Text } from '../../../../scenery/js/imports.js';
-import BANConstants from '../../common/BANConstants.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import BANColors from '../../common/BANColors.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import NucleonShellView from './NucleonShellView.js';
-import ParticleType from '../../common/model/ParticleType.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import CompleteNuclideChartIconNode from './CompleteNuclideChartIconNode.js';
-import ZoomInNuclideChartIconNode from './ZoomInNuclideChartIconNode.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import DecayType from '../../common/model/DecayType.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import FullChartTextButton from './FullChartTextButton.js';
-import AlphaParticle from '../../common/model/AlphaParticle.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import BANColors from '../../common/BANColors.js';
+import BANConstants from '../../common/BANConstants.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
-import TinyProperty from '../../../../axon/js/TinyProperty.js';
-import NuclearShellModelText from './NuclearShellModelText.js';
-import Property from '../../../../axon/js/Property.js';
+import AlphaParticle from '../../common/model/AlphaParticle.js';
+import DecayType from '../../common/model/DecayType.js';
+import ParticleType from '../../common/model/ParticleType.js';
 import BANParticleView from '../../common/view/BANParticleView.js';
+import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
+import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
+import CompleteNuclideChartIconNode from './CompleteNuclideChartIconNode.js';
+import FullChartTextButton from './FullChartTextButton.js';
+import NuclearShellModelText from './NuclearShellModelText.js';
+import NucleonShellView from './NucleonShellView.js';
+import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
+import PeriodicTableAndIsotopeSymbol from './PeriodicTableAndIsotopeSymbol.js';
+import ZoomInNuclideChartIconNode from './ZoomInNuclideChartIconNode.js';
 
 // types
 export type NuclideChartIntroScreenViewOptions = BANScreenViewOptions;

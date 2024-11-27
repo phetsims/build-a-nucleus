@@ -7,28 +7,28 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import ParticleType from '../model/ParticleType.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import { HBox, Node, PressListenerEvent, ProfileColorProperty, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DoubleArrowButton, { ArrowButtonDirection } from './DoubleArrowButton.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import BANColors from '../BANColors.js';
-import BANModel from '../model/BANModel.js';
-import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, Node, PressListenerEvent, ProfileColorProperty, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import Particle from '../../../../shred/js/model/Particle.js';
-import Range from '../../../../dot/js/Range.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import NucleonCreatorNode from './NucleonCreatorNode.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import Multilink from '../../../../axon/js/Multilink.js';
+import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
+import BANColors from '../BANColors.js';
+import BANModel from '../model/BANModel.js';
+import ParticleType from '../model/ParticleType.js';
+import DoubleArrowButton, { ArrowButtonDirection } from './DoubleArrowButton.js';
+import NucleonCreatorNode from './NucleonCreatorNode.js';
 
 // constants
 const MAX_TEXT_WIDTH = 150;

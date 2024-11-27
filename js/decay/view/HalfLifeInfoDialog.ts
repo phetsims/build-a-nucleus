@@ -7,15 +7,15 @@
  * @author Luisa Vargas
  */
 
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { Font, GridBox, HBox, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import buildANucleus from '../../buildANucleus.js';
-import { Font, GridBox, HBox, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
-import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
-import BANTimescalePoints from '../model/BANTimescalePoints.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import BANConstants from '../../common/BANConstants.js';
+import BANTimescalePoints from '../model/BANTimescalePoints.js';
+import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 
 // constants
 const MAX_CONTENT_WIDTH = 600;

@@ -7,11 +7,11 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import DecayType from '../../common/model/DecayType.js';
-import AtomIdentifier, { DecayAmount } from '../../../../shred/js/AtomIdentifier.js';
-import BANColors from '../../common/BANColors.js';
 import { ColorProperty } from '../../../../scenery/js/imports.js';
+import AtomIdentifier, { DecayAmount } from '../../../../shred/js/AtomIdentifier.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANColors from '../../common/BANColors.js';
+import DecayType from '../../common/model/DecayType.js';
 
 class NuclideChartCellModel {
 

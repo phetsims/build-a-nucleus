@@ -6,19 +6,19 @@
  * @author Luisa Vargas
  */
 
-import { ColorProperty, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
-import buildANucleus from '../../buildANucleus.js';
-import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AxisArrowNode from '../../../../bamboo/js/AxisArrowNode.js';
-import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
+import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import Orientation from '../../../../phet-core/js/Orientation.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
+import { ColorProperty, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 
 type SelfOptions = {

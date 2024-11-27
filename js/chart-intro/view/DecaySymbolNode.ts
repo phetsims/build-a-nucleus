@@ -7,12 +7,12 @@
  * @author Luisa Vargas
  * */
 
-import shred from '../../../../shred/js/shred.js';
-import { HBox, Node, NodeOptions, Text, VBox } from '../../../../scenery/js/imports.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, Node, NodeOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import shred from '../../../../shred/js/shred.js';
 
 // types
 type SelfOptions = {

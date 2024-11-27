@@ -7,13 +7,13 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import { Circle, HBox, Node, Text } from '../../../../scenery/js/imports.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
+import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../../common/BANConstants.js';
-import Property from '../../../../axon/js/Property.js';
 
 class ShowElectronCloudCheckbox extends Checkbox {
 

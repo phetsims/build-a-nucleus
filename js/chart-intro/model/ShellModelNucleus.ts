@@ -10,17 +10,17 @@
 
 import { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle, { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
+import BANParticle from '../../common/model/BANParticle.js';
 import ParticleType from '../../common/model/ParticleType.js';
 import EnergyLevelType from './EnergyLevelType.js';
-import BANParticle from '../../common/model/BANParticle.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 // types
 export type ParticleShellPosition = {

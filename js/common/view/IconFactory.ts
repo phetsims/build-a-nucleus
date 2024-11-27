@@ -7,16 +7,16 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import ParticleType from '../model/ParticleType.js';
-import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import BANColors from '../BANColors.js';
-import { HBox, Line, Node, TColor, VBox } from '../../../../scenery/js/imports.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import DecayType from '../model/DecayType.js';
+import { HBox, Line, Node, TColor, VBox } from '../../../../scenery/js/imports.js';
+import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANColors from '../BANColors.js';
 import BANConstants from '../BANConstants.js';
+import DecayType from '../model/DecayType.js';
+import ParticleType from '../model/ParticleType.js';
 
 const ALPHA_PARTICLE_SPACING = -5;
 const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;

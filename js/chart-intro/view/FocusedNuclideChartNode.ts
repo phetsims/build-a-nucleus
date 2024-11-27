@@ -8,15 +8,15 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import NuclideChartNode from './NuclideChartNode.js';
-import buildANucleus from '../../buildANucleus.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import BANConstants from '../../common/BANConstants.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import { Color, Rectangle } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../../common/BANConstants.js';
+import NuclideChartNode from './NuclideChartNode.js';
 
 const HIGHLIGHT_RECTANGLE_LINE_WIDTH = 1.5;
 

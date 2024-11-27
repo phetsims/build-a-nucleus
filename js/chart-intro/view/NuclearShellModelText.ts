@@ -6,10 +6,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import { Node, RichText } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 

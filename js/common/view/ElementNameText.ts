@@ -6,15 +6,15 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import { Color, Text, TextOptions } from '../../../../scenery/js/imports.js';
+import AtomIdentifier, { nameTable } from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import AtomIdentifier, { nameTable } from '../../../../shred/js/AtomIdentifier.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import BANConstants from '../BANConstants.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 export type ElementNameTextOptions = TextOptions;
 

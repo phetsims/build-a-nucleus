@@ -7,12 +7,12 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import NuclideChartNode from './NuclideChartNode.js';
-import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
-import { Color, Node, Path } from '../../../../scenery/js/imports.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import { Color, Node, Path } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
+import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
+import NuclideChartNode from './NuclideChartNode.js';
 
 class ZoomInNuclideChartIconNode extends Node {
 

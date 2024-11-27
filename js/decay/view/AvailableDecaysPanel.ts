@@ -6,21 +6,21 @@
  * @author Luisa Vargas
  */
 
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, HSeparator, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
+import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
 import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
-import { HBox, HSeparator, Node, Rectangle, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import ParticleType from '../../common/model/ParticleType.js';
-import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
-import DecayType from '../../common/model/DecayType.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
-import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
+import DecayType from '../../common/model/DecayType.js';
+import ParticleType from '../../common/model/ParticleType.js';
 import IconFactory from '../../common/view/IconFactory.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
 
 // constants
 const LABEL_FONT = new PhetFont( BANConstants.BUTTONS_AND_LEGEND_FONT_SIZE );

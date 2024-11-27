@@ -7,32 +7,32 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Range from '../../../../dot/js/Range.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Line, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Animation from '../../../../twixt/js/Animation.js';
-import Easing from '../../../../twixt/js/Easing.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import BANColors from '../../common/BANColors.js';
-import Utils from '../../../../dot/js/Utils.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import BANConstants from '../../common/BANConstants.js';
-import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import InfinityNode from './InfinityNode.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import TProperty from '../../../../axon/js/TProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';
+import TickMarkSet from '../../../../bamboo/js/TickMarkSet.js';
+import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import Orientation from '../../../../phet-core/js/Orientation.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import ScientificNotationNode from '../../../../scenery-phet/js/ScientificNotationNode.js';
+import { Color, HBox, Line, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import BANColors from '../../common/BANColors.js';
+import BANConstants from '../../common/BANConstants.js';
+import InfinityNode from './InfinityNode.js';
 
 // types
 type SelfOptions = {

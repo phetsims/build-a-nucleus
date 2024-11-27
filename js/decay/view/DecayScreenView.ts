@@ -6,27 +6,27 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import DecayModel from '../model/DecayModel.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
-import HalfLifeInformationNode from './HalfLifeInformationNode.js';
-import BANConstants from '../../common/BANConstants.js';
-import AvailableDecaysPanel from './AvailableDecaysPanel.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import { ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
+import Particle from '../../../../shred/js/model/Particle.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import { ManualConstraint, Node, Text } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Particle from '../../../../shred/js/model/Particle.js';
-import ParticleType from '../../common/model/ParticleType.js';
-import DecayType from '../../common/model/DecayType.js';
-import AlphaParticle from '../../common/model/AlphaParticle.js';
-import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import BANConstants from '../../common/BANConstants.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
+import AlphaParticle from '../../common/model/AlphaParticle.js';
+import DecayType from '../../common/model/DecayType.js';
+import ParticleType from '../../common/model/ParticleType.js';
+import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
+import DecayModel from '../model/DecayModel.js';
+import AvailableDecaysPanel from './AvailableDecaysPanel.js';
+import HalfLifeInformationNode from './HalfLifeInformationNode.js';
 import ShowElectronCloudCheckbox from './ShowElectronCloudCheckbox.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import StabilityIndicatorText from './StabilityIndicatorText.js';
 
 // constants

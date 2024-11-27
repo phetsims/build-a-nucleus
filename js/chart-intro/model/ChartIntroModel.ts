@@ -6,18 +6,18 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import BANModel from '../../common/model/BANModel.js';
-import ShellModelNucleus from './ShellModelNucleus.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import ParticleType from '../../common/model/ParticleType.js';
-import Particle from '../../../../shred/js/model/Particle.js';
-import BANConstants from '../../common/BANConstants.js';
-import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Property from '../../../../axon/js/Property.js';
-import NuclideChartCellModel from './NuclideChartCellModel.js';
-import DecayEquationModel from './DecayEquationModel.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../../common/BANConstants.js';
+import BANModel from '../../common/model/BANModel.js';
 import BANParticle from '../../common/model/BANParticle.js';
+import ParticleType from '../../common/model/ParticleType.js';
+import DecayEquationModel from './DecayEquationModel.js';
+import NuclideChartCellModel from './NuclideChartCellModel.js';
+import ShellModelNucleus from './ShellModelNucleus.js';
 
 // types
 export type SelectedChartType = 'partial' | 'zoom';

@@ -7,18 +7,18 @@
  * @author Luisa Vargas
  */
 
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
+import Orientation from '../../../../phet-core/js/Orientation.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import BANColors from '../../common/BANColors.js';
 import NucleonNumberLine from './NucleonNumberLine.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
 import NuclideChartNode, { NuclideChartNodeOptions } from './NuclideChartNode.js';
-import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 
 type SelfOptions = {
   nuclideChartNodeOptions?: Partial<NuclideChartNodeOptions>;

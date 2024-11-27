@@ -6,11 +6,11 @@
  * @author Luisa Vargas
  */
 
-import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 const SECONDS_IN_A_YEAR = 365 * 24 * 60 * 60; // 365 days x 24 hrs/day x 60 min/hr x 60 sec/min
 const TIME_FOR_LIGHT_TO_CROSS_AN_ATOM = Math.pow( 10, -19 );

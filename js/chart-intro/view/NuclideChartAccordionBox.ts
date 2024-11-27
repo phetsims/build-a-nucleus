@@ -7,28 +7,28 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
-import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
-import NuclideChartLegendNode from './NuclideChartLegendNode.js';
-import { SelectedChartType } from '../model/ChartIntroModel.js';
-import BANConstants from '../../common/BANConstants.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Range from '../../../../dot/js/Range.js';
-import FocusedNuclideChartNode from './FocusedNuclideChartNode.js';
-import ZoomInNuclideChartNode from './ZoomInNuclideChartNode.js';
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import DecayEquationNode from './DecayEquationNode.js';
-import DecayEquationModel from '../model/DecayEquationModel.js';
-import BANColors from '../../common/BANColors.js';
-import DecayType from '../../common/model/DecayType.js';
-import buildANucleus from '../../buildANucleus.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
+import { HBox, Text, VBox } from '../../../../scenery/js/imports.js';
+import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
+import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import BANColors from '../../common/BANColors.js';
+import BANConstants from '../../common/BANConstants.js';
+import DecayType from '../../common/model/DecayType.js';
+import { SelectedChartType } from '../model/ChartIntroModel.js';
+import DecayEquationModel from '../model/DecayEquationModel.js';
+import DecayEquationNode from './DecayEquationNode.js';
+import FocusedNuclideChartNode from './FocusedNuclideChartNode.js';
+import NuclideChartAndNumberLines from './NuclideChartAndNumberLines.js';
+import NuclideChartLegendNode from './NuclideChartLegendNode.js';
+import ZoomInNuclideChartNode from './ZoomInNuclideChartNode.js';
 
 type NuclideChartAccordionBoxOptions = AccordionBoxOptions;
 

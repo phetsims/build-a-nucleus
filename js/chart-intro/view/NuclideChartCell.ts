@@ -6,11 +6,11 @@
  * @author Luisa Vargas
  */
 
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import { Rectangle, RectangleOptions, TPaint } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 import BANColors from '../../common/BANColors.js';
+import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 
 type SelfOptions = EmptySelfOptions;
 

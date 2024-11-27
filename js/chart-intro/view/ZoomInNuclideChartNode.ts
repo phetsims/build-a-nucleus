@@ -7,16 +7,16 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import NuclideChartNode from './NuclideChartNode.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import { Color, Path } from '../../../../scenery/js/imports.js';
 import Utils from '../../../../dot/js/Utils.js';
+import { Shape } from '../../../../kite/js/imports.js';
+import { Color, Path } from '../../../../scenery/js/imports.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
+import NuclideChartNode from './NuclideChartNode.js';
 
 class ZoomInNuclideChartNode extends NuclideChartNode {
 

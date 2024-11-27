@@ -6,13 +6,13 @@
  * @author Luisa Vargas
  */
 
-import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import buildANucleus from '../../buildANucleus.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import BANConstants from '../BANConstants.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import Particle from '../../../../shred/js/model/Particle.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../BANConstants.js';
 
 class AlphaParticle extends ParticleAtom {
 

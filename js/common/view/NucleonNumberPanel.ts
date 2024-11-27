@@ -6,21 +6,21 @@
  * @author Luisa Vargas
  */
 
-import Panel from '../../../../sun/js/Panel.js';
-import buildANucleus from '../../buildANucleus.js';
-import { HBox, Rectangle, Text } from '../../../../scenery/js/imports.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
-import ParticleType from '../model/ParticleType.js';
-import BANConstants from '../BANConstants.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
+import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
+import Panel from '../../../../sun/js/Panel.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
+import BANConstants from '../BANConstants.js';
+import ParticleType from '../model/ParticleType.js';
 
 // types
 type NucleonLabel = {

@@ -6,33 +6,33 @@
  * @author Luisa Vargas
  */
 
-import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.js';
-import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import buildANucleus from '../../buildANucleus.js';
-import BANConstants from '../../common/BANConstants.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import BANModel from '../model/BANModel.js';
-import { Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
-import NucleonNumberPanel from './NucleonNumberPanel.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import ParticleView from '../../../../shred/js/view/ParticleView.js';
-import Particle from '../../../../shred/js/model/Particle.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import ParticleType from '../model/ParticleType.js';
-import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
-import ParticleAtomNode from './ParticleAtomNode.js';
-import DecayType from '../model/DecayType.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
-import BANParticle from '../model/BANParticle.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import AlphaParticle from '../model/AlphaParticle.js';
-import ElementNameText from './ElementNameText.js';
-import NucleonCreatorsNode from './NucleonCreatorsNode.js';
-import BANParticleView from './BANParticleView.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
+import { Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import ParticleView from '../../../../shred/js/view/ParticleView.js';
+import buildANucleus from '../../buildANucleus.js';
+import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
+import BANConstants from '../../common/BANConstants.js';
+import AlphaParticle from '../model/AlphaParticle.js';
+import BANModel from '../model/BANModel.js';
+import BANParticle from '../model/BANParticle.js';
+import DecayType from '../model/DecayType.js';
+import ParticleType from '../model/ParticleType.js';
+import BANParticleView from './BANParticleView.js';
+import ElementNameText from './ElementNameText.js';
+import NucleonCreatorsNode from './NucleonCreatorsNode.js';
+import NucleonNumberPanel from './NucleonNumberPanel.js';
+import ParticleAtomNode from './ParticleAtomNode.js';
 
 // types
 type SelfOptions = {

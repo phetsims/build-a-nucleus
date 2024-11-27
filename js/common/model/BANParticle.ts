@@ -6,11 +6,11 @@
  * @author Luisa Vargas
  */
 
-import Particle, { ParticleOptions, ParticleTypeString } from '../../../../shred/js/model/Particle.js';
-import BANConstants from '../BANConstants.js';
-import buildANucleus from '../../buildANucleus.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import Particle, { ParticleOptions, ParticleTypeString } from '../../../../shred/js/model/Particle.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../BANConstants.js';
 
 const ANIMATION_TIME = 0.6; // in seconds
 export type BANParticleOptions = ParticleOptions;

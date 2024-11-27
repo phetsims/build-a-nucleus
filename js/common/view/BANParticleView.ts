@@ -5,12 +5,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Particle from '../../../../shred/js/model/Particle.js';
-import buildANucleus from '../../buildANucleus.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import ParticleView, { ParticleViewOptions } from '../../../../shred/js/view/ParticleView.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Particle from '../../../../shred/js/model/Particle.js';
+import ParticleView, { ParticleViewOptions } from '../../../../shred/js/view/ParticleView.js';
+import buildANucleus from '../../buildANucleus.js';
 
 export type BANParticleViewOptions = ParticleViewOptions;
 

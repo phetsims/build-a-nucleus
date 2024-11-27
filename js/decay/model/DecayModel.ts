@@ -6,14 +6,14 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import BANModel from '../../common/model/BANModel.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import BANConstants from '../../common/BANConstants.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DecayType from '../../common/model/DecayType.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../../common/BANConstants.js';
+import BANModel from '../../common/model/BANModel.js';
+import DecayType from '../../common/model/DecayType.js';
 
 class DecayModel extends BANModel<ParticleAtom> {
 

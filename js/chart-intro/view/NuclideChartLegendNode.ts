@@ -6,14 +6,14 @@
  * @author Luisa Vargas
  */
 
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { GridBox, HBox, Node, ProfileColorProperty, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import buildANucleus from '../../buildANucleus.js';
-import BANColors from '../../common/BANColors.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import DecayType from '../../common/model/DecayType.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
+import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import DecayType from '../../common/model/DecayType.js';
 
 // constants
 const LEGEND_KEY_BOX_SIZE = 14;

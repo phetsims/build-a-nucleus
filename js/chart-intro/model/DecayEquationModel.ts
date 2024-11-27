@@ -7,13 +7,13 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import NuclideChartCellModel from './NuclideChartCellModel.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import BANConstants from '../../common/BANConstants.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../../common/BANConstants.js';
+import NuclideChartCellModel from './NuclideChartCellModel.js';
 
 class DecayEquationModel {
 

@@ -7,10 +7,10 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import { Color, Path, PathOptions } from '../../../../scenery/js/imports.js';
-import optionize from '../../../../phet-core/js/optionize.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import { Color, Path, PathOptions } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
 
 type SelfOptions = {
   radius?: number;

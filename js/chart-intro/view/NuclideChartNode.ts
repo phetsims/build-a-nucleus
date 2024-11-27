@@ -6,27 +6,27 @@
  * @author Luisa Vargas
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
+import Orientation from '../../../../phet-core/js/Orientation.js';
+import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import { Color, GridBox, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
-import NuclideChartCell from './NuclideChartCell.js';
-import DecayType from '../../common/model/DecayType.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
-import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
-import BANConstants from '../../common/BANConstants.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import ChartIntroModel from '../model/ChartIntroModel.js';
-import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import BANColors from '../../common/BANColors.js';
-import { N_ONE_CAPACITY, N_ZERO_CAPACITY } from '../model/ShellModelNucleus.js';
+import BANConstants from '../../common/BANConstants.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANModel from '../../common/model/BANModel.js';
+import DecayType from '../../common/model/DecayType.js';
+import ChartIntroModel from '../model/ChartIntroModel.js';
+import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
+import { N_ONE_CAPACITY, N_ZERO_CAPACITY } from '../model/ShellModelNucleus.js';
+import NuclideChartCell from './NuclideChartCell.js';
 
 type SelfOptions = {
   cellTextFontSize: number;

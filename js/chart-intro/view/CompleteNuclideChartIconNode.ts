@@ -7,10 +7,10 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import NuclideChartNode from './NuclideChartNode.js';
-import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import { Node } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
+import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
+import NuclideChartNode from './NuclideChartNode.js';
 
 class CompleteNuclideChartIconNode extends Node {
 

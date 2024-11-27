@@ -7,18 +7,18 @@
  */
 
 import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
+import { FlowBox } from '../../../scenery/js/imports.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
+import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import BANColors from '../common/BANColors.js';
+import DecayType from '../common/model/DecayType.js';
+import IconFactory from '../common/view/IconFactory.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import BuildANucleusStrings from '../BuildANucleusStrings.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import IconFactory from '../common/view/IconFactory.js';
-import DecayType from '../common/model/DecayType.js';
-import { FlowBox } from '../../../scenery/js/imports.js';
-import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 
 // types
 export type DecayScreenOptions = ScreenOptions;

@@ -6,20 +6,20 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
-import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Range from '../../../../dot/js/Range.js';
-import ParticleType from './ParticleType.js';
 import Animation from '../../../../twixt/js/Animation.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import BANParticle from './BANParticle.js';
+import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
-import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
+import BANParticle from './BANParticle.js';
+import ParticleType from './ParticleType.js';
 
 class BANModel<T extends ParticleAtom> {
 

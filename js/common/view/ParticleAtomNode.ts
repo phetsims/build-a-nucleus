@@ -8,17 +8,17 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import { Circle, Color, Node } from '../../../../scenery/js/imports.js';
-import BANConstants from '../BANConstants.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import { Circle, Color, Node } from '../../../../scenery/js/imports.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import Particle from '../../../../shred/js/model/Particle.js';
-import ParticleView from '../../../../shred/js/view/ParticleView.js';
-import Range from '../../../../dot/js/Range.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import ParticleView from '../../../../shred/js/view/ParticleView.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../BANConstants.js';
 
 // Empirically determined, from the ElectronCloudView radius.
 const MIN_ELECTRON_CLOUD_RADIUS = 42.5;

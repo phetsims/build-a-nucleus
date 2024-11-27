@@ -7,17 +7,17 @@
  * @author Luisa Vargas
  */
 
-import buildANucleus from '../../buildANucleus.js';
-import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
-import { HBox, HBoxOptions, Node, Text } from '../../../../scenery/js/imports.js';
-import BuildANucleusStrings from '../../BuildANucleusStrings.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, HBoxOptions, Node, Text } from '../../../../scenery/js/imports.js';
+import buildANucleus from '../../buildANucleus.js';
+import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
+import HalfLifeInfoDialog from './HalfLifeInfoDialog.js';
+import HalfLifeNumberLineNode from './HalfLifeNumberLineNode.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 14 );

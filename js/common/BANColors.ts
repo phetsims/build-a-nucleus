@@ -7,8 +7,8 @@
  */
 
 import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
-import buildANucleus from '../buildANucleus.js';
 import { PARTICLE_COLORS } from '../../../shred/js/model/Particle.js';
+import buildANucleus from '../buildANucleus.js';
 
 const BANColors = {
 

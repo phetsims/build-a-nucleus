@@ -7,15 +7,15 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import { DragListener, Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
-import buildANucleus from '../../buildANucleus.js';
-import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import ParticleType from '../model/ParticleType.js';
-import BANConstants from '../BANConstants.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import BANParticle from '../model/BANParticle.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import { DragListener, Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
 import Particle from '../../../../shred/js/model/Particle.js';
+import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
+import buildANucleus from '../../buildANucleus.js';
+import BANConstants from '../BANConstants.js';
+import BANParticle from '../model/BANParticle.js';
+import ParticleType from '../model/ParticleType.js';
 
 class NucleonCreatorNode extends Node {
 

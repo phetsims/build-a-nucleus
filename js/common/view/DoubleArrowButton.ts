@@ -10,9 +10,9 @@
  */
 
 import { Shape } from '../../../../kite/js/imports.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import { HBox, TPaint, Path } from '../../../../scenery/js/imports.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import { HBox, Path, TPaint } from '../../../../scenery/js/imports.js';
 import RectangularPushButton, { RectangularPushButtonOptions } from '../../../../sun/js/buttons/RectangularPushButton.js';
 import buildANucleus from '../../buildANucleus.js';
 
