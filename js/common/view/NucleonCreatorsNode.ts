@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * Spinner buttons at the bottom of the screen that add and remove protons and neutrons from the atom. Buttons are

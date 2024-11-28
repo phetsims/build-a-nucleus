@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * Node that represents the initial part of the Nuclide chart, up to 10 protons and 12 neutrons.

@@ -1,4 +1,4 @@
-// Copyright 2023, University of Colorado Boulder
+// Copyright 2023-2024, University of Colorado Boulder
 
 /**
  * Node that represents the view of a decay equation. It is a VBox with the 'Most likely decay' portion at the top and

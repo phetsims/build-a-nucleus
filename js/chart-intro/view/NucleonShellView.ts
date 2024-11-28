@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * Node that represents the nucleon shells, meaning the straight horizontal lines above the buckets, in the view.
