@@ -63,6 +63,7 @@ class AvailableDecaysPanel extends Panel {
       }, BANConstants.INFO_DIALOG_OPTIONS )
     );
     const decaysInfoButton = new InfoButton( {
+      iconFill: 'black',
       listener: () => decaysInfoDialog.show(),
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT,
       baseColor: BANColors.availableDecaysInfoButtonColorProperty

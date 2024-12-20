@@ -57,6 +57,7 @@ class HalfLifeInformationNode extends Node {
 
     // Create and add the info button.
     const infoButton = new InfoButton( {
+      iconFill: 'black',
       listener: () => halfLifeInfoDialog.show(),
       baseColor: BANColors.infoButtonColorProperty,
       maxHeight: BANConstants.INFO_BUTTON_MAX_HEIGHT
