@@ -1,6 +1,6 @@
 // Copyright 2022-2024, University of Colorado Boulder
 
-import { Rectangle } from '../../../../scenery/js/imports.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import PeriodicTableNode from '../../../../shred/js/view/PeriodicTableNode.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';

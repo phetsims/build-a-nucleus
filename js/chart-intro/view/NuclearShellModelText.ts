@@ -7,7 +7,8 @@
  */
 
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
-import { Node, RichText } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';

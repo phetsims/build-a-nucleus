@@ -7,7 +7,7 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import { Node } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import buildANucleus from '../../buildANucleus.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import NuclideChartNode from './NuclideChartNode.js';

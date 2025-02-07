@@ -8,7 +8,14 @@
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import { allowLinksProperty, Color, Image, Node, Rectangle, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
+import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
+import allowLinksProperty from '../../../../scenery/js/util/allowLinksProperty.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
 import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
 import fullNuclideChart_png from '../../../images/fullNuclideChart_png.js';

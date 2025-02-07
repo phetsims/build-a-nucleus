@@ -7,7 +7,7 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import { ColorProperty } from '../../../../scenery/js/imports.js';
+import ColorProperty from '../../../../scenery/js/util/ColorProperty.js';
 import AtomIdentifier, { DecayAmount } from '../../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';

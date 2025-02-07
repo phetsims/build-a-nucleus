@@ -8,7 +8,12 @@
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import { GridBox, HBox, Node, ProfileColorProperty, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import GridBox from '../../../../scenery/js/layout/nodes/GridBox.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
+import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';

@@ -10,7 +10,11 @@
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PlusNode from '../../../../scenery-phet/js/PlusNode.js';
-import { HBox, Line, Node, TColor, VBox } from '../../../../scenery/js/imports.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import TColor from '../../../../scenery/js/util/TColor.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../BANColors.js';

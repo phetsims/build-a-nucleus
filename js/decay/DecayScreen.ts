@@ -10,7 +10,7 @@ import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
-import { FlowBox } from '../../../scenery/js/imports.js';
+import FlowBox from '../../../scenery/js/layout/nodes/FlowBox.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import buildANucleus from '../buildANucleus.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';

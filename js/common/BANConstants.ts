@@ -8,7 +8,8 @@
 
 import ScreenView from '../../../joist/js/ScreenView.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import { Color, RadialGradient } from '../../../scenery/js/imports.js';
+import Color from '../../../scenery/js/util/Color.js';
+import RadialGradient from '../../../scenery/js/util/RadialGradient.js';
 import ShredConstants from '../../../shred/js/ShredConstants.js';
 import buildANucleus from '../buildANucleus.js';
 import BANColors from './BANColors.js';

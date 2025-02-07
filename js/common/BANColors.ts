@@ -6,7 +6,8 @@
  * @author Luisa Vargas
  */
 
-import { Color, ProfileColorProperty } from '../../../scenery/js/imports.js';
+import Color from '../../../scenery/js/util/Color.js';
+import ProfileColorProperty from '../../../scenery/js/util/ProfileColorProperty.js';
 import { PARTICLE_COLORS } from '../../../shred/js/model/Particle.js';
 import buildANucleus from '../buildANucleus.js';
 

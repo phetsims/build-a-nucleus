@@ -9,7 +9,9 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { DragListener, Node, PressListenerEvent } from '../../../../scenery/js/imports.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import { PressListenerEvent } from '../../../../scenery/js/listeners/PressListener.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleus from '../../buildANucleus.js';
