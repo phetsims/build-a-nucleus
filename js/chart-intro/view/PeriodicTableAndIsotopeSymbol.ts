@@ -1,4 +1,4 @@
-// Copyright 2022-2024, University of Colorado Boulder
+// Copyright 2022-2025, University of Colorado Boulder
 
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';

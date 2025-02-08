@@ -1,4 +1,4 @@
-// Copyright 2023-2024, University of Colorado Boulder
+// Copyright 2023-2025, University of Colorado Boulder
 
 /**
  * Node that focuses on current nuclide in NuclideChartNode by drawing a square box outline with an area of 5x5 cells

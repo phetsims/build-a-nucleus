@@ -1,4 +1,4 @@
-// Copyright 2023-2024, University of Colorado Boulder
+// Copyright 2023-2025, University of Colorado Boulder
 
 /**
  * Node that holds the ParticleView's from ParticleAtom. Rearranges particles in different node layers using z-indexing.

@@ -1,4 +1,4 @@
-// Copyright 2023-2024, University of Colorado Boulder
+// Copyright 2023-2025, University of Colorado Boulder
 
 /**
  * Node that represents the background of a single cell in the nuclide chart. The view of the NuclideChartCellModel.
