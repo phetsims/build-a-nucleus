@@ -9,6 +9,7 @@
 
 
 import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
+import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
 import AtomIdentifier from '../../../shred/js/AtomIdentifier.js';
 import buildANucleus from '../buildANucleus.js';
 import BANConstants from './BANConstants.js';
