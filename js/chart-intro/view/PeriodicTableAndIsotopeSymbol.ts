@@ -1,5 +1,11 @@
 // Copyright 2022-2025, University of Colorado Boulder
 
+/**
+ * A node that presents a periodic table and an enlarged and dynamic isotope symbol above the table.
+ *
+ * @author Luisa Vargas
+ */
+
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import PeriodicTableNode from '../../../../shred/js/view/PeriodicTableNode.js';
@@ -8,12 +14,6 @@ import Panel from '../../../../sun/js/Panel.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-
-/**
- * A node that presents a periodic table and an enlarged and dynamic isotope symbol above the table.
- *
- * @author Luisa Vargas
- */
 
 class PeriodicTableAndIsotopeSymbol extends Panel {
 
