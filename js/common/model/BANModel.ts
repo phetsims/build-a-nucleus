@@ -99,6 +99,7 @@ class BANModel<T extends ParticleAtom> {
       // This duplicates code in ParticleAtom, but not all particles are in the particleAtom, see
       if ( isUserControlled && this.particleAtom.containsParticle( particle ) ) {
         this.particleAtom.removeParticle( particle );
+        particle.zLayerProperty.set( 0 ); // move to front layer
       }
 
       if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString
