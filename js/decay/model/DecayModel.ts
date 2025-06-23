@@ -10,6 +10,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANModel from '../../common/model/BANModel.js';
@@ -26,7 +27,9 @@ class DecayModel extends BANModel<ParticleAtom> {
 
   public constructor() {
 
-    const particleAtom = new ParticleAtom();
+    const particleAtom = new ParticleAtom( {
+      tandem: Tandem.OPT_OUT // Opt out for now until phet-io is implemented.
+    } );
 
     // Empirically determined, the last nuclide the Decay screen goes up to is Plutonium-240 (94 protons and 146 neutrons).
     super( BANConstants.DECAY_MAX_NUMBER_OF_PROTONS, BANConstants.DECAY_MAX_NUMBER_OF_NEUTRONS, particleAtom );

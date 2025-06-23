@@ -16,6 +16,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle, { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANParticle from '../../common/model/BANParticle.js';
@@ -82,7 +83,9 @@ class ShellModelNucleus extends ParticleAtom {
   private readonly neutronsLevelProperty = new EnumerationProperty( EnergyLevelType.N_ZERO );
 
   public constructor() {
-    super();
+    super( {
+      tandem: Tandem.OPT_OUT // Opt out for now until phet-io is implemented.
+    } );
 
     // Initialize the positions for where a nucleon can be placed.
     for ( let i = 0; i < ALLOWED_PARTICLE_POSITIONS.length; i++ ) {

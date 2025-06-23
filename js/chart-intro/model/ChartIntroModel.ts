@@ -10,6 +10,7 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANModel from '../../common/model/BANModel.js';
@@ -44,7 +45,9 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
     super( BANConstants.CHART_MAX_NUMBER_OF_PROTONS, BANConstants.CHART_MAX_NUMBER_OF_NEUTRONS, new ShellModelNucleus() );
 
     // This is the mini-nucleus that updates based on the particleAtom.
-    this.miniParticleAtom = new ParticleAtom();
+    this.miniParticleAtom = new ParticleAtom( {
+      tandem: Tandem.OPT_OUT // Opt out for now until phet-io is implemented.
+    } );
 
     this.selectedNuclideChartProperty = new Property<SelectedChartType>( 'partial' );
 

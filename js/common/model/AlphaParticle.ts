@@ -9,6 +9,7 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import buildANucleus from '../../buildANucleus.js';
@@ -23,7 +24,9 @@ class AlphaParticle extends ParticleAtom {
   public static readonly NUMBER_OF_ALLOWED_NEUTRONS = 2;
 
   public constructor() {
-    super();
+    super( {
+      tandem: Tandem.OPT_OUT // Opt out for now until phet-io is implemented.
+    } );
   }
 
   /**
