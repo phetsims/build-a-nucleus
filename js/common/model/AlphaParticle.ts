@@ -1,4 +1,4 @@
-// Copyright 2023-2024, University of Colorado Boulder
+// Copyright 2023-2025, University of Colorado Boulder
 
 /**
  * A model element that represents an alpha particle, which is made up of 2 protons and 2 neutrons.
