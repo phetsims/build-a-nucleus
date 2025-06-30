@@ -29,9 +29,9 @@ export default class BANParticle extends Particle {
     particle.destinationProperty.value = destination;
 
     const distance = particle.destinationProperty.value.distance( particle.positionProperty.value );
-    particle.animationVelocityProperty.value = consistentTime ?
-                                               distance / ANIMATION_TIME :
-                                               BANConstants.PARTICLE_ANIMATION_SPEED;
+    particle.animationSpeedProperty.value = consistentTime ?
+                                            distance / ANIMATION_TIME :
+                                            BANConstants.PARTICLE_ANIMATION_SPEED;
   }
 }
 
