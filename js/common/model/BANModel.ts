@@ -123,7 +123,7 @@ class BANModel<T extends ParticleAtom> {
     this.particles.addItemAddedListener( particle => {
 
       // No need to remove because when a particle is removed from this.particles, it is disposed.
-      particle.userControlledProperty.link(
+      particle.isDraggingProperty.link(
         isUserControlled => userControlledListener( isUserControlled, particle ) );
     } );
 
