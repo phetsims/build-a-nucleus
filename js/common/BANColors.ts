@@ -44,7 +44,7 @@ const BANColors = {
   } ),
   betaMinusColorProperty: new ProfileColorProperty( buildANucleus, 'betaMinusColor', {
     default: new Color( 148, 245, 245 )
-  } ),
+  }, { disableListenerLimit: true } ),
   alphaColorProperty: new ProfileColorProperty( buildANucleus, 'alphaColor', {
     default: new Color( 40, 215, 86 )
   } ),
@@ -113,7 +113,7 @@ const BANColors = {
 
   nuclideChartBorderColorProperty: new ProfileColorProperty( buildANucleus, 'nuclideChartBorderColor', {
     default: new Color( 143, 143, 143 )
-  } ),
+  }, { disableListenerLimit: true } ),
 
   nuclideChartBorderMagicNumberColorProperty: new ProfileColorProperty( buildANucleus, 'nuclideChartBorderMagicNumberColor', {
     default: new Color( 251, 255, 36 )
