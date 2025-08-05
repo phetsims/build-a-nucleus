@@ -14,7 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Particle, { ParticleTypeString } from '../../../../shred/js/model/Particle.js';
+import Particle, { ParticleType } from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
@@ -130,7 +130,7 @@ class ShellModelNucleus extends ParticleAtom {
   /**
    * Return the shell positions array for the given particleType.
    */
-  private getNucleonShellPositions( particleType: ParticleTypeEnum | ParticleTypeString ): ParticleShellPosition[][] {
+  private getNucleonShellPositions( particleType: ParticleTypeEnum | ParticleType ): ParticleShellPosition[][] {
     return particleType === ParticleTypeEnum.NEUTRON || particleType === ParticleTypeEnum.NEUTRON.particleTypeString ?
            this.neutronShellPositions : this.protonShellPositions;
   }
