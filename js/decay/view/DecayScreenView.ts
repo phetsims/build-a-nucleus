@@ -23,7 +23,7 @@ import BANConstants from '../../common/BANConstants.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import DecayType from '../../common/model/DecayType.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import DecayModel from '../model/DecayModel.js';
 import AvailableDecaysPanel from './AvailableDecaysPanel.js';
@@ -224,7 +224,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
 
         // Emit the 2 protons after {{ BANConstants.TIME_TO_SHOW_DOES_NOT_EXIST }} seconds.
         if ( !protonsEmitted && position.distance( alphaParticleInitialPosition ) >= alphaParticleDistanceTravelled ) {
-          _.times( 2, () => { this.emitNucleon( ParticleType.PROTON ); } );
+          _.times( 2, () => { this.emitNucleon( ParticleTypeEnum.PROTON ); } );
           protonsEmitted = true;
         }
       } );

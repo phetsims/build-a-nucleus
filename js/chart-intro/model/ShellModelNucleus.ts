@@ -20,14 +20,14 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANParticle from '../../common/model/BANParticle.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import EnergyLevelType from './EnergyLevelType.js';
 
 // types
 export type ParticleShellPosition = {
   particle?: Particle;
   xPosition: number; // 0 - 5
-  type: ParticleType;
+  type: ParticleTypeEnum;
 };
 
 // constants
@@ -92,11 +92,11 @@ class ShellModelNucleus extends ParticleAtom {
       for ( let j = 0; j < ALLOWED_PARTICLE_POSITIONS[ i ].length; j++ ) {
         this.protonShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = {
           xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ],
-          type: ParticleType.PROTON
+          type: ParticleTypeEnum.PROTON
         };
         this.neutronShellPositions[ i ][ ALLOWED_PARTICLE_POSITIONS[ i ][ j ] ] = {
           xPosition: ALLOWED_PARTICLE_POSITIONS[ i ][ j ],
-          type: ParticleType.NEUTRON
+          type: ParticleTypeEnum.NEUTRON
         };
       }
     }
@@ -130,8 +130,8 @@ class ShellModelNucleus extends ParticleAtom {
   /**
    * Return the shell positions array for the given particleType.
    */
-  private getNucleonShellPositions( particleType: ParticleType | ParticleTypeString ): ParticleShellPosition[][] {
-    return particleType === ParticleType.NEUTRON || particleType === ParticleType.NEUTRON.particleTypeString ?
+  private getNucleonShellPositions( particleType: ParticleTypeEnum | ParticleTypeString ): ParticleShellPosition[][] {
+    return particleType === ParticleTypeEnum.NEUTRON || particleType === ParticleTypeEnum.NEUTRON.particleTypeString ?
            this.neutronShellPositions : this.protonShellPositions;
   }
 
@@ -139,7 +139,7 @@ class ShellModelNucleus extends ParticleAtom {
    * Return the right-most particle from the highest energy level that contains particles, if there is one.
    * Otherwise, return undefined.
    */
-  public getLastParticleInShell( particleType: ParticleType ): Particle | undefined {
+  public getLastParticleInShell( particleType: ParticleTypeEnum ): Particle | undefined {
     const nucleonShellPositions = this.getNucleonShellPositions( particleType );
     for ( let i = nucleonShellPositions.length - 1; i >= 0; i-- ) {
       const nucleonShellRow = nucleonShellPositions[ i ];
@@ -156,7 +156,7 @@ class ShellModelNucleus extends ParticleAtom {
    * Return the view destination of the next open position for the given particleType shell positions and set the
    * particle on that open shell position, even though it is not yet 'counted' as part of the particleAtom.
    */
-  public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
+  public getParticleDestination( particleType: ParticleTypeEnum, particle: Particle ): Vector2 {
     const nucleonShellPositions = this.getNucleonShellPositions( particleType );
     let yPosition = EnergyLevelType.N_ZERO.yPosition; // initialize to the lowest shell where yPosition = 0
 
@@ -187,7 +187,7 @@ class ShellModelNucleus extends ParticleAtom {
     const viewDestination = this.modelViewTransform.modelToViewXY( openParticleShellPosition!.xPosition, yPosition );
 
     // Add x offset for neutron particle to be aligned with its energy level position.
-    viewDestination.addXY( particleType === ParticleType.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
+    viewDestination.addXY( particleType === ParticleTypeEnum.NEUTRON ? BANConstants.X_DISTANCE_BETWEEN_ENERGY_LEVELS : 0, 0 );
     return viewDestination;
   }
 
@@ -343,7 +343,7 @@ class ShellModelNucleus extends ParticleAtom {
 
       // Don't use setAnimationDestination because we don't want to alter the velocity mid animation.
       particle.destinationProperty.value = this.getParticleDestination(
-        ParticleType.getParticleTypeFromStringType( particle.type ), particle );
+        ParticleTypeEnum.getParticleTypeFromStringType( particle.type ), particle );
     } );
   }
 

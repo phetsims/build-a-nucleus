@@ -20,7 +20,7 @@ import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../BANColors.js';
 import BANConstants from '../BANConstants.js';
 import DecayType from '../model/DecayType.js';
-import ParticleType from '../model/ParticleType.js';
+import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 
 const ALPHA_PARTICLE_SPACING = -5;
 const NUCLEON_PARTICLE_RADIUS = BANConstants.PARTICLE_RADIUS * 0.7;
@@ -32,9 +32,9 @@ class IconFactory {
   /**
    * Function to create a particle node ( a circle with a specific color ), make it bigger if the particle is a nucleon.
    */
-  public static createParticleNode( particleType: ParticleType ): ParticleNode {
+  public static createParticleNode( particleType: ParticleTypeEnum ): ParticleNode {
     return new ParticleNode( particleType.particleTypeString,
-      particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ? NUCLEON_PARTICLE_RADIUS :
+      particleType === ParticleTypeEnum.PROTON || particleType === ParticleTypeEnum.NEUTRON ? NUCLEON_PARTICLE_RADIUS :
       ELECTRON_PARTICLE_RADIUS
     );
   }
@@ -69,7 +69,7 @@ class IconFactory {
   /**
    * Function to create the icon for a nucleon emission ( a nucleon particle node with motion lines to its left ).
    */
-  private static createNucleonEmissionIcon( particleType: ParticleType ): Node {
+  private static createNucleonEmissionIcon( particleType: ParticleTypeEnum ): Node {
     return new HBox( {
       children: [
         IconFactory.createMotionLines( 4 ),
@@ -106,20 +106,20 @@ class IconFactory {
   private static createBetaDecayIcon( isBetaMinusDecay: boolean ): Node {
     return new HBox( {
       children: [
-        isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.NEUTRON ) :
-        IconFactory.createParticleNode( ParticleType.PROTON ),
+        isBetaMinusDecay ? IconFactory.createParticleNode( ParticleTypeEnum.NEUTRON ) :
+        IconFactory.createParticleNode( ParticleTypeEnum.PROTON ),
 
         IconFactory.createDecayArrowNode( BANColors.blueDecayIconSymbolsColorProperty ),
 
-        isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.PROTON ) :
-        IconFactory.createParticleNode( ParticleType.NEUTRON ),
+        isBetaMinusDecay ? IconFactory.createParticleNode( ParticleTypeEnum.PROTON ) :
+        IconFactory.createParticleNode( ParticleTypeEnum.NEUTRON ),
 
         IconFactory.createPlusNode( BANColors.blueDecayIconSymbolsColorProperty ),
 
         IconFactory.createMotionLines( 3.5, true ),
 
-        isBetaMinusDecay ? IconFactory.createParticleNode( ParticleType.ELECTRON ) :
-        IconFactory.createParticleNode( ParticleType.POSITRON )
+        isBetaMinusDecay ? IconFactory.createParticleNode( ParticleTypeEnum.ELECTRON ) :
+        IconFactory.createParticleNode( ParticleTypeEnum.POSITRON )
       ],
       spacing: SPACING / 3
     } );
@@ -145,10 +145,10 @@ class IconFactory {
         IconFactory.createMotionLines( 6 ),
         new VBox( {
           children: [
-            IconFactory.createHalfAlphaParticle( [ IconFactory.createParticleNode( ParticleType.PROTON ),
-              IconFactory.createParticleNode( ParticleType.NEUTRON ) ] ),
-            IconFactory.createHalfAlphaParticle( [ IconFactory.createParticleNode( ParticleType.NEUTRON ),
-              IconFactory.createParticleNode( ParticleType.PROTON ) ] )
+            IconFactory.createHalfAlphaParticle( [ IconFactory.createParticleNode( ParticleTypeEnum.PROTON ),
+              IconFactory.createParticleNode( ParticleTypeEnum.NEUTRON ) ] ),
+            IconFactory.createHalfAlphaParticle( [ IconFactory.createParticleNode( ParticleTypeEnum.NEUTRON ),
+              IconFactory.createParticleNode( ParticleTypeEnum.PROTON ) ] )
           ],
           spacing: ALPHA_PARTICLE_SPACING
         } )
@@ -169,9 +169,9 @@ class IconFactory {
       case DecayType.BETA_PLUS_DECAY:
         return IconFactory.createBetaDecayIcon( false ); // beta plus decay icon
       case DecayType.PROTON_EMISSION:
-        return IconFactory.createNucleonEmissionIcon( ParticleType.PROTON ); // proton emission icon
+        return IconFactory.createNucleonEmissionIcon( ParticleTypeEnum.PROTON ); // proton emission icon
       case DecayType.NEUTRON_EMISSION:
-        return IconFactory.createNucleonEmissionIcon( ParticleType.NEUTRON ); // neutron emission icon
+        return IconFactory.createNucleonEmissionIcon( ParticleTypeEnum.NEUTRON ); // neutron emission icon
       default:
         return null;
     }

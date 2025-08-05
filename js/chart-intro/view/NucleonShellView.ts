@@ -20,7 +20,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import EnergyLevelType from '../model/EnergyLevelType.js';
 import { N_ONE_CAPACITY, N_ZERO_CAPACITY, ParticleShellPosition } from '../model/ShellModelNucleus.js';
 
@@ -28,11 +28,11 @@ type EnergyLevelNodeOptions = EmptySelfOptions & NodeOptions;
 
 class NucleonShellView extends Node {
 
-  public constructor( particleType: ParticleType, nucleonShellPositions: ParticleShellPosition[][],
+  public constructor( particleType: ParticleTypeEnum, nucleonShellPositions: ParticleShellPosition[][],
                       nucleonCountProperty: TReadOnlyProperty<number>, modelViewTransform: ModelViewTransform2,
                       providedOptions?: EnergyLevelNodeOptions ) {
 
-    assert && assert( particleType === ParticleType.NEUTRON || particleType === ParticleType.PROTON,
+    assert && assert( particleType === ParticleTypeEnum.NEUTRON || particleType === ParticleTypeEnum.PROTON,
       'only protons and neutrons supported in NucleonShellView' );
 
     const options =
@@ -43,7 +43,7 @@ class NucleonShellView extends Node {
     const emptyLayerColor = BANColors.zeroNucleonsEnergyLevelColorProperty.value;
 
     // Color when the layer is completely full.
-    const fullLayerColor = particleType === ParticleType.NEUTRON ?
+    const fullLayerColor = particleType === ParticleTypeEnum.NEUTRON ?
                            BANColors.neutronColorProperty.value :
                            BANColors.protonColorProperty.value;
 

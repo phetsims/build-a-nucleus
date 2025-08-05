@@ -19,7 +19,7 @@ import Animation from '../../../../twixt/js/Animation.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 import BANParticle from './BANParticle.js';
-import ParticleType from './ParticleType.js';
+import ParticleTypeEnum from './ParticleTypeEnum.js';
 
 class BANModel<T extends ParticleAtom> {
 
@@ -102,19 +102,19 @@ class BANModel<T extends ParticleAtom> {
         particle.zLayerProperty.set( 0 ); // move to front layer
       }
 
-      if ( isUserControlled && particle.type === ParticleType.PROTON.particleTypeString
+      if ( isUserControlled && particle.type === ParticleTypeEnum.PROTON.particleTypeString
            && !this.userControlledProtons.includes( particle ) ) {
         this.userControlledProtons.add( particle );
       }
-      else if ( !isUserControlled && particle.type === ParticleType.PROTON.particleTypeString
+      else if ( !isUserControlled && particle.type === ParticleTypeEnum.PROTON.particleTypeString
                 && this.userControlledProtons.includes( particle ) ) {
         this.userControlledProtons.remove( particle );
       }
-      else if ( isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString
+      else if ( isUserControlled && particle.type === ParticleTypeEnum.NEUTRON.particleTypeString
                 && !this.userControlledNeutrons.includes( particle ) ) {
         this.userControlledNeutrons.add( particle );
       }
-      else if ( !isUserControlled && particle.type === ParticleType.NEUTRON.particleTypeString
+      else if ( !isUserControlled && particle.type === ParticleTypeEnum.NEUTRON.particleTypeString
                 && this.userControlledNeutrons.includes( particle ) ) {
         this.userControlledNeutrons.remove( particle );
       }
@@ -135,7 +135,7 @@ class BANModel<T extends ParticleAtom> {
    * Select the particle closest to its creator node but don't remove it yet, that's done in returnParticleToStack in
    * the view.
    */
-  public getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
+  public getParticleToReturn( particleType: ParticleTypeEnum, creatorNodePosition: Vector2 ): Particle {
     const sortedParticles = _.sortBy( this.getParticlesByType( particleType ), particle => {
       return particle.positionProperty.value.distance( creatorNodePosition );
     } );
@@ -147,7 +147,7 @@ class BANModel<T extends ParticleAtom> {
   /**
    * Return array of all the particles that are of particleType and part of the particleAtom
    */
-  public getParticlesByType( particleType: ParticleType ): Particle[] {
+  public getParticlesByType( particleType: ParticleTypeEnum ): Particle[] {
     const filteredParticles = _.filter( this.particles, particle => {
       return this.particleAtom.containsParticle( particle ) && particle.type === particleType.particleTypeString;
     } );
@@ -161,7 +161,7 @@ class BANModel<T extends ParticleAtom> {
   /**
    * Return the destination of a particle when it's added to the particleAtom.
    */
-  public getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
+  public getParticleDestination( particleType: ParticleTypeEnum, particle: Particle ): Vector2 {
     return this.particleAtom.positionProperty.value;
   }
 
@@ -169,7 +169,7 @@ class BANModel<T extends ParticleAtom> {
    * Add a Particle to the model.
    */
   public addParticle( particle: Particle ): void {
-    assert && assert( _.some( ParticleType.enumeration.values, particleType => {
+    assert && assert( _.some( ParticleTypeEnum.enumeration.values, particleType => {
         return particle.type === particleType.particleTypeString;
       } ),
       'Particles must be one of the types in ParticleType ' + particle.type );
@@ -245,7 +245,7 @@ class BANModel<T extends ParticleAtom> {
    * Create and add a nucleon of particleType immediately to the particleAtom. Position is by default the position of
    * the particleAtom. Returns the new nucleon created.
    */
-  public addNucleonImmediatelyToAtom( particleType: ParticleType ): Particle {
+  public addNucleonImmediatelyToAtom( particleType: ParticleTypeEnum ): Particle {
     const particle = new BANParticle( particleType.particleTypeString );
     this.addParticle( particle );
     particle.positionProperty.value = this.getParticleDestination( particleType, particle );
@@ -262,11 +262,11 @@ class BANModel<T extends ParticleAtom> {
     _.times( Math.max( numberOfNeutrons, numberOfProtons ), () => {
       if ( this.particleAtom.neutronCountProperty.value < numberOfNeutrons &&
            this.particleAtom.neutronCountProperty.value < this.neutronNumberRange.max ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.NEUTRON );
+        this.addNucleonImmediatelyToAtom( ParticleTypeEnum.NEUTRON );
       }
       if ( this.particleAtom.protonCountProperty.value < numberOfProtons &&
            this.particleAtom.protonCountProperty.value < this.protonNumberRange.max ) {
-        this.addNucleonImmediatelyToAtom( ParticleType.PROTON );
+        this.addNucleonImmediatelyToAtom( ParticleTypeEnum.PROTON );
       }
     } );
 
@@ -279,10 +279,10 @@ class BANModel<T extends ParticleAtom> {
    * Don't finish the animation towards to the particle atom, because now it is time to remove this particle
    * (animating it back to the stack).
    */
-  public clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
-    assert && assert( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON,
+  public clearIncomingParticle( particle: Particle, particleType: ParticleTypeEnum ): void {
+    assert && assert( particleType === ParticleTypeEnum.PROTON || particleType === ParticleTypeEnum.NEUTRON,
       'only proton and neutron types support for clearing' );
-    arrayRemove( particleType === ParticleType.PROTON ? this.incomingProtons : this.incomingNeutrons, particle );
+    arrayRemove( particleType === ParticleTypeEnum.PROTON ? this.incomingProtons : this.incomingNeutrons, particle );
     particle.animationEndedEmitter.removeAllListeners();
   }
 

@@ -30,7 +30,7 @@ import BANConstants from '../../common/BANConstants.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import DecayType from '../../common/model/DecayType.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import BANParticleView from '../../common/view/BANParticleView.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import ChartIntroModel, { SelectedChartType } from '../model/ChartIntroModel.js';
@@ -84,8 +84,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // Updates nucleons in miniParticleAtom as the particleAtom's nucleon changes.
     // This listener keeps the mini-particle in sync.
-    const nucleonNumberListener = ( nucleonNumber: number, particleType: ParticleType ) => {
-      const currentMiniAtomNucleonNumber = particleType === ParticleType.PROTON ?
+    const nucleonNumberListener = ( nucleonNumber: number, particleType: ParticleTypeEnum ) => {
+      const currentMiniAtomNucleonNumber = particleType === ParticleTypeEnum.PROTON ?
                                            model.miniParticleAtom.protonCountProperty.value :
                                            model.miniParticleAtom.neutronCountProperty.value;
 
@@ -121,9 +121,9 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
       }
     };
     model.particleAtom.protonCountProperty.link(
-      protonNumber => nucleonNumberListener( protonNumber, ParticleType.PROTON ) );
+      protonNumber => nucleonNumberListener( protonNumber, ParticleTypeEnum.PROTON ) );
     model.particleAtom.neutronCountProperty.link(
-      neutronNumber => nucleonNumberListener( neutronNumber, ParticleType.NEUTRON ) );
+      neutronNumber => nucleonNumberListener( neutronNumber, ParticleTypeEnum.NEUTRON ) );
     const particleAtomNodeCenter = this.particleAtomNode.center;
 
     // Scale down to make nucleus 'mini' sized and keep the same center after scaling.
@@ -170,14 +170,14 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.addChild( arrow );
 
     // Add proton and neutron energy level nodes.
-    this.protonEnergyLevelNode = new NucleonShellView( ParticleType.PROTON, model.particleAtom.protonShellPositions,
+    this.protonEnergyLevelNode = new NucleonShellView( ParticleTypeEnum.PROTON, model.particleAtom.protonShellPositions,
       model.particleAtom.protonCountProperty, this.model.particleAtom.modelViewTransform );
 
     // We don't want to effect the origin of this, so just translate.
     this.protonEnergyLevelNode.setTranslation( options.particleViewPosition );
     this.addChild( this.protonEnergyLevelNode );
 
-    this.neutronEnergyLevelNode = new NucleonShellView( ParticleType.NEUTRON, model.particleAtom.neutronShellPositions,
+    this.neutronEnergyLevelNode = new NucleonShellView( ParticleTypeEnum.NEUTRON, model.particleAtom.neutronShellPositions,
       model.particleAtom.neutronCountProperty, this.model.particleAtom.modelViewTransform );
 
     // Neutron energy levels are further to the right than the proton energy levels.
@@ -314,7 +314,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
-  public override emitNucleon( particleType: ParticleType, particleAtom: ParticleAtom ): void {
+  public override emitNucleon( particleType: ParticleTypeEnum, particleAtom: ParticleAtom ): void {
     this.isMiniAtomConnected = false;
 
     // Handle the animation for the mini ParticleAtom.
@@ -330,7 +330,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   /**
    * Fade away and remove a nucleon of a given particleType from the energy levels.
    */
-  private fadeOutShellNucleon( particleType: ParticleType ): void {
+  private fadeOutShellNucleon( particleType: ParticleTypeEnum ): void {
     const shellNucleusNucleon = this.model.particleAtom.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( shellNucleusNucleon );
     const particleView = this.findParticleView( shellNucleusNucleon );
@@ -370,8 +370,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.model.miniParticleAtom.reconfigureNucleus();
 
     // Animate the NucleonShellView.
-    _.times( AlphaParticle.NUMBER_OF_ALLOWED_PROTONS, () => this.fadeOutShellNucleon( ParticleType.PROTON ) );
-    _.times( AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS, () => this.fadeOutShellNucleon( ParticleType.NEUTRON ) );
+    _.times( AlphaParticle.NUMBER_OF_ALLOWED_PROTONS, () => this.fadeOutShellNucleon( ParticleTypeEnum.PROTON ) );
+    _.times( AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS, () => this.fadeOutShellNucleon( ParticleTypeEnum.NEUTRON ) );
 
     this.isMiniAtomConnected = true;
 
@@ -386,7 +386,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
 
     // Animate the miniParticleAtom.
     const nucleonTypeToChange = betaDecayType === DecayType.BETA_MINUS_DECAY ?
-                                ParticleType.NEUTRON : ParticleType.PROTON;
+                                ParticleTypeEnum.NEUTRON : ParticleTypeEnum.PROTON;
     const particleToEmit = super.betaDecay( betaDecayType, this.model.miniParticleAtom );
     this.createMiniParticleView( particleToEmit );
 
@@ -400,8 +400,8 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     } );
 
     // Create the new particle and add it immediately to the atom.
-    const newNucleonType = nucleonTypeToChange === ParticleType.PROTON ?
-                           ParticleType.NEUTRON : ParticleType.PROTON;
+    const newNucleonType = nucleonTypeToChange === ParticleTypeEnum.PROTON ?
+                           ParticleTypeEnum.NEUTRON : ParticleTypeEnum.PROTON;
     const particle = this.model.addNucleonImmediatelyToAtom( newNucleonType );
 
     // Fade in the new nucleon particle.

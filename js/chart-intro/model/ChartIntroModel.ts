@@ -15,7 +15,7 @@ import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANModel from '../../common/model/BANModel.js';
 import BANParticle from '../../common/model/BANParticle.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import DecayEquationModel from './DecayEquationModel.js';
 import NuclideChartCellModel from './NuclideChartCellModel.js';
 import ShellModelNucleus from './ShellModelNucleus.js';
@@ -58,7 +58,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
   /**
    * Create model for particle in mini-nucleus and add it to the miniParticleAtom.
    */
-  public createMiniParticleModel( particleType: ParticleType ): Particle {
+  public createMiniParticleModel( particleType: ParticleTypeEnum ): Particle {
     const particle = new BANParticle( particleType.particleTypeString );
     this.miniParticleAtom.addParticle( particle );
     return particle;
@@ -75,7 +75,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
   /**
    * Select the particle in the farthest energy level.
    */
-  public override getParticleToReturn( particleType: ParticleType, creatorNodePosition: Vector2 ): Particle {
+  public override getParticleToReturn( particleType: ParticleTypeEnum, creatorNodePosition: Vector2 ): Particle {
     const particleToReturn = this.particleAtom.getLastParticleInShell( particleType );
     assert && assert( particleToReturn, 'No particle of type ' + particleType.name + ' exists in the particleAtom.' );
     assert && assert( !particleToReturn!.isDisposed, 'Particle should not already be disposed.' );
@@ -87,7 +87,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
   /**
    * Return the next open shell position for the given particleType and add it to that shell position.
    */
-  public override getParticleDestination( particleType: ParticleType, particle: Particle ): Vector2 {
+  public override getParticleDestination( particleType: ParticleTypeEnum, particle: Particle ): Vector2 {
     return this.particleAtom.getParticleDestination( particleType, particle );
   }
 
@@ -136,7 +136,7 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
    * We need to make sure that the shell position spots reserved for the incoming, animating particles, are cleared out
    * since the particle is no longer coming into the atom.
    */
-  public override clearIncomingParticle( particle: Particle, particleType: ParticleType ): void {
+  public override clearIncomingParticle( particle: Particle, particleType: ParticleTypeEnum ): void {
     super.clearIncomingParticle( particle, particleType );
 
     // Not a full removeParticle() call because we never completed the animation into the particleAtom (but we did

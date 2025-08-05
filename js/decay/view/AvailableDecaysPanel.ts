@@ -25,7 +25,7 @@ import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import DecayType from '../../common/model/DecayType.js';
-import ParticleType from '../../common/model/ParticleType.js';
+import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import IconFactory from '../../common/view/IconFactory.js';
 
 // constants
@@ -137,7 +137,7 @@ class AvailableDecaysPanel extends Panel {
 
     // Create and add the particle labels.
     // A particle label is a particle node on the left with its corresponding particle name on the right.
-    const particleLabels = ParticleType.enumeration.values.map( particleType => {
+    const particleLabels = ParticleTypeEnum.enumeration.values.map( particleType => {
       return new HBox( {
         children: [
           IconFactory.createParticleNode( particleType ),

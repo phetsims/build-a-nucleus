@@ -28,7 +28,7 @@ import AlphaParticle from '../model/AlphaParticle.js';
 import BANModel from '../model/BANModel.js';
 import BANParticle from '../model/BANParticle.js';
 import DecayType from '../model/DecayType.js';
-import ParticleType from '../model/ParticleType.js';
+import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 import BANParticleView from './BANParticleView.js';
 import ElementNameText from './ElementNameText.js';
 import NucleonCreatorsNode from './NucleonCreatorsNode.js';
@@ -140,9 +140,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
       this.particleViewMap[ particleView.particle.id ] = particleView;
       this.addParticleView( particle );
-      const particleType = ParticleType.getParticleTypeFromStringType( particle.type );
+      const particleType = ParticleTypeEnum.getParticleTypeFromStringType( particle.type );
 
-      if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
+      if ( particleType === ParticleTypeEnum.PROTON || particleType === ParticleTypeEnum.NEUTRON ) {
 
         // Called when a nucleon is finished being dragged.
         particle.isDraggingProperty.lazyLink( isDragging => !isDragging && this.dragEndedListener( particle, this.model.particleAtom ) );
@@ -154,9 +154,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
         particleView.dispose();
 
-        const particleType = ParticleType.getParticleTypeFromStringType( particle.type );
+        const particleType = ParticleTypeEnum.getParticleTypeFromStringType( particle.type );
 
-        if ( particleType === ParticleType.PROTON || particleType === ParticleType.NEUTRON ) {
+        if ( particleType === ParticleTypeEnum.PROTON || particleType === ParticleTypeEnum.NEUTRON ) {
           this.checkIfCreatorNodeShouldBeVisible( particleType );
         }
       } );
@@ -190,10 +190,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Get information for a specific particle type.
    */
-  private getInfoForParticleType( particleType: ParticleType ): ParticleTypeInfo {
-    const maxNumber = particleType === ParticleType.PROTON ? this.model.protonNumberRange.max :
+  private getInfoForParticleType( particleType: ParticleTypeEnum ): ParticleTypeInfo {
+    const maxNumber = particleType === ParticleTypeEnum.PROTON ? this.model.protonNumberRange.max :
                       this.model.neutronNumberRange.max;
-    const creatorNode = particleType === ParticleType.PROTON ? this.nucleonCreatorsNode.protonsCreatorNode :
+    const creatorNode = particleType === ParticleTypeEnum.PROTON ? this.nucleonCreatorsNode.protonsCreatorNode :
                         this.nucleonCreatorsNode.neutronsCreatorNode;
     const numberOfNucleons = [ ...this.model.particles ]
       .filter( particle => particle.type === particleType.particleTypeString ).length;
@@ -211,7 +211,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Hides the given creator node if the number for that nucleon type has reached its max.
    */
-  private checkIfCreatorNodeShouldBeInvisible( particleType: ParticleType ): void {
+  private checkIfCreatorNodeShouldBeInvisible( particleType: ParticleTypeEnum ): void {
     const infoForParticleType = this.getInfoForParticleType( particleType );
 
     if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) >= infoForParticleType.maxNumber ) {
@@ -222,7 +222,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Shows the given creator node if the number for that nucleon type is below its max.
    */
-  private checkIfCreatorNodeShouldBeVisible( particleType: ParticleType ): void {
+  private checkIfCreatorNodeShouldBeVisible( particleType: ParticleTypeEnum ): void {
     const infoForParticleType = this.getInfoForParticleType( particleType );
 
     if ( ( infoForParticleType.numberOfNucleons - infoForParticleType.outgoingNucleons ) < infoForParticleType.maxNumber ) {
@@ -234,8 +234,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
    * Make nucleon creator nodes visible if their nucleon numbers are below their max amounts.
    */
   private checkIfCreatorNodesShouldBeVisible(): void {
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.PROTON );
-    this.checkIfCreatorNodeShouldBeVisible( ParticleType.NEUTRON );
+    this.checkIfCreatorNodeShouldBeVisible( ParticleTypeEnum.PROTON );
+    this.checkIfCreatorNodeShouldBeVisible( ParticleTypeEnum.NEUTRON );
   }
 
   /**
@@ -251,11 +251,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Create a particle of particleType at its creator node and send it (and add it) to the particleAtom.
    */
-  protected createParticleFromStack( particleType: ParticleType ): Particle {
+  protected createParticleFromStack( particleType: ParticleTypeEnum ): Particle {
 
     // Create a particle at the center of its creator node.
     const particle = new BANParticle( particleType.particleTypeString );
-    const origin = particleType === ParticleType.PROTON ?
+    const origin = particleType === ParticleTypeEnum.PROTON ?
                    this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
                    this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
     particle.setPositionAndDestination( origin );
@@ -268,7 +268,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     const particleView = this.findParticleView( particle );
     particleView.inputEnabled = false;
 
-    if ( particleType === ParticleType.PROTON ) {
+    if ( particleType === ParticleTypeEnum.PROTON ) {
       this.model.incomingProtons.push( particle );
     }
     else {
@@ -293,8 +293,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
    * Remove a particle of particleType from the particleAtom, if it is in the particleAtom, and send it back to its
    * creator node.
    */
-  private returnParticleToStack( particleType: ParticleType ): void {
-    const creatorNodePosition = particleType === ParticleType.PROTON ?
+  private returnParticleToStack( particleType: ParticleTypeEnum ): void {
+    const creatorNodePosition = particleType === ParticleTypeEnum.PROTON ?
                                 this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
                                 this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
 
@@ -394,22 +394,22 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
       if ( this.previousProtonNumber < protonNumber ) {
         _.times( protonNumber - this.previousProtonNumber, () => {
-          this.returnParticleToStack( ParticleType.PROTON );
+          this.returnParticleToStack( ParticleTypeEnum.PROTON );
         } );
       }
       else if ( this.previousProtonNumber > protonNumber ) {
         _.times( this.previousProtonNumber - protonNumber, () => {
-          this.createParticleFromStack( ParticleType.PROTON );
+          this.createParticleFromStack( ParticleTypeEnum.PROTON );
         } );
       }
       if ( this.previousNeutronNumber < neutronNumber ) {
         _.times( neutronNumber - this.previousNeutronNumber, () => {
-          this.returnParticleToStack( ParticleType.NEUTRON );
+          this.returnParticleToStack( ParticleTypeEnum.NEUTRON );
         } );
       }
       else if ( this.previousNeutronNumber > neutronNumber ) {
         _.times( this.previousNeutronNumber - neutronNumber, () => {
-          this.createParticleFromStack( ParticleType.NEUTRON );
+          this.createParticleFromStack( ParticleTypeEnum.NEUTRON );
         } );
       }
     }
@@ -429,7 +429,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
    * Define a function that will decide where to put nucleons.
    */
   private dragEndedListener( nucleon: Particle, atom: ParticleAtom ): void {
-    const particleCreatorNodeModelCenter = nucleon.type === ParticleType.PROTON.particleTypeString ?
+    const particleCreatorNodeModelCenter = nucleon.type === ParticleTypeEnum.PROTON.particleTypeString ?
                                            this.nucleonCreatorsNode.protonsCreatorNodeModelCenter :
                                            this.nucleonCreatorsNode.neutronsCreatorNodeModelCenter;
 
@@ -462,7 +462,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Remove a nucleon of a given particleType from the atom immediately.
    */
-  private removeNucleonImmediatelyFromAtom( particleType: ParticleType ): void {
+  private removeNucleonImmediatelyFromAtom( particleType: ParticleTypeEnum ): void {
     const particleToRemove = this.model.particleAtom.extractParticle( particleType.particleTypeString );
     this.animateAndRemoveParticle( particleToRemove );
   }
@@ -470,8 +470,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Restore the particleAtom to have the nucleon number before a decay occurred.
    */
-  private restorePreviousNucleonNumber( particleType: ParticleType, oldNucleonNumber: number ): void {
-    const newNucleonNumber = particleType === ParticleType.PROTON ?
+  private restorePreviousNucleonNumber( particleType: ParticleTypeEnum, oldNucleonNumber: number ): void {
+    const newNucleonNumber = particleType === ParticleTypeEnum.PROTON ?
                              this.model.particleAtom.protonCountProperty.value :
                              this.model.particleAtom.neutronCountProperty.value;
     const nucleonNumberDifference = oldNucleonNumber - newNucleonNumber;
@@ -490,8 +490,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
    * Restore the sim to the old nucleon numbers and clear all currently outgoing particles and active animations.
    */
   protected undoDecay( oldProtonNumber: number, oldNeutronNumber: number ): void {
-    this.restorePreviousNucleonNumber( ParticleType.PROTON, oldProtonNumber );
-    this.restorePreviousNucleonNumber( ParticleType.NEUTRON, oldNeutronNumber );
+    this.restorePreviousNucleonNumber( ParticleTypeEnum.PROTON, oldProtonNumber );
+    this.restorePreviousNucleonNumber( ParticleTypeEnum.NEUTRON, oldNeutronNumber );
 
     // Remove all particles in the outgoingParticles array from the particles array.
     [ ...this.model.outgoingParticles ].forEach( particle => {
@@ -515,10 +515,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
     switch( decayType ) {
       case DecayType.NEUTRON_EMISSION:
-        this.emitNucleon( ParticleType.NEUTRON );
+        this.emitNucleon( ParticleTypeEnum.NEUTRON );
         break;
       case DecayType.PROTON_EMISSION:
-        this.emitNucleon( ParticleType.PROTON );
+        this.emitNucleon( ParticleTypeEnum.PROTON );
         break;
       case DecayType.BETA_PLUS_DECAY:
         this.betaDecay( DecayType.BETA_PLUS_DECAY );
@@ -554,7 +554,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Removes a nucleon from the nucleus and animates it out of view.
    */
-  protected emitNucleon( particleType: ParticleType, particleAtom: ParticleAtom = this.model.particleAtom ): void {
+  protected emitNucleon( particleType: ParticleTypeEnum, particleAtom: ParticleAtom = this.model.particleAtom ): void {
     const nucleon = particleAtom.extractParticle( particleType.particleTypeString );
     this.model.outgoingParticles.add( nucleon );
     this.animateAndRemoveParticle( nucleon, this.getRandomExternalModelPosition(), false );
@@ -579,9 +579,9 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
 
     // Get the protons and neutrons closest to the center of the particleAtom and remove them from the particleAtom.
     const protonsToRemove = _.times( AlphaParticle.NUMBER_OF_ALLOWED_PROTONS,
-      () => particleAtom.extractParticleClosestToCenter( ParticleType.PROTON.particleTypeString ) );
+      () => particleAtom.extractParticleClosestToCenter( ParticleTypeEnum.PROTON.particleTypeString ) );
     const neutronsToRemove = _.times( AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
-      () => particleAtom.extractParticleClosestToCenter( ParticleType.NEUTRON.particleTypeString ) );
+      () => particleAtom.extractParticleClosestToCenter( ParticleTypeEnum.NEUTRON.particleTypeString ) );
 
     // Add the obtained protons and neutrons to the alphaParticle.
     [ ...protonsToRemove, ...neutronsToRemove ].forEach( nucleon => {
@@ -610,15 +610,15 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     let particleToEmit: Particle;
     if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
       particleArray = particleAtom.neutrons;
-      particleToEmit = new BANParticle( ParticleType.ELECTRON.particleTypeString );
+      particleToEmit = new BANParticle( ParticleTypeEnum.ELECTRON.particleTypeString );
     }
     else {
       particleArray = particleAtom.protons;
-      particleToEmit = new BANParticle( ParticleType.POSITRON.particleTypeString );
+      particleToEmit = new BANParticle( ParticleTypeEnum.POSITRON.particleTypeString );
     }
 
     // Get a random particle from the particleArray to determine the particleType.
-    const particleTypeString = ParticleType.enumeration.getValue( particleArray.get( 0 ).type.toUpperCase() ).name;
+    const particleTypeString = ParticleTypeEnum.enumeration.getValue( particleArray.get( 0 ).type.toUpperCase() ).name;
     assert && assert( particleArray.lengthProperty.value >= 1,
       'The particleAtom needs a ' + particleTypeString + ' for a ' + betaDecayType.name );
 
@@ -638,8 +638,8 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     // Add the particle to the model to emit it, then change the nucleon type and remove the particle.
     particleAtom.changeNucleonType( closestParticle, () => {
       !particleToEmit.isDisposed && this.animateAndRemoveParticle( particleToEmit, destination, false );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.PROTON );
-      this.checkIfCreatorNodeShouldBeInvisible( ParticleType.NEUTRON );
+      this.checkIfCreatorNodeShouldBeInvisible( ParticleTypeEnum.PROTON );
+      this.checkIfCreatorNodeShouldBeInvisible( ParticleTypeEnum.NEUTRON );
       this.checkIfCreatorNodesShouldBeVisible();
     } );
 

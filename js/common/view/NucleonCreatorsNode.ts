@@ -31,7 +31,7 @@ import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
 import BANColors from '../BANColors.js';
 import BANModel from '../model/BANModel.js';
-import ParticleType from '../model/ParticleType.js';
+import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 import DoubleArrowButton, { ArrowButtonDirection } from './DoubleArrowButton.js';
 import NucleonCreatorNode from './NucleonCreatorNode.js';
 
@@ -65,8 +65,8 @@ class NucleonCreatorsNode extends HBox {
   // For use in methods.
   private readonly protonNumberRange: Range;
   private readonly neutronNumberRange: Range;
-  private readonly createParticleFromStack: ( particleType: ParticleType ) => Particle;
-  private readonly returnParticleToStack: ( particleType: ParticleType ) => void;
+  private readonly createParticleFromStack: ( particleType: ParticleTypeEnum ) => Particle;
+  private readonly returnParticleToStack: ( particleType: ParticleTypeEnum ) => void;
   private model: BANModel<ParticleAtom | ShellModelNucleus>;
   private readonly particleTransform: ModelViewTransform2;
 
@@ -80,8 +80,8 @@ class NucleonCreatorsNode extends HBox {
   public constructor( model: BANModel<ParticleAtom | ShellModelNucleus>,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
                       particleTransform: ModelViewTransform2,
-                      createParticleFromStack: ( particleType: ParticleType ) => Particle,
-                      returnParticleToStack: ( particleType: ParticleType ) => void ) {
+                      createParticleFromStack: ( particleType: ParticleTypeEnum ) => Particle,
+                      returnParticleToStack: ( particleType: ParticleTypeEnum ) => void ) {
     super();
 
     const getLocalPoint = this.globalToParentPoint.bind( this );
@@ -91,11 +91,11 @@ class NucleonCreatorsNode extends HBox {
     const neutronsLabel = new Text( BuildANucleusStrings.neutronsUppercaseStringProperty, NUCLEON_LABEL_TEXT_OPTIONS );
 
     // Create and add the NucleonCreatorNode for the protons.
-    this.protonsCreatorNode = new NucleonCreatorNode( ParticleType.PROTON, getLocalPoint, addAndDragParticle,
+    this.protonsCreatorNode = new NucleonCreatorNode( ParticleTypeEnum.PROTON, getLocalPoint, addAndDragParticle,
       particleTransform );
 
     // Create and add the NucleonCreatorNode for the neutrons.
-    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleType.NEUTRON, getLocalPoint, addAndDragParticle,
+    this.neutronsCreatorNode = new NucleonCreatorNode( ParticleTypeEnum.NEUTRON, getLocalPoint, addAndDragParticle,
       particleTransform );
 
     this.model = model;
@@ -121,8 +121,8 @@ class NucleonCreatorsNode extends HBox {
     } );
 
     // Create and add the single arrow buttons.
-    this.protonArrowButtons = this.createSingleArrowButtons( ParticleType.PROTON, BANColors.protonColorProperty );
-    this.neutronArrowButtons = this.createSingleArrowButtons( ParticleType.NEUTRON, BANColors.neutronColorProperty );
+    this.protonArrowButtons = this.createSingleArrowButtons( ParticleTypeEnum.PROTON, BANColors.protonColorProperty );
+    this.neutronArrowButtons = this.createSingleArrowButtons( ParticleTypeEnum.NEUTRON, BANColors.neutronColorProperty );
 
     // Function to toggle nucleon creator nodes enabled
     // NOTE: this linkage is very similar to that of each arrow button enabled property, version these together.
@@ -184,13 +184,13 @@ class NucleonCreatorsNode extends HBox {
   private createDoubleArrowButtons( direction: ArrowButtonDirection ): Node {
 
     const enabledProperty = direction === 'up' ?
-                            this.createArrowEnabledProperty( 'up', ParticleType.PROTON, ParticleType.NEUTRON ) :
-                            this.createArrowEnabledProperty( 'down', ParticleType.PROTON, ParticleType.NEUTRON );
+                            this.createArrowEnabledProperty( 'up', ParticleTypeEnum.PROTON, ParticleTypeEnum.NEUTRON ) :
+                            this.createArrowEnabledProperty( 'down', ParticleTypeEnum.PROTON, ParticleTypeEnum.NEUTRON );
 
     return new DoubleArrowButton( direction,
       direction === 'up' ?
-      () => this.increaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ) :
-      () => this.decreaseNucleonNumberListener( ParticleType.PROTON, ParticleType.NEUTRON ),
+      () => this.increaseNucleonNumberListener( ParticleTypeEnum.PROTON, ParticleTypeEnum.NEUTRON ) :
+      () => this.decreaseNucleonNumberListener( ParticleTypeEnum.PROTON, ParticleTypeEnum.NEUTRON ),
       merge( {
         leftArrowFill: BANColors.protonColorProperty,
         rightArrowFill: BANColors.neutronColorProperty,
@@ -199,16 +199,16 @@ class NucleonCreatorsNode extends HBox {
     );
   }
 
-  private createSingleArrowButtons( nucleonType: ParticleType, nucleonColorProperty: ProfileColorProperty ): Node {
+  private createSingleArrowButtons( nucleonType: ParticleTypeEnum, nucleonColorProperty: ProfileColorProperty ): Node {
 
     // Create the arrow enabled properties.
-    const upArrowEnabledProperty = nucleonType === ParticleType.PROTON ?
-                                   this.createArrowEnabledProperty( 'up', ParticleType.PROTON ) :
-                                   this.createArrowEnabledProperty( 'up', ParticleType.NEUTRON );
+    const upArrowEnabledProperty = nucleonType === ParticleTypeEnum.PROTON ?
+                                   this.createArrowEnabledProperty( 'up', ParticleTypeEnum.PROTON ) :
+                                   this.createArrowEnabledProperty( 'up', ParticleTypeEnum.NEUTRON );
 
-    const downArrowEnabledProperty = nucleonType === ParticleType.PROTON ?
-                                     this.createArrowEnabledProperty( 'down', ParticleType.PROTON ) :
-                                     this.createArrowEnabledProperty( 'down', ParticleType.NEUTRON );
+    const downArrowEnabledProperty = nucleonType === ParticleTypeEnum.PROTON ?
+                                     this.createArrowEnabledProperty( 'down', ParticleTypeEnum.PROTON ) :
+                                     this.createArrowEnabledProperty( 'down', ParticleTypeEnum.NEUTRON );
 
     const singleArrowButtonOptions = merge( { arrowFill: nucleonColorProperty }, ARROW_BUTTON_OPTIONS );
 
@@ -243,8 +243,8 @@ class NucleonCreatorsNode extends HBox {
 
   private createArrowEnabledProperty(
     direction: ArrowButtonDirection,
-    firstParticleType: ParticleType,
-    secondParticleType?: ParticleType
+    firstParticleType: ParticleTypeEnum,
+    secondParticleType?: ParticleTypeEnum
   ): TReadOnlyProperty<boolean> {
 
     // Function to create the arrow enabled properties.
@@ -285,8 +285,8 @@ class NucleonCreatorsNode extends HBox {
           // If there are no atoms actually in the atom (only potentially animating to the atom),
           // see https://github.com/phetsims/build-a-nucleus/issues/74.
           if ( direction === 'down' && _.some( [ firstParticleType, secondParticleType ], particleType => {
-            return ( particleType === ParticleType.NEUTRON && atomNeutronNumber === 0 ) ||
-                   ( particleType === ParticleType.PROTON && atomProtonNumber === 0 );
+            return ( particleType === ParticleTypeEnum.NEUTRON && atomNeutronNumber === 0 ) ||
+                   ( particleType === ParticleTypeEnum.PROTON && atomProtonNumber === 0 );
           } ) ) {
             return false;
           }
@@ -308,16 +308,16 @@ class NucleonCreatorsNode extends HBox {
    *
    * NOTE: we also return true for the p0,n0 case, even though that doesn't technically "exist".
    */
-  private static hasNextIso( direction: ArrowButtonDirection, particleType: ParticleType | 'both',
+  private static hasNextIso( direction: ArrowButtonDirection, particleType: ParticleTypeEnum | 'both',
                              protonNumber: number, neutronNumber: number ): boolean {
 
     if ( direction === 'up' ) {
 
       // Proton up arrow.
-      if ( particleType === ParticleType.PROTON ) {
+      if ( particleType === ParticleTypeEnum.PROTON ) {
         return AtomIdentifier.doesNextIsotoneExist( protonNumber, neutronNumber );
       }
-      else if ( particleType === ParticleType.NEUTRON ) {
+      else if ( particleType === ParticleTypeEnum.NEUTRON ) {
 
         // Neutron up arrow.
         return AtomIdentifier.doesNextIsotopeExist( protonNumber, neutronNumber );
@@ -331,11 +331,11 @@ class NucleonCreatorsNode extends HBox {
       //  direction === 'down'
 
       // Proton down arrow.
-      if ( particleType === ParticleType.PROTON ) {
+      if ( particleType === ParticleTypeEnum.PROTON ) {
         return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber )
                || ( neutronNumber === 0 && protonNumber === 1 );
       }
-      else if ( particleType === ParticleType.NEUTRON ) {
+      else if ( particleType === ParticleTypeEnum.NEUTRON ) {
 
         // Neutron down arrow.
         return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber )
@@ -353,12 +353,12 @@ class NucleonCreatorsNode extends HBox {
    * Function returns whether true when the protonNumber or neutronNumber is not at its min or max range (depending on
    * the direction of the button).
    */
-  private isNucleonNumberNotAtRangeBounds( direction: ArrowButtonDirection, particleType: ParticleType,
+  private isNucleonNumberNotAtRangeBounds( direction: ArrowButtonDirection, particleType: ParticleTypeEnum,
                                            protonNumber: number, neutronNumber: number ): boolean {
     if ( direction === 'up' ) {
 
       // Proton up arrow.
-      if ( particleType === ParticleType.PROTON ) {
+      if ( particleType === ParticleTypeEnum.PROTON ) {
         return protonNumber !== this.protonNumberRange.max;
       }
 
@@ -369,7 +369,7 @@ class NucleonCreatorsNode extends HBox {
       //  direction === 'down'
 
       // Proton down arrow.
-      if ( particleType === ParticleType.PROTON ) {
+      if ( particleType === ParticleTypeEnum.PROTON ) {
         return protonNumber !== this.protonNumberRange.min;
       }
 
@@ -391,7 +391,7 @@ class NucleonCreatorsNode extends HBox {
   /**
    * Create listener to create a particle.
    */
-  private increaseNucleonNumberListener( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ): void {
+  private increaseNucleonNumberListener( firstNucleonType: ParticleTypeEnum, secondNucleonType?: ParticleTypeEnum ): void {
     this.createParticleFromStack( firstNucleonType );
     secondNucleonType && this.createParticleFromStack( secondNucleonType );
   }
@@ -399,7 +399,7 @@ class NucleonCreatorsNode extends HBox {
   /**
    * Create listener to return a particle to the stack.
    */
-  private decreaseNucleonNumberListener( firstNucleonType: ParticleType, secondNucleonType?: ParticleType ): void {
+  private decreaseNucleonNumberListener( firstNucleonType: ParticleTypeEnum, secondNucleonType?: ParticleTypeEnum ): void {
     this.returnParticleToStack( firstNucleonType );
     secondNucleonType && this.returnParticleToStack( secondNucleonType );
   }

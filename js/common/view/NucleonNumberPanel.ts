@@ -22,7 +22,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../BANConstants.js';
-import ParticleType from '../model/ParticleType.js';
+import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 
 // types
 type NucleonLabel = {
@@ -45,7 +45,7 @@ class NucleonNumberPanel extends Panel {
     const panelContents = new Rectangle( 0, 0, 140, 40 ); // Empirically determined.
 
     // Function to create the nucleon labels and add them to panelContents.
-    const nucleonLabel = ( nucleonStringProperty: TReadOnlyProperty<string>, nucleonType: ParticleType,
+    const nucleonLabel = ( nucleonStringProperty: TReadOnlyProperty<string>, nucleonType: ParticleTypeEnum,
                            nucleonCountProperty: TReadOnlyProperty<number>, nucleonNumberRange: Range ): NucleonLabel => {
 
       // The nucleon title and icon pair.
@@ -130,9 +130,9 @@ class NucleonNumberPanel extends Panel {
 
     // Create the nucleon labels.
     const protonLabel = nucleonLabel( BuildANucleusStrings.protonsColonStringProperty,
-      ParticleType.PROTON, protonCountProperty, protonNumberRange );
+      ParticleTypeEnum.PROTON, protonCountProperty, protonNumberRange );
     const neutronLabel = nucleonLabel( BuildANucleusStrings.neutronsColonStringProperty,
-      ParticleType.NEUTRON, neutronCountProperty, neutronNumberRange );
+      ParticleTypeEnum.NEUTRON, neutronCountProperty, neutronNumberRange );
 
     // Position the protonLabel at the top and the neutronLabel at the bottom, and align their respective numberDisplay's.
     protonLabel.contents.top = 0;

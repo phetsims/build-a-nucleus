@@ -17,11 +17,11 @@ import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 import BANParticle from '../model/BANParticle.js';
-import ParticleType from '../model/ParticleType.js';
+import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 
 class NucleonCreatorNode extends Node {
 
-  public constructor( particleType: ParticleType, getLocalPoint: ( point: Vector2 ) => Vector2,
+  public constructor( particleType: ParticleTypeEnum, getLocalPoint: ( point: Vector2 ) => Vector2,
                       addAndDragParticle: ( event: PressListenerEvent, particle: Particle ) => void,
                       particleTransform: ModelViewTransform2 ) {
     super();
