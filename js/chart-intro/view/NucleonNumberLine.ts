@@ -7,7 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import AxisArrowNode from '../../../../bamboo/js/AxisArrowNode.js';
 import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import TickLabelSet from '../../../../bamboo/js/TickLabelSet.js';

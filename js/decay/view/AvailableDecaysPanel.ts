@@ -6,7 +6,7 @@
  * @author Luisa Vargas
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';

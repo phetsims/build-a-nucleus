@@ -6,7 +6,7 @@
  * @author Luisa Vargas
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import GridBox from '../../../../scenery/js/layout/nodes/GridBox.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
