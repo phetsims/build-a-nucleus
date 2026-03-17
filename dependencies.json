@@ -13,11 +13,11 @@
     "branch": "HEAD"
   },
   "brand": {
-    "sha": "bfc37a3bc30ac15a585a576ffd5786375ad89fa5",
+    "sha": "24f3e633befefe908df6e0dbb6d4db91e30c57b4",
     "branch": "HEAD"
   },
   "build-a-nucleus": {
-    "sha": "98dafab3aee9e70b16556cf27ae3f2b2c3614642",
+    "sha": "6b5d09fa94d01d64e417472e4c72aadf54f62345",
     "branch": "1.1"
   },
   "chipper": {
