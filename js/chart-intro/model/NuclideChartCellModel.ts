@@ -8,8 +8,8 @@
  */
 
 import ColorProperty from '../../../../scenery/js/util/ColorProperty.js';
+import { DecayAmount } from '../../../../shred/js/AtomData.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import { DecayAmount } from '../../../../shred/js/ShredData.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import DecayType from '../../common/model/DecayType.js';

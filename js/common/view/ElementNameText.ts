@@ -12,8 +12,8 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import { nameTable } from '../../../../shred/js/AtomData.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
-import { nameTable } from '../../../../shred/js/ShredData.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../BANConstants.js';
