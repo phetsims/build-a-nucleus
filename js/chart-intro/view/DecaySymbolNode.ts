@@ -14,7 +14,7 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomNameUtils from '../../../../shred/js/AtomNameUtils.js';
 import shred from '../../../../shred/js/shred.js';
 
 // types
@@ -34,7 +34,7 @@ class DecaySymbolNode extends Node {
 
     const options =
       optionize<DecaySymbolNodeOptions, SelfOptions, NodeOptions>()( {
-        symbolString: protonNumber > 0 ? AtomIdentifier.getSymbol( protonNumber ) : '-',
+        symbolString: protonNumber > 0 ? AtomNameUtils.getSymbol( protonNumber ) : '-',
         scale: 0.15
       }, providedOptions );
 

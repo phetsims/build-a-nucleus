@@ -12,8 +12,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import { nameTable } from '../../../../shred/js/AtomData.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomNameUtils, { nameTable } from '../../../../shred/js/AtomNameUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../BANConstants.js';
@@ -57,7 +56,7 @@ export default class ElementNameText extends Text {
       const neutronNumber = neutronCountProperty.value;
       const doesNuclideExist = nuclideExistsProperty.value;
 
-      let name = AtomIdentifier.getName( protonNumber ).value;
+      let name = AtomNameUtils.getName( protonNumber ).value;
       const massNumber = protonNumber + neutronNumber;
 
       const massNumberString = massNumber.toString();

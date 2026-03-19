@@ -21,6 +21,7 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomNameUtils from '../../../../shred/js/AtomNameUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -146,7 +147,7 @@ class NuclideChartNode extends Node {
 
         // Show the cell's label.
         labelContainer.visible = true;
-        labelText.string = AtomIdentifier.getSymbol( protonNumber );
+        labelText.string = AtomNameUtils.getSymbol( protonNumber );
         labelContainer.center = currentCellCenter;
         labelText.fill = this.getCellLabelFill( highlightedCell.cellModel );
 
