@@ -14,7 +14,7 @@ import ChartTransform from '../../../../bamboo/js/ChartTransform.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import NuclideChartNode from './NuclideChartNode.js';
@@ -53,7 +53,7 @@ class FocusedNuclideChartNode extends NuclideChartNode {
         const cellY = protonNumber;
 
         // The default could very well be p0,n0, which doesn't exist, so eagerly set things up once.
-        if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) || !initialized ) {
+        if ( AtomInfoUtils.doesExist( protonNumber, neutronNumber ) || !initialized ) {
           initialized = true;
 
           // Constrain the bounds of the highlightRectangle.

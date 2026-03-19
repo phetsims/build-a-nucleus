@@ -14,7 +14,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import NuclideChartNode from './NuclideChartNode.js';
@@ -46,7 +46,7 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
       const cellY = protonNumber;
 
       // The default could very well be p0,n0, which doesn't exist, so eagerly set things up the first time.
-      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) || !initialized ) {
+      if ( AtomInfoUtils.doesExist( protonNumber, neutronNumber ) || !initialized ) {
         initialized = true;
 
         // Limit the bounds of the ZoomInNuclideChartNode to avoid showing white space.

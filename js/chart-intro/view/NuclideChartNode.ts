@@ -20,7 +20,7 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import AtomNameUtils from '../../../../shred/js/AtomNameUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
@@ -109,7 +109,7 @@ class NuclideChartNode extends Node {
         protonNumber + BANConstants.Y_SHIFT_HIGHLIGHT_RECTANGLE );
 
       // Highlight the cell if it exists.
-      if ( AtomIdentifier.doesExist( protonNumber, neutronNumber ) ) {
+      if ( AtomInfoUtils.doesExist( protonNumber, neutronNumber ) ) {
 
         // Get the highlightedCell.
         const protonRowIndex = protonNumber;
@@ -122,7 +122,7 @@ class NuclideChartNode extends Node {
         const decayType = highlightedCell.cellModel.decayType;
 
         // Draw the decay direction with the arrowNode if there is a known decay for this nuclide cell.
-        if ( !AtomIdentifier.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
+        if ( !AtomInfoUtils.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
 
           // Direction determined based on how the DecayType changes the current nuclide, see DecayType for more details.
           const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :

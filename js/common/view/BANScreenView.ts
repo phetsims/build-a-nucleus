@@ -17,7 +17,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import { PressListenerEvent } from '../../../../scenery/js/listeners/PressListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
@@ -387,7 +387,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
          this.model.userControlledProtons.length === 0 ) {
       this.timeSinceCountdownStarted = 0;
 
-      assert && assert( AtomIdentifier.doesExist( this.previousProtonNumber, this.previousNeutronNumber ) ||
+      assert && assert( AtomInfoUtils.doesExist( this.previousProtonNumber, this.previousNeutronNumber ) ||
                         ( this.previousProtonNumber === 0 && this.previousNeutronNumber === 0 ),
         `cannot set back to a non existent previous: p${this.previousProtonNumber}, n${this.previousNeutronNumber}` );
 
@@ -435,7 +435,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     // If removing the nucleon will create a nuclide that does not exist, re-add the nucleon to the atom.
     const currentlyNonExistentAtom =
       this.model.particleAtom.massNumberProperty.value !== 0 &&
-      !AtomIdentifier.doesExist( this.model.particleAtom.protonCountProperty.value,
+      !AtomInfoUtils.doesExist( this.model.particleAtom.protonCountProperty.value,
         this.model.particleAtom.neutronCountProperty.value );
 
 
@@ -509,7 +509,7 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   protected decayAtom( decayType: DecayType | null ): void {
     const protons = this.model.particleAtom.protonCountProperty.value;
     const neutrons = this.model.particleAtom.neutronCountProperty.value;
-    assert && assert( AtomIdentifier.doesExist( protons, neutrons ),
+    assert && assert( AtomInfoUtils.doesExist( protons, neutrons ),
       `Decaying for a non existent atom with ${protons} protons and ${neutrons} neutrons.` );
 
     switch( decayType ) {

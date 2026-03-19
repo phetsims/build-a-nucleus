@@ -12,7 +12,7 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Animation from '../../../../twixt/js/Animation.js';
@@ -85,13 +85,13 @@ class BANModel<T extends ParticleAtom> {
     // The stability of the nuclide is determined by the given number of protons and neutrons.
     this.isStableProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber )
+      ( protonNumber, neutronNumber ) => AtomInfoUtils.isStable( protonNumber, neutronNumber )
     );
 
     // If a nuclide with a given number of protons and neutrons exists.
     this.nuclideExistsProperty = new DerivedProperty(
       [ this.particleAtom.protonCountProperty, this.particleAtom.neutronCountProperty ],
-      ( protonNumber, neutronNumber ) => AtomIdentifier.doesExist( protonNumber, neutronNumber )
+      ( protonNumber, neutronNumber ) => AtomInfoUtils.doesExist( protonNumber, neutronNumber )
     );
 
     const userControlledListener = ( isUserControlled: boolean, particle: Particle ) => {

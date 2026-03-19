@@ -9,7 +9,7 @@
 
 import ColorProperty from '../../../../scenery/js/util/ColorProperty.js';
 import { DecayAmount } from '../../../../shred/js/AtomData.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import DecayType from '../../common/model/DecayType.js';
@@ -30,7 +30,7 @@ class NuclideChartCellModel {
 
     this.protonNumber = protonNumber;
     this.neutronNumber = neutronNumber;
-    this.isStable = AtomIdentifier.isStable( protonNumber, neutronNumber );
+    this.isStable = AtomInfoUtils.isStable( protonNumber, neutronNumber );
 
     // Get the first decay in available decays to color the cell according to that decay type.
     const decayTypeAndPercent = this.getDecayTypeAndPercent( protonNumber, neutronNumber );
@@ -44,7 +44,7 @@ class NuclideChartCellModel {
 
   private getDecayTypeAndPercent( protonNumber: number, neutronNumber: number ): readonly [ DecayType | null, DecayAmount ] {
 
-    const decaysAndPercentTuples = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
+    const decaysAndPercentTuples = AtomInfoUtils.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
     if ( decaysAndPercentTuples.length === 0 ) {
       return [ null, null ];

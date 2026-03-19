@@ -22,7 +22,7 @@ import { PressListenerEvent } from '../../../../scenery/js/listeners/PressListen
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
@@ -133,7 +133,7 @@ class NucleonCreatorsNode extends HBox {
         const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
         const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
         const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
-        const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
+        const doesNuclideExist = AtomInfoUtils.doesExist( protonNumber, neutronNumber );
         const massNumber = atomProtonNumber + atomNeutronNumber;
 
         const shouldEnableCreators = this.shouldEnableCreators( doesNuclideExist, massNumber, userControlledNucleonNumber );
@@ -256,7 +256,7 @@ class NucleonCreatorsNode extends HBox {
         const protonNumber = atomProtonNumber + incomingProtonsNumber + userControlledProtonNumber;
         const neutronNumber = atomNeutronNumber + incomingNeutronsNumber + userControlledNeutronNumber;
         const userControlledNucleonNumber = userControlledNeutronNumber + userControlledProtonNumber;
-        const doesNuclideExist = AtomIdentifier.doesExist( protonNumber, neutronNumber );
+        const doesNuclideExist = AtomInfoUtils.doesExist( protonNumber, neutronNumber );
         const massNumber = atomProtonNumber + atomNeutronNumber;
 
         // Disable all buttons if the nuclide doesn't exist and one of the two cases:
@@ -274,7 +274,7 @@ class NucleonCreatorsNode extends HBox {
                                       !NucleonCreatorsNode.hasNextIso( direction, firstParticleType, protonNumber, neutronNumber );
 
           // In the up direction, you can create one extra past an atom that does exist.
-          const allowIncreaseToNonExistent = direction === 'up' && AtomIdentifier.doesExist( protonNumber, neutronNumber );
+          const allowIncreaseToNonExistent = direction === 'up' && AtomInfoUtils.doesExist( protonNumber, neutronNumber );
 
           // Covers cases where you can't remove a particle into a nuclide that doesn't exist, but you can add one
           // extra (for learning) before it is animated back to an existent state.
@@ -315,16 +315,16 @@ class NucleonCreatorsNode extends HBox {
 
       // Proton up arrow.
       if ( particleType === ParticleTypeEnum.PROTON ) {
-        return AtomIdentifier.doesNextIsotoneExist( protonNumber, neutronNumber );
+        return AtomInfoUtils.doesNextIsotoneExist( protonNumber, neutronNumber );
       }
       else if ( particleType === ParticleTypeEnum.NEUTRON ) {
 
         // Neutron up arrow.
-        return AtomIdentifier.doesNextIsotopeExist( protonNumber, neutronNumber );
+        return AtomInfoUtils.doesNextIsotopeExist( protonNumber, neutronNumber );
       }
       else {
         assert && assert( particleType === 'both', 'all cases covered' );
-        return AtomIdentifier.doesNextNuclideExist( protonNumber, neutronNumber );
+        return AtomInfoUtils.doesNextNuclideExist( protonNumber, neutronNumber );
       }
     }
     else {
@@ -332,18 +332,18 @@ class NucleonCreatorsNode extends HBox {
 
       // Proton down arrow.
       if ( particleType === ParticleTypeEnum.PROTON ) {
-        return AtomIdentifier.doesPreviousIsotoneExist( protonNumber, neutronNumber )
+        return AtomInfoUtils.doesPreviousIsotoneExist( protonNumber, neutronNumber )
                || ( neutronNumber === 0 && protonNumber === 1 );
       }
       else if ( particleType === ParticleTypeEnum.NEUTRON ) {
 
         // Neutron down arrow.
-        return AtomIdentifier.doesPreviousIsotopeExist( protonNumber, neutronNumber )
+        return AtomInfoUtils.doesPreviousIsotopeExist( protonNumber, neutronNumber )
                || ( neutronNumber === 1 && protonNumber === 0 );
       }
       else {
         assert && assert( particleType === 'both', 'all cases covered' );
-        return AtomIdentifier.doesPreviousNuclideExist( protonNumber, neutronNumber )
+        return AtomInfoUtils.doesPreviousNuclideExist( protonNumber, neutronNumber )
                || ( neutronNumber === 1 && protonNumber === 1 );
       }
     }

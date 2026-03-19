@@ -10,7 +10,7 @@
 
 import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
 import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
-import AtomIdentifier from '../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../shred/js/AtomInfoUtils.js';
 import buildANucleus from '../buildANucleus.js';
 import BANConstants from './BANConstants.js';
 
@@ -63,7 +63,7 @@ function warnForNonExistentAtom( protonsKeyString: QueryParamsWeCareAbout, neutr
   const numberOfNeutrons = BANQueryParameters[ neutronsKeyString ];
   const numberOfProtons = BANQueryParameters[ protonsKeyString ];
 
-  if ( !AtomIdentifier.doesExist( numberOfProtons, numberOfNeutrons ) ) {
+  if ( !AtomInfoUtils.doesExist( numberOfProtons, numberOfNeutrons ) ) {
     const errorMessage = `A nuclide with ${numberOfProtons} protons and ${numberOfNeutrons} neutrons does not exist`;
 
     // Add a warning if the protons or neutrons query parameter was part of an invalid combo (atom doesn't exist)

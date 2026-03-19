@@ -8,7 +8,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import buildANucleus from '../../buildANucleus.js';
@@ -52,7 +52,7 @@ class DecayModel extends BANModel<ParticleAtom> {
           else {
 
             // The nuclide is unstable, update its half-life.
-            halfLife = AtomIdentifier.getNuclideHalfLife( protonNumber, neutronNumber );
+            halfLife = AtomInfoUtils.getNuclideHalfLife( protonNumber, neutronNumber );
           }
         }
         else {
@@ -76,7 +76,7 @@ class DecayModel extends BANModel<ParticleAtom> {
     // available decay type.
     const createDecayEnabledListener = ( protonNumber: number, neutronNumber: number, decayType: DecayType,
                                          hasIncomingParticles: boolean ): boolean => {
-      const decays = AtomIdentifier.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
+      const decays = AtomInfoUtils.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
       return !hasIncomingParticles && !!decays.find( decay => decay[ 0 ] === decayType.name );
     };

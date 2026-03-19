@@ -132,4 +132,4 @@ used in all three NuclideChartNodes and both nuclide chart icon nodes.
 ## Data
 
 The half-life and decay data comes from the [Relational ENSDF](https://www-nds.iaea.org/relnsd/NdsEnsdf/QueryForm.html)
-from 2022. The values in this database from experimental data which is then manually hard-coded into AtomIdentifier.
+from 2022. The values in this database from experimental data which is then manually hard-coded into AtomData.

@@ -15,7 +15,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
@@ -147,7 +147,7 @@ class ParticleAtomNode extends Node {
    */
   private getElectronShellDiameter( numElectrons: number, minChangedRadius: number, maxChangedRadius: number ): number {
     const maxElectrons = this.protonNumberRange.max;
-    const atomicRadius = AtomIdentifier.getAtomicRadius( numElectrons );
+    const atomicRadius = AtomInfoUtils.getAtomicRadius( numElectrons );
     if ( atomicRadius ) {
       return ParticleAtomNode.reduceRadiusRange( atomicRadius, this.protonNumberRange.min + 1, maxElectrons,
         minChangedRadius, maxChangedRadius );

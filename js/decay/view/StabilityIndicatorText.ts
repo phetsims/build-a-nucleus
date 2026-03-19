@@ -11,7 +11,7 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
-import AtomIdentifier from '../../../../shred/js/AtomIdentifier.js';
+import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -39,7 +39,7 @@ class StabilityIndicatorText extends Text {
         // We need to update whenever any of these strings change, to support Dynamic Locale.
         BuildANucleusStrings.stableStringProperty,
         BuildANucleusStrings.unstableStringProperty
-      ], ( protonNumber, neutronNumber ) => AtomIdentifier.isStable( protonNumber, neutronNumber ) ?
+      ], ( protonNumber, neutronNumber ) => AtomInfoUtils.isStable( protonNumber, neutronNumber ) ?
                                             BuildANucleusStrings.stableStringProperty.value :
                                             BuildANucleusStrings.unstableStringProperty.value
     );
