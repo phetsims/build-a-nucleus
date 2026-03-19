@@ -11,7 +11,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANModel from '../../common/model/BANModel.js';
 import BANParticle from '../../common/model/BANParticle.js';
@@ -145,5 +144,4 @@ class ChartIntroModel extends BANModel<ShellModelNucleus> {
   }
 }
 
-buildANucleus.register( 'ChartIntroModel', ChartIntroModel );
 export default ChartIntroModel;

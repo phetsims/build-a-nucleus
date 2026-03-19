@@ -21,7 +21,6 @@ import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
-import buildANucleus from '../../buildANucleus.js';
 import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import AlphaParticle from '../model/AlphaParticle.js';
@@ -656,5 +655,4 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   }
 }
 
-buildANucleus.register( 'BANScreenView', BANScreenView );
 export default BANScreenView;

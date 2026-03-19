@@ -14,7 +14,6 @@ import { PressListenerEvent } from '../../../../scenery/js/listeners/PressListen
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 import BANParticle from '../model/BANParticle.js';
 import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
@@ -47,5 +46,4 @@ class NucleonCreatorNode extends Node {
   }
 }
 
-buildANucleus.register( 'NucleonCreatorNode', NucleonCreatorNode );
 export default NucleonCreatorNode;

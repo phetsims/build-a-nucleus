@@ -12,7 +12,6 @@ import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js'
 import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 import FlowBox from '../../../scenery/js/layout/nodes/FlowBox.js';
 import Tandem from '../../../tandem/js/Tandem.js';
-import buildANucleus from '../buildANucleus.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import BANColors from '../common/BANColors.js';
 import DecayType from '../common/model/DecayType.js';
@@ -58,5 +57,4 @@ function createScreenIcon(): ScreenIcon {
   } );
 }
 
-buildANucleus.register( 'DecayScreen', DecayScreen );
 export default DecayScreen;

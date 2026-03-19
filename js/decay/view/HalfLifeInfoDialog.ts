@@ -16,7 +16,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Font from '../../../../scenery/js/util/Font.js';
 import Dialog from '../../../../sun/js/Dialog.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -155,5 +154,4 @@ class HalfLifeInfoDialog extends Dialog {
   }
 }
 
-buildANucleus.register( 'HalfLifeInfoDialog', HalfLifeInfoDialog );
 export default HalfLifeInfoDialog;

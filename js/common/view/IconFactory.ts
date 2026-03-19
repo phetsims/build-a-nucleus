@@ -16,7 +16,6 @@ import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import TColor from '../../../../scenery/js/util/TColor.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../BANColors.js';
 import BANConstants from '../BANConstants.js';
 import DecayType from '../model/DecayType.js';
@@ -178,5 +177,4 @@ class IconFactory {
   }
 }
 
-buildANucleus.register( 'IconFactory', IconFactory );
 export default IconFactory;

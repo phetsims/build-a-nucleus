@@ -11,7 +11,6 @@ import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 import FlowBox from '../../../scenery/js/layout/nodes/FlowBox.js';
-import buildANucleus from '../buildANucleus.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import ChartIntroModel from '../chart-intro/model/ChartIntroModel.js';
 import ChartIntroScreenView from '../chart-intro/view/ChartIntroScreenView.js';
@@ -55,5 +54,4 @@ function createScreenIcon(): ScreenIcon {
   } );
 }
 
-buildANucleus.register( 'ChartIntroScreen', ChartIntroScreen );
 export default ChartIntroScreen;

@@ -10,7 +10,6 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../BANColors.js';
 
@@ -43,5 +42,4 @@ class DecayType extends EnumerationValue {
   }
 }
 
-buildANucleus.register( 'DecayType', DecayType );
 export default DecayType;

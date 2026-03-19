@@ -15,7 +15,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import NuclideChartNode from './NuclideChartNode.js';
 
@@ -66,5 +65,4 @@ class ZoomInNuclideChartNode extends NuclideChartNode {
   }
 }
 
-buildANucleus.register( 'ZoomInNuclideChartNode', ZoomInNuclideChartNode );
 export default ZoomInNuclideChartNode;

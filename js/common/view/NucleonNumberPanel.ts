@@ -19,7 +19,6 @@ import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../BANConstants.js';
 import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
@@ -149,5 +148,4 @@ class NucleonNumberPanel extends Panel {
   }
 }
 
-buildANucleus.register( 'NucleonNumberPanel', NucleonNumberPanel );
 export default NucleonNumberPanel;

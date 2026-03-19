@@ -17,7 +17,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Particle, { ParticleType } from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANParticle from '../../common/model/BANParticle.js';
 import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
@@ -361,5 +360,4 @@ class ShellModelNucleus extends ParticleAtom {
   }
 }
 
-buildANucleus.register( 'ShellModelNucleus', ShellModelNucleus );
 export default ShellModelNucleus;

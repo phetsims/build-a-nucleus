@@ -16,7 +16,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -257,5 +256,4 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   }
 }
 
-buildANucleus.register( 'DecayScreenView', DecayScreenView );
 export default DecayScreenView;

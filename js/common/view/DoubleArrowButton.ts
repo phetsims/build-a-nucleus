@@ -16,7 +16,6 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
 import RectangularPushButton, { RectangularPushButtonOptions } from '../../../../sun/js/buttons/RectangularPushButton.js';
-import buildANucleus from '../../buildANucleus.js';
 
 export type ArrowButtonDirection = 'up' | 'down';
 
@@ -88,5 +87,3 @@ export default class DoubleArrowButton extends RectangularPushButton {
     super( options );
   }
 }
-
-buildANucleus.register( 'DoubleArrowButton', DoubleArrowButton );

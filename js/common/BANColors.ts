@@ -162,6 +162,4 @@ const BANColors = {
   } )
 };
 
-buildANucleus.register( 'BANColors', BANColors );
-
 export default BANColors;

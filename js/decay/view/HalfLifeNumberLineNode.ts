@@ -34,7 +34,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -474,5 +473,4 @@ class HalfLifeNumberLineNode extends Node {
   }
 }
 
-buildANucleus.register( 'HalfLifeNumberLineNode', HalfLifeNumberLineNode );
 export default HalfLifeNumberLineNode;

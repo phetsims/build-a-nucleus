@@ -15,7 +15,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import NuclideChartNode from './NuclideChartNode.js';
 
@@ -112,5 +111,4 @@ class FocusedNuclideChartNode extends NuclideChartNode {
   }
 }
 
-buildANucleus.register( 'FocusedNuclideChartNode', FocusedNuclideChartNode );
 export default FocusedNuclideChartNode;

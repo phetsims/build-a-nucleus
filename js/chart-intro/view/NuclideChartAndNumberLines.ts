@@ -14,7 +14,6 @@ import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import NucleonNumberLine from './NucleonNumberLine.js';
@@ -72,5 +71,4 @@ class NuclideChartAndNumberLines extends Node {
   }
 }
 
-buildANucleus.register( 'NuclideChartAndNumberLines', NuclideChartAndNumberLines );
 export default NuclideChartAndNumberLines;

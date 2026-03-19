@@ -17,7 +17,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
@@ -132,5 +131,4 @@ class NucleonShellView extends Node {
   }
 }
 
-buildANucleus.register( 'NucleonShellView', NucleonShellView );
 export default NucleonShellView;

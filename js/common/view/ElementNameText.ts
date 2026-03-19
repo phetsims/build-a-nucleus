@@ -13,7 +13,6 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AtomNameUtils, { nameTable } from '../../../../shred/js/AtomNameUtils.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../BANConstants.js';
 
@@ -116,5 +115,3 @@ export default class ElementNameText extends Text {
     this.elementNameStringProperty = elementNameStringProperty;
   }
 }
-
-buildANucleus.register( 'ElementNameText', ElementNameText );

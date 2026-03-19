@@ -9,7 +9,6 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Particle, { ParticleOptions, ParticleType } from '../../../../shred/js/model/Particle.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 
 const ANIMATION_TIME = 0.6; // in seconds
@@ -34,5 +33,3 @@ export default class BANParticle extends Particle {
                                             BANConstants.PARTICLE_ANIMATION_SPEED;
   }
 }
-
-buildANucleus.register( 'BANParticle', BANParticle );

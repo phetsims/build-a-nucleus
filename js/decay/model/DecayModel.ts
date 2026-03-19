@@ -11,7 +11,6 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANModel from '../../common/model/BANModel.js';
 import DecayType from '../../common/model/DecayType.js';
@@ -124,5 +123,4 @@ class DecayModel extends BANModel<ParticleAtom> {
   }
 }
 
-buildANucleus.register( 'DecayModel', DecayModel );
 export default DecayModel;

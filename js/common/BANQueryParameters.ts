@@ -11,7 +11,6 @@
 import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
 import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
 import AtomInfoUtils from '../../../shred/js/AtomInfoUtils.js';
-import buildANucleus from '../buildANucleus.js';
 import BANConstants from './BANConstants.js';
 
 // Acceptable nucleon counts should be an integer greater than zero, and less than the available max per screen.
@@ -84,5 +83,4 @@ function warnForNonExistentAtom( protonsKeyString: QueryParamsWeCareAbout, neutr
 warnForNonExistentAtom( 'decayScreenProtons', 'decayScreenNeutrons' );
 warnForNonExistentAtom( 'chartIntroScreenProtons', 'chartIntroScreenNeutrons' );
 
-buildANucleus.register( 'BANQueryParameters', BANQueryParameters );
 export default BANQueryParameters;

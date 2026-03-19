@@ -12,7 +12,6 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 
 class AlphaParticle extends ParticleAtom {
@@ -64,5 +63,4 @@ class AlphaParticle extends ParticleAtom {
   }
 }
 
-buildANucleus.register( 'AlphaParticle', AlphaParticle );
 export default AlphaParticle;

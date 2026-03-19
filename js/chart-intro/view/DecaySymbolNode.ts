@@ -15,7 +15,6 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AtomNameUtils from '../../../../shred/js/AtomNameUtils.js';
-import shred from '../../../../shred/js/shred.js';
 
 // types
 type SelfOptions = {
@@ -72,5 +71,4 @@ class DecaySymbolNode extends Node {
   }
 }
 
-shred.register( 'DecaySymbolNode', DecaySymbolNode );
 export default DecaySymbolNode;

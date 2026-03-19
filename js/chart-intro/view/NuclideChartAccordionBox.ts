@@ -19,7 +19,6 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -196,5 +195,4 @@ class NuclideChartAccordionBox extends AccordionBox {
   }
 }
 
-buildANucleus.register( 'NuclideChartAccordionBox', NuclideChartAccordionBox );
 export default NuclideChartAccordionBox;

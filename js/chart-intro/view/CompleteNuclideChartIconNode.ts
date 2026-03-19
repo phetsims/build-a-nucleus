@@ -8,7 +8,6 @@
  */
 
 import Node from '../../../../scenery/js/nodes/Node.js';
-import buildANucleus from '../../buildANucleus.js';
 import NuclideChartAccordionBox from './NuclideChartAccordionBox.js';
 import NuclideChartNode from './NuclideChartNode.js';
 
@@ -25,5 +24,4 @@ class CompleteNuclideChartIconNode extends Node {
   }
 }
 
-buildANucleus.register( 'CompleteNuclideChartIconNode', CompleteNuclideChartIconNode );
 export default CompleteNuclideChartIconNode;

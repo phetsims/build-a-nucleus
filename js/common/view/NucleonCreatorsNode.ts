@@ -26,7 +26,6 @@ import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
 import BANColors from '../BANColors.js';
@@ -405,5 +404,4 @@ class NucleonCreatorsNode extends HBox {
   }
 }
 
-buildANucleus.register( 'NucleonCreatorsNode', NucleonCreatorsNode );
 export default NucleonCreatorsNode;

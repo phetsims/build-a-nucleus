@@ -10,7 +10,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleView, { ParticleViewOptions } from '../../../../shred/js/view/ParticleView.js';
-import buildANucleus from '../../buildANucleus.js';
 
 export type BANParticleViewOptions = ParticleViewOptions;
 
@@ -23,5 +22,3 @@ export default class BANParticleView extends ParticleView {
     super( particle, modelViewTransform, options );
   }
 }
-
-buildANucleus.register( 'BANParticleView', BANParticleView );

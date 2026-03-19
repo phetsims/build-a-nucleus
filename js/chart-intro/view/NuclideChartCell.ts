@@ -9,7 +9,6 @@
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Rectangle, { RectangleOptions } from '../../../../scenery/js/nodes/Rectangle.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 
@@ -46,5 +45,4 @@ class NuclideChartCell extends Rectangle {
   }
 }
 
-buildANucleus.register( 'NuclideChartCell', NuclideChartCell );
 export default NuclideChartCell;

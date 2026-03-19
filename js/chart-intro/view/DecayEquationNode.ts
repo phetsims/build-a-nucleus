@@ -15,7 +15,6 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -148,5 +147,4 @@ class DecayEquationNode extends VBox {
   }
 }
 
-buildANucleus.register( 'DecayEquationNode', DecayEquationNode );
 export default DecayEquationNode;

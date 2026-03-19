@@ -16,7 +16,6 @@ import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Animation from '../../../../twixt/js/Animation.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 import BANParticle from './BANParticle.js';
 import ParticleTypeEnum from './ParticleTypeEnum.js';
@@ -304,5 +303,4 @@ class BANModel<T extends ParticleAtom> {
   ];
 }
 
-buildANucleus.register( 'BANModel', BANModel );
 export default BANModel;

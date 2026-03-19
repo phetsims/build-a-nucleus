@@ -11,7 +11,6 @@
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import buildANucleus from '../../buildANucleus.js';
 
 class EnergyLevelType extends EnumerationValue {
 
@@ -51,5 +50,4 @@ class EnergyLevelType extends EnumerationValue {
   }
 }
 
-buildANucleus.register( 'EnergyLevelType', EnergyLevelType );
 export default EnergyLevelType;

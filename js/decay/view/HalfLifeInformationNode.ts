@@ -14,7 +14,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -91,5 +90,4 @@ class HalfLifeInformationNode extends Node {
   }
 }
 
-buildANucleus.register( 'HalfLifeInformationNode', HalfLifeInformationNode );
 export default HalfLifeInformationNode;

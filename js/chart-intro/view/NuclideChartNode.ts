@@ -22,7 +22,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import AtomNameUtils from '../../../../shred/js/AtomNameUtils.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
@@ -221,5 +220,4 @@ class NuclideChartNode extends Node {
 
 }
 
-buildANucleus.register( 'NuclideChartNode', NuclideChartNode );
 export default NuclideChartNode;

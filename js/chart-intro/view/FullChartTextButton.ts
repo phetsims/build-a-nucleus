@@ -19,7 +19,6 @@ import Color from '../../../../scenery/js/util/Color.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
 import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
 import fullNuclideChart_png from '../../../images/fullNuclideChart_png.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -89,5 +88,4 @@ class FullChartTextButton extends TextPushButton {
   }
 }
 
-buildANucleus.register( 'FullChartTextButton', FullChartTextButton );
 export default FullChartTextButton;

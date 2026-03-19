@@ -20,7 +20,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import Dialog, { DialogOptions } from '../../../../sun/js/Dialog.js';
 import Panel from '../../../../sun/js/Panel.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -189,5 +188,4 @@ class AvailableDecaysPanel extends Panel {
   }
 }
 
-buildANucleus.register( 'AvailableDecaysPanel', AvailableDecaysPanel );
 export default AvailableDecaysPanel;

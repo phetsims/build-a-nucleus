@@ -23,7 +23,6 @@ import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularR
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -439,5 +438,4 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   }
 }
 
-buildANucleus.register( 'ChartIntroScreenView', ChartIntroScreenView );
 export default ChartIntroScreenView;

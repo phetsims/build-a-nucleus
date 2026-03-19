@@ -11,7 +11,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import buildANucleus from '../../buildANucleus.js';
 
 type SelfOptions = {
   radius?: number;
@@ -41,5 +40,4 @@ class InfinityNode extends Path {
   }
 }
 
-buildANucleus.register( 'InfinityNode', InfinityNode );
 export default InfinityNode;

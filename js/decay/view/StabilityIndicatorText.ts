@@ -12,7 +12,6 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../../common/BANConstants.js';
 
@@ -53,5 +52,4 @@ class StabilityIndicatorText extends Text {
   }
 }
 
-buildANucleus.register( 'StabilityIndicatorText', StabilityIndicatorText );
 export default StabilityIndicatorText;

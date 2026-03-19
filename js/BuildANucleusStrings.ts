@@ -91,6 +91,4 @@ type StringsType = {
 
 const BuildANucleusStrings = getStringModule( 'BUILD_A_NUCLEUS' ) as StringsType;
 
-buildANucleus.register( 'BuildANucleusStrings', BuildANucleusStrings );
-
 export default BuildANucleusStrings;

@@ -14,7 +14,6 @@ import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANConstants from '../../common/BANConstants.js';
 
@@ -60,5 +59,4 @@ class ShowElectronCloudCheckbox extends Checkbox {
   }
 }
 
-buildANucleus.register( 'ShowElectronCloudCheckbox', ShowElectronCloudCheckbox );
 export default ShowElectronCloudCheckbox;

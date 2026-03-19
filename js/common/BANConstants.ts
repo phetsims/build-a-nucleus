@@ -11,7 +11,6 @@ import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../scenery/js/util/RadialGradient.js';
 import ShredConstants from '../../../shred/js/ShredConstants.js';
-import buildANucleus from '../buildANucleus.js';
 import BANColors from './BANColors.js';
 
 // constants
@@ -126,5 +125,4 @@ const BANConstants = {
   }
 };
 
-buildANucleus.register( 'BANConstants', BANConstants );
 export default BANConstants;

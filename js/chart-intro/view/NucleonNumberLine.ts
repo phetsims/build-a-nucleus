@@ -20,7 +20,6 @@ import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ColorProperty from '../../../../scenery/js/util/ColorProperty.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 
 type SelfOptions = {
@@ -129,5 +128,4 @@ class NucleonNumberLine extends Node {
   }
 }
 
-buildANucleus.register( 'NucleonNumberLine', NucleonNumberLine );
 export default NucleonNumberLine;

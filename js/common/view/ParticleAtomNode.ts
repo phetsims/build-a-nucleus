@@ -19,7 +19,6 @@ import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANConstants from '../BANConstants.js';
 
 // Empirically determined, from the ElectronCloudView radius.
@@ -177,5 +176,4 @@ class ParticleAtomNode extends Node {
 
 }
 
-buildANucleus.register( 'ParticleAtomNode', ParticleAtomNode );
 export default ParticleAtomNode;

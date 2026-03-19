@@ -11,7 +11,6 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import PeriodicTableNode from '../../../../shred/js/view/PeriodicTableNode.js';
 import SymbolNode from '../../../../shred/js/view/SymbolNode.js';
 import Panel from '../../../../sun/js/Panel.js';
-import buildANucleus from '../../buildANucleus.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 
@@ -50,5 +49,4 @@ class PeriodicTableAndIsotopeSymbol extends Panel {
   }
 }
 
-buildANucleus.register( 'PeriodicTableAndIsotopeSymbol', PeriodicTableAndIsotopeSymbol );
 export default PeriodicTableAndIsotopeSymbol;

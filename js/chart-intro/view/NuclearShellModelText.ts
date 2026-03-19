@@ -9,7 +9,6 @@
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -36,5 +35,3 @@ export default class NuclearShellModelText extends Node {
     } );
   }
 }
-
-buildANucleus.register( 'NuclearShellModelText', NuclearShellModelText );

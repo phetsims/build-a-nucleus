@@ -9,7 +9,6 @@
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import buildANucleus from '../../buildANucleus.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 
 const SECONDS_IN_A_YEAR = 365 * 24 * 60 * 60; // 365 days x 24 hrs/day x 60 min/hr x 60 sec/min
@@ -87,5 +86,4 @@ class BANTimescalePoints extends EnumerationValue {
   }
 }
 
-buildANucleus.register( 'BANTimescalePoints', BANTimescalePoints );
 export default BANTimescalePoints;
