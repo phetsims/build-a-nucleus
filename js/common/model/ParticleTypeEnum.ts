@@ -1,4 +1,4 @@
-// Copyright 2022-2025, University of Colorado Boulder
+// Copyright 2022-2026, University of Colorado Boulder
 
 /**
  * ParticleTypeEnum is an enumeration type that identifies the particle types and associates these names with other
