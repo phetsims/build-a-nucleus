@@ -20,6 +20,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import Particle from '../../../../shred/js/model/Particle.js';
 import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
+import ParticleAtomNode from '../../../../shred/js/view/ParticleAtomNode.js';
 import ParticleView from '../../../../shred/js/view/ParticleView.js';
 import ShellModelNucleus from '../../chart-intro/model/ShellModelNucleus.js';
 import BANConstants from '../../common/BANConstants.js';
@@ -32,7 +33,6 @@ import BANParticleView from './BANParticleView.js';
 import ElementNameText from './ElementNameText.js';
 import NucleonCreatorsNode from './NucleonCreatorsNode.js';
 import NucleonNumberPanel from './NucleonNumberPanel.js';
-import ParticleAtomNode from './ParticleAtomNode.js';
 
 // types
 type SelfOptions = {
@@ -173,7 +173,11 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
     } );
 
     // Create the particleAtomNode but add it in subclasses so particles are in top layer.
-    this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, this.model.protonNumberRange );
+    this.particleAtomNode = new ParticleAtomNode( this.model.particleAtom, atomCenter, {
+      protonNumberRange: this.model.protonNumberRange,
+      numberOfNucleonLayers: BANConstants.NUMBER_OF_NUCLEON_LAYERS,
+      electronCloudFillGradient: BANConstants.ELECTRON_CLOUD_FILL_GRADIENT
+    } );
 
     // Update the cloud size as the massNumber changes.
     this.model.particleAtom.protonCountProperty.link(
