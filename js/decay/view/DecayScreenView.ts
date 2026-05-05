@@ -21,7 +21,7 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
 import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
 import DecayModel from '../model/DecayModel.js';
@@ -235,7 +235,7 @@ class DecayScreenView extends BANScreenView<DecayModel> {
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  protected override betaDecay( betaDecayType: DecayType ): Particle {
+  protected override betaDecay( betaDecayType: BANDecayType ): Particle {
     const particleToEmit = super.betaDecay( betaDecayType );
     this.model.addParticle( particleToEmit );
     return particleToEmit;

@@ -23,7 +23,7 @@ import Panel from '../../../../sun/js/Panel.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
 import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import IconFactory from '../../common/view/IconFactory.js';
 
@@ -38,10 +38,10 @@ const BUTTON_CONTENT_WIDTH = 145;
 // types
 type decayTypeButtonIndexType = Record<string, number>;
 type SelfOptions = {
-  decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
+  decayEnabledPropertyMap: Map<BANDecayType, TReadOnlyProperty<boolean>>;
 
   // Upon any decay button firing, this listener fires with the given decay type.
-  handleDecayListener: ( decayType: DecayType ) => void;
+  handleDecayListener: ( decayType: BANDecayType ) => void;
 };
 export type AvailableDecaysPanelOptions = SelfOptions;
 
@@ -75,7 +75,7 @@ class AvailableDecaysPanel extends Panel {
     } );
 
     // Function to create the decay button and corresponding decay icon pair.
-    const createDecayButtonAndIcon = ( decayType: DecayType ): Node => {
+    const createDecayButtonAndIcon = ( decayType: BANDecayType ): Node => {
 
       const buttonBackgroundRectangle = new Rectangle( 0, 0, BUTTON_CONTENT_WIDTH, BUTTON_HEIGHT );
       const buttonText = new RichText( decayType.labelStringProperty, {
@@ -120,7 +120,7 @@ class AvailableDecaysPanel extends Panel {
 
     // Create the decay button and icon pair in a VBox.
     const decayButtonsAndIcons: Node[] = [];
-    DecayType.enumeration.values.forEach( decayType => {
+    BANDecayType.enumeration.values.forEach( decayType => {
       decayTypeButtonIndexMap[ decayType.name.toString() ] = decayButtonsAndIcons.push( createDecayButtonAndIcon( decayType ) ) - 1;
     } );
     const arrangedDecayButtonsAndIcons = new VBox( {

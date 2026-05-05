@@ -27,7 +27,7 @@ import BANConstants from '../../common/BANConstants.js';
 import AlphaParticle from '../model/AlphaParticle.js';
 import BANModel from '../model/BANModel.js';
 import BANParticle from '../model/BANParticle.js';
-import DecayType from '../model/DecayType.js';
+import BANDecayType from '../model/BANDecayType.js';
 import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 import BANParticleView from './BANParticleView.js';
 import ElementNameText from './ElementNameText.js';
@@ -509,26 +509,26 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Given a decayType, conduct that decay on the model's ParticleAtom.
    */
-  protected decayAtom( decayType: DecayType | null ): void {
+  protected decayAtom( decayType: BANDecayType | null ): void {
     const protons = this.model.particleAtom.protonCountProperty.value;
     const neutrons = this.model.particleAtom.neutronCountProperty.value;
     assert && assert( AtomInfoUtils.doesExist( protons, neutrons ),
       `Decaying for a non existent atom with ${protons} protons and ${neutrons} neutrons.` );
 
     switch( decayType ) {
-      case DecayType.NEUTRON_EMISSION:
+      case BANDecayType.NEUTRON_EMISSION:
         this.emitNucleon( ParticleTypeEnum.NEUTRON );
         break;
-      case DecayType.PROTON_EMISSION:
+      case BANDecayType.PROTON_EMISSION:
         this.emitNucleon( ParticleTypeEnum.PROTON );
         break;
-      case DecayType.BETA_PLUS_DECAY:
-        this.betaDecay( DecayType.BETA_PLUS_DECAY );
+      case BANDecayType.BETA_PLUS_DECAY:
+        this.betaDecay( BANDecayType.BETA_PLUS_DECAY );
         break;
-      case DecayType.BETA_MINUS_DECAY:
-        this.betaDecay( DecayType.BETA_MINUS_DECAY );
+      case BANDecayType.BETA_MINUS_DECAY:
+        this.betaDecay( BANDecayType.BETA_MINUS_DECAY );
         break;
-      case DecayType.ALPHA_DECAY:
+      case BANDecayType.ALPHA_DECAY:
         this.emitAlphaParticle();
         break;
       default:
@@ -607,10 +607,10 @@ abstract class BANScreenView<M extends BANModel<ParticleAtom | ShellModelNucleus
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  protected betaDecay( betaDecayType: DecayType, particleAtom: ParticleAtom = this.model.particleAtom ): Particle {
+  protected betaDecay( betaDecayType: BANDecayType, particleAtom: ParticleAtom = this.model.particleAtom ): Particle {
     let particleArray;
     let particleToEmit: Particle;
-    if ( betaDecayType === DecayType.BETA_MINUS_DECAY ) {
+    if ( betaDecayType === BANDecayType.BETA_MINUS_DECAY ) {
       particleArray = particleAtom.neutrons;
       particleToEmit = new BANParticle( ParticleTypeEnum.ELECTRON.particleTypeString );
     }

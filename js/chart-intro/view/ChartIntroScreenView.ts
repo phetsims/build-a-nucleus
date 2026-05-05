@@ -28,7 +28,7 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANQueryParameters from '../../common/BANQueryParameters.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
 import ParticleTypeEnum from '../../common/model/ParticleTypeEnum.js';
 import BANParticleView from '../../common/view/BANParticleView.js';
 import BANScreenView, { BANScreenViewOptions } from '../../common/view/BANScreenView.js';
@@ -211,7 +211,7 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
     this.nuclideChartAccordionBox = new NuclideChartAccordionBox(
       this.model.particleAtom.protonCountProperty, this.model.particleAtom.neutronCountProperty,
       this.model.selectedNuclideChartProperty, this.model.decayEquationModel,
-      ( decayType: DecayType | null ) => {
+      ( decayType: BANDecayType | null ) => {
         oldProtonNumber = this.model.particleAtom.protonCountProperty.value;
         oldNeutronNumber = this.model.particleAtom.neutronCountProperty.value;
         this.decayAtom( decayType );
@@ -380,11 +380,11 @@ class ChartIntroScreenView extends BANScreenView<ChartIntroModel> {
   /**
    * Changes the nucleon type of a particle in the atom and emits an electron or positron from behind that particle.
    */
-  protected override betaDecay( betaDecayType: DecayType ): Particle {
+  protected override betaDecay( betaDecayType: BANDecayType ): Particle {
     this.isMiniAtomConnected = false;
 
     // Animate the miniParticleAtom.
-    const nucleonTypeToChange = betaDecayType === DecayType.BETA_MINUS_DECAY ?
+    const nucleonTypeToChange = betaDecayType === BANDecayType.BETA_MINUS_DECAY ?
                                 ParticleTypeEnum.NEUTRON : ParticleTypeEnum.PROTON;
     const particleToEmit = super.betaDecay( betaDecayType, this.model.miniParticleAtom );
     this.createMiniParticleView( particleToEmit );

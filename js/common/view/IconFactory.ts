@@ -18,7 +18,7 @@ import TColor from '../../../../scenery/js/util/TColor.js';
 import ParticleNode from '../../../../shred/js/view/ParticleNode.js';
 import BANColors from '../BANColors.js';
 import BANConstants from '../BANConstants.js';
-import DecayType from '../model/DecayType.js';
+import BANDecayType from '../model/BANDecayType.js';
 import ParticleTypeEnum from '../model/ParticleTypeEnum.js';
 
 const ALPHA_PARTICLE_SPACING = -5;
@@ -159,17 +159,17 @@ class IconFactory {
   /**
    * Function to create the decay icons corresponding to a specific DecayType.
    */
-  public static createDecayIcon( decayType: DecayType ): Node | null {
+  public static createDecayIcon( decayType: BANDecayType ): Node | null {
     switch( decayType ) {
-      case DecayType.ALPHA_DECAY:
+      case BANDecayType.ALPHA_DECAY:
         return IconFactory.createAlphaDecayIcon(); // alpha decay icon
-      case DecayType.BETA_MINUS_DECAY:
+      case BANDecayType.BETA_MINUS_DECAY:
         return IconFactory.createBetaDecayIcon( true ); // beta minus decay icon
-      case DecayType.BETA_PLUS_DECAY:
+      case BANDecayType.BETA_PLUS_DECAY:
         return IconFactory.createBetaDecayIcon( false ); // beta plus decay icon
-      case DecayType.PROTON_EMISSION:
+      case BANDecayType.PROTON_EMISSION:
         return IconFactory.createNucleonEmissionIcon( ParticleTypeEnum.PROTON ); // proton emission icon
-      case DecayType.NEUTRON_EMISSION:
+      case BANDecayType.NEUTRON_EMISSION:
         return IconFactory.createNucleonEmissionIcon( ParticleTypeEnum.NEUTRON ); // neutron emission icon
       default:
         return null;

@@ -11,7 +11,8 @@ import ColorProperty from '../../../../scenery/js/util/ColorProperty.js';
 import { DecayAmount } from '../../../../shred/js/AtomData.js';
 import AtomInfoUtils from '../../../../shred/js/AtomInfoUtils.js';
 import BANColors from '../../common/BANColors.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
+import getAvailableDecaysAndPercents from '../../common/model/getAvailableDecaysAndPercents.js';
 
 class NuclideChartCellModel {
 
@@ -19,7 +20,7 @@ class NuclideChartCellModel {
   public readonly neutronNumber: number;
 
   // Null could be that it is stable or has an unknown decay type, see NuclideChartCellModel.isStable to differentiate.
-  public readonly decayType: DecayType | null;
+  public readonly decayType: BANDecayType | null;
   public readonly decayTypeLikelihoodPercent: DecayAmount;
 
   public readonly colorProperty: ColorProperty;
@@ -41,28 +42,18 @@ class NuclideChartCellModel {
                          this.decayType.colorProperty;
   }
 
-  private getDecayTypeAndPercent( protonNumber: number, neutronNumber: number ): readonly [ DecayType | null, DecayAmount ] {
+  private getDecayTypeAndPercent( protonNumber: number, neutronNumber: number ): readonly [ BANDecayType | null, DecayAmount ] {
 
-    const decaysAndPercentTuples = AtomInfoUtils.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
+    // Get the decay types mapped to percentage decays from the utility function.
+    const decayAndPercentTuples = getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
-    if ( decaysAndPercentTuples.length === 0 ) {
+    // Bail out if there were no decays found.
+    if ( decayAndPercentTuples.length === 0 ) {
       return [ null, null ];
     }
 
-    let desiredEntry = decaysAndPercentTuples[ 0 ];
-    for ( let i = 1; i < decaysAndPercentTuples.length; i++ ) {
-      const decayAndPercent = decaysAndPercentTuples[ i ];
-
-      // We want the actual highest percent over the null if given the opportunity
-      if ( desiredEntry[ 1 ] === null ) {
-        desiredEntry = decayAndPercent;
-      }
-      else if ( decayAndPercent[ 1 ] !== null && desiredEntry[ 1 ] < decayAndPercent[ 1 ] ) {
-        desiredEntry = decayAndPercent;
-      }
-    }
-
-    return [ DecayType.enumeration.getValue( desiredEntry[ 0 ] ), desiredEntry[ 1 ] ];
+    // Return the first tuple, which should represent the most common decay.
+    return decayAndPercentTuples[ 0 ];
   }
 }
 

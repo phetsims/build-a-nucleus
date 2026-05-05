@@ -17,7 +17,7 @@ import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProper
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
 
 // constants
 const LEGEND_KEY_BOX_SIZE = 14;
@@ -51,7 +51,7 @@ class NuclideChartLegendNode extends Node {
     decayHBoxes.push( stableHBox );
 
     // Create the legend item for each decay type in a grid box.
-    DecayType.enumeration.values.forEach( decayType => {
+    BANDecayType.enumeration.values.forEach( decayType => {
       decayHBoxes.push( createLegendItem( decayType.labelStringProperty, decayType.colorProperty ) );
     } );
     const legendGridBox = new GridBox( {

@@ -26,7 +26,7 @@ import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
 import AlphaParticle from '../../common/model/AlphaParticle.js';
 import BANModel from '../../common/model/BANModel.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
 import ChartIntroModel from '../model/ChartIntroModel.js';
 import NuclideChartCellModel from '../model/NuclideChartCellModel.js';
 import { N_ONE_CAPACITY, N_ZERO_CAPACITY } from '../model/ShellModelNucleus.js';
@@ -124,10 +124,10 @@ class NuclideChartNode extends Node {
         if ( !AtomInfoUtils.isStable( protonNumber, neutronNumber ) && decayType !== null ) {
 
           // Direction determined based on how the DecayType changes the current nuclide, see DecayType for more details.
-          const direction = decayType === DecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
-                            decayType === DecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
-                            decayType === DecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
-                            decayType === DecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
+          const direction = decayType === BANDecayType.NEUTRON_EMISSION ? new Vector2( neutronNumber - 1, protonNumber ) :
+                            decayType === BANDecayType.PROTON_EMISSION ? new Vector2( neutronNumber, protonNumber - 1 ) :
+                            decayType === BANDecayType.BETA_PLUS_DECAY ? new Vector2( neutronNumber + 1, protonNumber - 1 ) :
+                            decayType === BANDecayType.BETA_MINUS_DECAY ? new Vector2( neutronNumber - 1, protonNumber + 1 ) :
 
                               // Alpha decay.
                             new Vector2( neutronNumber - AlphaParticle.NUMBER_OF_ALLOWED_NEUTRONS,
@@ -169,8 +169,8 @@ class NuclideChartNode extends Node {
     if ( !cellModel ) {
       return Color.WHITE;
     }
-    return cellModel.decayType === DecayType.ALPHA_DECAY ||
-           cellModel.decayType === DecayType.BETA_MINUS_DECAY ||
+    return cellModel.decayType === BANDecayType.ALPHA_DECAY ||
+           cellModel.decayType === BANDecayType.BETA_MINUS_DECAY ||
            ( !cellModel.decayType && !cellModel.isStable ) ?
            Color.BLACK : Color.WHITE;
   }

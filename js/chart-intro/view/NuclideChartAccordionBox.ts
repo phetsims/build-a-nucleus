@@ -22,7 +22,7 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import BuildANucleusStrings from '../../BuildANucleusStrings.js';
 import BANColors from '../../common/BANColors.js';
 import BANConstants from '../../common/BANConstants.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
 import { SelectedChartType } from '../model/ChartIntroModel.js';
 import DecayEquationModel from '../model/DecayEquationModel.js';
 import DecayEquationNode from './DecayEquationNode.js';
@@ -39,7 +39,7 @@ class NuclideChartAccordionBox extends AccordionBox {
 
   public constructor( protonCountProperty: TReadOnlyProperty<number>, neutronCountProperty: TReadOnlyProperty<number>,
                       selectedNuclideChartProperty: TReadOnlyProperty<SelectedChartType>,
-                      decayEquationModel: DecayEquationModel, decayAtom: ( decayType: DecayType | null ) => void,
+                      decayEquationModel: DecayEquationModel, decayAtom: ( decayType: BANDecayType | null ) => void,
                       showMagicNumbersProperty: TReadOnlyProperty<boolean>,
                       hasIncomingParticlesProperty: TReadOnlyProperty<boolean>,
                       undoDecay: VoidFunction, hideUndoButtonEmitter: TEmitter,

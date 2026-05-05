@@ -14,7 +14,7 @@ import FlowBox from '../../../scenery/js/layout/nodes/FlowBox.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import BuildANucleusStrings from '../BuildANucleusStrings.js';
 import BANColors from '../common/BANColors.js';
-import DecayType from '../common/model/DecayType.js';
+import BANDecayType from '../common/model/BANDecayType.js';
 import IconFactory from '../common/view/IconFactory.js';
 import DecayModel from '../decay/model/DecayModel.js';
 import DecayScreenView from '../decay/view/DecayScreenView.js';
@@ -50,7 +50,7 @@ class DecayScreen extends Screen<DecayModel, DecayScreenView> {
 function createScreenIcon(): ScreenIcon {
 
   // We know the ALPHA_DECAY type is a valid decay so null won't be returned
-  const iconNode = new FlowBox( { children: [ IconFactory.createDecayIcon( DecayType.ALPHA_DECAY )! ], margin: 3 } );
+  const iconNode = new FlowBox( { children: [ IconFactory.createDecayIcon( BANDecayType.ALPHA_DECAY )! ], margin: 3 } );
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 1

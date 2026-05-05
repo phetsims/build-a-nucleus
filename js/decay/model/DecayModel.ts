@@ -13,7 +13,8 @@ import ParticleAtom from '../../../../shred/js/model/ParticleAtom.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BANConstants from '../../common/BANConstants.js';
 import BANModel from '../../common/model/BANModel.js';
-import DecayType from '../../common/model/DecayType.js';
+import BANDecayType from '../../common/model/BANDecayType.js';
+import getAvailableDecaysAndPercents from '../../common/model/getAvailableDecaysAndPercents.js';
 
 class DecayModel extends BANModel<ParticleAtom> {
 
@@ -22,7 +23,7 @@ class DecayModel extends BANModel<ParticleAtom> {
 
   // A data structure for all the enabledProperties for the "decay buttons". These enabledProperties toggle to enabled
   // when the Nuclide supports that given decay type.
-  public decayEnabledPropertyMap: Map<DecayType, TReadOnlyProperty<boolean>>;
+  public decayEnabledPropertyMap: Map<BANDecayType, TReadOnlyProperty<boolean>>;
 
   public constructor() {
 
@@ -73,11 +74,16 @@ class DecayModel extends BANModel<ParticleAtom> {
 
     // Function which would return whether a given nuclide (defined by the number of protons and neutrons) has a certain
     // available decay type.
-    const createDecayEnabledListener = ( protonNumber: number, neutronNumber: number, decayType: DecayType,
+    const createDecayEnabledListener = ( protonNumber: number,
+                                         neutronNumber: number,
+                                         decayType: BANDecayType,
                                          hasIncomingParticles: boolean ): boolean => {
-      const decays = AtomInfoUtils.getAvailableDecaysAndPercents( protonNumber, neutronNumber );
 
-      return !hasIncomingParticles && !!decays.find( decay => decay[ 0 ] === decayType.name );
+      // Get a list of all decays available for this nuclear configuration.
+      const decays = getAvailableDecaysAndPercents( protonNumber, neutronNumber );
+
+      // Return a boolean that indicates whether the requested decay type is on the list of possible decays.
+      return !hasIncomingParticles && !!decays.find( decay => decay[ 0 ] === decayType );
     };
 
     const dependencies = [
@@ -89,25 +95,25 @@ class DecayModel extends BANModel<ParticleAtom> {
     this.decayEnabledPropertyMap = new Map();
 
     // Create the decay enabled properties.
-    this.decayEnabledPropertyMap.set( DecayType.PROTON_EMISSION, new DerivedProperty( dependencies,
+    this.decayEnabledPropertyMap.set( BANDecayType.PROTON_EMISSION, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.PROTON_EMISSION, hasIncomingParticles )
+        createDecayEnabledListener( protonNumber, neutronNumber, BANDecayType.PROTON_EMISSION, hasIncomingParticles )
     ) );
-    this.decayEnabledPropertyMap.set( DecayType.NEUTRON_EMISSION, new DerivedProperty( dependencies,
+    this.decayEnabledPropertyMap.set( BANDecayType.NEUTRON_EMISSION, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.NEUTRON_EMISSION, hasIncomingParticles )
+        createDecayEnabledListener( protonNumber, neutronNumber, BANDecayType.NEUTRON_EMISSION, hasIncomingParticles )
     ) );
-    this.decayEnabledPropertyMap.set( DecayType.BETA_MINUS_DECAY, new DerivedProperty( dependencies,
+    this.decayEnabledPropertyMap.set( BANDecayType.BETA_MINUS_DECAY, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_MINUS_DECAY, hasIncomingParticles )
+        createDecayEnabledListener( protonNumber, neutronNumber, BANDecayType.BETA_MINUS_DECAY, hasIncomingParticles )
     ) );
-    this.decayEnabledPropertyMap.set( DecayType.BETA_PLUS_DECAY, new DerivedProperty( dependencies,
+    this.decayEnabledPropertyMap.set( BANDecayType.BETA_PLUS_DECAY, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.BETA_PLUS_DECAY, hasIncomingParticles )
+        createDecayEnabledListener( protonNumber, neutronNumber, BANDecayType.BETA_PLUS_DECAY, hasIncomingParticles )
     ) );
-    this.decayEnabledPropertyMap.set( DecayType.ALPHA_DECAY, new DerivedProperty( dependencies,
+    this.decayEnabledPropertyMap.set( BANDecayType.ALPHA_DECAY, new DerivedProperty( dependencies,
       ( protonNumber, neutronNumber, hasIncomingParticles ) =>
-        createDecayEnabledListener( protonNumber, neutronNumber, DecayType.ALPHA_DECAY, hasIncomingParticles )
+        createDecayEnabledListener( protonNumber, neutronNumber, BANDecayType.ALPHA_DECAY, hasIncomingParticles )
     ) );
   }
 
